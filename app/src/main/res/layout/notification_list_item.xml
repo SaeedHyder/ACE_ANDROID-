@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginRight="@dimen/x10"
+        android:padding="@dimen/x15"
+        android:gravity="center_vertical"
+        >
+
+
+        <LinearLayout
+            android:id="@+id/detailLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="0.88"
+
+            >
+
+            <com.app.ace.ui.views.AnyTextView
+                android:id="@+id/txtNotificationText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="dummy alert"
+                android:textColor="@color/black"
+                android:textSize="@dimen/x16"
+                app:typeface="Roboto-Bold.ttf" />
+
+
+            <com.app.ace.ui.views.AnyTextView
+                android:id="@+id/txtNotificationDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Template"
+                android:alpha="0.7"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/x12"
+                app:typeface="Roboto-Regular.ttf" />
+
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="@dimen/x15"
+            android:layout_height="@dimen/x15"
+            android:src="@drawable/notfication"
+            />
+
+
+
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/txt_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginBottom="@dimen/x3"
+        android:layout_marginTop="@dimen/x1"
+        android:alpha="0.6"
+        android:background="@drawable/text"/>
+
+
+</LinearLayout>
