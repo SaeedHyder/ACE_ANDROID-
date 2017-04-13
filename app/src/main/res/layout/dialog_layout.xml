@@ -19,7 +19,7 @@
     </LinearLayout>
 
     <RelativeLayout
-
+        android:id="@+id/rl_dialog"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
@@ -28,6 +28,7 @@
 
 
         <RelativeLayout
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/popup_bg"
@@ -140,7 +141,7 @@
                     >
 
                     <Button
-                        android:id="@+id/btndialog_1"
+                        android:id="@+id/btndialogCalendar_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/x10"
@@ -154,7 +155,7 @@
                         />
 
                     <Button
-                        android:id="@+id/btndialog_2"
+                        android:id="@+id/btndialogCalendar_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/x15"
@@ -165,6 +166,19 @@
                         android:text="@string/ok"
 
                         />
+
+                    <Button
+                        android:id="@+id/btndialog_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/x15"
+                        android:visibility="gone"
+                        android:background="@drawable/cancel_btn"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/x16"
+                        android:text="@string/cancel"
+                        />
+
 
                 </LinearLayout>
 

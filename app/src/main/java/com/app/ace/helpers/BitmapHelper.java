@@ -1,11 +1,5 @@
 package com.app.ace.helpers;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -18,8 +12,11 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.ExifInterface;
-import android.util.DisplayMetrics;
-import android.util.FloatMath;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class BitmapHelper {
 	
@@ -106,17 +103,7 @@ public class BitmapHelper {
 		return dest;
 	}
 	
-	public static float getScreenSize(Activity activity) {
 
-		DisplayMetrics metrics = new DisplayMetrics();
-
-		activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-		float height = metrics.heightPixels / metrics.xdpi;
-		float width = metrics.widthPixels / metrics.ydpi;
-
-		return FloatMath.sqrt(height * height + width * width);
-	}
 	
 	public static Bitmap getRoundedCornerImage( Bitmap bitmap ) {
 		Bitmap output = Bitmap.createBitmap( bitmap.getWidth(),

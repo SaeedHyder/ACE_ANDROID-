@@ -24,4 +24,7 @@ public class AppConstants {
     public static String twitter = "twitter";
 
     public static String fixPassword = "123456";
+
+    public static float zoomIn = 15;
+
 }

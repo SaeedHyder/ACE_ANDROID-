@@ -23,6 +23,8 @@ public class TitleBar extends RelativeLayout {
 	private ImageView btnRight2;
 	private ImageView btnRight3;
 
+	private AnyEditTextView searchbar;
+
 
 	private View.OnClickListener menuButtonListener;
 	private OnClickListener backButtonListener;
@@ -62,6 +64,7 @@ public class TitleBar extends RelativeLayout {
 		btnRight2 = (ImageView) this.findViewById(R.id.btnRight2);
 		btnRight3 = (ImageView) this.findViewById(R.id.btnRight3);
 		btnLeft = (ImageView) this.findViewById(R.id.btnLeft);
+		searchbar=(AnyEditTextView)this.findViewById(R.id.edit_searchBarr);
 
 
 	}
@@ -90,6 +93,15 @@ public class TitleBar extends RelativeLayout {
 		btnLeft.setOnClickListener(backButtonListener);
 
 	}
+
+	public void showSearchBar() {
+		searchbar.setVisibility(View.VISIBLE);
+	}
+
+	public void hideSearchBar() {
+		searchbar.setVisibility(View.GONE);
+	}
+
 
 	public void showAddButton(View.OnClickListener addBtnListener) {
 		btnRight.setVisibility(View.VISIBLE);
@@ -137,6 +149,14 @@ public class TitleBar extends RelativeLayout {
 		btnRight.setVisibility(View.VISIBLE);
 		btnRight.setImageResource(R.drawable.settings_icon);
 		btnRight.setOnClickListener(settingBtnListener);
+
+	}
+
+	public void showCancelButton(View.OnClickListener cancelBtn) {
+		btnRight.setVisibility(View.VISIBLE);
+		btnRight.setImageResource(R.drawable.cancel_icon);
+		btnRight.setOnClickListener(cancelBtn);
+
 
 	}
 

@@ -8,10 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.app.ace.R;
+import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.ui.views.AnyTextView;
 
 import roboguice.fragment.RoboDialogFragment;
@@ -20,10 +21,13 @@ import roboguice.inject.InjectView;
 public class DialogFragment extends RoboDialogFragment implements View.OnClickListener {
 
 
-    @InjectView(R.id.btndialog_1)
+    @InjectView(R.id.rl_dialog)
+    RelativeLayout rl_dialog;
+
+    @InjectView(R.id.btndialogCalendar_1)
     private Button btndialog_1;
 
-    @InjectView(R.id.btndialog_2)
+    @InjectView(R.id.btndialogCalendar_2)
     private Button btndialog_2;
 
     @InjectView(R.id.txtHeader)
@@ -37,6 +41,9 @@ public class DialogFragment extends RoboDialogFragment implements View.OnClickLi
 
     @InjectView(R.id.txt3)
     private AnyTextView txt3;
+
+    private BaseFragment fragment;
+    private String tag;
 
     private String title;
     private String text1;
@@ -53,6 +60,11 @@ public class DialogFragment extends RoboDialogFragment implements View.OnClickLi
     public static DialogFragment newInstance() {
 
         return new DialogFragment();
+    }
+
+    public void setFragment(BaseFragment fragment, String tag){
+        this.fragment = fragment;
+        this.tag = tag;
     }
 
     public void setPopupData(String title, String text1, String text2, String text3, boolean isShow_btndialog_1, boolean isShow_btndialog_2) {
@@ -128,6 +140,8 @@ public class DialogFragment extends RoboDialogFragment implements View.OnClickLi
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+        showFragment();
         hideButtons();
         setDialogText();
         setListener();
@@ -162,6 +176,17 @@ public class DialogFragment extends RoboDialogFragment implements View.OnClickLi
 
     }
 
+    public void showFragment() {
+        android.support.v4.app.FragmentTransaction transaction = getChildFragmentManager()
+                .beginTransaction();
+
+        transaction.replace(rl_dialog.getId(), fragment);
+        transaction
+                .addToBackStack(
+                        getChildFragmentManager().getBackStackEntryCount() == 0 ? tag
+                                : null).commit();
+    }
+
     private void setListener() {
         btndialog_1.setOnClickListener(dialogBtnListener1);
         btndialog_2.setOnClickListener(dialogBtnListener2);
@@ -171,11 +196,11 @@ public class DialogFragment extends RoboDialogFragment implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
 
-            case R.id.btndialog_1:
+            case R.id.btndialogCalendar_1:
                 DialogFragment.this.dismiss();
                 break;
 
-            case R.id.btndialog_2:
+            case R.id.btndialogCalendar_2:
                 DialogFragment.this.dismiss();
                 break;
         }

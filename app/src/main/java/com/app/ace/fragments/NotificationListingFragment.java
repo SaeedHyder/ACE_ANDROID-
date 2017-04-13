@@ -147,13 +147,23 @@ public class NotificationListingFragment  extends BaseFragment implements View.O
                 break;
 
             case R.id.iv_Camera:
-
+                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
 
                 break;
 
             case R.id.iv_Calander:
 
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                getDockActivity().addDockableFragment(TrainingBookingCalenderFragment.newInstance(),"TrainingBookingCalenderFragment");
+
+               /* if(AppConstants.is_show_trainer){
+
+                    getDockActivity().addDockableFragment(TrainerBookingCalendarFragment.newInstance(),"TrainerBookingCalendarFragment");
+                }
+                else
+                {
+                    getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(),"TraineeScheduleFragment");
+
+                }*/
 
                 break;
 

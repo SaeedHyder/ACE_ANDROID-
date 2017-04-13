@@ -1,6 +1,8 @@
 package com.app.ace.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 
 import com.app.ace.BaseApplication;
 import com.app.ace.R;
@@ -61,7 +64,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
     @InjectView(R.id.txt_no_data)
     private AnyTextView txt_no_data;
 
+    AnyTextView txt_Trainer;
+    AnyTextView  txt_Training;
+    AnyTextView  txt_Location;
+
     public File postImage;
+
 
     private ArrayListAdapter<HomeListDataEnt> adapter;
     private List<HomeListDataEnt> dataCollection;
@@ -79,6 +87,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
 
         adapter = new ArrayListAdapter<HomeListDataEnt>(getDockActivity(), new HomeFragmentItemBinder(getDockActivity()));
 
+
         BaseApplication.getBus().register(this);
     }
 
@@ -92,6 +101,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         getAllHomePosts();
         setListener();
     }
@@ -103,6 +113,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
         iv_Camera.setOnClickListener(this);
         iv_Fav.setOnClickListener(this);
         iv_profile.setOnClickListener(this);
+
+
 
     }
 
@@ -144,19 +156,23 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
         titleBar.hideButtons();
         titleBar.setSubHeading(getString(R.string.app_name));
 
+        titleBar.hideSearchBar();
+
         titleBar.showSearchButton(new View.OnClickListener() {
             @Override
-                public void onClick(View v) {
+                public void onClick(final View v) {
 
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                popUpDropdown(v);
             }
         });
+
+
 
         titleBar.showCommentButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+               // UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
                 getDockActivity().addDockableFragment(InboxListFragment.newInstance(),"InboxListFragment");
 
             }
@@ -290,7 +306,18 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
 
             case R.id.iv_Calander:
 
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                getDockActivity().addDockableFragment(TrainingBookingCalenderFragment.newInstance(),"TrainerBookingCalendarFragment");
+
+              /*  if(AppConstants.is_show_trainer){
+
+                    getDockActivity().addDockableFragment(TrainerBookingCalendarFragment.newInstance(),"TrainerBookingCalendarFragment");
+                }
+                else
+                {
+                    getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(),"TraineeScheduleFragment");
+
+                }*/
 
                 break;
 
@@ -300,8 +327,29 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
 
                 break;
 
+            /*case R.id.txt_Trainer:
+
+                getDockActivity().addDockableFragment(SearchPeopleFragment.newInstance(),"HomeFragment");
+
+                break;
+
+            case R.id.txt_Training:
+
+                getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(),"HomeFragment");
+
+                break;
+
+            case R.id.txt_Location:
+
+                getDockActivity().addDockableFragment(MapScreenFragment.newInstance(),"HomeFragment");
+
+                break;*/
+
+
         }
     }
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -319,6 +367,65 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
             if(postImage !=null)
                 createPost();
         }
+    }
+
+
+    void popUpDropdown(View v)
+    {
+        LayoutInflater layoutInflater = (LayoutInflater)getDockActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = layoutInflater.inflate(R.layout.home_search_items, null);
+
+        final PopupWindow popupWindow = new PopupWindow(
+                popupView,
+                (int)getResources().getDimension(R.dimen.x100),
+                (int)getResources().getDimension(R.dimen.x100));
+
+        txt_Trainer=(AnyTextView)popupView.findViewById(R.id.txt_Trainer);
+        txt_Training=(AnyTextView)popupView.findViewById(R.id.txt_Training);
+        txt_Location=(AnyTextView)popupView.findViewById(R.id.txt_Location);
+
+               /* txt_Trainer.setOnClickListener(this);
+                txt_Training.setOnClickListener(this);
+                txt_Location.setOnClickListener(this);*/
+
+
+        txt_Trainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDockActivity().addDockableFragment(SearchPeopleFragment.newInstance(), "SearchPeopleFragment");
+                popupWindow.dismiss();
+            }
+        });
+
+        txt_Training.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDockActivity().addDockableFragment(TrainingSearchFragment.newInstance(), "TrainingSearchFragment");
+                popupWindow.dismiss();
+            }
+        });
+
+        txt_Location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDockActivity().addDockableFragment(MapScreenFragment.newInstance(), "MapScreenFragment");
+                popupWindow.dismiss();
+            }
+        });
+
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setTouchable(true);
+
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                //TODO do sth here on dismiss
+            }
+        });
+
+        popupWindow.showAsDropDown(v);
+
     }
 
 }

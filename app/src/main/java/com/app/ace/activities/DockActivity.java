@@ -11,6 +11,8 @@ import android.support.v4.widget.DrawerLayout;
 
 import com.app.ace.BaseApplication;
 import com.app.ace.R;
+import com.app.ace.fragments.CalenderPopupDialogFragment;
+import com.app.ace.fragments.FriendsInfoFragment;
 import com.app.ace.fragments.HomeFragment;
 import com.app.ace.fragments.SideMenuFragment;
 import com.app.ace.fragments.abstracts.BaseFragment;
@@ -89,7 +91,7 @@ public abstract class DockActivity extends RoboFragmentActivity implements
 
     }
 
-    public void addDockableFragment(BaseFragment frag, boolean isAnimate) {
+    public void addDockableFragment(FriendsInfoFragment frag, String isAnimate) {
 
         android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction();
@@ -213,7 +215,6 @@ public abstract class DockActivity extends RoboFragmentActivity implements
     public BaseApplication getMainApplication() {
         return (BaseApplication) getApplication();
     }
-
 
 
 

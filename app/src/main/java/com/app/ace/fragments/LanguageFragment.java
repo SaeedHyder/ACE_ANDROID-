@@ -6,23 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import com.app.ace.R;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.ui.views.TitleBar;
-import com.daimajia.slider.library.Indicators.PagerIndicator;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Handler;
 
 import roboguice.inject.InjectView;
-import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 /**
  * Created by khan_muhammad on 3/10/2017.
@@ -91,8 +86,12 @@ public class LanguageFragment extends BaseFragment implements View.OnClickListen
 
         switch (v.getId()) {
             case R.id.btnDone:
-                getDockActivity().addDockableFragment(WelcomeTutorialFragment.newInstance(), "WelcomeTutorialFragment");
-                break;
+               getDockActivity().addDockableFragment(WelcomeTutorialFragment.newInstance(), "WelcomeTutorialFragment");
+               /* DialogFragment dialog = DialogFragment.newInstance();
+                dialog.setPopupData("",""," ","",true,true);
+                dialog.setFragment(CalenderPopupDialogFragment.newInstance(), "CalenderPopupDialogFragment");
+                dialog.show(getFragmentManager(),"My_Dialog");
+                break;*/
 
         }
 

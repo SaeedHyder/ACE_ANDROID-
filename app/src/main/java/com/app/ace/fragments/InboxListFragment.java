@@ -66,6 +66,7 @@ public class InboxListFragment extends BaseFragment {
         userCollection.add(new InboxDataItem("drawable://" + R.drawable.profile_pic_trainer, "Tori Smith", getString(R.string.what_other_training)));
         userCollection.add(new InboxDataItem("drawable://" + R.drawable.profile_pic, getString(R.string.charlie_hunnam), getString(R.string.please_reply)));
 
+
         bindData(userCollection);
     }
 
@@ -96,11 +97,9 @@ public class InboxListFragment extends BaseFragment {
         titleBar.showAddButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                getDockActivity().addDockableFragment(NewMessageFragment.newInstance(), "NewMessageFragment");
             }
         });
-
-
-
     }
 }

@@ -55,5 +55,17 @@
     <color name="lightish_grey">#797878</color>
     <color name="darkish_grey">#626262</color>
 
+    <!--Training Search-->
+    <color name="darkRed">#d20c13</color>
+    <color name="lightGray">#5a5555</color>
+    <color name="darkGray">#262626</color>
+    <!--Calendar-->
+    <color name="darkbrown">#660004</color>
+    <color name="calendar_lightgray">#e9e9e9</color>
+    <color name="textcolor_lightgray">#3f3f3f</color>
+
+    <!--Detailed Screen-->
+    <color name="profile_name_darkBrown">#9e0007</color>
+
 
 </resources>

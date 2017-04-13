@@ -1,5 +1,7 @@
 package com.app.ace.fragments;
 
+import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RatingBar;
 
 import com.app.ace.BaseApplication;
@@ -29,6 +32,9 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import roboguice.inject.InjectView;
+
+import static com.app.ace.R.id.txt_Location;
+import static com.app.ace.R.id.txt_Training;
 
 /**
  * Created by khan_muhammad on 3/17/2017.
@@ -109,8 +115,15 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     private List<String> dataCollection;
 
     private DockActivity activity;
+    AnyTextView txt_TrainerProfileFrag;
+    AnyTextView txt_TrainingProfileFrag;
+    AnyTextView txt_LocationProfileFrag;
 
-    public static TrainerProfileFragment newInstance() {
+
+    public static TrainerProfileFragment newInstance()
+    {
+
+
         return new TrainerProfileFragment();
     }
 
@@ -118,9 +131,13 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         adapter = new ArrayListAdapter<String>(getDockActivity(), new UserPicItemBinder());
 
         BaseApplication.getBus().register(this);
+
+
     }
 
     @Nullable
@@ -228,8 +245,10 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             @Override
             public void onClick(View v) {
 
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
-                //getDockActivity().addDockableFragment(TrianeeSignUpFragment.newInstance(),"TrianeeSignUpFragment");
+                getDockActivity().addDockableFragment(HomeFragment.newInstance(),"HomeFragment");
+             //   homeFragment.popUpDropdown(v);
+                popUpDropDown(v);
+
             }
         });
 
@@ -287,7 +306,9 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
             case R.id.btn_request:
 
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                getDockActivity().addDockableFragment(CalendarFragment.newInstance(),"CalendarFragment");
+
 
                 break;
 
@@ -316,7 +337,15 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
             case R.id.iv_Calander:
 
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                if(AppConstants.is_show_trainer){
+                    getDockActivity().addDockableFragment(TrainerBookingCalendarFragment.newInstance(),"TrainerBookingCalendarFragment");
+
+                }
+                else
+                {
+                    getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(),"TraineeScheduleFragment");
+
+                }
 
                 break;
 
@@ -343,6 +372,63 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 break;
 
         }
+    }
+
+    void popUpDropDown(View v)
+    {
+        LayoutInflater layoutInflater = (LayoutInflater)getDockActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = layoutInflater.inflate(R.layout.home_search_items, null);
+
+        final PopupWindow popupWindow = new PopupWindow(
+                popupView,
+                (int)getResources().getDimension(R.dimen.x100),
+                (int)getResources().getDimension(R.dimen.x100));
+
+        txt_TrainerProfileFrag=(AnyTextView)popupView.findViewById(R.id.txt_Trainer);
+        txt_TrainingProfileFrag=(AnyTextView)popupView.findViewById(R.id.txt_Training);
+        txt_LocationProfileFrag=(AnyTextView)popupView.findViewById(R.id.txt_Location);
+
+               /* txt_Trainer.setOnClickListener(this);
+                txt_Training.setOnClickListener(this);
+                txt_Location.setOnClickListener(this);*/
+
+
+        txt_TrainerProfileFrag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDockActivity().addDockableFragment(SearchPeopleFragment.newInstance(), "SearchPeopleFragment");
+                popupWindow.dismiss();
+            }
+        });
+
+        txt_TrainingProfileFrag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDockActivity().addDockableFragment(TrainingSearchFragment.newInstance(), "TrainingSearchFragment");
+                popupWindow.dismiss();
+            }
+        });
+
+        txt_LocationProfileFrag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDockActivity().addDockableFragment(MapScreenFragment.newInstance(), "MapScreenFragment");
+                popupWindow.dismiss();
+            }
+        });
+
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setTouchable(true);
+
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                //TODO do sth here on dismiss
+            }
+        });
+
+        popupWindow.showAsDropDown(v);
     }
 
 

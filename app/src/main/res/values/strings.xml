@@ -106,9 +106,8 @@
     <string name="mobile_number">Mobile Number</string>
 
 
-
     <string name="sign_up_as_trainer">Sign Up As Trainer</string>
-   <!-- <string name="education_and_cirtification"><h1>Education And Cirtification</h1><br></br><p style="font-size:9px;font-weight:normal" >Please sellect all that apply</p></string>-->
+    <!-- <string name="education_and_cirtification"><h1>Education And Cirtification</h1><br></br><p style="font-size:9px;font-weight:normal" >Please sellect all that apply</p></string>-->
     <string name="education_and_cirtification">Education And Certification</string>
     <string name="please_select">Please select all that apply</string>
     <string name="cb_degree">Degree (Exercise Physcology, Kinesiology, Other)</string>
@@ -221,7 +220,6 @@
     <string name="current_password">Current Pasword</string>
 
 
-
     //Buttons Text
     <string name="follow">Follow</string>
     <string name="request">Request</string>
@@ -277,5 +275,51 @@
 
 
     <string name="profile_pic_error">Please select profile picture</string>
+
+
+    //Training Seach
+    <string name="search">Search</string>
+    <string name="types_of_training">Types of Training</string>
+    <string name="select_the_type">Please select the type of training</string>
+    <string name="select_all">Select All</string>
+    <string name="flexibility_training">Flexibility Training</string>
+    <string name="static_strength_training">Static Strength Training</string>
+    <string name="dynamic_strength_training">Dynamic Strength Training</string>
+    <string name="circuit_training">Circuit Training</string>
+    <string name="aerobic_training">Aerobic Training</string>
+    <string name="body_building">Body Building</string>
+    <string name="lose_weight">Lose Weight</string>
+    <string name="fitness_time_riyadh">Fitness time,Ash shaikh hasan ibn hassain ibn ALi ,king faisal,Riyadh</string>
+    <string name="not_avaliable">Not Avaliable</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="time_deailed_screen">16:00 - 17:00</string>
+    <string name="cancel_booking">CANCEL BOOKING</string>
+    <string name="booking_details">Booking Details</string>
+    <string name="confirm">CONFIRM</string>
+    <string name="booking_confirm_text">Are you sure you want to book slots for the selected dates.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="to">To</string>
+    <string name="booking_summary_details">Booking Summary Details</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="send_to" />
+    <string name="members">Members</string>
+    <string name="mute_conversations">Mute Conversations</string>
+    <string name="add_a_comment">Add a Comment</string>
+    <string name="name">Name</string>
+    <string name="comments">Comments</string>
+    <string name="_13m">13m</string>
+    <string name="mx">|</string>
+    <string name="reply">Reply</string>
+    <string name="send_too">Send to</string>
+    <string name="Comments">Comments</string>
+    <string name="how_are_you">How Are You</string>
+    <string name="m13">m 13</string>
+
+    //Detailed Screen
+
 
 </resources>

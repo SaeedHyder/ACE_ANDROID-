@@ -9,6 +9,8 @@ import android.widget.ProgressBar;
 import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
 import com.app.ace.entities.HomeListDataEnt;
+import com.app.ace.fragments.CommentSectionFragment;
+import com.app.ace.fragments.SharePopUpfragment;
 import com.app.ace.fragments.TrainerProfileFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.UIHelper;
@@ -103,7 +105,8 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt> {
         viewHolder.iv_do_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UIHelper.showShortToastInCenter(context,context.getString(R.string.will_be_implemented));
+                //UIHelper.showShortToastInCenter(context,context.getString(R.string.will_be_implemented));
+                context.addDockableFragment(CommentSectionFragment.newInstance(), "CommentSectionFragment");
             }
         });
 
@@ -111,7 +114,8 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt> {
         viewHolder.iv_sendto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UIHelper.showShortToastInCenter(context,context.getString(R.string.will_be_implemented));
+               // UIHelper.showShortToastInCenter(context,context.getString(R.string.will_be_implemented));
+                context.addDockableFragment(SharePopUpfragment.newInstance(), "SharePopUpfragment");
             }
         });
 
