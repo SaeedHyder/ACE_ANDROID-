@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/imageLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <com.daimajia.slider.library.SliderLayout
+            android:id="@+id/imageSlider"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black"
+            custom:auto_cycle="true"
+            custom:indicator_visibility="visible"
+            custom:pager_animation="Accordion"
+            custom:pager_animation_span="1100" />
+
+        <ImageView
+            android:id="@+id/iv_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btnStart"
+            android:layout_marginBottom="@dimen/x30"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/welcome1"/>
+
+        <Button
+            android:id="@+id/btnStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/get_started"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/pagerIndicator"
+            android:layout_marginBottom="@dimen/x5"
+            android:text=""
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:textSize="@dimen/x16"
+
+            />
+
+        <com.daimajia.slider.library.Indicators.PagerIndicator
+            android:id="@+id/pagerIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/x25"
+            android:gravity="center"
+            custom:selected_color="@color/tab_indicator_selected"
+            custom:selected_height="@dimen/x15"
+            custom:selected_padding_left="@dimen/x15"
+            custom:selected_padding_right="@dimen/x15"
+            custom:selected_width="@dimen/x15"
+            custom:shape="oval"
+            custom:unselected_color="@color/tab_indicator_unselected"
+            custom:unselected_height="@dimen/x10"
+            custom:unselected_padding_left="@dimen/x10"
+            custom:unselected_padding_right="@dimen/x10"
+            custom:unselected_width="@dimen/x10"
+
+            />
+
+
+    </RelativeLayout>
+
+</LinearLayout>

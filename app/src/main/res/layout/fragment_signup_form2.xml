@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:fillViewport="true">
+
+
+    <LinearLayout
+        android:id="@+id/parentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/x20"
+        android:paddingRight="@dimen/x20"
+        android:paddingTop="@dimen/x5"
+        >
+
+        <CheckBox
+            android:id="@+id/cb_degree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x5"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x7"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_degree"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+
+        <CheckBox
+            android:id="@+id/cb_nasm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_nasm"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <CheckBox
+            android:id="@+id/cb_ncsa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_ncsa"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <CheckBox
+            android:id="@+id/cb_acsm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_acsm"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <CheckBox
+            android:id="@+id/cb_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_check"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <CheckBox
+            android:id="@+id/cb_ace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_ace"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <CheckBox
+            android:id="@+id/cb_aother_cirtifications"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_aother_cirtifications"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <CheckBox
+            android:id="@+id/cb_cpr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_cpr"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <com.app.ace.ui.views.AnyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x20"
+            android:text="@string/university"
+            android:textColor="@color/txtview_title_color"
+            android:textSize="@dimen/x12"
+            android:gravity="left"
+            app:typeface="Roboto-Regular.ttf"
+            />
+
+        <com.app.ace.ui.views.AnyEditTextView
+            android:id="@+id/edtUniversity"
+            style="@style/form_edttext_fields_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:maxLength="50"
+            android:inputType="text|textNoSuggestions"
+            app:emptyAllowed="false"
+            android:textColor="@color/dark_grey"
+            android:textColorHint="@color/light_grey"
+            android:textSize="@dimen/x14"
+            app:typeface="Roboto-Regular.ttf" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginLeft="@dimen/x5"
+            android:layout_marginRight="@dimen/x5"
+            android:layout_marginTop="@dimen/x10"
+            android:alpha="0.6"
+            android:background="@drawable/text"/>
+
+
+        <com.app.ace.ui.views.AnyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:text="@string/pref_training_gym"
+            android:textColor="@color/txtview_title_color"
+            android:textSize="@dimen/x12"
+            android:gravity="left"
+            app:typeface="Roboto-Regular.ttf"
+            />
+
+        <com.app.ace.ui.views.AnyTextView
+            android:id="@+id/txt_pref_training_gym"
+            style="@style/form_edttext_fields_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:hint="@string/add_location_on_the_map"
+            android:textColor="@color/dark_grey"
+            android:textColorHint="@color/light_grey"
+            android:textSize="@dimen/x14"
+            app:typeface="Roboto-Regular.ttf" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginLeft="@dimen/x5"
+            android:layout_marginRight="@dimen/x5"
+            android:layout_marginTop="@dimen/x10"
+            android:alpha="0.6"
+            android:background="@drawable/text"/>
+
+
+        <com.app.ace.ui.views.AnyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:text="@string/sellect_type_of_training"
+            android:textColor="@color/txtview_title_color"
+            android:textSize="@dimen/x12"
+            android:gravity="left"
+            app:typeface="Roboto-Regular.ttf"
+            />
+
+        <CheckBox
+            android:id="@+id/cb_select_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x7"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_select_all"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+
+        <CheckBox
+            android:id="@+id/cb_flexibility"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_flexibility"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <CheckBox
+            android:id="@+id/cb_dunamic_strength"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_dunamic_strength"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <CheckBox
+            android:id="@+id/cb_static_strength"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_static_strength"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <CheckBox
+            android:id="@+id/cb_circuit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_circuit"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <CheckBox
+            android:id="@+id/cb_aerobic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_aerobic"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <CheckBox
+            android:id="@+id/cb_body_building"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_body_building"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <CheckBox
+            android:id="@+id/cb_loose_weight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_loose_weight"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <com.app.ace.ui.views.AnyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:text="@string/years_of_exp"
+            android:textColor="@color/txtview_title_color"
+            android:textSize="@dimen/x12"
+            android:gravity="left"
+            app:typeface="Roboto-Regular.ttf"
+            />
+
+        <CheckBox
+            android:id="@+id/cb_less_then_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x5"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_less_then_1"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <CheckBox
+            android:id="@+id/cb_1_to_5_years"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_1_to_5_years"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <CheckBox
+            android:id="@+id/cb_5_years_or_more"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/cb_5_years_or_more"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <com.app.ace.ui.views.AnyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:text="@string/what_is_your_primary"
+            android:textColor="@color/txtview_title_color"
+            android:textSize="@dimen/x12"
+            android:layout_marginBottom="@dimen/x3"
+            android:gravity="left"
+            app:typeface="Roboto-Regular.ttf"
+            />
+
+
+        <com.app.ace.ui.views.AnyEditTextView
+            android:id="@+id/edtPrimaryReason"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x80"
+            android:background="@drawable/text_box"
+            android:gravity="start"
+            android:padding="@dimen/x15"
+            android:inputType="textNoSuggestions"
+            android:scrollHorizontally="false"
+            android:scrollbars="vertical"
+            android:maxLines="10"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14"
+            app:emptyAllowed="false"
+            app:typeface="Roboto-Regular.ttf" />
+
+        <com.app.ace.ui.views.AnyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:text="@string/my_gym_timings"
+            android:textColor="@color/txtview_title_color"
+            android:textSize="@dimen/x12"
+            android:gravity="left"
+            app:typeface="Roboto-Regular.ttf"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <CheckBox
+                android:id="@+id/cb_sun"
+                android:layout_width="@dimen/x45"
+                android:layout_height="wrap_content"
+                android:button="@drawable/selector_chkbox"
+                android:checked="false"
+                android:paddingTop="@dimen/x5"
+                android:paddingLeft="@dimen/x7"
+                android:paddingBottom="@dimen/x2"
+                android:text="@string/cb_sun"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/x14" />
+
+
+            <CheckBox
+                android:id="@+id/cb_mon"
+                android:layout_width="@dimen/x45"
+                android:layout_height="wrap_content"
+                android:button="@drawable/selector_chkbox"
+                android:checked="false"
+                android:paddingTop="@dimen/x5"
+                android:paddingLeft="@dimen/x7"
+                android:paddingBottom="@dimen/x2"
+                android:text="@string/cb_mon"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/x14" />
+
+
+            <CheckBox
+                android:id="@+id/cb_tue"
+                android:layout_width="@dimen/x45"
+                android:layout_height="wrap_content"
+                android:button="@drawable/selector_chkbox"
+                android:checked="false"
+                android:paddingTop="@dimen/x5"
+                android:paddingLeft="@dimen/x7"
+                android:paddingBottom="@dimen/x2"
+                android:text="@string/cb_tue"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/x14" />
+
+            <CheckBox
+                android:id="@+id/cb_wed"
+                android:layout_width="@dimen/x45"
+                android:layout_height="wrap_content"
+                android:button="@drawable/selector_chkbox"
+                android:checked="false"
+                android:paddingTop="@dimen/x5"
+                android:paddingLeft="@dimen/x7"
+                android:paddingBottom="@dimen/x2"
+                android:text="@string/cb_wed"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/x14" />
+
+
+            <CheckBox
+                android:id="@+id/cb_thur"
+                android:layout_width="@dimen/x45"
+                android:layout_height="wrap_content"
+                android:button="@drawable/selector_chkbox"
+                android:checked="false"
+                android:paddingTop="@dimen/x5"
+                android:paddingLeft="@dimen/x7"
+                android:paddingBottom="@dimen/x2"
+                android:text="@string/cb_thur"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/x14" />
+
+
+            <CheckBox
+                android:id="@+id/cb_fri"
+                android:layout_width="@dimen/x45"
+                android:layout_height="wrap_content"
+                android:button="@drawable/selector_chkbox"
+                android:checked="false"
+                android:paddingTop="@dimen/x5"
+                android:paddingLeft="@dimen/x7"
+                android:paddingBottom="@dimen/x2"
+                android:text="@string/cb_fri"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/x14" />
+
+            <CheckBox
+                android:id="@+id/cb_sat"
+                android:layout_width="@dimen/x50"
+                android:layout_height="wrap_content"
+                android:button="@drawable/selector_chkbox"
+                android:checked="false"
+                android:paddingTop="@dimen/x5"
+                android:paddingLeft="@dimen/x11"
+                android:paddingBottom="@dimen/x2"
+                android:text="@string/cb_sat"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/x14" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:orientation="horizontal">
+
+            <com.app.ace.ui.views.AnyTextView
+                android:id="@+id/txt_from"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/x15"
+                android:text="@string/dd_from"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/dropdown"
+                android:drawableBottom="@drawable/text"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/x14"
+                app:typeface="Roboto-Regular.ttf"
+                />
+
+            <com.app.ace.ui.views.AnyTextView
+                android:id="@+id/txt_to"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/x30"
+                android:layout_margin="@dimen/x15"
+                android:text="@string/dd_to"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/dropdown"
+                android:drawableBottom="@drawable/text"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/x14"
+                app:typeface="Roboto-Regular.ttf"
+                />
+
+        </LinearLayout>
+
+        <com.app.ace.ui.views.AnyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:text="@string/upload_cv_optional"
+            android:textColor="@color/txtview_title_color"
+            android:textSize="@dimen/x12"
+            android:gravity="left"
+            app:typeface="Roboto-Regular.ttf"
+            />
+
+        <com.app.ace.ui.views.AnyTextView
+            android:id="@+id/txt_browse_cv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x5"
+            android:text="@string/browse"
+            android:drawableBottom="@drawable/text"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14"
+            android:gravity="left"
+            app:typeface="Roboto-Regular.ttf"
+            />
+
+        <Button
+            android:id="@+id/btnSignUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="@dimen/x20"
+            android:layout_marginBottom="@dimen/x20"
+            android:background="@drawable/next_bttn"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/x16"
+
+            />
+
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_SendTo"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/x15"
+        android:layout_marginRight="@dimen/x15"
+        android:layout_marginTop="@dimen/x15"
+        android:layout_weight="0.9"
+        android:orientation="vertical">
+
+        <com.app.ace.ui.views.AnyTextView
+            android:id="@+id/txt_To"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/to"
+            android:textColor="@color/txtview_title_color"
+            app:typeface="Roboto-Regular.ttf" />
+
+        <com.app.ace.ui.views.AnyEditTextView
+            android:id="@+id/edit_sendTo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="James Blunt"
+            android:paddingTop="@dimen/x4"
+            app:typeface="Roboto-Regular.ttf" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
+            android:background="@drawable/chat_bg"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.app.ace.ui.views.AnyEditTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x10"
+                android:layout_weight="0.85"
+                android:hint="Write a message here..."
+                app:typeface="Roboto-Regular.ttf" />
+
+            <ImageView
+                android:id="@+id/iv_sendbtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/x5"
+                android:layout_weight="0.15"
+                android:src="@drawable/send_btn" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
