@@ -12,7 +12,7 @@
         <item name="android:colorForeground">@android:color/background_dark</item>
         <item name="android:textColorPrimary">@android:color/black</item>-->
        <!-- <item name="colorPrimary">@color/top_bar_color2</item>-->
-        <item name="colorPrimaryDark">@color/top_bar_color1</item>
+        <!--<item name="colorPrimaryDark">@color/top_bar_color1</item>-->
         <!--<item name="colorAccent">#FF9E6F</item>-->
 
     </style>
@@ -21,15 +21,11 @@
     <style name="AppTheme" parent="AppBaseTheme">
 
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-         <item name="popupMenuStyle">@style/PopupMenu</item>
+
         <item name="android:textAllCaps">false</item>
         <item name="android:windowNoTitle">true</item>
     </style>
 
-    <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu">
-        <item name="android:popupBackground">@android:color/white</item>
-
-    </style>
 
 
 

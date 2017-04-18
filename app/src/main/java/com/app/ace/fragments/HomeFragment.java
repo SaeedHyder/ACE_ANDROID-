@@ -132,7 +132,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
 
             for(PostsEnt postsEnt : postsEntArrayList){
 
-                dataCollection.add(new HomeListDataEnt(394,12,postsEnt.getCreator().getProfile_image(),postsEnt.getCreator().getFirst_name()+" "+ postsEnt.getCreator().getLast_name(),postsEnt.getPost_image(),"Time Joe","Hi nice"));
+                dataCollection.add(new HomeListDataEnt(394,12,postsEnt.getCreator().getProfile_image(),postsEnt.getCreator().getFirst_name()+" "+ postsEnt.getCreator().getLast_name(),postsEnt.getPost_image(),"Time Joe","Hi nice",postsEnt.getUser_id()));
 
             }
 
@@ -287,7 +287,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
             case R.id.iv_profile:
 
                 AppConstants.is_show_trainer = false;
-                getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(),"TrainerProfileFragment");
+                getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(prefHelper.getUserId())),"TrainerProfileFragment");
 
                 break;
 

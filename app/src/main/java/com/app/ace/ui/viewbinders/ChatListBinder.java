@@ -10,6 +10,7 @@ import com.app.ace.activities.DockActivity;
 import com.app.ace.entities.ChatDataItem;
 import com.app.ace.fragments.TrainerProfileFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.BasePreferenceHelper;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 import com.app.ace.ui.views.AnyTextView;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -26,6 +27,8 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
     private ImageLoader imageLoader;
 
     private DockActivity context;
+
+    private BasePreferenceHelper prefHelper;
 
     public ChatListBinder(DockActivity context) {
         super(R.layout.list_chat_item);
@@ -72,7 +75,7 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
             @Override
             public void onClick(View v) {
                 AppConstants.is_show_trainer = false;
-                context.addDockableFragment(TrainerProfileFragment.newInstance(), "TrainerProfileFragment");
+                context.addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(prefHelper.getUserId())), "TrainerProfileFragment");
             }
         });
 
@@ -80,7 +83,7 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
             @Override
             public void onClick(View v) {
                 AppConstants.is_show_trainer = true;
-                context.addDockableFragment(TrainerProfileFragment.newInstance(), "TrainerProfileFragment");
+                context.addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(prefHelper.getUserId())), "TrainerProfileFragment");
             }
         });
 

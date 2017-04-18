@@ -263,6 +263,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 				"132456",
 				"android");
 
+
+
 		callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
 			@Override
 			public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
@@ -272,14 +274,19 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 					if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
 						getDockActivity().popBackStackTillEntry(0);
+
 						prefHelper.setLoginStatus(true);
 
 
-						AppConstants.user_id = response.body().getResult().getId();
-						AppConstants._token = response.body().getResult().get_token();
+
+						//AppConstants.user_id = response.body().getResult().getId();
+						//AppConstants._token = response.body().getResult().get_token();
+
+
+
 						prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
 						prefHelper.setUsrId(response.body().getResult().getId());
-						prefHelper.setToken( AppConstants._token);
+						prefHelper.setToken(response.body().getResult().get_token());
 
 						if(response.body().getResult().getUser_type().equals(AppConstants.trainee)){
 

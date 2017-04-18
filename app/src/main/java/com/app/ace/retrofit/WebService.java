@@ -2,6 +2,7 @@ package com.app.ace.retrofit;
 
 
 import com.app.ace.entities.CreatePostEnt;
+import com.app.ace.entities.CreaterEnt;
 import com.app.ace.entities.HomeResultEnt;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.RegistrationResult;
@@ -141,6 +142,24 @@ public interface WebService {
             @Part("caption") RequestBody caption,
             @Part MultipartBody.Part image,
             @Part("user_id") RequestBody user_id);
+
+
+
+    @GET("user/{user_id}")
+    Call<ResponseWrapper<CreaterEnt>> traineeProfile(
+            @Path("user_id") String user_id);
+
+
+    @GET("post/user/{user_id}")
+    Call<ResponseWrapper<CreaterEnt>> UserProfilePosts(
+            @Path("user_id") String user_id);
+
+
+   /* @Multipart
+    @GET("user/{user_id}")
+    Call<ResponseWrapper<CreaterEnt>> traineeProfile(
+            @Part("user_id") RequestBody user_id);
+*/
 
    /* @Part("image") File image,*/
 

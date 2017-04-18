@@ -1,5 +1,7 @@
 package com.app.ace.entities;
 
+import java.util.ArrayList;
+
 /**
  * Created by khan_muhammad on 3/22/2017.
  */
@@ -40,6 +42,129 @@ public class CreaterEnt {
     String device_token;
     String last_login;
     String profile_image;
+
+
+
+
+    //Adding Fields for Trainee Profile
+    int id;
+    int role_id;
+    String userType;
+    String profile_picture;
+    String resume;
+    String user_type;
+    String verification_code;
+    String is_verified;
+    String created_at;
+    String updated_at;
+    String deleted_at;
+
+
+
+    //Adding Fields for User Posts
+    ArrayList<PostsEnt> Posts;
+
+    public ArrayList<PostsEnt> getPosts() {
+        return Posts;
+    }
+
+    public void setPosts(ArrayList<PostsEnt> posts) {
+        Posts = posts;
+    }
+
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getRole_id() {
+        return role_id;
+    }
+
+    public void setRole_id(int role_id) {
+        this.role_id = role_id;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public String getProfile_picture() {
+        return profile_picture;
+    }
+
+    public void setProfile_picture(String profile_picture) {
+        this.profile_picture = profile_picture;
+    }
+
+    public String getResume() {
+        return resume;
+    }
+
+    public void setResume(String resume) {
+        this.resume = resume;
+    }
+
+    public String getUser_type() {
+        return user_type;
+    }
+
+    public void setUser_type(String user_type) {
+        this.user_type = user_type;
+    }
+
+    public String getVerification_code() {
+        return verification_code;
+    }
+
+    public void setVerification_code(String verification_code) {
+        this.verification_code = verification_code;
+    }
+
+    public String getIs_verified() {
+        return is_verified;
+    }
+
+    public void setIs_verified(String is_verified) {
+        this.is_verified = is_verified;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
+
+    public String getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(String updated_at) {
+        this.updated_at = updated_at;
+    }
+
+    public String getDeleted_at() {
+        return deleted_at;
+    }
+
+    public void setDeleted_at(String deleted_at) {
+        this.deleted_at = deleted_at;
+    }
+
+
+
+
 
     public int getStatus() {
         return status;

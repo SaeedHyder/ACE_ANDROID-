@@ -19,15 +19,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center">
 
-            <GridView
-                android:id="@+id/gridView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                android:numColumns="1"
-                android:background="@color/off_white"
-                ></GridView>
-
             <com.app.ace.ui.views.AnyTextView
                 android:id="@+id/txt_no_data"
                 android:layout_width="wrap_content"
@@ -39,6 +30,14 @@
                 app:typeface="Roboto-Regular.ttf"
                 android:textSize="@dimen/x15"
                 />
+
+            <GridView
+                android:id="@+id/gridView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/off_white"
+                android:numColumns="1"
+                android:visibility="visible"></GridView>
 
         </FrameLayout>
 

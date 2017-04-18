@@ -7,9 +7,62 @@ package com.app.ace.entities;
 public class PostsEnt {
 
     int user_id;
-    int totoal_likes, total_comments;
-    String post_image,friend_name,friend_comment;;
+    int totoal_likes;
+    int total_comments;
+    String post_image;
+    String friend_name;
+    String friend_comment;;
     CreaterEnt creator;
+
+    //Adding Fileds for User Posts
+    String image;
+    String caption;
+    String status;
+    String created_at;
+    String updated_at;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
+
+    public String getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(String updated_at) {
+        this.updated_at = updated_at;
+    }
+
+
+
 
     public String getFriend_name() {
         return friend_name;

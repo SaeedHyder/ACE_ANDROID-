@@ -19,6 +19,8 @@ public class BasePreferenceHelper extends PreferenceHelper {
     protected static final String KEY_TWITTER_LOGN = "isTwitterLogin";
 
     protected static final String USERNAME = "userName";
+
+
     protected static final String USERID = "userId";
 
 
@@ -73,5 +75,13 @@ public class BasePreferenceHelper extends PreferenceHelper {
     public String getUserId( ) {
         return getStringPreference(context, FILENAME, USERID);
     }
+
+    public static String getUSERID() {
+        return USERID;
+    }
+
+
+
+
 
 }

@@ -136,7 +136,7 @@ public class NotificationListingFragment  extends BaseFragment implements View.O
             case R.id.iv_profile:
 
                 AppConstants.is_show_trainer = false;
-                getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(),"TrainerProfileFragment");
+                getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(prefHelper.getUserId())),"TrainerProfileFragment");
 
                 break;
 

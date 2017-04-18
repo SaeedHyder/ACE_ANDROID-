@@ -48,7 +48,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt> {
     }
 
     @Override
-    public void bindView(HomeListDataEnt homeListDataEnt, int position, int grpPosition,
+    public void bindView(final HomeListDataEnt homeListDataEnt, int position, int grpPosition,
                          View view, Activity activity) {
 
 
@@ -91,7 +91,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt> {
             public void onClick(View v) {
 
                 AppConstants.is_show_trainer = true;
-                context.addDockableFragment(TrainerProfileFragment.newInstance(), "TrainerProfileFragment");
+                context.addDockableFragment(TrainerProfileFragment.newInstance(homeListDataEnt.getUser_id()), "TrainerProfileFragment");
             }
         });
 
