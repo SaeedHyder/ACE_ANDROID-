@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg">
+
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/x70"
+        android:src="@drawable/logo" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <com.app.ace.ui.views.AnyTextView
+            android:id="@+id/txtWelcomeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/x23"
+            android:gravity="center"
+            android:text="@string/wellcome_to_ace"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x30"
+            android:textStyle="bold"
+            app:typeface="Roboto-Regular.ttf" />
+
+        <com.app.ace.ui.views.AnyTextView
+            android:id="@+id/txtWelocmeSlogan"
+            android:layout_width="@dimen/x250"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/x2"
+            android:gravity="center"
+            android:text="@string/wellcome_slogan"
+            android:textColor="@color/lightish_grey"
+            android:textSize="@dimen/x19"
+            app:typeface="Roboto-Regular.ttf" />
+
+    </LinearLayout>
+
+
+    <com.app.ace.ui.views.AnyTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x25"
+        android:layout_marginLeft="@dimen/x20"
+        android:gravity="left"
+        android:text="@string/select_language"
+        android:textColor="@color/red"
+        android:alpha="0.7"
+        android:textSize="@dimen/x12"
+        app:typeface="Roboto-Regular.ttf" />
+
+    <Spinner
+        android:id="@+id/android_material_design_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x13"
+        android:layout_marginRight="@dimen/x20"
+        android:textColor="@color/darkish_grey"
+        android:alpha="0.6"
+        android:layout_marginBottom="@dimen/x3"
+        android:textSize="@dimen/x15" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginLeft="@dimen/x20"
+        android:layout_marginRight="@dimen/x20"
+        android:layout_marginBottom="@dimen/x15"
+        android:alpha="0.6"
+        android:background="@drawable/text"/>
+
+
+    <Button
+        android:id="@+id/btnDone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginLeft="@dimen/x20"
+        android:layout_marginRight="@dimen/x20"
+        android:background="@drawable/done"
+        android:gravity="center"
+        android:text="@string/done"
+        android:textColor="@color/white"
+        android:textSize="@dimen/x16"
+
+        />
+
+
+</LinearLayout>
