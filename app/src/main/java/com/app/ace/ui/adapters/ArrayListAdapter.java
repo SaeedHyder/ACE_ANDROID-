@@ -1,15 +1,19 @@
 package com.app.ace.ui.adapters;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.SpinnerAdapter;
 
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Adapter used in combination with {@link ViewBinder} to provide the basic
@@ -70,7 +74,7 @@ public class ArrayListAdapter<T> extends BaseAdapter implements SpinnerAdapter {
 		arrayList.addAll( entityList );
 		notifyDataSetChanged();
 	}
-	
+
 	@Override
 	public int getCount() {
 		return arrayList.size();
@@ -85,7 +89,7 @@ public class ArrayListAdapter<T> extends BaseAdapter implements SpinnerAdapter {
 	public long getItemId( int position ) {
 		return position;
 	}
-	
+
 	@Override
 	public View getView( int position, View view, ViewGroup arg2 ) {
 		
@@ -100,7 +104,7 @@ public class ArrayListAdapter<T> extends BaseAdapter implements SpinnerAdapter {
 		
 		return convertView;
 	}
-	
+
 	public T getItemFromList( int index ) {
 		return arrayList.get( index );
 	}
@@ -108,5 +112,6 @@ public class ArrayListAdapter<T> extends BaseAdapter implements SpinnerAdapter {
 	public List<T> getList() {
 		return arrayList;
 	}
+
 
 }
