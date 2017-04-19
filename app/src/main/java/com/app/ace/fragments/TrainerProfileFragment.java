@@ -546,7 +546,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
             case R.id.iv_profile:
 
-               getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(257),"TrainerProfileFragment");
+               getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(prefHelper.getUserId())),"TrainerProfileFragment");
 
                 break;
 

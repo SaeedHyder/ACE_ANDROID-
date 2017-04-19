@@ -3,11 +3,14 @@ package com.app.ace.retrofit;
 
 import com.app.ace.entities.CreatePostEnt;
 import com.app.ace.entities.CreaterEnt;
+import com.app.ace.entities.GetMessages;
 import com.app.ace.entities.HomeResultEnt;
+import com.app.ace.entities.MsgEnt;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.RegistrationResult;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -153,6 +156,13 @@ public interface WebService {
     @GET("post/user/{user_id}")
     Call<ResponseWrapper<CreaterEnt>> UserProfilePosts(
             @Path("user_id") String user_id);
+
+    @FormUrlEncoded
+    @POST("message/get")
+    Call<ResponseWrapper<ArrayList<MsgEnt>>> GetMsg(
+            @Field("sender_id") String sender_id,
+            @Field("receiver_id") String receiver_id);
+
 
 
    /* @Multipart

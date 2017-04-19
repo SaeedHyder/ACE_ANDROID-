@@ -74,16 +74,14 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
         viewHolder.userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppConstants.is_show_trainer = false;
-                context.addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(prefHelper.getUserId())), "TrainerProfileFragment");
+                //context.addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(prefHelper.getUserId())), "TrainerProfileFragment");
             }
         });
 
         viewHolder.userImage2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppConstants.is_show_trainer = true;
-                context.addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(prefHelper.getUserId())), "TrainerProfileFragment");
+                //context.addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(prefHelper.getUserId())), "TrainerProfileFragment");
             }
         });
 

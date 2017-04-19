@@ -10,8 +10,13 @@ import android.widget.ListView;
 
 import com.app.ace.R;
 import com.app.ace.entities.ChatDataItem;
+import com.app.ace.entities.HomeListDataEnt;
+import com.app.ace.entities.MsgEnt;
+import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
+import com.app.ace.global.AppConstants;
 import com.app.ace.global.CommentToChatMsgConstants;
+import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.ChatListBinder;
 import com.app.ace.ui.views.AnyEditTextView;
@@ -20,7 +25,12 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import roboguice.inject.InjectView;
+
+import static android.os.Build.VERSION_CODES.M;
 
 /**
  * Created by khan_muhammad on 3/20/2017.
@@ -36,6 +46,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     @InjectView(R.id.imgSend)
     private ImageView imgSend;
+
+    boolean isSender=true;
 
     String stringer;
 
@@ -90,16 +102,71 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 
 
+        getAllMsges();
 
         setListener();
-        getChatData();
+        //getChatData();
+    }
+
+    private void getAllMsges() {
+
+        loadingStarted();
+
+        Call<ResponseWrapper<ArrayList<MsgEnt>>> callBack = webService.GetMsg(
+                "260",
+                "257");
+        callBack.enqueue(new Callback<ResponseWrapper<ArrayList<MsgEnt>>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<ArrayList<MsgEnt>>> call, Response<ResponseWrapper<ArrayList<MsgEnt>>> response) {
+                loadingFinished();
+
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+
+                    setChatMsges(response.body().getResult());
+
+                }
+                else {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<ArrayList<MsgEnt>>> call, Throwable t) {
+
+                loadingFinished();
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+            }
+        });
+    }
+
+
+
+    private void setChatMsges(ArrayList<MsgEnt> msgArrayList) {
+
+        collection = new ArrayList<>();
+
+
+        for(MsgEnt msgEnt : msgArrayList){
+
+            if(msgEnt.getSender_id()== Integer.parseInt(prefHelper.getUserId()))
+            {
+                isSender=false;
+            }
+            else isSender=true;
+
+            collection.add(new ChatDataItem(msgEnt.getSender().getProfile_image(),msgEnt.getMessage_text(),msgEnt.getCreated_at(),msgEnt.getReceiver().getProfile_image(),msgEnt.getMessage_text(),msgEnt.getCreated_at(),isSender));
+
+
+        }
+        bindData(collection);
+
     }
 
     private void setListener() {
         imgSend.setOnClickListener(this);
     }
 
-    private void getChatData() {
+ /*   private void getChatData() {
 
         collection = new ArrayList<>();
 
@@ -111,7 +178,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             collection.add(new ChatDataItem("drawable://" + R.drawable.profile_pic, getString(R.string.i_wont_be), "3 mins ago", "drawable://" + R.drawable.profile_pic_trainer, commentToChatMsgConstants.getCommentC(), "6 mins ago", false));
         }
         bindData(collection);
-    }
+    }*/
 
     private void bindData(ArrayList<ChatDataItem> collection) {
         adapter.clearList();
