@@ -163,6 +163,12 @@ public interface WebService {
             @Field("sender_id") String sender_id,
             @Field("receiver_id") String receiver_id);
 
+    @FormUrlEncoded
+    @POST("message/send")
+    Call<ResponseWrapper<ArrayList<MsgEnt>>> SendMsg(
+            @Field("sender_id") String sender_id,
+            @Field("receiver_id") String receiver_id,
+            @Field("message_text") String message_text);
 
 
    /* @Multipart

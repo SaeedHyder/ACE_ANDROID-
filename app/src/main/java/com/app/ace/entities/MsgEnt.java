@@ -22,7 +22,7 @@ public class MsgEnt {
 
 
 
-    ArrayList<MsgEnt> msgArrayList;
+
 
     public int getId() {
         return id;
@@ -106,13 +106,7 @@ public class MsgEnt {
 
 
 
-    public ArrayList<MsgEnt> getMsgArrayList() {
-        return msgArrayList;
-    }
 
-    public void setMsgArrayList(ArrayList<MsgEnt> msgArrayList) {
-        this.msgArrayList = msgArrayList;
-    }
 
 
 }

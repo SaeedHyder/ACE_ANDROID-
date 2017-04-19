@@ -55,7 +55,7 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
             viewHolder.RightLayout.setVisibility(View.GONE);
 
             imageLoader.displayImage(entity.getSenderImage(), viewHolder.userImage);
-            imageLoader.displayImage(entity.getReceiverImage(), viewHolder.userImage2);
+
             viewHolder.txtSenderChat.setText(entity.getSenderMessage());
             viewHolder.txtSenderDate.setText(entity.getSenderMessageTime());
 
@@ -67,6 +67,7 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
             viewHolder.RightLayout.setVisibility(View.VISIBLE);
             viewHolder.leftLayout.setVisibility(View.GONE);
 
+            imageLoader.displayImage(entity.getSenderImage(),viewHolder.userImage2);
             viewHolder.txtReceiverChat.setText(entity.getReceiverMessage());
             viewHolder.txtReceiverDate.setText(entity.getReceiverMessageTime());
         }

@@ -27,6 +27,28 @@ public class Receiver {
     String education;
     String university;
     String gym_name;
+    String gym_latitude;
+    String gym_longitude;
+    String speciality;
+    String experience;
+    String primary_reason;
+    String gym_days;
+    String gym_timing_from;
+    String gym_timing_to;
+    String resume;
+    String user_type;
+    String social_media_id;
+    String social_media_platform;
+    String notification_status;
+    String device_type;
+    String device_token;
+    String last_login;
+    String profile_image;
+    String verification_code;
+    String is_verified;
+    String created_at;
+    String updated_at;
+    String deleted_at;
 
     public int getId() {
         return id;
@@ -372,26 +394,4 @@ public class Receiver {
         this.deleted_at = deleted_at;
     }
 
-    String gym_latitude;
-    String gym_longitude;
-    String speciality;
-    String experience;
-    String primary_reason;
-    String gym_days;
-    String gym_timing_from;
-    String gym_timing_to;
-    String resume;
-    String user_type;
-    String social_media_id;
-    String social_media_platform;
-    String notification_status;
-    String device_type;
-    String device_token;
-    String last_login;
-    String profile_image;
-    String verification_code;
-    String is_verified;
-    String created_at;
-    String updated_at;
-    String deleted_at;
 }

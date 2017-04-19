@@ -50,6 +50,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     boolean isSender=true;
 
     String stringer;
+    String SenderFullName;
 
     public static String SIGNUP_MODEL = "signup_model";
 
@@ -113,8 +114,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         loadingStarted();
 
         Call<ResponseWrapper<ArrayList<MsgEnt>>> callBack = webService.GetMsg(
-                "260",
-                "257");
+                prefHelper.getUserId(),
+                "260");
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<MsgEnt>>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<ArrayList<MsgEnt>>> call, Response<ResponseWrapper<ArrayList<MsgEnt>>> response) {
@@ -148,14 +149,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
         for(MsgEnt msgEnt : msgArrayList){
 
+
             if(msgEnt.getSender_id()== Integer.parseInt(prefHelper.getUserId()))
             {
                 isSender=false;
             }
-            else isSender=true;
+            else {
+                isSender = true;
+            }
 
             collection.add(new ChatDataItem(msgEnt.getSender().getProfile_image(),msgEnt.getMessage_text(),msgEnt.getCreated_at(),msgEnt.getReceiver().getProfile_image(),msgEnt.getMessage_text(),msgEnt.getCreated_at(),isSender));
-
 
         }
         bindData(collection);
@@ -217,11 +220,50 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.imgSend:
                 if (edtChat.getText().length() > 0) {
-                    collection.add(new ChatDataItem("drawable://" + R.drawable.profile_pic, getString(R.string.i_wont_be), "3 mins ago", "drawable://" + R.drawable.profile_pic_trainer, edtChat.getText().toString(), "6 mins ago", false));
+
+                    sendMsg();
+                   // collection.add(new ChatDataItem("drawable://" + R.drawable.profile_pic, getString(R.string.i_wont_be), "3 mins ago", "drawable://" + R.drawable.profile_pic_trainer, edtChat.getText().toString(), "6 mins ago", false));
                     edtChat.getText().clear();
-                    bindData(collection);
+                  //  bindData(collection);
                 }
                 break;
         }
+    }
+
+    private void sendMsg() {
+
+        loadingStarted();
+
+        Call<ResponseWrapper<ArrayList<MsgEnt>>> callBack = webService.SendMsg(
+                prefHelper.getUserId(),
+                "260",
+                edtChat.getText().toString());
+        callBack.enqueue(new Callback<ResponseWrapper<ArrayList<MsgEnt>>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<ArrayList<MsgEnt>>> call, Response<ResponseWrapper<ArrayList<MsgEnt>>> response) {
+                loadingFinished();
+
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+
+                    ArrayList<MsgEnt> msg =response.body().getResult();
+                    msg.get(0);
+
+                    collection.add(new ChatDataItem(msg.get(0).getSender().getProfile_image(),msg.get(0).getMessage_text(),msg.get(0).getCreated_at(),msg.get(0).getReceiver().getProfile_image(),msg.get(0).getMessage_text(),msg.get(0).getCreated_at(),false));
+                    bindData(collection);
+                }
+                else {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<ArrayList<MsgEnt>>> call, Throwable t) {
+
+                loadingFinished();
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+            }
+        });
+
+
     }
 }
