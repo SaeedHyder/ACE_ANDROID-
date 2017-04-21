@@ -1,5 +1,6 @@
 package com.app.ace.fragments;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -7,10 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.app.ace.R;
 import com.app.ace.entities.TrainingBookingCalenderItem;
 import com.app.ace.fragments.abstracts.BaseFragment;
+import com.app.ace.helpers.DateHelper;
+import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.TrainingBooking;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.TrainingBookingListItemBinder;
@@ -22,8 +27,11 @@ import com.github.jhonnyx2012.horizontalpicker.HorizontalPicker;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import roboguice.inject.InjectView;
+
+
 
 /**
  * Created by muniyemiftikhar on 4/7/2017.
@@ -33,6 +41,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
 
     @InjectView(R.id.avail)
     AnyTextView avail;
+
 
     @InjectView(R.id.iv_Home)
     private ImageView iv_Home;
@@ -49,6 +58,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
     @InjectView(R.id.lv_trainingBokingCalender)
     private ListView lv_trainingBokingCalender;
 
+
     private ArrayListAdapter<TrainingBookingCalenderItem> adapter;
 
     private ArrayList<TrainingBookingCalenderItem> userCollection = new ArrayList<>();
@@ -62,7 +72,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new ArrayListAdapter<TrainingBookingCalenderItem>(getDockActivity(), new TrainingBookingListItemBinder(this));
+        adapter = new ArrayListAdapter<TrainingBookingCalenderItem>(getDockActivity(), new TrainingBookingListItemBinder(getDockActivity(),this));
     }
 
     @Override
@@ -73,6 +83,8 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
         datePicker
                 .setListener(this)
                 .setDays(120)
@@ -92,8 +104,6 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
         iv_profile.setOnClickListener(this);
         datePicker.setOnClickListener(this);
         avail.setOnClickListener(this);
-
-
 
     }
 
@@ -125,6 +135,20 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
+        titleBar.showRepeatButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getDockActivity(),"Repeat",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        titleBar.showTickButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(getDockActivity(),"Saved",Toast.LENGTH_LONG).show();
+            }
+        });
         titleBar.setSubHeading("Trainer Calendar");
 
     }
@@ -136,13 +160,6 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
     @Override
     public void addList() {
 
-      //userCollection= new ArrayList<>();
-       //userCollection.add(new TrainingBookingCalenderItem("03:00","1:00"));
-       //userCollection.add(new TrainingBookingCalenderItem("02:00","1:00"));
-//backList();
-
-
-      // bindData(userCollection);
     }
 
     @Override
@@ -178,10 +195,10 @@ avail.setText("Second Availabilty");
 
                 break;
 
+
         }
 
     }
-
 
 }
 

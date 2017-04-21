@@ -139,6 +139,16 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
     }
 
     @Override
+    public void setFilePath(String filePath) {
+
+    }
+
+    @Override
+    public void setVideo(String videoPath) {
+
+    }
+
+    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         // On selecting a spinner item
         String item = parent.getItemAtPosition(position).toString();

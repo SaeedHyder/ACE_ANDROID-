@@ -131,7 +131,7 @@ public class VarificationCodeFragment extends BaseFragment implements View.OnCli
 
         Call<ResponseWrapper<RegistrationResult>> callBack = webService.verifyUser(
                 edtCode.getText().toString(),
-                AppConstants.user_id);
+                prefHelper.getUserId());
 
         callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
             @Override

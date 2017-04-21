@@ -24,6 +24,7 @@ public class NewMsgChat_Screen_Fragment extends BaseFragment implements View.OnC
 
     public static NewMsgChat_Screen_Fragment newInstance()
     {
+
         return new NewMsgChat_Screen_Fragment();
     }
 

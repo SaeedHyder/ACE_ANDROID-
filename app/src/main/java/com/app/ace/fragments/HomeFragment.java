@@ -15,6 +15,7 @@ import android.widget.PopupWindow;
 import com.app.ace.BaseApplication;
 import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
+import com.app.ace.activities.MainActivity;
 import com.app.ace.entities.CreatePostEnt;
 import com.app.ace.entities.HomeListDataEnt;
 import com.app.ace.entities.HomeResultEnt;
@@ -41,7 +42,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
-public class HomeFragment extends BaseFragment implements View.OnClickListener{
+public class HomeFragment extends BaseFragment implements View.OnClickListener , MainActivity.ImageSetter{
 
     @InjectView(R.id.gridView)
     private GridView gridView;
@@ -114,7 +115,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
         iv_Fav.setOnClickListener(this);
         iv_profile.setOnClickListener(this);
 
-
+        getMainActivity().setImageSetter(this);
 
     }
 
@@ -190,7 +191,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
 
     }
 
-    private void createPost() {
+    private void createPost(boolean isImage) {
 
         loadingStarted();
 
@@ -205,7 +206,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
             UserName = "";
         }
 
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData("image", postImage.getName(), RequestBody.create(MediaType.parse("image/*"), postImage));
+        MultipartBody.Part filePart;
+
+        if(isImage){
+            filePart = MultipartBody.Part.createFormData("image", postImage.getName(), RequestBody.create(MediaType.parse("image/*"), postImage));
+
+        }else{
+            filePart = MultipartBody.Part.createFormData("image", postImage.getName(), RequestBody.create(MediaType.parse("video/*"), postImage));
+        }
+
 
 
         Call<ResponseWrapper<CreatePostEnt>> callBack = webService.createPost(
@@ -298,9 +307,30 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
                 break;
 
             case R.id.iv_Camera:
+               CameraHelper.uploadMedia(getMainActivity());
 
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                //CameraHelper.uploadPhotoAndVideoDialog(HomeFragment.newInstance(),getDockActivity());
+
+              //  UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
                 //CameraHelper.uploadPhotoDialog(this, getDockActivity());
+
+               /* dialog = new CameraGalleryDialogFragment();
+
+                dialog.setData(getDockActivity());
+
+                dialog.setListener(new CameraGalleryDialogFragment.onCameraDialogListener() {
+                    @Override
+                    public void onResultReceived(String imageUri, File file) {
+
+                    }
+
+                    @Override
+                    public void onError(String reason) {
+
+                    }
+                });
+
+                dialog.show(getDockActivity().getSupportFragmentManager(),"My_Dialog");*/
 
                 break;
 
@@ -350,10 +380,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
     }
 
 
-
+   /* CameraGalleryDialogFragment dialog;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        dialog.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == AppConstants.CAMERA_REQUEST) {
 
@@ -367,7 +398,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
             if(postImage !=null)
                 createPost();
         }
-    }
+    }*/
 
 
     void popUpDropdown(View v)
@@ -428,4 +459,28 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener{
 
     }
 
+    @Override
+    public void setImage(String imagePath) {
+
+        if(imagePath != null){
+            postImage = new File(imagePath);
+            createPost(true);
+        }
+
+    }
+
+    @Override
+    public void setFilePath(String filePath) {
+
+    }
+
+    @Override
+    public void setVideo(String videoPath) {
+
+        if(videoPath != null){
+            postImage = new File(videoPath);
+            createPost(false);
+        }
+
+    }
 }

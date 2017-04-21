@@ -39,7 +39,7 @@ public class NewMessageListItemBinder extends ViewBinder<NewMessageDataItem> {
     }
 
     @Override
-    public void bindView(NewMessageDataItem entity, int position, int grpPosition, View view, Activity activity) {
+    public void bindView(final NewMessageDataItem entity, int position, int grpPosition, View view, Activity activity) {
 
         NewMessageListItemBinder.ViewHolder viewHolder = (NewMessageListItemBinder.ViewHolder) view.getTag();
 

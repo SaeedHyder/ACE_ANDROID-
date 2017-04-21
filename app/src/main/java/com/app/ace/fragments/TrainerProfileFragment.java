@@ -454,10 +454,10 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
     private void bindData(List<String> dataCollection,int noOfColumns) {
         adapter.clearList();
-        gv_pics.setAdapter(adapter);
         gv_pics.setNumColumns(noOfColumns);
         adapter.addAll(dataCollection);
-        adapter.notifyDataSetChanged();
+        gv_pics.setAdapter(adapter);
+        //adapter.notifyDataSetChanged();
     }
 
 

@@ -145,6 +145,19 @@ public class TitleBar extends RelativeLayout {
 
 	}
 
+    public void showTickButton(View.OnClickListener tickBtnListener) {
+        btnRight2.setVisibility(View.VISIBLE);
+        btnRight2.setImageResource(R.drawable.tick);
+        btnRight2.setOnClickListener(tickBtnListener);
+
+    }
+	public void showRepeatButton(View.OnClickListener repeatBtnListener) {
+		btnRight.setVisibility(View.VISIBLE);
+		btnRight.setImageResource(R.drawable.repeat);
+		btnRight.setOnClickListener(repeatBtnListener);
+
+	}
+
 	public void showSettingButton(View.OnClickListener settingBtnListener) {
 		btnRight.setVisibility(View.VISIBLE);
 		btnRight.setImageResource(R.drawable.settings_icon);

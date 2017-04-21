@@ -328,4 +328,14 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
                     "file:///" +imagePath, iv_profile);
         }
     }
+
+    @Override
+    public void setFilePath(String filePath) {
+
+    }
+
+    @Override
+    public void setVideo(String videoPath) {
+
+    }
 }

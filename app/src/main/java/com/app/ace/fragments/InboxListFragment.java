@@ -9,8 +9,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.app.ace.R;
+import com.app.ace.entities.CreaterEnt;
 import com.app.ace.entities.InboxDataItem;
+import com.app.ace.entities.MsgEnt;
+import com.app.ace.entities.PostsEnt;
+import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
+import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.InboxListItemBinder;
@@ -18,7 +23,12 @@ import com.app.ace.ui.views.TitleBar;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import roboguice.inject.InjectView;
+
+import static com.app.ace.global.AppConstants.user_id;
 
 /**
  * Created by khan_muhammad on 3/20/2017.
@@ -55,11 +65,55 @@ public class InboxListFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Call<ResponseWrapper<ArrayList<MsgEnt>>> callBack = webService.userinbox(prefHelper.getUserId());
+        loadingStarted();
+        callBack.enqueue(new Callback<ResponseWrapper<ArrayList<MsgEnt>>>() {
+
+                             @Override
+                             public void onResponse(Call<ResponseWrapper<ArrayList<MsgEnt>>> call, Response<ResponseWrapper<ArrayList<MsgEnt>>> response) {
+                                 loadingFinished();
+                                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+
+                                AddInboxData(response.body().getResult());
+
+                                 }
+
+                                 else {
+                                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                                 }
+
+                             }
+
+                             @Override
+                             public void onFailure(Call<ResponseWrapper<ArrayList<MsgEnt>>> call, Throwable t) {
+
+                                 loadingFinished();
+                                 UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+
+                             }
+                         });
+
         setListener();
-        getUserData();
+       // getUserData();
     }
 
-    private void getUserData() {
+    private void AddInboxData(ArrayList<MsgEnt> result) {
+
+        userCollection = new ArrayList<>();
+
+        for(MsgEnt msg : result){
+
+            userCollection.add(new InboxDataItem(msg.getSender().getProfile_image(),msg.getSender().getFirst_name()+" "+msg.getSender().getLast_name(),msg.getMessage().getMessage_text()));
+
+        }
+
+        bindData(userCollection);
+    }
+
+
+
+
+  /*  private void getUserData() {
 
         userCollection= new ArrayList<>();
         userCollection.add(new InboxDataItem("drawable://" + R.drawable.profile_pic, getString(R.string.james_blunt), getString(R.string.i_wont_be) ));
@@ -68,7 +122,7 @@ public class InboxListFragment extends BaseFragment {
 
 
         bindData(userCollection);
-    }
+    }*/
 
     private void setListener() {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

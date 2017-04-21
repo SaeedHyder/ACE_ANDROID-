@@ -1,6 +1,9 @@
 package com.app.ace.fragments;
 
 import android.app.TimePickerDialog;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -10,14 +13,17 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.app.ace.R;
+import com.app.ace.activities.MainActivity;
 import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.TwitterUser;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.global.SignupFormConstants;
+import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.DateHelper;
 import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.UIHelper;
@@ -40,6 +46,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+import static android.R.attr.path;
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by khan_muhammad on 3/13/2017.
  */
@@ -49,6 +58,7 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
     @InjectView(R.id.btnSignUp)
     private Button btnSignUp;
+
 
     @InjectView(R.id.edtPrimaryReason)
     private AnyEditTextView edtPrimaryReason;
@@ -429,12 +439,33 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.txt_browse_cv:
 
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                CameraHelper.uploadFile(getMainActivity());
+              /*  //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                Intent intent = new Intent();
+                intent.setType("text/plain");
+                //intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent,AppConstants.CV_REQUEST);
 
-                break;
+                break;*/
 
         }
     }
+
+
+   /* @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && data != null) {
+
+            Uri currFileURI = data.getData();
+            String path = currFileURI.getPath();
+            txt_browse_cv.setText(path);
+            Toast.makeText(getDockActivity(),path,Toast.LENGTH_LONG).show();
+        }
+
+    }*/
 
     private void signupTrainer() {
 

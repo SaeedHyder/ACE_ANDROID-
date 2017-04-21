@@ -170,6 +170,10 @@ public interface WebService {
             @Field("receiver_id") String receiver_id,
             @Field("message_text") String message_text);
 
+    @GET("message/{user_id}")
+    Call<ResponseWrapper<ArrayList<MsgEnt>>> userinbox(
+            @Path("user_id") String user_id);
+
 
    /* @Multipart
     @GET("user/{user_id}")

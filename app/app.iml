@@ -159,6 +159,7 @@
     <orderEntry type="module" module-name="horizontal-picker" exported="" />
     <orderEntry type="module" module-name="commons-lang3-3.1" exported="" />
     <orderEntry type="module" module-name="library" exported="" />
+    <orderEntry type="library" exported="" name="android-android-25" level="project" />
     <orderEntry type="library" exported="" name="support-compat-25.1.1" level="project" />
     <orderEntry type="library" exported="" name="joda-time-2.9.7" level="project" />
     <orderEntry type="library" exported="" name="support-core-ui-25.1.1" level="project" />

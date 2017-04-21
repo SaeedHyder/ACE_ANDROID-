@@ -4,6 +4,7 @@ import java.io.File;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -376,7 +377,76 @@ public class CameraHelper {
 		myAlertDialog.show();
 	}
 
+	public static void uploadFile(final MainActivity activity) {
+		AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(activity);
+		myAlertDialog.setTitle("Select File");
+		myAlertDialog.setMessage("How do you want to set your file?");
 
+		myAlertDialog.setPositiveButton("Select File", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				activity.pickFile();
+			}
+		});
+	}
+
+	public static void uploadMedia(final
+										 MainActivity activity) {
+		AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(activity);
+		myAlertDialog.setTitle("Select Photo / Video");
+		myAlertDialog.setMessage("How do you want to set your photo?");
+
+		myAlertDialog.setPositiveButton("Video",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+
+						AlertDialog.Builder videoDialog=new AlertDialog.Builder(activity);
+						videoDialog.setTitle("Select Video");
+						videoDialog.setMessage("How do you want to set your photo?");
+						videoDialog.setPositiveButton("Camera", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								activity.captureVideo();
+							}
+						});
+						videoDialog.setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								activity.pickVideo();
+							}
+						});
+
+						videoDialog.show();
+						//activity.chooseImage();
+						//activity.pickVideo();
+						//activity.pickFile();
+					}
+				});
+
+		myAlertDialog.setNegativeButton("Image",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+						AlertDialog.Builder imageDialog=new AlertDialog.Builder(activity);
+						imageDialog.setTitle("Select Image");
+						imageDialog.setMessage("How do you want to set your photo?");
+						imageDialog.setPositiveButton("Camera", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								activity.takePicture();
+							}
+						});
+						imageDialog.setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								activity.chooseImage();
+							}
+						});
+
+						imageDialog.show();
+					}
+				});
+		myAlertDialog.show();
+	}
 
 	public static void uploadPhotoDialog(final
 										 MainActivity activity) {

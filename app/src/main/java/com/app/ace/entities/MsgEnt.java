@@ -20,6 +20,56 @@ public class MsgEnt {
     public Sender sender;
     public Receiver receiver;
 
+    //Add Fields for Inbox layout
+    String message_id;
+    String deleted_at;
+    String sender_flag;
+    String receiver_flag;
+    public Message message;
+
+
+    public String getMessage_id() {
+        return message_id;
+    }
+
+    public void setMessage_id(String message_id) {
+        this.message_id = message_id;
+    }
+
+    public String getDeleted_at() {
+        return deleted_at;
+    }
+
+    public void setDeleted_at(String deleted_at) {
+        this.deleted_at = deleted_at;
+    }
+
+    public String getSender_flag() {
+        return sender_flag;
+    }
+
+    public void setSender_flag(String sender_flag) {
+        this.sender_flag = sender_flag;
+    }
+
+    public String getReceiver_flag() {
+        return receiver_flag;
+    }
+
+    public void setReceiver_flag(String receiver_flag) {
+        this.receiver_flag = receiver_flag;
+    }
+
+    public Message getMessage() {
+        return message;
+    }
+
+    public void setMessage(Message message) {
+        this.message = message;
+    }
+
+
+
 
 
 

@@ -13,6 +13,7 @@ public class AppConstants {
     public static final int CAMERA_REQUEST = 1001;
     public static final int GALLERY_REQUEST = 1002;
     public static final int VIDEO_REQUEST = 1003;
+    public static final int CV_REQUEST = 1004;
 
     public static boolean is_show_trainer = false;
     public static String user_id;

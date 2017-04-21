@@ -255,4 +255,14 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
         }
     }
 
+    @Override
+    public void setFilePath(String filePath) {
+
+    }
+
+    @Override
+    public void setVideo(String videoPath) {
+
+    }
+
 }
