@@ -15,15 +15,22 @@
         <LinearLayout
             android:id="@+id/ll_calender"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="@dimen/x32"
+            android:background="@color/darkbrown"
+            android:orientation="vertical">
 
-            <com.github.jhonnyx2012.horizontalpicker.HorizontalPicker
-                android:id="@+id/datePicker"
-                android:layout_width="match_parent"
+            <Spinner
+                android:id="@+id/sp_month"
+                android:layout_width="@dimen/x130"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:layout_gravity="center"
+                android:hint="Select Month"
+                android:textColorHint="@color/white"
+                android:textColor="@color/white"
+                android:textSize="@dimen/x15"
+                android:layout_marginTop="@dimen/x5"
                 />
-
 
 
         </LinearLayout>

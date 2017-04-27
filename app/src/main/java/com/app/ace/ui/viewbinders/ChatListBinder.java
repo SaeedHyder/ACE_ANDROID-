@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
 import com.app.ace.entities.ChatDataItem;
+import com.app.ace.fragments.HomeFragment;
 import com.app.ace.fragments.TrainerProfileFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.BasePreferenceHelper;
@@ -44,7 +45,7 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
     }
 
     @Override
-    public void bindView(ChatDataItem entity, int position, int grpPosition,
+    public void bindView(final ChatDataItem entity, int position, int grpPosition,
                          View view, Activity activity) {
 
 
@@ -75,14 +76,14 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
         viewHolder.userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //context.addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(prefHelper.getUserId())), "TrainerProfileFragment");
-            }
-        });
+                context.addDockableFragment(TrainerProfileFragment.newInstance(entity.getUserId()), "TrainerProfileFragment");
+    }
+});
 
         viewHolder.userImage2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //context.addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(prefHelper.getUserId())), "TrainerProfileFragment");
+                context.addDockableFragment(TrainerProfileFragment.newInstance(entity.getUserId()), "TrainerProfileFragment");
             }
         });
 

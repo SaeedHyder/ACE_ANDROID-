@@ -141,7 +141,7 @@ public class DialogFragment extends RoboDialogFragment implements View.OnClickLi
         super.onViewCreated(view, savedInstanceState);
 
 
-        showFragment();
+
         hideButtons();
         setDialogText();
         setListener();

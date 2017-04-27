@@ -6,8 +6,11 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -26,11 +29,16 @@ import com.github.jhonnyx2012.horizontalpicker.HorizontalPicker;
 
 import org.joda.time.DateTime;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 import roboguice.inject.InjectView;
 
+import static com.app.ace.R.id.datePicker;
+import static com.app.ace.R.id.sp_weeks;
 
 
 /**
@@ -52,11 +60,17 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
     @InjectView(R.id.iv_profile)
     private ImageView iv_profile;
 
-    @InjectView(R.id.datePicker)
-    private HorizontalPicker datePicker;
+
 
     @InjectView(R.id.lv_trainingBokingCalender)
     private ListView lv_trainingBokingCalender;
+
+    ArrayList<String> days;
+
+    @InjectView(R.id.sp_month)
+    Spinner sp_month;
+    String month;
+    int monthValue;
 
 
     private ArrayListAdapter<TrainingBookingCalenderItem> adapter;
@@ -84,16 +98,141 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        SpinnerData();
 
-        datePicker
-                .setListener(this)
-                .setDays(120)
-                .setOffset(7)
-                .init();
-        datePicker.setDate(new DateTime());
+        days=DaysOfMonth(monthValue);
+
         getSearchUserData();
        // addList();
         setListener();
+
+    }
+
+    private void SpinnerData() {
+
+        List<String> months = new ArrayList<String>();
+        months.add("Select month");
+        months.add("JANUARY");
+        months.add("FEBRUARY");
+        months.add("MARCH");
+        months.add("APRIL");
+        months.add("MAY");
+        months.add("JUNE");
+        months.add("JULY");
+        months.add("AUGUST");
+        months.add("SEPTEMBER");
+        months.add("OCTOBER");
+        months.add("NOVEMBER");
+        months.add("DECEMBER");
+
+        ArrayAdapter<String> monthAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, months);
+        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_month.setAdapter(monthAdapter);
+
+        sp_month.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                month = sp_month.getSelectedItem().toString();
+
+                if(month.contains("JANUARY"))
+                {
+                    monthValue=0;
+                    days=DaysOfMonth(monthValue);
+                    getSearchUserData();
+                }
+                if(month.contains("FEBRUARY"))
+                {
+                    monthValue=1;
+                    days=DaysOfMonth(monthValue);
+                    getSearchUserData();
+                }
+                if(month.contains("MARCH"))
+                {
+                    monthValue=2;
+                    days=DaysOfMonth(monthValue);
+                    getSearchUserData();
+                }
+                if(month.contains("APRIL"))
+                {
+                    monthValue=3;
+                    days=DaysOfMonth(monthValue);
+                    getSearchUserData();
+                }
+                if(month.contains("MAY"))
+                {
+                    monthValue=4;
+                    days=DaysOfMonth(monthValue);
+                    getSearchUserData();
+                }
+                if(month.contains("JUNE"))
+                {
+                    monthValue=5;
+                    days=DaysOfMonth(monthValue);
+                    getSearchUserData();
+                }
+                if(month.contains("JULY"))
+                {
+                    monthValue=6;
+                    days=DaysOfMonth(monthValue);
+                    getSearchUserData();
+                }
+                if(month.contains("AUGUST"))
+                {
+                    monthValue=7;
+                    days=DaysOfMonth(monthValue);
+                    getSearchUserData();
+                }
+                if(month.contains("SEPTEMBER"))
+                {
+                    monthValue=8;
+                    days=DaysOfMonth(monthValue);
+                    getSearchUserData();
+                }
+                if(month.contains("OCTOBER"))
+                {
+                    monthValue=9;
+                    days=DaysOfMonth(monthValue);
+                    getSearchUserData();
+                }
+                if(month.contains("NOVEMBER"))
+                {
+                    monthValue=10;
+                    days=DaysOfMonth(monthValue);
+                    getSearchUserData();
+                }
+                if(month.contains("DECEMBER"))
+                {
+                    monthValue=11;
+                    days=DaysOfMonth(monthValue);
+                    getSearchUserData();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private ArrayList<String> DaysOfMonth(int monthValue) {
+
+        Calendar mCalendar = Calendar.getInstance();
+        mCalendar.set(2017,monthValue,1);
+        // Calculate remaining days in month
+        int remainingDay = mCalendar.getActualMaximum(Calendar.DAY_OF_MONTH) - mCalendar.get(Calendar.DAY_OF_MONTH) + 1;
+        ArrayList<String> allDays = new ArrayList<String>();
+        SimpleDateFormat mFormat = new SimpleDateFormat("EEE, dd ", Locale.US);
+        for(int i = 0; i < remainingDay; i++){
+            // Add day to list
+            allDays.add(mFormat.format(mCalendar.getTime()));
+            // Move next day
+            mCalendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        return allDays;
+
 
     }
 
@@ -102,7 +241,6 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
         iv_Home.setOnClickListener(this);
         iv_Calander.setOnClickListener(this);
         iv_profile.setOnClickListener(this);
-        datePicker.setOnClickListener(this);
         avail.setOnClickListener(this);
 
     }
@@ -110,8 +248,9 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
 
     private void getSearchUserData() {
         userCollection= new ArrayList<>();
-        userCollection.add(new TrainingBookingCalenderItem("Fri 7","12:00","1:00","4:00","8:00"));
-        userCollection.add(new TrainingBookingCalenderItem("Fri 7","12:00","1:00","4:00","8:00"));
+        for(String item: days) {
+            userCollection.add(new TrainingBookingCalenderItem(item, "12:00", "1:00", "4:00", "8:00"));
+        }
         //userCollection.add(new DetailedScreenItem("Training","BodyBuilding"));
         //addList();
       /*  userCollection= new ArrayList<>();

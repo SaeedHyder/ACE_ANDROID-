@@ -14,6 +14,10 @@ public class RegistrationResult {
     private String updated_at;
     private String user_type;
     private String profile_picture_name;
+
+
+
+    private String resume;
     private String education;
     private String university;
     private String gym_name;
@@ -364,5 +368,13 @@ public class RegistrationResult {
 
     public void set_token(String _token) {
         this._token = _token;
+    }
+
+    public String getResume() {
+        return resume;
+    }
+
+    public void setResume(String resume) {
+        this.resume = resume;
     }
 }

@@ -14,6 +14,7 @@ public class HomeListDataEnt {
 
     int user_id;
 
+
     public HomeListDataEnt(int totoal_likes, int total_comments, String profile_pic_path, String profile_name, String profile_post_pic_path, String friend_name, String friend_comment, int user_id){
 
         setTotoal_likes(totoal_likes);
@@ -24,6 +25,7 @@ public class HomeListDataEnt {
         setFriend_name(friend_name);
         setFriend_comment(friend_comment);
         setUser_id(user_id);
+
     }
 
 
@@ -90,5 +92,6 @@ public class HomeListDataEnt {
     public void setUser_id(int user_id) {
         this.user_id = user_id;
     }
+
 
 }

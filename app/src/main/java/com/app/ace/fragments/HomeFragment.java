@@ -72,6 +72,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
     public File postImage;
 
 
+
     private ArrayListAdapter<HomeListDataEnt> adapter;
     private List<HomeListDataEnt> dataCollection;
 
@@ -302,7 +303,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
 
             case R.id.iv_Fav:
 
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                getDockActivity().addDockableFragment(FollowingFragment.newInstance(),"FollowingFragment");
 
                 break;
 

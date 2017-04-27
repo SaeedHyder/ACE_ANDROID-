@@ -388,6 +388,7 @@ public class CameraHelper {
 				activity.pickFile();
 			}
 		});
+		myAlertDialog.show();
 	}
 
 	public static void uploadMedia(final

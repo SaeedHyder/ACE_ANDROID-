@@ -12,18 +12,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.app.ace.BaseApplication;
 import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
 import com.app.ace.entities.CreaterEnt;
+import com.app.ace.entities.FollowUser;
 import com.app.ace.entities.HomeListDataEnt;
 import com.app.ace.entities.PostsEnt;
 import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.UserProfile;
+import com.app.ace.entities.post;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
@@ -45,7 +50,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+import static com.app.ace.R.id.btn;
+import static com.app.ace.R.id.btn_followTrainee;
 import static com.app.ace.R.id.gridView;
+import static com.app.ace.R.id.txt;
 import static com.app.ace.R.id.txt_Location;
 import static com.app.ace.R.id.txt_Training;
 import static com.app.ace.R.id.txt_avaliability_dis;
@@ -59,7 +67,10 @@ import static com.app.ace.global.AppConstants.user_id;
  * Created by khan_muhammad on 3/17/2017.
  */
 
-public class TrainerProfileFragment extends BaseFragment implements View.OnClickListener{
+public class TrainerProfileFragment extends BaseFragment implements View.OnClickListener {
+
+    @InjectView(R.id.scrollView)
+    private ScrollView scrollView;
 
     @InjectView(R.id.gv_pics)
     private ExpandableGridView gv_pics;
@@ -85,8 +96,20 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     @InjectView(R.id.iv_profile)
     private ImageView iv_profile;
 
+    @InjectView(R.id.btn_followTrainee)
+    Button btn_followTrainee;
+
+    @InjectView(R.id.btn_unfollowTrainee)
+    Button btn_unfollowTrainee;
+
     @InjectView(R.id.btn_follow)
     private Button btn_follow;
+
+    @InjectView(R.id.btn_Unfollow)
+    private Button btn_Unfollow;
+
+    @InjectView(R.id.btn_edit)
+    Button btn_edit;
 
     @InjectView(R.id.btn_request)
     private Button btn_request;
@@ -103,7 +126,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     @InjectView(R.id.ll_trainer)
     private LinearLayout ll_trainer;
 
-       @InjectView(R.id.ll_trainee)
+    @InjectView(R.id.ll_trainee)
     private LinearLayout ll_trainee;
 
     @InjectView(R.id.ll_grid)
@@ -122,6 +145,15 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     @InjectView(R.id.txt_Trainer)
     private AnyTextView txt_Trainer;
 
+    @InjectView(R.id.txt_postCount)
+    AnyTextView txt_postCount;
+
+    @InjectView(R.id.txt_FollowersCount)
+    AnyTextView txt_FollowersCount;
+
+    @InjectView(R.id.txt_FollowingsCount)
+    AnyTextView txt_FollowingsCount;
+
     @InjectView(R.id.rbAddRating)
     private CustomRatingBar rbAddRating;
 
@@ -132,13 +164,13 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     @InjectView(R.id.txt_education_cirtification_dis)
     private AnyTextView txt_education_cirtification_dis;
 
-    @InjectView (R.id.txt_preffered_training_loc_dis)
+    @InjectView(R.id.txt_preffered_training_loc_dis)
     private AnyTextView txt_preffered_training_loc_dis;
 
     @InjectView(R.id.txt_avaliability_dis)
     private AnyTextView txt_avaliability_dis;
 
-    @InjectView (R.id.txt_no_data)
+    @InjectView(R.id.txt_no_data)
     AnyTextView txt_no_data;
 
 
@@ -155,15 +187,12 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     String user_id;
 
 
-
-    /*public static TrainerProfileFragment newInstance()
-    {
+    public static TrainerProfileFragment newInstance() {
         return new TrainerProfileFragment();
-    }*/
+    }
 
 
-    public static TrainerProfileFragment newInstance(int user_id)
-    {
+    public static TrainerProfileFragment newInstance(int user_id) {
         Bundle args = new Bundle();
         args.putString(USER_ID, String.valueOf(user_id));
         TrainerProfileFragment fragment = new TrainerProfileFragment();
@@ -176,8 +205,11 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        user_id = getArguments().getString(USER_ID);
-
+        if (getArguments() != null) {
+            user_id = getArguments().getString(USER_ID);
+        } else {
+            user_id = prefHelper.getUserId();
+        }
 
 
         imageLoader = ImageLoader.getInstance();
@@ -199,18 +231,36 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         super.onViewCreated(view, savedInstanceState);
 
 
-        Call<ResponseWrapper<CreaterEnt>> callBack = webService.traineeProfile(user_id);
+        Call<ResponseWrapper<UserProfile>> callBack = webService.UserProfile(user_id, prefHelper.getUserId());
 
-        callBack.enqueue(new Callback<ResponseWrapper<CreaterEnt>>() {
+        callBack.enqueue(new Callback<ResponseWrapper<UserProfile>>() {
             @Override
-            public void onResponse(Call<ResponseWrapper<CreaterEnt>> call, Response<ResponseWrapper<CreaterEnt>> response) {
+            public void onResponse(Call<ResponseWrapper<UserProfile>> call, Response<ResponseWrapper<UserProfile>> response) {
 
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    if (response.body().getResult().getUser_type().equalsIgnoreCase(AppConstants.trainer) ) {
+                    if (response.body().getResult().getUser_type().equalsIgnoreCase(AppConstants.trainer)) {
+
+                        if (response.body().getResult().getId() == Integer.parseInt(prefHelper.getUserId())) {
+                            btn_edit.setVisibility(View.VISIBLE);
+                            btn_follow.setVisibility(View.GONE);
+                            btn_Unfollow.setVisibility(View.GONE);
+                            btn_request.setVisibility(View.GONE);
+                        }
+
+                        if (response.body().getResult().getIs_following() == 0) {
+                            btn_follow.setVisibility(View.VISIBLE);
+                            btn_Unfollow.setVisibility(View.GONE);
+                        } else {
+                            btn_follow.setVisibility(View.GONE);
+                            btn_Unfollow.setVisibility(View.VISIBLE);
+
+                        }
+
                         ll_one_button.setVisibility(View.INVISIBLE);
                         ll_two_buttons.setVisibility(View.VISIBLE);
+
 
                         ll_trainer.setVisibility(View.VISIBLE);
                         ll_trainee.setVisibility(View.GONE);
@@ -221,13 +271,36 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                         ll_separator.setVisibility(View.VISIBLE);
 
                         if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
-                            ShowTrainerProfile();
-                        }
-                    }
+                            // ShowTrainerProfile();
+                            txt_profileName.setText(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
+                            imageLoader.displayImage(response.body().getResult().getProfile_image(), riv_profile_pic);
+                            txt_education_cirtification_dis.setText(response.body().getResult().getEducation() + " " + response.body().getResult().getUniversity());
+                            txt_preffered_training_loc_dis.setText(response.body().getResult().getAddress());
+                            txt_avaliability_dis.setText(response.body().getResult().getGym_days() + " " + response.body().getResult().getGym_timing_from() + "-" + response.body().getResult().getGym_timing_to());
+                            txt_postCount.setText(response.body().getResult().getPosts_count());
+                            txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
+                            txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
 
-                    else {
+                            ShowUserPosts(response.body().getResult().getPosts());
+                        }
+                    } else {
+                        if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
+                            btn_edit_or_follow.setVisibility(View.GONE);
+                            btn_followTrainee.setVisibility(View.VISIBLE);
+
+                        }
+                        if (response.body().getResult().getIs_following() == 0) {
+                            btn_followTrainee.setVisibility(View.VISIBLE);
+                            btn_unfollowTrainee.setVisibility(View.GONE);
+                        } else {
+                            btn_followTrainee.setVisibility(View.GONE);
+                            btn_unfollowTrainee.setVisibility(View.VISIBLE);
+
+                        }
+
                         ll_one_button.setVisibility(View.VISIBLE);
                         ll_two_buttons.setVisibility(View.INVISIBLE);
+
 
                         ll_trainer.setVisibility(View.GONE);
                         ll_trainee.setVisibility(View.VISIBLE);
@@ -237,8 +310,14 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
                         ll_separator.setVisibility(View.GONE);
 
-                        if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
-                            ShowTrianeeData();
+                        if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
+                            // ShowTrianeeData();
+                            txt_profileName.setText(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
+                            imageLoader.displayImage(response.body().getResult().getProfile_image(), riv_profile_pic);
+                            txt_postCount.setText(response.body().getResult().getPosts_count());
+                            txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
+                            txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
+                            ShowUserPosts(response.body().getResult().getPosts());
                         }
                     }
                 }
@@ -246,7 +325,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             }
 
             @Override
-            public void onFailure(Call<ResponseWrapper<CreaterEnt>> call, Throwable t) {
+            public void onFailure(Call<ResponseWrapper<UserProfile>> call, Throwable t) {
 
                 loadingFinished();
                 UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
@@ -254,57 +333,64 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             }
         });
 
-       /* if(AppConstants.is_show_trainer)
-        {
 
-            ll_one_button.setVisibility(View.INVISIBLE);
-            ll_two_buttons.setVisibility(View.VISIBLE);
-
-            ll_trainer.setVisibility(View.VISIBLE);
-            ll_trainee.setVisibility(View.GONE);
-
-            txt_Trainer.setVisibility(View.VISIBLE);
-            rbAddRating.setVisibility(View.VISIBLE);
-
-            //txt_profileName.setText(getString(R.string.charlie_hunnam));
-           // riv_profile_pic.setBackgroundResource(R.drawable.profile_pic_trainer);
-
-
-            ll_separator.setVisibility(View.VISIBLE);
-
-            if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
-                ShowTrainerProfile();
-            }
-
-        }else{
-
-            ll_one_button.setVisibility(View.VISIBLE);
-            ll_two_buttons.setVisibility(View.INVISIBLE);
-
-            ll_trainer.setVisibility(View.GONE);
-            ll_trainee.setVisibility(View.VISIBLE);
-
-            txt_Trainer.setVisibility(View.GONE);
-            rbAddRating.setVisibility(View.GONE);
-
-           // txt_profileName.setText(getString(R.string.james_blunt));
-           // riv_profile_pic.setBackgroundResource(R.drawable.profile_pic);
-
-            ll_separator.setVisibility(View.GONE);
-
-            if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
-                ShowTrianeeData();
-            }
-            }*/
-
-
-        if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
-            getBrowsedAdData();
-        }
         setListener();
     }
 
-    private void ShowTrainerProfile() {
+    private void ShowUserPosts(ArrayList<post> userPost) {
+
+        dataCollection = new ArrayList<String>();
+
+        for (post postsEnt : userPost) {
+
+            dataCollection.add(new String(postsEnt.getPost_image()));
+
+        }
+
+        bindData(dataCollection, 3);
+    }
+
+    private void bindData(List<String> dataCollection, int noOfColumns) {
+        adapter.clearList();
+        gv_pics.setNumColumns(noOfColumns);
+        adapter.addAll(dataCollection);
+        gv_pics.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+        scrollView.post(new Runnable() {
+            public void run() {
+                scrollView.fullScroll(View.FOCUS_UP);
+            }
+        });
+
+    }
+
+    private void setListener() {
+
+        iv_grid.setOnClickListener(this);
+        iv_list.setOnClickListener(this);
+        iv_Home.setOnClickListener(this);
+        iv_Calander.setOnClickListener(this);
+        iv_Camera.setOnClickListener(this);
+        iv_Fav.setOnClickListener(this);
+        iv_profile.setOnClickListener(this);
+        btn_follow.setOnClickListener(this);
+        btn_request.setOnClickListener(this);
+        btn_edit_or_follow.setOnClickListener(this);
+
+        ll_grid.setOnClickListener(this);
+        ll_list.setOnClickListener(this);
+        btn_Unfollow.setOnClickListener(this);
+        btn_followTrainee.setOnClickListener(this);
+        btn_edit.setOnClickListener(this);
+        btn_unfollowTrainee.setOnClickListener(this);
+        txt_postCount.setOnClickListener(this);
+        txt_FollowersCount.setOnClickListener(this);
+        txt_FollowingsCount.setOnClickListener(this);
+
+    }
+
+ /*   private void ShowTrainerProfile() {
         loadingStarted();
         Call<ResponseWrapper<CreaterEnt>> callBack = webService.traineeProfile(user_id);
 
@@ -335,9 +421,9 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
             }
         });
-    }
+    }*/
 
-    private void ShowTrianeeData() {
+   /* private void ShowTrianeeData() {
 
         loadingStarted();
 
@@ -369,29 +455,11 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             }
         });
 
-    }
+    }*/
 
 
-    private void setListener() {
 
-        iv_grid.setOnClickListener(this);
-        iv_list.setOnClickListener(this);
-        iv_Home.setOnClickListener(this);
-        iv_Calander.setOnClickListener(this);
-        iv_Camera.setOnClickListener(this);
-        iv_Fav.setOnClickListener(this);
-        iv_profile.setOnClickListener(this);
-        btn_follow.setOnClickListener(this);
-        btn_request.setOnClickListener(this);
-        btn_edit_or_follow.setOnClickListener(this);
-
-        ll_grid.setOnClickListener(this);
-        ll_list.setOnClickListener(this);
-
-    }
-
-
-    private void getBrowsedAdData() {
+    /*private void getBrowsedAdData() {
 
         Call<ResponseWrapper<CreaterEnt>> callBack = webService.UserProfilePosts(user_id);
 
@@ -418,7 +486,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
 
             }
-        });
+        });*/
 
         /*dataCollection = new ArrayList<String>();
 
@@ -432,33 +500,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         dataCollection.add("drawable://" + R.drawable.pic3);
         dataCollection.add("drawable://" + R.drawable.pic4);*/
 
-        //bindData(dataCollection,3);
-    }
-
-    private void ShowUserPosts(ArrayList<PostsEnt> posts) {
-
-        dataCollection = new ArrayList<String>();
-
-            for(PostsEnt postsEnt : posts){
-
-                dataCollection.add(new String(postsEnt.getPost_image()));
-
-            }
-
-            bindData(dataCollection,3);
-        }
-
-
-
-
-
-    private void bindData(List<String> dataCollection,int noOfColumns) {
-        adapter.clearList();
-        gv_pics.setNumColumns(noOfColumns);
-        adapter.addAll(dataCollection);
-        gv_pics.setAdapter(adapter);
-        //adapter.notifyDataSetChanged();
-    }
+    //bindData(dataCollection,3);
 
 
     @Override
@@ -471,8 +513,8 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             @Override
             public void onClick(View v) {
 
-                getDockActivity().addDockableFragment(HomeFragment.newInstance(),"HomeFragment");
-             //   homeFragment.popUpDropdown(v);
+                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                //   homeFragment.popUpDropdown(v);
                 popUpDropDown(v);
 
             }
@@ -482,7 +524,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             @Override
             public void onClick(View v) {
 
-                getDockActivity().addDockableFragment(SettingsFragment.newInstance(),"SettingsFragment");
+                getDockActivity().addDockableFragment(SettingsFragment.newInstance(), "SettingsFragment");
 
             }
         });
@@ -491,9 +533,9 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
 
     @Override
-    public void onClick( View v ) {
+    public void onClick(View v) {
         // TODO Auto-generated method stub
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.iv_list:
 
                 iv_list.setImageResource(R.drawable.list_view);
@@ -533,43 +575,74 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             case R.id.btn_request:
 
                 //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
-                getDockActivity().addDockableFragment(CalendarFragment.newInstance(),"CalendarFragment");
+                getDockActivity().addDockableFragment(CalendarFragment.newInstance(), "CalendarFragment");
 
 
                 break;
 
             case R.id.btn_follow:
 
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                btn_follow.setVisibility(View.GONE);
+                btn_Unfollow.setVisibility(View.VISIBLE);
+
+                //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                followUser();
 
                 break;
 
+            case R.id.btn_Unfollow:
+
+                btn_follow.setVisibility(View.VISIBLE);
+                btn_Unfollow.setVisibility(View.GONE);
+
+                unfollowUser();
+
+                break;
+
+            case R.id.btn_followTrainee:
+                btn_followTrainee.setVisibility(View.GONE);
+                btn_edit_or_follow.setVisibility(View.GONE);
+                btn_unfollowTrainee.setVisibility(View.VISIBLE);
+
+                followUser();
+                break;
+
+            case R.id.btn_unfollowTrainee:
+                btn_followTrainee.setVisibility(View.VISIBLE);
+                btn_edit_or_follow.setVisibility(View.GONE);
+                btn_unfollowTrainee.setVisibility(View.GONE);
+
+                unfollowUser();
+
+                break;
+
+
             case R.id.iv_profile:
 
-               getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(prefHelper.getUserId())),"TrainerProfileFragment");
+                getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(prefHelper.getUserId())), "TrainerProfileFragment");
 
                 break;
 
             case R.id.iv_Fav:
 
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                getDockActivity().addDockableFragment(FollowingFragment.newInstance(), "FollowingFragment");
 
                 break;
 
             case R.id.iv_Camera:
 
+                CameraHelper.uploadMedia(getMainActivity());
 
                 break;
 
             case R.id.iv_Calander:
 
-                if(AppConstants.is_show_trainer){
-                    getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(),"TrainerBookingCalendarFragment");
+                if (AppConstants.is_show_trainer) {
+                    getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(), "TrainerBookingCalendarFragment");
 
-                }
-                else
-                {
-                    getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(),"TraineeScheduleFragment");
+                } else {
+                    getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(), "TraineeScheduleFragment");
 
                 }
 
@@ -577,42 +650,107 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
             case R.id.iv_Home:
 
-                getDockActivity().addDockableFragment(HomeFragment.newInstance(),"HomeFragment");
+                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
 
                 break;
 
             case R.id.btn_edit_or_follow:
 
-                if(AppConstants.is_show_trainer){
-
-                    getDockActivity().addDockableFragment(EditTrainerProfileFragment.newInstance(),"EditTrainerProfileFragment");
-
-                }else{
-
-                    getDockActivity().addDockableFragment(EditTraineeProfileFragment.newInstance(),"EditTraineeProfileFragment");
-
-                }
-
-
+                getDockActivity().addDockableFragment(EditTraineeProfileFragment.newInstance(), "EditTraineeProfileFragment");
 
                 break;
+
+            case R.id.btn_edit:
+
+                getDockActivity().addDockableFragment(EditTrainerProfileFragment.newInstance(), "EditTrainerProfileFragment");
+
+                break;
+
 
         }
     }
 
-    void popUpDropDown(View v)
-    {
-        LayoutInflater layoutInflater = (LayoutInflater)getDockActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+    private void followUser() {
+
+        Call<ResponseWrapper<FollowUser>> callBack = webService.follow(
+                prefHelper.getUserId(),
+                user_id
+        );
+
+        callBack.enqueue(new Callback<ResponseWrapper<FollowUser>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<FollowUser>> call, Response<ResponseWrapper<FollowUser>> response) {
+
+                loadingFinished();
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                   /* btn_follow.setVisibility(View.GONE);
+                    btn_Unfollow.setVisibility(View.VISIBLE);*/
+
+                } else {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<FollowUser>> call, Throwable t) {
+
+                loadingFinished();
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+
+            }
+        });
+    }
+
+    private void unfollowUser() {
+
+        Call<ResponseWrapper<FollowUser>> callBack = webService.unfollow(
+                prefHelper.getUserId(),
+                user_id
+        );
+
+        callBack.enqueue(new Callback<ResponseWrapper<FollowUser>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<FollowUser>> call, Response<ResponseWrapper<FollowUser>> response) {
+
+                loadingFinished();
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                   /* btn_follow.setVisibility(View.VISIBLE);
+                    btn_Unfollow.setVisibility(View.GONE);*/
+
+                } else {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<FollowUser>> call, Throwable t) {
+
+                loadingFinished();
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+
+            }
+        });
+    }
+
+    void popUpDropDown(View v) {
+        LayoutInflater layoutInflater = (LayoutInflater) getDockActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = layoutInflater.inflate(R.layout.home_search_items, null);
 
         final PopupWindow popupWindow = new PopupWindow(
                 popupView,
-                (int)getResources().getDimension(R.dimen.x100),
-                (int)getResources().getDimension(R.dimen.x100));
+                (int) getResources().getDimension(R.dimen.x100),
+                (int) getResources().getDimension(R.dimen.x100));
 
-        txt_TrainerProfileFrag=(AnyTextView)popupView.findViewById(R.id.txt_Trainer);
-        txt_TrainingProfileFrag=(AnyTextView)popupView.findViewById(R.id.txt_Training);
-        txt_LocationProfileFrag=(AnyTextView)popupView.findViewById(R.id.txt_Location);
+        txt_TrainerProfileFrag = (AnyTextView) popupView.findViewById(R.id.txt_Trainer);
+        txt_TrainingProfileFrag = (AnyTextView) popupView.findViewById(R.id.txt_Training);
+        txt_LocationProfileFrag = (AnyTextView) popupView.findViewById(R.id.txt_Location);
 
                /* txt_Trainer.setOnClickListener(this);
                 txt_Training.setOnClickListener(this);

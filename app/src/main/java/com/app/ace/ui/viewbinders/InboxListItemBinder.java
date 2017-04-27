@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.view.View;
 
 import com.app.ace.R;
+import com.app.ace.activities.DockActivity;
 import com.app.ace.entities.InboxDataItem;
+import com.app.ace.fragments.ChatFragment;
+import com.app.ace.fragments.TrainerProfileFragment;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 import com.app.ace.ui.views.AnyTextView;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -19,10 +22,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class InboxListItemBinder extends ViewBinder<InboxDataItem> {
 
     private ImageLoader imageLoader;
+    DockActivity context;
 
-    public InboxListItemBinder() {
+    public InboxListItemBinder(DockActivity context) {
         super(R.layout.inbox_list_item);
 
+        this.context=context;
         imageLoader = ImageLoader.getInstance();
     }
 
@@ -33,13 +38,22 @@ public class InboxListItemBinder extends ViewBinder<InboxDataItem> {
     }
 
     @Override
-    public void bindView(InboxDataItem entity, int position, int grpPosition,
+    public void bindView(final InboxDataItem entity, int position, int grpPosition,
                          View view, Activity activity) {
 
 
         InboxListItemBinder.ViewHolder viewHolder = (InboxListItemBinder.ViewHolder) view.getTag();
 
         imageLoader.displayImage(entity.getUserImage(), viewHolder.userImage);
+        viewHolder.userImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getConversationId())), "ChatFragment");
+
+            }
+        });
+
         viewHolder.txtUserName.setText(entity.getUserName());
         viewHolder.txtUserMessage.setText(entity.getUserMessage());
     }

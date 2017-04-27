@@ -52,7 +52,7 @@ public class InboxListFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new ArrayListAdapter<InboxDataItem>(getDockActivity(), new InboxListItemBinder());
+        adapter = new ArrayListAdapter<InboxDataItem>(getDockActivity(), new InboxListItemBinder(getDockActivity()));
     }
 
     @Nullable
@@ -103,7 +103,9 @@ public class InboxListFragment extends BaseFragment {
 
         for(MsgEnt msg : result){
 
-            userCollection.add(new InboxDataItem(msg.getSender().getProfile_image(),msg.getSender().getFirst_name()+" "+msg.getSender().getLast_name(),msg.getMessage().getMessage_text()));
+               userCollection.add(new InboxDataItem(msg.getSender().getProfile_image(),msg.getSender().getFirst_name()+" "+msg.getSender().getLast_name(),msg.getMessage().getMessage_text(),msg.getMessage().getConversation_id()));
+
+         //  userCollection.add(new InboxDataItem(msg.getReceiver().getProfile_image(),msg.getReceiver().getFirst_name()+" "+msg.getReceiver().getLast_name(),msg.getMessage().getMessage_text(),msg.getMessage().getConversation_id()));
 
         }
 
@@ -128,7 +130,7 @@ public class InboxListFragment extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                getDockActivity().addDockableFragment(ChatFragment.newInstance(), "ChatFragment");
+                //getDockActivity().addDockableFragment(ChatFragment.newInstance(), "ChatFragment");
             }
         });
     }

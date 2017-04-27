@@ -339,7 +339,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
                 if (image != null) {
                     Log.i(TAG, "Chosen Image: Is not null");
 
-                    Toast.makeText(getApplication(),thumbnailFilePath,Toast.LENGTH_LONG).show();
+                   // Toast.makeText(getApplication(),thumbnailFilePath,Toast.LENGTH_LONG).show();
                    imageSetter.setImage(thumbnailFilePath);
 
                     //loadImage(imageViewThumbnail, image.getFileThumbnail());
@@ -506,6 +506,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
             @Override
             public void run() {
                // progressBar.setVisibility(View.INVISIBLE);
+                imageSetter.setFilePath(file.getFilePath());
                 populateFileDetails(file);
             }
         });
@@ -518,6 +519,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         text.append("Mime type: " + file.getMimeType() + "\n\n");
         text.append("File extn: " + file.getExtension() + "\n\n");
         text.append("File size: " + file.getFileSize() / 1024 + "KB");
+
         Toast.makeText(this,text.toString(),Toast.LENGTH_LONG).show();
     }
 

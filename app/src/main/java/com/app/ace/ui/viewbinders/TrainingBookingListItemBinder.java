@@ -53,7 +53,20 @@ public class TrainingBookingListItemBinder extends ViewBinder<TrainingBookingCal
 
         final TrainingBookingListItemBinder.ViewHolder viewHolder = (TrainingBookingListItemBinder.ViewHolder) view.getTag();
 
-        viewHolder.txtDayDate.setText(entity.getTxtDayDate());
+        if(entity.getTxtDayDate().contains("Sat")) {
+            viewHolder.txtDayDate.setTextColor(R.color.red);
+            viewHolder.txtDayDate.setText(entity.getTxtDayDate());
+        }
+        else if(entity.getTxtDayDate().contains("Sun"))
+        {
+            viewHolder.txtDayDate.setTextColor(R.color.red);
+            viewHolder.txtDayDate.setText(entity.getTxtDayDate());
+        }
+        else
+        {
+            viewHolder.txtDayDate.setTextColor(R.color.black);
+            viewHolder.txtDayDate.setText(entity.getTxtDayDate());
+        }
       //  viewHolder.txtTo.setText(entity.getTxtTo());
         //viewHolder.txtFrom.setText(entity.getTxtFrom());
 

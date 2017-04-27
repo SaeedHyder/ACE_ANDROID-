@@ -3,11 +3,13 @@ package com.app.ace.retrofit;
 
 import com.app.ace.entities.CreatePostEnt;
 import com.app.ace.entities.CreaterEnt;
+import com.app.ace.entities.FollowUser;
 import com.app.ace.entities.GetMessages;
 import com.app.ace.entities.HomeResultEnt;
 import com.app.ace.entities.MsgEnt;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.RegistrationResult;
+import com.app.ace.entities.UserProfile;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+
+import static com.app.ace.global.AppConstants.user_id;
 
 public interface WebService {
 
@@ -65,6 +69,7 @@ public interface WebService {
             @Part("email") RequestBody email,
             @Part("password") RequestBody password,
             @Part MultipartBody.Part profile_picture,
+            @Part MultipartBody.Part resume,
             @Part("user_type") RequestBody user_type,
             @Part("education") RequestBody education,
             @Part("university") RequestBody university,
@@ -152,16 +157,20 @@ public interface WebService {
     Call<ResponseWrapper<CreaterEnt>> traineeProfile(
             @Path("user_id") String user_id);
 
+    @FormUrlEncoded
+    @POST("user/profile")
+    Call<ResponseWrapper<UserProfile>> UserProfile(
+            @Field("user_id") String user_id,
+            @Field("visitor_id") String visitor_id);
+
 
     @GET("post/user/{user_id}")
     Call<ResponseWrapper<CreaterEnt>> UserProfilePosts(
             @Path("user_id") String user_id);
 
-    @FormUrlEncoded
-    @POST("message/get")
-    Call<ResponseWrapper<ArrayList<MsgEnt>>> GetMsg(
-            @Field("sender_id") String sender_id,
-            @Field("receiver_id") String receiver_id);
+    @GET("message/get/{conversation_id}")
+    Call<ResponseWrapper<ArrayList<MsgEnt>>> GetConversation(
+            @Path("conversation_id") String conversation_id);
 
     @FormUrlEncoded
     @POST("message/send")
@@ -173,6 +182,29 @@ public interface WebService {
     @GET("message/{user_id}")
     Call<ResponseWrapper<ArrayList<MsgEnt>>> userinbox(
             @Path("user_id") String user_id);
+
+    @FormUrlEncoded
+    @POST("user/follow")
+    Call<ResponseWrapper<FollowUser>> follow(
+            @Field("user_id") String user_id,
+            @Field("following_id") String following_id);
+
+    @FormUrlEncoded
+    @POST("user/unfollow")
+    Call<ResponseWrapper<FollowUser>> unfollow(
+            @Field("user_id") String user_id,
+            @Field("following_id") String following_id);
+
+
+    @Multipart
+    @POST("user/register")
+    Call<ResponseWrapper<RegistrationResult>> UpdateTrainee(
+            @Part("user_id") RequestBody user_id,
+            @Part("password") RequestBody password,
+            @Part("first_name") RequestBody first_name,
+            @Part("last_name") RequestBody last_name,
+            @Part("phone_number") RequestBody phone_number,
+            @Part MultipartBody.Part profile_picture);
 
 
    /* @Multipart

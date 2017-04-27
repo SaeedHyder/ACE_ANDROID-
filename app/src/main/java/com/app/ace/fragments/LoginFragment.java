@@ -191,7 +191,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 						AppConstants._token = response.body().getResult().get_token();
 						prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
 						prefHelper.setUsrId(response.body().getResult().getId());
-						prefHelper.setToken( AppConstants._token);
+						prefHelper.setToken(response.body().getResult().get_token());
 
 						if(response.body().getResult().getUser_type().equals(AppConstants.trainee)){
 

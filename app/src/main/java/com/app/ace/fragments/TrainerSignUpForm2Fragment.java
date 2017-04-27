@@ -35,6 +35,7 @@ import com.google.gson.Gson;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -53,7 +54,7 @@ import static android.app.Activity.RESULT_OK;
  * Created by khan_muhammad on 3/13/2017.
  */
 
-public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnClickListener,CompoundButton.OnCheckedChangeListener {
+public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnClickListener,CompoundButton.OnCheckedChangeListener,MainActivity.ImageSetter {
 
 
     @InjectView(R.id.btnSignUp)
@@ -162,6 +163,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
     @InjectView(R.id.cb_5_years_or_more)
     private CheckBox cb_5_years_or_more;
 
+    public File resume;
+    public String resumePath;
+
 
     public String Education,Speciality,Years_of_Exp,Gym_days,gym_time_from,gym_time_to;
 
@@ -254,6 +258,8 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
         cb_thur.setOnCheckedChangeListener(this);
         cb_fri.setOnCheckedChangeListener(this);
         cb_sat.setOnCheckedChangeListener(this);
+
+        getMainActivity().setImageSetter(this);
 
     }
 
@@ -440,6 +446,8 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
             case R.id.txt_browse_cv:
 
                 CameraHelper.uploadFile(getMainActivity());
+              //  Toast.makeText(getDockActivity(),cvFile.toString(),Toast.LENGTH_LONG).show();
+
               /*  //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
                 Intent intent = new Intent();
                 intent.setType("text/plain");
@@ -472,6 +480,8 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
         loadingStarted();
 
         MultipartBody.Part filePart = MultipartBody.Part.createFormData("profile_picture",  signupFormConstants.getProfilePic().getName(), RequestBody.create(MediaType.parse("image/*"),  signupFormConstants.getProfilePic()));
+       MultipartBody.Part  cvFile = MultipartBody.Part.createFormData("resume",resumePath, RequestBody.create(MediaType.parse("*/*"), resume));
+
 
         String SocialMediaName = "";
         if(!signupFormConstants.getSocial_user_id().equalsIgnoreCase("")){
@@ -489,6 +499,7 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
                 RequestBody.create(MediaType.parse("text/plain"),signupFormConstants.getEmail()),
                 RequestBody.create(MediaType.parse("text/plain"),signupFormConstants.getPassword()),
                 filePart,
+                cvFile,
                 RequestBody.create(MediaType.parse("text/plain"),AppConstants.trainer),
                 RequestBody.create(MediaType.parse("text/plain"),Education),
                 RequestBody.create(MediaType.parse("text/plain"),edtUniversity.getText().toString()),
@@ -824,6 +835,28 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
                 break;
 
         }
+
+    }
+
+    @Override
+    public void setImage(String imagePath) {
+
+    }
+
+    @Override
+    public void setFilePath(String filePath) {
+        if(filePath != null){
+            resume = new File(filePath);
+            resumePath=filePath;
+            //Toast.makeText(getDockActivity(),cvFile.toString(),Toast.LENGTH_LONG).show();
+           // txt_browse_cv.setText(cvFile.toString());
+
+        }
+
+    }
+
+    @Override
+    public void setVideo(String videoPath) {
 
     }
 }

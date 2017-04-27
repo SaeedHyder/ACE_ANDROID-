@@ -2,9 +2,18 @@ package com.app.ace.ui.viewbinders;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
@@ -27,11 +36,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by khan_muhammad on 3/18/2017.
  */
 
-public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt> {
+public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
 
 
     private ImageLoader imageLoader;
     private DockActivity context;
+    Display display;
 
     public HomeFragmentItemBinder(DockActivity context) {
         super(R.layout.fragment_home_item);
@@ -47,6 +57,8 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt> {
         return new HomeFragmentItemBinder.ViewHolder(view);
     }
 
+
+
     @Override
     public void bindView(final HomeListDataEnt homeListDataEnt, int position, int grpPosition,
                          View view, Activity activity) {
@@ -55,6 +67,53 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt> {
 
         final HomeFragmentItemBinder.ViewHolder viewHolder = (HomeFragmentItemBinder.ViewHolder) view.getTag();
 
+    /*    if(homeListDataEnt.getVideoUrl()!=null)
+        {
+            viewHolder.vv_post_video.setVisibility(View.VISIBLE);
+            viewHolder.iv_post_pic.setVisibility(View.GONE);
+
+            Uri uri=Uri.parse(homeListDataEnt.getVideoUrl());
+            viewHolder.vv_post_video.setVideoURI(uri);
+            viewHolder.vv_post_video.requestFocus();
+            viewHolder.vv_post_video.start();
+        }
+*/
+    if (homeListDataEnt.getProfile_post_pic_path().contains(".mp4"))
+    {
+
+        /*RelativeLayout.LayoutParams lv= new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+        lv.addRule(RelativeLayout.CENTER_HORIZONTAL);*/
+
+       // Toast.makeText(context,homeListDataEnt.getProfile_post_pic_path(),Toast.LENGTH_LONG).show();
+        viewHolder.vv_post_video.setVisibility(View.VISIBLE);
+        viewHolder.iv_post_pic.setVisibility(View.GONE);
+
+        MediaController mediaController= new MediaController(context);
+        mediaController.setAnchorView(viewHolder.vv_post_video);
+
+
+        viewHolder.vv_post_video.setKeepScreenOn(true);
+        Uri uri=Uri.parse(homeListDataEnt.getProfile_post_pic_path());
+        viewHolder.vv_post_video.setVideoURI(uri);
+        viewHolder.vv_post_video.setMediaController(mediaController);
+        viewHolder.vv_post_video.requestFocus();
+        viewHolder.vv_post_video.start();
+        mediaController.hide();
+
+
+    /*   if (viewHolder.vv_post_video.isScrollContainer())
+        {
+            viewHolder.vv_post_video.pause();
+            mediaController.hide();
+        }
+*/
+    }
+    else
+    {
+
+        viewHolder.vv_post_video.setVisibility(View.GONE);
+        viewHolder.iv_post_pic.setVisibility(View.VISIBLE);
         imageLoader.displayImage(homeListDataEnt.getProfile_post_pic_path(), viewHolder.iv_post_pic, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
@@ -76,6 +135,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt> {
                 viewHolder.progressBar.setVisibility(View.GONE);
             }
         });
+    }
 
         imageLoader.displayImage(homeListDataEnt.getProfile_pic_path(), viewHolder.civ_profile_pic);
         //imageLoader.displayImage(homeListDataEnt.getProfile_post_pic_path(), viewHolder.iv_post_pic);
@@ -137,6 +197,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt> {
 
         private CircleImageView civ_profile_pic;
         private ImageView iv_post_pic,iv_like,iv_do_comment,iv_sendto;
+        private VideoView vv_post_video;
         AnyTextView txt_profileName,txt_likes_count,txt_commenter_Name,txt_comment,txt_view_all_comments;
 
         public ViewHolder(View view) {
@@ -154,6 +215,8 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt> {
             txt_commenter_Name = (AnyTextView) view.findViewById(R.id.txt_commenter_Name);
             txt_comment = (AnyTextView) view.findViewById(R.id.txt_comment);
             txt_view_all_comments = (AnyTextView) view.findViewById(R.id.txt_view_all_comments);
+            vv_post_video=(VideoView)view.findViewById(R.id.vv_post_video);
+
 
         }
     }

@@ -1,23 +1,24 @@
 package com.app.ace.entities;
 
-public class InboxDataItem {
+/**
+ * Created by muniyemiftikhar on 4/4/2017.
+ */
 
+public class YouDataItem {
     private String userImage;
     private String userName;
-    private String userMessage;
+    private String userDetail;
+    private Integer youImage;
 
 
 
-
-    private int ConversationId;
-
-    public InboxDataItem(String userImage, String userName, String userMessage, int ConversationId){
+    public YouDataItem(String userImage, String userName, String userDetail, Integer youImage){
         setUserImage(userImage);
         setUserName(userName);
-        setUserMessage(userMessage);
-        setConversationId(ConversationId);
-    }
+        setUserMessage(userDetail);
+        setYouImage(youImage);
 
+    }
     public String getUserImage() {
         return userImage;
     }
@@ -35,21 +36,20 @@ public class InboxDataItem {
     }
 
     public String getUserMessage() {
-        return userMessage;
+        return userDetail;
     }
 
     public void setUserMessage(String userMessage) {
-        this.userMessage = userMessage;
+        this.userDetail = userMessage;
     }
 
-    public int getConversationId() {
-        return ConversationId;
+    public Integer getYouImage() {
+        return youImage;
     }
 
-    public void setConversationId(int conversationId) {
-        ConversationId = conversationId;
+    public void setYouImage(Integer youImage) {
+        this.youImage = youImage;
     }
-
 
 
 }

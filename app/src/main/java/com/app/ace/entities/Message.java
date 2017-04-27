@@ -8,6 +8,12 @@ public class Message {
 
     int id;
     int conversation_id;
+    int sender_id;
+    int receiver_id;
+    String message_text;
+    String status;
+    String created_at;
+    String updated_at;
 
     public int getId() {
         return id;
@@ -73,12 +79,7 @@ public class Message {
         this.updated_at = updated_at;
     }
 
-    int sender_id;
-    int receiver_id;
-    String message_text;
-    String status;
-    String created_at;
-    String updated_at;
+
 
 
 }

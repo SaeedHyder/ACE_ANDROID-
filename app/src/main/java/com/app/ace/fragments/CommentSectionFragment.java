@@ -127,7 +127,7 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
                 commentToChatMsgConstants.setCommentC(et_CommentBar.getText().toString());
 
 
-                getDockActivity().addDockableFragment(ChatFragment.newInstance(commentToChatMsgConstants), "ChatFragment");
+               getDockActivity().addDockableFragment(ChatFragment.newInstance(commentToChatMsgConstants), "ChatFragment");
                 break;
         }
     }
