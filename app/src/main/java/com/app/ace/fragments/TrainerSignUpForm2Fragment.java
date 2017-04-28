@@ -527,6 +527,7 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
                         prefHelper.setToken( AppConstants._token);
                         prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
                         prefHelper.setUsrId(response.body().getResult().getId());
+                        prefHelper.putUser(response.body().getResult());
 
                         if(response.body().getResult().getUser_type().equals(AppConstants.trainee)){
 

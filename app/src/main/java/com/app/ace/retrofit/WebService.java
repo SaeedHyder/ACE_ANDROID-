@@ -1,14 +1,19 @@
 package com.app.ace.retrofit;
 
 
+import android.media.Rating;
+
 import com.app.ace.entities.CreatePostEnt;
 import com.app.ace.entities.CreaterEnt;
 import com.app.ace.entities.FollowUser;
 import com.app.ace.entities.GetMessages;
 import com.app.ace.entities.HomeResultEnt;
 import com.app.ace.entities.MsgEnt;
+import com.app.ace.entities.PostsEnt;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.RegistrationResult;
+import com.app.ace.entities.ShowComments;
+import com.app.ace.entities.User;
 import com.app.ace.entities.UserProfile;
 
 import java.io.File;
@@ -25,6 +30,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 
+import static com.app.ace.R.string.university;
 import static com.app.ace.global.AppConstants.user_id;
 
 public interface WebService {
@@ -51,7 +57,7 @@ public interface WebService {
             @Part("social_media_platform") RequestBody social_media_platform,
             @Part("first_name") RequestBody first_name,
             @Part("last_name") RequestBody last_name,
-            @Part("phone_number") RequestBody mobile_no,
+            @Part("phone_number") RequestBody phone_number,
             @Part("email") RequestBody email,
             @Part("password") RequestBody password,
             @Part MultipartBody.Part profile_picture,
@@ -196,15 +202,66 @@ public interface WebService {
             @Field("following_id") String following_id);
 
 
+    @FormUrlEncoded
+    @POST("post/like")
+    Call<ResponseWrapper<PostsEnt>> likePost(
+            @Field("user_id") String user_id,
+            @Field("post_id") int post_id);
+
+
+    @FormUrlEncoded
+    @POST("post/comment/create")
+    Call<ResponseWrapper<ShowComments>> CreateComment(
+            @Field("user_id") String user_id,
+            @Field("post_id") String post_id,
+            @Field("comment_text") String comment_text,
+            @Field("tag_ids") int tag_ids
+            //@Field("parent_comment_id") String parent_comment_id
+            );
+
+
+
+    @GET("post/comment/{post_id}")
+    Call<ResponseWrapper<ArrayList<ShowComments>>> ShowComments(
+            @Path("post_id") String post_id   );
+
+
+
     @Multipart
-    @POST("user/register")
+    @POST("user/update")
     Call<ResponseWrapper<RegistrationResult>> UpdateTrainee(
             @Part("user_id") RequestBody user_id,
-            @Part("password") RequestBody password,
+          //  @Part("password") RequestBody password,
+            @Part("first_name") RequestBody first_name,
+            @Part("last_name") RequestBody last_name,
+            @Part("user_status") RequestBody user_status,
+            @Part("phone_number") RequestBody phone_number,
+            @Part MultipartBody.Part profile_picture);
+
+    @Multipart
+    @POST("user/update")
+    Call<ResponseWrapper<RegistrationResult>> UpdateTrainer(
+            @Part("user_id") RequestBody user_id,
+           // @Part("password") RequestBody password,
             @Part("first_name") RequestBody first_name,
             @Part("last_name") RequestBody last_name,
             @Part("phone_number") RequestBody phone_number,
-            @Part MultipartBody.Part profile_picture);
+            @Part("university") RequestBody university,
+             @Part MultipartBody.Part profile_picture
+    );
+
+    @FormUrlEncoded
+    @POST("user/rating/add")
+    Call<ResponseWrapper<User>> rating(
+            @Path("rating_by") String rating_by,
+            @Path("rating") int rating,
+            @Path("user_id") String user_id);
+
+
+
+
+
+
 
 
    /* @Multipart

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.app.ace.entities.RegistrationResult;
+import com.app.ace.retrofit.GsonFactory;
 import com.google.inject.Inject;
 
 public class BasePreferenceHelper extends PreferenceHelper {
@@ -22,6 +24,8 @@ public class BasePreferenceHelper extends PreferenceHelper {
 
 
     protected static final String USERID = "userId";
+
+    protected static final String KEY_USER = "key_user";
 
 
     @Inject
@@ -79,6 +83,24 @@ public class BasePreferenceHelper extends PreferenceHelper {
     public static String getUSERID() {
         return USERID;
     }
+
+
+    public RegistrationResult getUser() {
+        return GsonFactory.getConfiguredGson().fromJson(
+                getStringPreference(context, FILENAME, KEY_USER), RegistrationResult.class);
+    }
+
+    public void putUser(RegistrationResult user) {
+        putStringPreference(context, FILENAME, KEY_USER, GsonFactory
+                .getConfiguredGson().toJson(user));
+    }
+
+
+
+
+
+
+
 
 
 

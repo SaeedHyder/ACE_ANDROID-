@@ -238,6 +238,7 @@
             android:singleLine="true"
             android:maxLength="50"
             app:emptyAllowed="false"
+            android:editable="false"
             android:textColorHint="@color/edittext_hint_color"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/x14"

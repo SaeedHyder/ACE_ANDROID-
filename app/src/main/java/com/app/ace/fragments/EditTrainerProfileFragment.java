@@ -14,20 +14,36 @@ import android.widget.Toast;
 
 import com.app.ace.R;
 import com.app.ace.activities.MainActivity;
+import com.app.ace.entities.RegistrationResult;
+import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.UIHelper;
+import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import roboguice.inject.InjectView;
+
+import static com.app.ace.R.id.edtEmail;
+import static com.app.ace.R.id.edtPrimaryReason;
+import static com.app.ace.R.id.edtUserName;
+import static com.app.ace.R.id.riv_profile_pic;
 
 /**
  * Created by khan_muhammad on 3/18/2017.
@@ -47,6 +63,30 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
     @InjectView(R.id.txt_eidt_speciality)
     private AnyTextView txt_eidt_speciality;
 
+    @InjectView(R.id.edtUserName)
+    AnyEditTextView edtUserName;
+
+    @InjectView(R.id.edtUniversity)
+    AnyEditTextView edtUniversity;
+
+    @InjectView(R.id.txtGymLocatoin)
+    AnyTextView txtGymLocatoin;
+
+    @InjectView(R.id.edtEmail)
+    AnyEditTextView edtEmail;
+
+    @InjectView(R.id.edtMobileNumber)
+    AnyEditTextView edtMobileNumber;
+
+    File profilePic;
+    String profilePath;
+
+    ImageLoader imageLoader;
+    String fullname,firstName,lastName;
+
+
+
+
     @InjectView(R.id.sp_Gender)
     private Spinner sp_Gender;
 
@@ -61,6 +101,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_edit_profile_trainer, container, false);
+
     }
 
     @Override
@@ -82,13 +123,94 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         sp_Gender.setAdapter(dataAdapter);
         sp_Gender.setSelection(0);
 
+        imageLoader = ImageLoader.getInstance();
+
+        ShowProfile();
+
         setListener();
+    }
+
+    private void ShowProfile() {
+        edtUserName.setText(prefHelper.getUserName());
+        edtMobileNumber.setText(prefHelper.getUser().getPhone_number());
+        edtEmail.setText(prefHelper.getUser().getEmail());
+        edtEmail.setEnabled(false);
+        edtEmail.setFocusable(false);
+        edtUniversity.setText(prefHelper.getUser().getUniversity());
+        imageLoader.displayImage(prefHelper.getUser().getProfile_image(), civ_profile_pic);
+
+
+
+    }
+
+    private void EditProfile() {
+
+
+        fullname=edtUserName.getText().toString();
+        if(fullname.contains(" ")) {
+            String[] name = fullname.split(" ");
+            firstName = name[0];
+            lastName = name[1];
+        }
+        else
+        {
+            firstName=fullname;
+            lastName=" ";
+
+        }
+        MultipartBody.Part profile_picture = null;
+        if(profilePic != null) {
+           profile_picture = MultipartBody.Part.createFormData("profile_picture", profilePath, RequestBody.create(MediaType.parse("image/*"), profilePic));
+        }
+
+        Call<ResponseWrapper<RegistrationResult>> callBack = webService.UpdateTrainer(
+
+                RequestBody.create(MediaType.parse("text/plain"),prefHelper.getUserId()),
+               // RequestBody.create(MediaType.parse("text/plain"),password),
+                RequestBody.create(MediaType.parse("text/plain"),firstName),
+                RequestBody.create(MediaType.parse("text/plain"),lastName),
+                RequestBody.create(MediaType.parse("text/plain"),edtMobileNumber.getText().toString()),
+                RequestBody.create(MediaType.parse("text/plain"),edtUniversity.getText().toString()),
+                profile_picture
+               );
+
+        callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
+                    loadingFinished();
+
+                    if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    }
+                    else {
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<RegistrationResult>> call, Throwable t) {
+                loadingFinished();
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+            }
+        });
+
+
+
+
+
     }
 
     private void setListener() {
         btnChangeProfilePhoto.setOnClickListener(this);
         txt_eidt_certification.setOnClickListener(this);
         txt_eidt_speciality.setOnClickListener(this);
+        edtUserName.setOnClickListener(this);
+        edtUniversity.setOnClickListener(this);
+        edtEmail.setOnClickListener(this);
+        edtMobileNumber.setOnClickListener(this);
+        txtGymLocatoin.setOnClickListener(this);
         getMainActivity().setImageSetter(this);
     }
 
@@ -101,7 +223,8 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         titleBar.showSaveButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                EditProfile();
             }
         });
 
@@ -154,6 +277,8 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
 
         if (imagePath != null) {
             //profilePic = new File(imagePath);
+            profilePic = new File(imagePath);
+            profilePath=imagePath;
             ImageLoader.getInstance().displayImage(
                     "file:///" +imagePath, civ_profile_pic);
         }

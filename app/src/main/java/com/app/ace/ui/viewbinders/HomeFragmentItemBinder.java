@@ -17,12 +17,20 @@ import android.widget.VideoView;
 
 import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
+import com.app.ace.entities.CreatePostEnt;
+import com.app.ace.entities.FollowUser;
 import com.app.ace.entities.HomeListDataEnt;
+import com.app.ace.entities.PostsEnt;
+import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.CommentSectionFragment;
+import com.app.ace.fragments.HomeFragment;
 import com.app.ace.fragments.SharePopUpfragment;
 import com.app.ace.fragments.TrainerProfileFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.BasePreferenceHelper;
 import com.app.ace.helpers.UIHelper;
+import com.app.ace.interfaces.IOnLike;
+import com.app.ace.retrofit.WebService;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 import com.app.ace.ui.views.AnyTextView;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -31,6 +39,15 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.app.ace.R.id.gridView;
+import static com.app.ace.R.id.txt_no_data;
+import static com.app.ace.global.AppConstants.user_id;
 
 /**
  * Created by khan_muhammad on 3/18/2017.
@@ -43,13 +60,21 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
     private DockActivity context;
     Display display;
 
-    public HomeFragmentItemBinder(DockActivity context) {
+
+    IOnLike IOnLike;
+
+
+    public HomeFragmentItemBinder(DockActivity context,IOnLike IOnLike) {
         super(R.layout.fragment_home_item);
 
         this.context = context;
 
+        this.IOnLike = IOnLike;
+
         imageLoader = ImageLoader.getInstance();
     }
+
+
 
     @Override
     public ViewBinder.BaseViewHolder createViewHolder(
@@ -57,13 +82,15 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
         return new HomeFragmentItemBinder.ViewHolder(view);
     }
 
+     int postId;
+
 
 
     @Override
     public void bindView(final HomeListDataEnt homeListDataEnt, int position, int grpPosition,
                          View view, Activity activity) {
 
-
+            postId=homeListDataEnt.getId();
 
         final HomeFragmentItemBinder.ViewHolder viewHolder = (HomeFragmentItemBinder.ViewHolder) view.getTag();
 
@@ -158,7 +185,9 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
         viewHolder.iv_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UIHelper.showShortToastInCenter(context,context.getString(R.string.will_be_implemented));
+
+                IOnLike.setLikeHit(homeListDataEnt.getId());
+
             }
         });
 
@@ -166,7 +195,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
             @Override
             public void onClick(View v) {
                 //UIHelper.showShortToastInCenter(context,context.getString(R.string.will_be_implemented));
-                context.addDockableFragment(CommentSectionFragment.newInstance(), "CommentSectionFragment");
+                context.addDockableFragment(CommentSectionFragment.newInstance(homeListDataEnt.getId()), "CommentSectionFragment");
             }
         });
 
@@ -190,6 +219,8 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
         });
 
     }
+
+
 
     public static class ViewHolder extends BaseViewHolder {
 

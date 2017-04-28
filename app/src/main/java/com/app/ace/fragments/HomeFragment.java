@@ -1,7 +1,6 @@
 package com.app.ace.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import com.app.ace.BaseApplication;
 import com.app.ace.R;
@@ -25,6 +25,7 @@ import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.UIHelper;
+import com.app.ace.interfaces.IOnLike;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.HomeFragmentItemBinder;
 import com.app.ace.ui.views.AnyTextView;
@@ -42,7 +43,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
-public class HomeFragment extends BaseFragment implements View.OnClickListener , MainActivity.ImageSetter{
+public class HomeFragment extends BaseFragment implements View.OnClickListener , MainActivity.ImageSetter,IOnLike{
 
     @InjectView(R.id.gridView)
     private GridView gridView;
@@ -70,6 +71,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
     AnyTextView  txt_Location;
 
     public File postImage;
+    HomeFragmentItemBinder homeFragmentItemBinder;
 
 
 
@@ -87,7 +89,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new ArrayListAdapter<HomeListDataEnt>(getDockActivity(), new HomeFragmentItemBinder(getDockActivity()));
+        adapter = new ArrayListAdapter<HomeListDataEnt>(getDockActivity(), new HomeFragmentItemBinder(getDockActivity(), this));
 
 
         BaseApplication.getBus().register(this);
@@ -116,6 +118,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
         iv_Fav.setOnClickListener(this);
         iv_profile.setOnClickListener(this);
 
+
         getMainActivity().setImageSetter(this);
 
     }
@@ -134,7 +137,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
 
             for(PostsEnt postsEnt : postsEntArrayList){
 
-                dataCollection.add(new HomeListDataEnt(394,12,postsEnt.getCreator().getProfile_image(),postsEnt.getCreator().getFirst_name()+" "+ postsEnt.getCreator().getLast_name(),postsEnt.getPost_image(),"Time Joe","Hi nice",postsEnt.getUser_id()));
+                dataCollection.add(new HomeListDataEnt(Integer.parseInt(postsEnt.getLike_count()),Integer.parseInt(postsEnt.getComment_count()),postsEnt.getCreator().getProfile_image(),postsEnt.getCreator().getFirst_name()+" "+ postsEnt.getCreator().getLast_name(),postsEnt.getPost_image(),"Time Joe","Hi nice",postsEnt.getUser_id(),postsEnt.getId()));
 
             }
 
@@ -303,7 +306,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
 
             case R.id.iv_Fav:
 
-                getDockActivity().addDockableFragment(FollowingFragment.newInstance(),"FollowingFragment");
+               getDockActivity().addDockableFragment(FollowingFragment.newInstance(),"FollowingFragment");
 
                 break;
 
@@ -460,6 +463,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
 
     }
 
+
+
     @Override
     public void setImage(String imagePath) {
 
@@ -482,6 +487,42 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
             postImage = new File(videoPath);
             createPost(false);
         }
+
+    }
+
+    @Override
+    public void setLikeHit(final int postId) {
+
+
+        Call<ResponseWrapper<PostsEnt>> callBack = webService.likePost(
+                prefHelper.getUserId(),
+                postId);
+
+        callBack.enqueue(new Callback<ResponseWrapper<PostsEnt>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<PostsEnt>> call, Response<ResponseWrapper<PostsEnt>> response) {
+
+
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                   Toast.makeText(getDockActivity(),String.valueOf(postId),Toast.LENGTH_LONG).show();
+                  // Toast.makeText(getDockActivity(), prefHelper.getUser().getFirst_name(),Toast.LENGTH_LONG).show();
+
+                }
+                else {
+
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<PostsEnt>> call, Throwable t) {
+
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+            }
+        });
 
     }
 }

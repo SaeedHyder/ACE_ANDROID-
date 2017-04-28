@@ -8,6 +8,7 @@ public class FollowUser {
 
 
     int id;
+    int status;
     String following_id;
     String follower_id;
     String updated_at;
@@ -51,6 +52,14 @@ public class FollowUser {
 
     public void setCreated_at(String created_at) {
         this.created_at = created_at;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
 }

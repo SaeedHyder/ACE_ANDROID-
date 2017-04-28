@@ -13,10 +13,14 @@ import android.widget.Spinner;
 
 import com.app.ace.R;
 import com.app.ace.activities.MainActivity;
+import com.app.ace.entities.RegistrationResult;
+import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.UIHelper;
+import com.app.ace.ui.views.AnyEditTextView;
+import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -26,6 +30,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import roboguice.inject.InjectView;
 
 /**
@@ -42,6 +52,24 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
 
     @InjectView(R.id.sp_Gender)
     private Spinner sp_Gender;
+
+    @InjectView(R.id.edtUserName)
+    AnyEditTextView edtUserName;
+
+    @InjectView(R.id.edtTagLine)
+    AnyEditTextView edtTagLine;
+
+    @InjectView(R.id.edtEmail)
+    AnyEditTextView edtEmail;
+
+    @InjectView(R.id.edtMobileNumber)
+    AnyEditTextView edtMobileNumber;
+
+    String fullname,firstName,lastName;
+    File profilePic;
+    String profilePath;
+    ImageLoader imageLoader;
+
 
 
     public static EditTraineeProfileFragment newInstance(){
@@ -60,6 +88,7 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        imageLoader = ImageLoader.getInstance();
         // Spinner Drop down elements
         List<String> categories = new ArrayList<>();
         categories.add(getString(R.string.male));
@@ -75,12 +104,84 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
         sp_Gender.setAdapter(dataAdapter);
         sp_Gender.setSelection(0);
 
+        SetTraineeProfile();
+
         setListener();
     }
+
+    private void SetTraineeProfile() {
+
+        edtUserName.setText(prefHelper.getUserName());
+        edtEmail.setText(prefHelper.getUser().getEmail());
+        edtMobileNumber.setText(prefHelper.getUser().getPhone_number());
+        edtTagLine.setText(prefHelper.getUser().getUser_status());
+        imageLoader.displayImage(prefHelper.getUser().getProfile_image(), civ_profile_pic);
+
+
+
+    }
+
+    private void EditProfile() {
+
+        fullname=edtUserName.getText().toString();
+        if(fullname.contains(" ")) {
+            String[] name = fullname.split(" ");
+            firstName = name[0];
+            lastName = name[1];
+        }
+        else
+        {
+            firstName=fullname;
+            lastName=" ";
+        }
+        MultipartBody.Part profile_picture = null;
+        if(profilePic != null) {
+            profile_picture = MultipartBody.Part.createFormData("profile_picture", profilePath, RequestBody.create(MediaType.parse("image/*"), profilePic));
+        }
+        Call<ResponseWrapper<RegistrationResult>> callBack = webService.UpdateTrainee(
+                RequestBody.create(MediaType.parse("text/plain"),prefHelper.getUserId()),
+                RequestBody.create(MediaType.parse("text/plain"),firstName),
+                RequestBody.create(MediaType.parse("text/plain"),lastName),
+                RequestBody.create(MediaType.parse("text/plain"),edtTagLine.getText().toString()),
+                RequestBody.create(MediaType.parse("text/plain"),edtMobileNumber.getText().toString()),
+                profile_picture
+        );
+
+        callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
+
+                loadingFinished();
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+                else {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<RegistrationResult>> call, Throwable t) {
+
+                loadingFinished();
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+
+            }
+        });
+
+}
 
     private void setListener() {
         btnChangeProfilePhoto.setOnClickListener(this);
         getMainActivity().setImageSetter(this);
+        edtUserName.setOnClickListener(this);
+        edtTagLine.setOnClickListener(this);
+        edtMobileNumber.setOnClickListener(this);
+        edtEmail.setOnClickListener(this);
+        edtEmail.setEnabled(false);
+        edtEmail.setFocusable(false);
     }
 
     @Override
@@ -92,12 +193,15 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
         titleBar.showSaveButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+               // UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                EditProfile();
             }
         });
 
         titleBar.setSubHeading(getResources().getString(R.string.edit_profile));
     }
+
+
 
     @Override
     public void onClick(View v) {
@@ -132,7 +236,8 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
     public void setImage(String imagePath) {
 
         if (imagePath != null) {
-            //profilePic = new File(imagePath);
+            profilePic = new File(imagePath);
+            profilePath=imagePath;
             ImageLoader.getInstance().displayImage(
                     "file:///" +imagePath, civ_profile_pic);
         }

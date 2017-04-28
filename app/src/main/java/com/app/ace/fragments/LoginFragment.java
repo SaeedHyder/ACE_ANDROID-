@@ -192,6 +192,11 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 						prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
 						prefHelper.setUsrId(response.body().getResult().getId());
 						prefHelper.setToken(response.body().getResult().get_token());
+						prefHelper.putUser(response.body().getResult());
+
+						//prefHelper.setMobileNo(response.body().getResult().getPhone_no());
+
+
 
 						if(response.body().getResult().getUser_type().equals(AppConstants.trainee)){
 
@@ -265,6 +270,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 
 
 
+
 		callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
 			@Override
 			public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
@@ -287,6 +293,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 						prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
 						prefHelper.setUsrId(response.body().getResult().getId());
 						prefHelper.setToken(response.body().getResult().get_token());
+						prefHelper.putUser(response.body().getResult());
 
 						if(response.body().getResult().getUser_type().equals(AppConstants.trainee)){
 

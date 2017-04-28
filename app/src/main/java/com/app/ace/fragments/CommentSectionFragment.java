@@ -6,11 +6,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.app.ace.R;
 import com.app.ace.entities.CommentsSectionItemsEnt;
+import com.app.ace.entities.HomeListDataEnt;
+import com.app.ace.entities.PostsEnt;
+import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.ShowComments;
 import com.app.ace.fragments.abstracts.BaseFragment;
+import com.app.ace.global.AppConstants;
 import com.app.ace.global.CommentToChatMsgConstants;
+import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.CommentSection;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.CommentSectionItemBinder;
@@ -18,10 +25,15 @@ import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.TitleBar;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import roboguice.inject.InjectView;
 
 import static com.app.ace.R.id.lv_CommentSection;
-
+import static com.app.ace.fragments.TrainerProfileFragment.USER_ID;
+import static com.app.ace.global.AppConstants.user_id;
 
 
 public class CommentSectionFragment extends BaseFragment implements  CommentSection, View.OnClickListener{
@@ -35,12 +47,21 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
     @InjectView(R.id.iv_pointer)
     ImageView iv_pointer;
 
+    public static String POSTID = "post_id";
+    String post_id;
+
     private ArrayListAdapter<CommentsSectionItemsEnt> adapter;
 
     private ArrayList<CommentsSectionItemsEnt> userCollection = new ArrayList<>();
 
-    public static CommentSectionFragment newInstance() {
-        return new CommentSectionFragment();
+    public static CommentSectionFragment newInstance(int postId) {
+        Bundle args = new Bundle();
+        args.putString(POSTID, String.valueOf(postId));
+        CommentSectionFragment fragment = new CommentSectionFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+
     }
 
 
@@ -49,8 +70,12 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new ArrayListAdapter<CommentsSectionItemsEnt>(getDockActivity(), new CommentSectionItemBinder(this) {
-
         });
+        if (getArguments() != null) {
+            post_id = getArguments().getString(POSTID);
+        } else {
+
+        }
     }
 
 
@@ -67,13 +92,61 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        ShowComments();
         setListener();
-        getUserData();
+        //getUserData();
+    }
+
+    private void ShowComments() {
+
+        Call<ResponseWrapper<ArrayList<ShowComments>>> callBack = webService.ShowComments(post_id);
+
+        callBack.enqueue(new Callback<ResponseWrapper<ArrayList<ShowComments>>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<ArrayList<ShowComments>>> call, Response<ResponseWrapper<ArrayList<ShowComments>>> response) {
+
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+
+                   // if(response.body().getResult().size()!=0) {
+                        SetAllComments(response.body().getResult());
+                   // }
+                    if(response.body().getMessage().contains("No Comments")) {
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    }
+
+                }
+                else {
+
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<ArrayList<ShowComments>>> call, Throwable t) {
+
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+
+            }
+        });
+    }
+
+    private void SetAllComments(ArrayList<ShowComments> result) {
+
+        userCollection = new ArrayList<>();
+
+        for(ShowComments item : result){
+
+            userCollection.add(new CommentsSectionItemsEnt(item.getUser().getProfile_image(),item.getUser().getFirst_name()+" "+item.getUser().getLast_name(),item.getComment_text(),item.getCreated_at()));
+
+        }
+
+        bindData(userCollection);
+
+
     }
 
 
-
-    private void getUserData() {
+  /*  private void getUserData() {
 
         userCollection= new ArrayList<>();
         userCollection.add(new CommentsSectionItemsEnt("drawable://" + R.drawable.profile_pic, getString(R.string.james_blunt),"I wont be able to make it today","13m" ));
@@ -83,7 +156,7 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
 
         bindData(userCollection);
     }
-
+*/
 
 
     private void setListener() {
@@ -121,14 +194,49 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
         switch (view.getId()) {
             case R.id.iv_pointer:
 
+            Toast.makeText(getDockActivity(),"Comment",Toast.LENGTH_LONG).show();
+                SendComment();
 
-                CommentToChatMsgConstants commentToChatMsgConstants = new CommentToChatMsgConstants();
+              //  CommentToChatMsgConstants commentToChatMsgConstants = new CommentToChatMsgConstants();
 
-                commentToChatMsgConstants.setCommentC(et_CommentBar.getText().toString());
+               // commentToChatMsgConstants.setCommentC(et_CommentBar.getText().toString());
 
 
-               getDockActivity().addDockableFragment(ChatFragment.newInstance(commentToChatMsgConstants), "ChatFragment");
+              // getDockActivity().addDockableFragment(ChatFragment.newInstance(commentToChatMsgConstants), "ChatFragment");
                 break;
         }
+    }
+
+    private void SendComment() {
+
+        Call<ResponseWrapper<ShowComments>> callBack = webService.CreateComment(
+                prefHelper.getUserId(),
+                post_id,
+                et_CommentBar.getText().toString(),
+                0);
+
+        callBack.enqueue(new Callback<ResponseWrapper<ShowComments>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<ShowComments>> call, Response<ResponseWrapper<ShowComments>> response) {
+
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+
+                    userCollection.add(new CommentsSectionItemsEnt("drawable://" + R.drawable.profile_pic,prefHelper.getUserName(),response.body().getResult().getComment_text(),response.body().getResult().getCreated_at()));
+                    bindData(userCollection);
+                    et_CommentBar.setText("");
+                }
+                else
+                {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<ShowComments>> call, Throwable t) {
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+            }
+        });
+
     }
 }

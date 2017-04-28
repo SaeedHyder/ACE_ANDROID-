@@ -2,9 +2,11 @@ package com.app.ace.fragments;
 
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.Rating;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -24,6 +26,7 @@ import com.app.ace.entities.HomeListDataEnt;
 import com.app.ace.entities.PostsEnt;
 import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.User;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.entities.post;
 import com.app.ace.fragments.abstracts.BaseFragment;
@@ -52,7 +55,9 @@ import roboguice.inject.InjectView;
 
 import static com.app.ace.R.id.btn;
 import static com.app.ace.R.id.btn_followTrainee;
+
 import static com.app.ace.R.id.gridView;
+import static com.app.ace.R.id.rbAddRating;
 import static com.app.ace.R.id.txt;
 import static com.app.ace.R.id.txt_Location;
 import static com.app.ace.R.id.txt_Training;
@@ -185,6 +190,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
     public static String USER_ID = "User_Id";
     String user_id;
+    int rating=5;
 
 
     public static TrainerProfileFragment newInstance() {
@@ -267,6 +273,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
                         txt_Trainer.setVisibility(View.VISIBLE);
                         rbAddRating.setVisibility(View.VISIBLE);
+
 
                         ll_separator.setVisibility(View.VISIBLE);
 
@@ -388,119 +395,50 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         txt_FollowersCount.setOnClickListener(this);
         txt_FollowingsCount.setOnClickListener(this);
 
+        rbAddRating.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+              //  rating();
+
+               Toast.makeText(getDockActivity(),String.valueOf(rbAddRating.getScore()),Toast.LENGTH_LONG).show();
+                return false;
+            }
+        });
+
     }
 
- /*   private void ShowTrainerProfile() {
-        loadingStarted();
-        Call<ResponseWrapper<CreaterEnt>> callBack = webService.traineeProfile(user_id);
+    private void rating() {
 
-        callBack.enqueue(new Callback<ResponseWrapper<CreaterEnt>>() {
+        Call<ResponseWrapper<User>> callBack = webService.rating(
+                prefHelper.getUserId(),
+                rating,
+                user_id);
+
+        callBack.enqueue(new Callback<ResponseWrapper<User>>() {
             @Override
-            public void onResponse(Call<ResponseWrapper<CreaterEnt>> call, Response<ResponseWrapper<CreaterEnt>> response) {
+            public void onResponse(Call<ResponseWrapper<User>> call, Response<ResponseWrapper<User>> response) {
 
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    txt_profileName.setText(response.body().getResult().getFirst_name()+" "+response.body().getResult().getLast_name());
-                    imageLoader.displayImage(response.body().getResult().getProfile_image(),riv_profile_pic);
-                    txt_education_cirtification_dis.setText(response.body().getResult().getEducation()+" "+response.body().getResult().getUniversity());
-                    txt_preffered_training_loc_dis.setText(response.body().getResult().getAddress());
-                    txt_avaliability_dis.setText(response.body().getResult().getGym_days()+" "+response.body().getResult().getGym_timing_from()+"-"+response.body().getResult().getGym_timing_to());
-                    //response.body().getResult().getGym_timing_to()+" "+response.body().getResult().getGym_timing_from()
-                }
-                else {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+
+                } else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
+
             }
 
             @Override
-            public void onFailure(Call<ResponseWrapper<CreaterEnt>> call, Throwable t) {
-
+            public void onFailure(Call<ResponseWrapper<User>> call, Throwable t) {
                 loadingFinished();
                 UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
-
             }
         });
-    }*/
-
-   /* private void ShowTrianeeData() {
-
-        loadingStarted();
-
-        Call<ResponseWrapper<CreaterEnt>> callBack = webService.traineeProfile(user_id);
-
-        callBack.enqueue(new Callback<ResponseWrapper<CreaterEnt>>() {
-            @Override
-            public void onResponse(Call<ResponseWrapper<CreaterEnt>> call, Response<ResponseWrapper<CreaterEnt>> response) {
-
-                loadingFinished();
-                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+    }
 
 
-                    txt_profileName.setText(response.body().getResult().getFirst_name()+" "+response.body().getResult().getLast_name());
-                    imageLoader.displayImage(response.body().getResult().getProfile_image(),riv_profile_pic);
-                }
-                else {
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<ResponseWrapper<CreaterEnt>> call, Throwable t) {
-
-                loadingFinished();
-                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
-
-            }
-        });
-
-    }*/
-
-
-
-    /*private void getBrowsedAdData() {
-
-        Call<ResponseWrapper<CreaterEnt>> callBack = webService.UserProfilePosts(user_id);
-
-        callBack.enqueue(new Callback<ResponseWrapper<CreaterEnt>>() {
-            @Override
-            public void onResponse(Call<ResponseWrapper<CreaterEnt>> call, Response<ResponseWrapper<CreaterEnt>> response) {
-
-                loadingFinished();
-                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-
-                    ShowUserPosts(response.body().getResult().getPosts());
-
-                }
-                else {
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<ResponseWrapper<CreaterEnt>> call, Throwable t) {
-
-                loadingFinished();
-                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
-
-            }
-        });*/
-
-        /*dataCollection = new ArrayList<String>();
-
-        dataCollection.add("drawable://" + R.drawable.pic1);
-        dataCollection.add("drawable://" + R.drawable.pic3);
-        dataCollection.add("drawable://" + R.drawable.pic4);
-        dataCollection.add("drawable://" + R.drawable.pic1);
-        dataCollection.add("drawable://" + R.drawable.pic3);
-        dataCollection.add("drawable://" + R.drawable.pic4);
-        dataCollection.add("drawable://" + R.drawable.pic1);
-        dataCollection.add("drawable://" + R.drawable.pic3);
-        dataCollection.add("drawable://" + R.drawable.pic4);*/
-
-    //bindData(dataCollection,3);
 
 
     @Override
@@ -651,7 +589,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             case R.id.iv_Home:
 
                 getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
-
+                //rating();
                 break;
 
             case R.id.btn_edit_or_follow:
@@ -666,6 +604,9 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
                 break;
 
+            case R.id.rbAddRating:
+                //rating();
+               // Toast.makeText(getDockActivity(),String.valueOf(rbAddRating.getScore()),Toast.LENGTH_LONG).show();
 
         }
     }
