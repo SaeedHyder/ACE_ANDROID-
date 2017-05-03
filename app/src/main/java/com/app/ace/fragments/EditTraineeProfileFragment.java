@@ -38,6 +38,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+
+
+
 /**
  * Created by khan_muhammad on 3/22/2017.
  */
@@ -52,6 +55,9 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
 
     @InjectView(R.id.sp_Gender)
     private Spinner sp_Gender;
+
+
+
 
     @InjectView(R.id.edtUserName)
     AnyEditTextView edtUserName;
@@ -89,25 +95,12 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
         super.onViewCreated(view, savedInstanceState);
 
         imageLoader = ImageLoader.getInstance();
-        // Spinner Drop down elements
-        List<String> categories = new ArrayList<>();
-        categories.add(getString(R.string.male));
-        categories.add(getString(R.string.femaile));
-
-        // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, categories);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        sp_Gender.setAdapter(dataAdapter);
-        sp_Gender.setSelection(0);
-
+        sp_Gender();
+        sp_Certification();
         SetTraineeProfile();
-
         setListener();
     }
+
 
     private void SetTraineeProfile() {
 
@@ -172,6 +165,36 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
         });
 
 }
+
+    private void sp_Gender() {
+        // Spinner Drop down elements
+        List<String> categories = new ArrayList<>();
+        categories.add(getString(R.string.male));
+        categories.add(getString(R.string.femaile));
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, categories);
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        sp_Gender.setAdapter(dataAdapter);
+        sp_Gender.setSelection(0);
+
+    }
+
+    private void sp_Certification() {
+
+        List<String> categories = new ArrayList<>();
+        categories.add(getString(R.string.male));
+        categories.add(getString(R.string.femaile));
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, categories);
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+
+    }
 
     private void setListener() {
         btnChangeProfilePhoto.setOnClickListener(this);

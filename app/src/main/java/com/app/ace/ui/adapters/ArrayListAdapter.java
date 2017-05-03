@@ -28,6 +28,7 @@ public class ArrayListAdapter<T> extends BaseAdapter implements SpinnerAdapter {
 	protected Activity mContext;
 	protected List<T> arrayList;
 	protected ViewBinder<T> viewBinder;
+
 	
 	public ArrayListAdapter( Activity context, List<T> arrayList,
 			ViewBinder<T> viewBinder ) {
@@ -79,6 +80,12 @@ public class ArrayListAdapter<T> extends BaseAdapter implements SpinnerAdapter {
 	public int getCount() {
 		return arrayList.size();
 	}
+
+	@Override
+	public int getViewTypeCount() {
+		return 2;
+	}
+
 	
 	@Override
 	public Object getItem( int position ) {

@@ -213,7 +213,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
             @Override
             public void onClick(View v) {
 
-                UIHelper.showShortToastInCenter(context,context.getString(R.string.will_be_implemented));
+                context.addDockableFragment(CommentSectionFragment.newInstance(homeListDataEnt.getId()), "CommentSectionFragment");
 
             }
         });

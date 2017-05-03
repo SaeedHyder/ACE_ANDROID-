@@ -341,8 +341,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
             case R.id.iv_Calander:
 
                 //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
-                getDockActivity().addDockableFragment(TrainingBookingCalenderFragment.newInstance(),"TrainerBookingCalendarFragment");
-
+                if(prefHelper.getUser().getUser_type().equalsIgnoreCase("trainer")) {
+                    getDockActivity().addDockableFragment(TrainingBookingCalenderFragment.newInstance(), "TrainerBookingCalendarFragment");
+                }
+                else
+                {
+                    getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(),"TraineeScheduleFragment");
+                }
               /*  if(AppConstants.is_show_trainer){
 
                     getDockActivity().addDockableFragment(TrainerBookingCalendarFragment.newInstance(),"TrainerBookingCalendarFragment");

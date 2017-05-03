@@ -5,7 +5,7 @@ package com.app.ace.interfaces;
  */
 
 public interface TrainingBooking {
-    void addList();
+    void LastAvailtxt();
     void backList();
     void textList();
 }

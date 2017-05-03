@@ -13,6 +13,7 @@ import com.app.ace.entities.PostsEnt;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ShowComments;
+import com.app.ace.entities.TrainerBookingCalendarJson;
 import com.app.ace.entities.User;
 import com.app.ace.entities.UserProfile;
 
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -253,9 +255,14 @@ public interface WebService {
     @FormUrlEncoded
     @POST("user/rating/add")
     Call<ResponseWrapper<User>> rating(
-            @Path("rating_by") String rating_by,
-            @Path("rating") int rating,
-            @Path("user_id") String user_id);
+            @Field("rating_by") String rating_by,
+            @Field("rating") int rating,
+            @Field("user_id") String user_id);
+
+
+    @POST("schedule/create")
+    Call<ResponseWrapper> createSchedule(
+            @Body ArrayList<TrainerBookingCalendarJson> data);
 
 
 

@@ -399,20 +399,22 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-              //  rating();
+                float rating=rbAddRating.getScore();
+              int ratingInt=(int)rating+1;
+                rating(ratingInt);
 
-               Toast.makeText(getDockActivity(),String.valueOf(rbAddRating.getScore()),Toast.LENGTH_LONG).show();
+            //   Toast.makeText(getDockActivity(),String.valueOf(rbAddRating.getScore()),Toast.LENGTH_LONG).show();
                 return false;
             }
         });
 
     }
 
-    private void rating() {
+    private void rating(int ratingInt) {
 
         Call<ResponseWrapper<User>> callBack = webService.rating(
                 prefHelper.getUserId(),
-                rating,
+                ratingInt,
                 user_id);
 
         callBack.enqueue(new Callback<ResponseWrapper<User>>() {
@@ -589,7 +591,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             case R.id.iv_Home:
 
                 getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
-                //rating();
+               // rating();
                 break;
 
             case R.id.btn_edit_or_follow:

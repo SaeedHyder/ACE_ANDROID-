@@ -85,10 +85,10 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
     String fullname,firstName,lastName;
 
 
-
-
     @InjectView(R.id.sp_Gender)
     private Spinner sp_Gender;
+
+
 
 
     public static EditTrainerProfileFragment newInstance(){
@@ -122,6 +122,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         // attaching data adapter to spinner
         sp_Gender.setAdapter(dataAdapter);
         sp_Gender.setSelection(0);
+
 
         imageLoader = ImageLoader.getInstance();
 

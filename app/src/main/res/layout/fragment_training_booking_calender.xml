@@ -21,16 +21,26 @@
 
             <Spinner
                 android:id="@+id/sp_month"
-                android:layout_width="@dimen/x130"
+                android:layout_width="@dimen/x100"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:layout_gravity="center"
-                android:hint="Select Month"
-                android:textColorHint="@color/white"
-                android:textColor="@color/white"
-                android:textSize="@dimen/x15"
+                android:gravity="center"
                 android:layout_marginTop="@dimen/x5"
                 />
+
+         <!--   <Spinner
+                android:id="@+id/sp_Gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/iv_Gender"
+                android:layout_centerVertical="true"
+                android:hint="Male"
+                android:drawableLeft="@drawable/gender_icon"
+                android:textColorHint="@color/edittext_hint_color"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/x15"
+                android:alpha="0.6"/>-->
 
 
         </LinearLayout>

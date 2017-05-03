@@ -14,13 +14,16 @@ public class TrainingBookingCalenderItem {
     private String txtSecTo;
     private String txtSecFrom;
 
+    private String txtThirdTo;
+    private String txtThirdFrom;
+
 /*    public TrainingBookingCalenderItem( String txtTo, String txtFrom){
         setTxtTo(txtTo);
         setTxtFrom(txtFrom);
         setTxtback(txtback);
     }*/
 
-    public TrainingBookingCalenderItem(String txtDayDate, String txtSecTo, String txtTo, String txtFrom, String txtSecFrom)
+    public TrainingBookingCalenderItem(String txtDayDate, String txtSecTo, String txtTo, String txtFrom, String txtSecFrom,String txtThirdTo,String txtThirdFrom )
     {
         setTxtDayDate(txtDayDate);
         setTxtTo(txtTo);
@@ -28,6 +31,8 @@ public class TrainingBookingCalenderItem {
         setTxtIncre(txtIncre);
         setTxtSecTo(txtSecTo);
         setTxtSecFrom(txtSecFrom);
+        setTxtThirdTo(txtThirdTo);
+        setTxtThirdFrom(txtThirdFrom);
 
     }
 
@@ -86,5 +91,21 @@ public class TrainingBookingCalenderItem {
 
     public void setTxtSecFrom(String txtSecFrom) {
         this.txtSecFrom = txtSecFrom;
+    }
+
+    public String getTxtThirdTo() {
+        return txtThirdTo;
+    }
+
+    public void setTxtThirdTo(String txtThirdTo) {
+        this.txtThirdTo = txtThirdTo;
+    }
+
+    public String getTxtThirdFrom() {
+        return txtThirdFrom;
+    }
+
+    public void setTxtThirdFrom(String txtThirdFrom) {
+        this.txtThirdFrom = txtThirdFrom;
     }
 }
