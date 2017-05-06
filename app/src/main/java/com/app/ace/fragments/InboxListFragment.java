@@ -88,6 +88,8 @@ public class InboxListFragment extends BaseFragment {
                              public void onFailure(Call<ResponseWrapper<ArrayList<MsgEnt>>> call, Throwable t) {
 
                                  loadingFinished();
+                                 System.out.println(t.getMessage());
+                                 System.out.println(t.getCause());
                                  UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
 
                              }

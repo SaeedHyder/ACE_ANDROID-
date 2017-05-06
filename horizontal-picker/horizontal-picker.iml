@@ -101,6 +101,5 @@
     <orderEntry type="library" exported="" name="support-core-ui-25.1.1" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-v7-25.1.1" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-25.1.1" level="project" />
-    <orderEntry type="library" exported="" name="android-android-25" level="project" />
   </component>
 </module>

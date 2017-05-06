@@ -35,7 +35,7 @@ import retrofit2.http.Path;
 import static com.app.ace.R.string.university;
 import static com.app.ace.global.AppConstants.user_id;
 
-public interface WebService {
+public interface WebService<T> {
 
 
    /* @FormUrlEncoded
@@ -188,7 +188,7 @@ public interface WebService {
             @Field("message_text") String message_text);
 
     @GET("message/{user_id}")
-    Call<ResponseWrapper<ArrayList<MsgEnt>>> userinbox(
+    Call<ResponseWrapper<T>> userinbox(
             @Path("user_id") String user_id);
 
     @FormUrlEncoded

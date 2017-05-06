@@ -137,7 +137,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
 
             for(PostsEnt postsEnt : postsEntArrayList){
 
-                dataCollection.add(new HomeListDataEnt(Integer.parseInt(postsEnt.getLike_count()),Integer.parseInt(postsEnt.getComment_count()),postsEnt.getCreator().getProfile_image(),postsEnt.getCreator().getFirst_name()+" "+ postsEnt.getCreator().getLast_name(),postsEnt.getPost_image(),"Time Joe","Hi nice",postsEnt.getUser_id(),postsEnt.getId()));
+                dataCollection.add(new HomeListDataEnt(Integer.parseInt(postsEnt.getLike_count())
+                        ,Integer.parseInt(postsEnt.getComment_count()),postsEnt.getCreator().getProfile_image()
+                        ,postsEnt.getCreator().getFirst_name()+" "+ postsEnt.getCreator().getLast_name()
+                        ,postsEnt.getPost_image(),"Time Joe","Hi nice",postsEnt.getUser_id(),postsEnt.getId()));
 
             }
 

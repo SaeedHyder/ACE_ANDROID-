@@ -83,5 +83,8 @@ dependencies {
     compile 'com.squareup:android-times-square:1.6.5@aar'
 
     compile 'com.android.support:design:25.3.1'
+
+    compile 'com.android.support:multidex:1.0.1'
+
 }
 apply plugin: 'io.fabric'
