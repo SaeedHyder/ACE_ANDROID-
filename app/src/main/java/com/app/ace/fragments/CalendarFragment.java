@@ -8,31 +8,32 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.app.ace.R;
+import com.app.ace.entities.FollowingCountListEnt;
+import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.TrainerTimingSlots;
 import com.app.ace.fragments.abstracts.BaseFragment;
+import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.views.TitleBar;
 import com.squareup.timessquare.CalendarCellDecorator;
 import com.squareup.timessquare.CalendarPickerView;
 import com.squareup.timessquare.DefaultDayViewAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import roboguice.inject.InjectView;
 
-import static android.R.attr.duration;
-import static android.R.attr.x;
-import static com.app.ace.R.id.gv_pics;
-import static com.app.ace.R.id.iv_grid;
-import static com.app.ace.R.id.iv_list;
+import static com.app.ace.global.AppConstants.trainer;
 
 /**
  * Created by saeedhyder on 4/4/2017.
@@ -46,7 +47,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     @InjectView (R.id.btn_avaliablity)
     Button btn_avaliablity;
 
-    @InjectView(R.id.sp_timer)
+    @InjectView(R.id.sp_trainerTime)
     Spinner sp_timer;
 
     @InjectView(R.id.sp_weeks)
@@ -59,6 +60,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     Button btn_training_Search_Submit;
 
     int days;
+    List<String> timings=new ArrayList<String>();
 
 
     public static CalendarFragment newInstance() {
@@ -85,15 +87,8 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //Spinner Timer
+        trainerTimeSlots();
 
-        List<String> timer = new ArrayList<String>();
-        timer.add("Slots Avaliable");
-
-        ArrayAdapter<String> timerAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, timer);
-
-        timerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sp_timer.setAdapter(timerAdapter);
 
         //Spinner Weeks
         List<String> timeDuration = new ArrayList<String>();
@@ -104,14 +99,22 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         timeDuration.add("6 Months");
 
         ArrayAdapter<String> TimeDurationAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, timeDuration);
-        timerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        TimeDurationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_weeks.setAdapter(TimeDurationAdapter);
 
         //Spinner Category
         List<String> category = new ArrayList<String>();
         category.add("Types of Training");
+        category.add("Flexiblity training");
+        category.add("Dynamic Strength training");
+        category.add("Static strength training");
+        category.add("Circuit training");
+        category.add("Aerobic training");
+        category.add("Body Building");
+        category.add("Lose Weight");
+        
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, category);
-        timerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_category.setAdapter(categoryAdapter);
        /* String calendarDate = calendarView.getDate()+"";
         Toast.makeText(getDockActivity(),calendarDate,Toast.LENGTH_LONG).show();*/
@@ -157,6 +160,53 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
 
 
         setListener();
+    }
+
+    private void trainerTimeSlots() {
+
+        Call<ResponseWrapper<ArrayList<TrainerTimingSlots>>> callBack = webService.TrainerTimingSlots(prefHelper.getUserId());
+        loadingStarted();
+
+        callBack.enqueue(new Callback<ResponseWrapper<ArrayList<TrainerTimingSlots>>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<ArrayList<TrainerTimingSlots>>> call, Response<ResponseWrapper<ArrayList<TrainerTimingSlots>>> response) {
+                loadingFinished();
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS))
+                {
+                    getTrainerTimingSlots(response.body().getResult());
+                }
+                else
+                {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<ArrayList<TrainerTimingSlots>>> call, Throwable t) {
+
+                loadingFinished();
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+
+            }
+        });
+
+    }
+
+    private void getTrainerTimingSlots(ArrayList<TrainerTimingSlots> result) {
+
+        timings.add("Slots Avaliable");
+
+        for(TrainerTimingSlots item: result)
+        {
+            timings.add(item.getStart_time()+" to "+item.getEnd_time());
+
+        }
+
+        ArrayAdapter<String> timerAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, timings);
+
+        timerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_timer.setAdapter(timerAdapter);
+
     }
 
     private void setCalendarView(int days) {

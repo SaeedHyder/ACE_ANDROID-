@@ -27,9 +27,13 @@ public class InboxListItemBinder extends ViewBinder<InboxDataItem> {
     public InboxListItemBinder(DockActivity context) {
         super(R.layout.inbox_list_item);
 
-        this.context=context;
+
         imageLoader = ImageLoader.getInstance();
+
+        this.context=context;
+
     }
+
 
     @Override
     public ViewBinder.BaseViewHolder createViewHolder(

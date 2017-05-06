@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/parenLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x10"
+        android:layout_marginBottom="@dimen/x10"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginRight="@dimen/x10"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userImageFollowers"
+            android:layout_width="@dimen/x40"
+            android:layout_height="@dimen/x40"
+            android:src="@drawable/profile_pic"
+
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <com.app.ace.ui.views.AnyTextView
+                android:id="@+id/txtUserNameFollowers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/x10"
+                android:gravity="center"
+                android:text="@string/james_blunt"
+                android:textColor="@color/black"
+                android:textSize="@dimen/x15"
+                app:typeface="Roboto-Bold.ttf" />
+
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/txt_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginBottom="@dimen/x3"
+        android:layout_marginTop="@dimen/x1"
+        android:alpha="0.6"
+        android:background="@drawable/text"/>
+
+
+</LinearLayout>

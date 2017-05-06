@@ -5,23 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
-<!--<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
 
-    <com.app.ace.ui.views.AnyTextView
-        android:id="@+id/showdate"
-        android:layout_width="180dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:text="Dates Schedule"
-        app:typeface="Roboto-Regular.ttf"
-        android:layout_marginLeft="@dimen/x25"
-        android:layout_marginRight="@dimen/x25"
-        android:layout_marginTop="@dimen/x10"/>
-</LinearLayout>-->
-    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,16 +14,16 @@
 
         <com.app.ace.ui.views.AnyTextView
             android:id="@+id/txtTime"
-            android:layout_width="180dp"
-            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_weight="0.7"
             android:layout_height="wrap_content"
-            android:padding="@dimen/x16"
             android:text="Dates Schedule"
-            android:gravity="center|center_vertical|center_horizontal"
+            android:gravity="left"
+            android:layout_gravity="center_vertical"
             app:typeface="Roboto-Regular.ttf"
-            android:layout_marginLeft="@dimen/x25"
+            android:layout_marginLeft="@dimen/x12"
             android:layout_marginRight="@dimen/x25"
-            android:layout_marginTop="@dimen/x10"/>
+          />
 
         <View
             android:layout_width="1dp"
@@ -59,16 +43,16 @@
             app:typeface="Roboto-Regular.ttf"/>-->
         <Button
             android:id="@+id/btnName"
-            android:layout_width="@dimen/x180"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="muniyem"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/x30"
+            android:layout_weight="0.6"
+            android:text="James Blunt"
             android:gravity="center|center_vertical|center_horizontal"
             android:background="@drawable/next_bttn"
             android:textColor="@color/white"
             android:textSize="@dimen/x16"
-            android:layout_marginLeft="@dimen/x25"
-            android:layout_marginRight="@dimen/x25"
+            android:layout_marginLeft="@dimen/x16"
+            android:layout_marginRight="@dimen/x60"
             android:layout_marginTop="@dimen/x10"
             android:layout_marginBottom="@dimen/x10"
 

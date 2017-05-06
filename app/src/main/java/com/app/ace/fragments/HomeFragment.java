@@ -21,11 +21,13 @@ import com.app.ace.entities.HomeListDataEnt;
 import com.app.ace.entities.HomeResultEnt;
 import com.app.ace.entities.PostsEnt;
 import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.ShowComments;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.IOnLike;
+import com.app.ace.interfaces.LastPostComment;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.HomeFragmentItemBinder;
 import com.app.ace.ui.views.AnyTextView;
@@ -42,6 +44,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
+
+import static com.app.ace.R.string.comments;
 
 public class HomeFragment extends BaseFragment implements View.OnClickListener , MainActivity.ImageSetter,IOnLike{
 
@@ -72,6 +76,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
 
     public File postImage;
     HomeFragmentItemBinder homeFragmentItemBinder;
+    String Lastcomment;
+    String NameCommentor;
 
 
 
@@ -79,6 +85,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
     private List<HomeListDataEnt> dataCollection;
 
     private DockActivity activity;
+
 
 
     public static HomeFragment newInstance(){
@@ -137,7 +144,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
 
             for(PostsEnt postsEnt : postsEntArrayList){
 
-                dataCollection.add(new HomeListDataEnt(Integer.parseInt(postsEnt.getLike_count()),Integer.parseInt(postsEnt.getComment_count()),postsEnt.getCreator().getProfile_image(),postsEnt.getCreator().getFirst_name()+" "+ postsEnt.getCreator().getLast_name(),postsEnt.getPost_image(),"Time Joe","Hi nice",postsEnt.getUser_id(),postsEnt.getId()));
+                dataCollection.add(new HomeListDataEnt(Integer.parseInt(postsEnt.getLike_count()),Integer.parseInt(postsEnt.getComment_count()),postsEnt.getCreator().getProfile_image(),postsEnt.getCreator().getFirst_name()+" "+ postsEnt.getCreator().getLast_name(),postsEnt.getPost_image(),"Time Joe","Hi nice",postsEnt.getUser_id(),postsEnt.getId(),postsEnt.getComment(),postsEnt.getIs_liked()));
 
             }
 
@@ -234,6 +241,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
 
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
+
                         getDockActivity().addDockableFragment(HomeFragment.newInstance(),"HomeFragment");
 
                     } else {
@@ -257,7 +265,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
 
         loadingStarted();
 
-        Call<ResponseWrapper<HomeResultEnt>> callBack = webService.getAllHomePosts();
+        Call<ResponseWrapper<HomeResultEnt>> callBack = webService.getAllHomePosts(prefHelper.getUserId());
 
         callBack.enqueue(new Callback<ResponseWrapper<HomeResultEnt>>() {
             @Override
@@ -496,8 +504,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
     }
 
     @Override
-    public void setLikeHit(final int postId) {
-
+    public void setLikeHit(final int postId, final AnyTextView txtLikeCount, final HomeListDataEnt entity) {
 
         Call<ResponseWrapper<PostsEnt>> callBack = webService.likePost(
                 prefHelper.getUserId(),
@@ -507,17 +514,35 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
             @Override
             public void onResponse(Call<ResponseWrapper<PostsEnt>> call, Response<ResponseWrapper<PostsEnt>> response) {
 
+                int i=1;
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                   Toast.makeText(getDockActivity(),String.valueOf(postId),Toast.LENGTH_LONG).show();
-                  // Toast.makeText(getDockActivity(), prefHelper.getUser().getFirst_name(),Toast.LENGTH_LONG).show();
+                    //UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+
+
+                    if(response.body().getMessage().contains("Post Liked"))
+                    {
+                        txtLikeCount.setText(entity.getTotoal_likes() + i + " likes");
+                    }
+                    else
+                    {
+                        txtLikeCount.setText(entity.getTotoal_likes()-0 + " likes");
+                    }
+                    /*if(response.body().getMessage().contains("Post Unliked"))
+                    {
+                        txtLikeCount.setText(entity.getTotoal_likes()- 0 + " likes");
+                    }
+                    else
+                    {
+                        txtLikeCount.setText(entity.getTotoal_likes() + i + " likes");
+                    }*/
 
                 }
                 else {
 
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+
                 }
 
             }
@@ -526,8 +551,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
             public void onFailure(Call<ResponseWrapper<PostsEnt>> call, Throwable t) {
 
                 UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+
             }
         });
 
+
+
     }
+
+
 }
