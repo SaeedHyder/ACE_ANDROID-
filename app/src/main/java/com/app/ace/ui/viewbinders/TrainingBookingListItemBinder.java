@@ -14,7 +14,6 @@ import com.app.ace.entities.TrainingBookingCalenderItem;
 import com.app.ace.fragments.TrainingBookingCalenderFragment;
 import com.app.ace.helpers.DateHelper;
 import com.app.ace.helpers.UIHelper;
-import com.app.ace.interfaces.TrainerBookingChangeText;
 import com.app.ace.interfaces.TrainingBooking;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 import com.app.ace.ui.views.AnyTextView;
@@ -31,14 +30,13 @@ import static com.app.ace.R.id.txtTo;
 import static com.app.ace.R.id.txtback;
 
 /**
- * Created by muniyemiftikhar on 4/7/2017.
+ * Created by saeedhyder on 4/7/2017.
  */
 
 public class TrainingBookingListItemBinder extends ViewBinder<TrainingBookingCalenderItem>  {
 
     Context context;
     TrainingBooking trainingbooking;
-    TrainerBookingChangeText trainerBookingChangeText;
     public String txtTo,txtFrom,txt,txtSecTo,txtSecFrom,txtThirdFrom,txtThirdTo,selectedDay;
     String prevDay=null;
 
@@ -466,6 +464,7 @@ public class TrainingBookingListItemBinder extends ViewBinder<TrainingBookingCal
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);
         TimePickerDialog mTimePicker;
+
         mTimePicker = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {

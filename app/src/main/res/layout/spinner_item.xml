@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--<CheckBox
+        android:id="@+id/cb_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:button="@drawable/selector_chkbox"
+        android:checked="false"
+        android:paddingLeft="@dimen/x10"
+        android:paddingRight="@dimen/x10"
+        android:paddingBottom="@dimen/x2"
+        android:layout_weight="1"
+        android:textColor="@color/lightGray"
+        android:textSize="@dimen/x14" />-->
+
+   <!-- <com.app.ace.ui.views.AnyTextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="text"
+        android:textAlignment="gravity"
+        android:paddingLeft="@dimen/x15"/>-->
+
+    <com.app.ace.ui.views.AnyTextView
+        android:id="@+id/text"
+        style="?android:attr/spinnerItemStyle"
+        android:singleLine="true"
+        android:paddingLeft="@dimen/x20"
+        android:paddingRight="@dimen/x20"
+        android:paddingBottom="@dimen/x2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:textAlignment="inherit"
+        app:typeface="Roboto-Regular.ttf"
+
+
+        />
+
+    <CheckBox
+        android:id="@+id/cb_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:paddingRight="@dimen/x20"
+          android:button="@drawable/selector_chkbox"/>
+
+
+</RelativeLayout>

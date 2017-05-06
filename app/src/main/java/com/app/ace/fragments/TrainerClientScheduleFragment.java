@@ -9,8 +9,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.app.ace.R;
+import com.app.ace.entities.GetTraineeBookings;
+import com.app.ace.entities.InboxDataItem;
+import com.app.ace.entities.MsgEnt;
+import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.ShowComments;
 import com.app.ace.entities.TrainerClientScheduleItem;
 import com.app.ace.fragments.abstracts.BaseFragment;
+import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.TrainerClientScheduleListItemBinder;
 import com.app.ace.ui.views.AnyTextView;
@@ -23,7 +30,12 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import roboguice.inject.InjectView;
+
+import static com.app.ace.global.AppConstants.trainee;
 
 
 public class TrainerClientScheduleFragment extends BaseFragment implements DatePickerListener, View.OnClickListener {
@@ -82,8 +94,46 @@ public class TrainerClientScheduleFragment extends BaseFragment implements DateP
                 .setOffset(7)
                 .init();
         datePicker.setDate(new DateTime());
-        getSearchUserData();
+      //  getSearchUserData();
+        setTraineeBookings();
         setListener();
+    }
+
+    private void setTraineeBookings() {
+
+        Call<ResponseWrapper<ArrayList<GetTraineeBookings>>> callBack = webService.ShowTraineeBookings(prefHelper.getUserId());
+
+        callBack.enqueue(new Callback<ResponseWrapper<ArrayList<GetTraineeBookings>>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<ArrayList<GetTraineeBookings>>> call, Response<ResponseWrapper<ArrayList<GetTraineeBookings>>> response) {
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+
+                    setTraineeData(response.body().getResult());
+
+                }
+                else
+                {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<ArrayList<GetTraineeBookings>>> call, Throwable t) {
+
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+            }
+        });
+
+    }
+
+    private void setTraineeData(ArrayList<GetTraineeBookings> result) {
+
+        userCollection = new ArrayList<>();
+
+        for(GetTraineeBookings item : result){
+            userCollection.add(new TrainerClientScheduleItem(item.getStart_time()+"-"+item.getEnd_time(),item.getTrainer().getFirst_name()+" "+item.getTrainer().getLast_name()));
+        }
+        bindData(userCollection);
     }
 
     private void setListener() {
@@ -93,19 +143,17 @@ public class TrainerClientScheduleFragment extends BaseFragment implements DateP
         iv_profile.setOnClickListener(this);
         datePicker.setOnClickListener(this);
 
-
-
     }
 
 
-    private void getSearchUserData() {
+   /* private void getSearchUserData() {
         userCollection= new ArrayList<>();
         userCollection.add(new TrainerClientScheduleItem("11:00-12:00","James"));
         userCollection.add(new TrainerClientScheduleItem("1:00-2:00","Eoin"));
        // userCollection.add(new TrainerClientScheduleItem("Training","BodyBuilding"));
 
         bindData(userCollection);
-    }
+    }*/
 
     private void bindData(ArrayList<TrainerClientScheduleItem> userCollection) {
         adapter.clearList();

@@ -19,9 +19,11 @@ import com.app.ace.global.AppConstants;
 import com.app.ace.global.CommentToChatMsgConstants;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.CommentSection;
+import com.app.ace.interfaces.LastPostComment;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.CommentSectionItemBinder;
 import com.app.ace.ui.views.AnyEditTextView;
+import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
 
 import java.util.ArrayList;
@@ -49,6 +51,7 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
 
     public static String POSTID = "post_id";
     String post_id;
+
 
     private ArrayListAdapter<CommentsSectionItemsEnt> adapter;
 
@@ -138,7 +141,11 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
 
             userCollection.add(new CommentsSectionItemsEnt(item.getUser().getProfile_image(),item.getUser().getFirst_name()+" "+item.getUser().getLast_name(),item.getComment_text(),item.getCreated_at()));
 
+
+
         }
+
+
 
         bindData(userCollection);
 
@@ -221,7 +228,7 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    userCollection.add(new CommentsSectionItemsEnt("drawable://" + R.drawable.profile_pic,prefHelper.getUserName(),response.body().getResult().getComment_text(),response.body().getResult().getCreated_at()));
+                    userCollection.add(new CommentsSectionItemsEnt(prefHelper.getUser().getProfile_image(),prefHelper.getUserName(),response.body().getResult().getComment_text(),response.body().getResult().getCreated_at()));
                     bindData(userCollection);
                     et_CommentBar.setText("");
                 }
@@ -239,4 +246,5 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
         });
 
     }
+
 }

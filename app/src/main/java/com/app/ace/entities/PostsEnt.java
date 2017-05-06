@@ -1,5 +1,7 @@
 package com.app.ace.entities;
 
+import java.util.ArrayList;
+
 /**
  * Created by khan_muhammad on 3/22/2017.
  */
@@ -24,6 +26,10 @@ public class PostsEnt {
     int id;
     String like_count;
     String comment_count;
+    String is_liked;
+
+
+    ArrayList<PostComment> comment;
 
     public int getId() {
         return id;
@@ -150,7 +156,25 @@ public class PostsEnt {
         this.creator = creator;
     }
 
+    public ArrayList<PostComment> getComment() {
+        return comment;
+    }
+
+    public void setComment(ArrayList<PostComment> comment) {
+        this.comment = comment;
+    }
+
+    public String getIs_liked() {
+        return is_liked;
+    }
+
+    public void setIs_liked(String is_liked) {
+        this.is_liked = is_liked;
+    }
+
+
     /* "id": 3,
+
             "user_id": 150,
             "image": "pSZmNgGaHuVu.jpg",
             "caption": "swagger",

@@ -2,7 +2,6 @@ package com.app.ace.fragments;
 
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Rating;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -13,18 +12,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RatingBar;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.app.ace.BaseApplication;
 import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
-import com.app.ace.entities.CreaterEnt;
 import com.app.ace.entities.FollowUser;
-import com.app.ace.entities.HomeListDataEnt;
-import com.app.ace.entities.PostsEnt;
-import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.User;
 import com.app.ace.entities.UserProfile;
@@ -40,8 +33,6 @@ import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.CustomRatingBar;
 import com.app.ace.ui.views.ExpandableGridView;
 import com.app.ace.ui.views.TitleBar;
-import com.google.gson.Gson;
-import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -52,21 +43,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
-
-import static com.app.ace.R.id.btn;
-import static com.app.ace.R.id.btn_followTrainee;
-
-import static com.app.ace.R.id.gridView;
-import static com.app.ace.R.id.rbAddRating;
-import static com.app.ace.R.id.txt;
-import static com.app.ace.R.id.txt_Location;
-import static com.app.ace.R.id.txt_Training;
-import static com.app.ace.R.id.txt_avaliability_dis;
-import static com.app.ace.R.id.txt_education_cirtification_dis;
-import static com.app.ace.R.id.txt_no_data;
-import static com.app.ace.R.id.txt_preffered_training_loc_dis;
-import static com.app.ace.global.AppConstants.trainer;
-import static com.app.ace.global.AppConstants.user_id;
 
 /**
  * Created by khan_muhammad on 3/17/2017.
@@ -609,6 +585,16 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             case R.id.rbAddRating:
                 //rating();
                // Toast.makeText(getDockActivity(),String.valueOf(rbAddRating.getScore()),Toast.LENGTH_LONG).show();
+
+            case R.id.txt_FollowersCount:
+                getDockActivity().addDockableFragment(FollowersCountListFragment.newInstance(Integer.parseInt(user_id)), "FollowingCountListFragment");
+                break;
+
+            case R.id.txt_FollowingsCount:
+                getDockActivity().addDockableFragment(FollowingCountListFragment.newInstance(Integer.parseInt(user_id)), "FollowersCountListFragment");
+                break;
+
+
 
         }
     }

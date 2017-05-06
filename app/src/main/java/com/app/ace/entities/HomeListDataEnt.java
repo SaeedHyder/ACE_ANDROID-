@@ -14,6 +14,7 @@ public class HomeListDataEnt {
 
     int user_id;
 
+
     public int getId() {
         return id;
     }
@@ -23,9 +24,11 @@ public class HomeListDataEnt {
     }
 
     int id;
+    String is_liked;
+    ArrayList<PostComment> commentsArray;
 
 
-    public HomeListDataEnt(int totoal_likes, int total_comments, String profile_pic_path, String profile_name, String profile_post_pic_path, String friend_name, String friend_comment, int user_id,int id){
+    public HomeListDataEnt(int totoal_likes, int total_comments, String profile_pic_path, String profile_name, String profile_post_pic_path, String friend_name, String friend_comment, int user_id,int id, ArrayList<PostComment> commentsArray,String is_liked){
 
         setTotoal_likes(totoal_likes);
         setTotal_comments(total_comments);
@@ -36,9 +39,20 @@ public class HomeListDataEnt {
         setFriend_comment(friend_comment);
         setUser_id(user_id);
         setId(id);
+        setCommentsArray(commentsArray);
+        setIs_liked(is_liked);
+
+
 
     }
 
+    public String getIs_liked() {
+        return is_liked;
+    }
+
+    public void setIs_liked(String is_liked) {
+        this.is_liked = is_liked;
+    }
 
     public int getTotoal_likes() {
         return totoal_likes;
@@ -103,6 +117,17 @@ public class HomeListDataEnt {
     public void setUser_id(int user_id) {
         this.user_id = user_id;
     }
+
+    public ArrayList<PostComment> getCommentsArray() {
+        return commentsArray;
+    }
+
+    public void setCommentsArray(ArrayList<PostComment> commentsArray) {
+        this.commentsArray = commentsArray;
+    }
+
+
+
 
 
 }

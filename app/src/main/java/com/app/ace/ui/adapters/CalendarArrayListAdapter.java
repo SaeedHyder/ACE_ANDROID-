@@ -1,19 +1,15 @@
 package com.app.ace.ui.adapters;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.SpinnerAdapter;
 
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Adapter used in combination with {@link ViewBinder} to provide the basic
@@ -23,21 +19,21 @@ import java.util.Locale;
  * @param <T>
  *            The entity that will be passed into this adapter
  */
-public class ArrayListAdapter<T> extends BaseAdapter implements SpinnerAdapter {
-	
+public class CalendarArrayListAdapter<T> extends BaseAdapter implements SpinnerAdapter {
+
 	protected Activity mContext;
 	protected List<T> arrayList;
 	protected ViewBinder<T> viewBinder;
 
-	
-	public ArrayListAdapter( Activity context, List<T> arrayList,
-			ViewBinder<T> viewBinder ) {
+
+	public CalendarArrayListAdapter(Activity context, List<T> arrayList,
+                                    ViewBinder<T> viewBinder ) {
 		mContext = context;
 		this.arrayList = arrayList;
 		this.viewBinder = viewBinder;
 	}
-	
-	public ArrayListAdapter( Activity context, ViewBinder<T> viewBinder ) {
+
+	public CalendarArrayListAdapter(Activity context, ViewBinder<T> viewBinder ) {
 		this( context, new ArrayList<T>(), viewBinder );
 	}
 	
@@ -81,8 +77,15 @@ public class ArrayListAdapter<T> extends BaseAdapter implements SpinnerAdapter {
 		return arrayList.size();
 	}
 
+	@Override
+	public int getItemViewType(int position) {
+		return position;
+	}
 
-
+	@Override
+	public int getViewTypeCount() {
+		return getCount();
+	}
 
 	@Override
 	public Object getItem( int position ) {

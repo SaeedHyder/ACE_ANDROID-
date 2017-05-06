@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -30,6 +32,7 @@ import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.BasePreferenceHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.IOnLike;
+import com.app.ace.interfaces.LastPostComment;
 import com.app.ace.retrofit.WebService;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 import com.app.ace.ui.views.AnyTextView;
@@ -59,18 +62,19 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
     private ImageLoader imageLoader;
     private DockActivity context;
     Display display;
+    boolean is_liked=true;
+    boolean is_liked1=true;
+    int count =0;
+    int x,y=0;
 
 
     IOnLike IOnLike;
-
 
     public HomeFragmentItemBinder(DockActivity context,IOnLike IOnLike) {
         super(R.layout.fragment_home_item);
 
         this.context = context;
-
         this.IOnLike = IOnLike;
-
         imageLoader = ImageLoader.getInstance();
     }
 
@@ -94,17 +98,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
 
         final HomeFragmentItemBinder.ViewHolder viewHolder = (HomeFragmentItemBinder.ViewHolder) view.getTag();
 
-    /*    if(homeListDataEnt.getVideoUrl()!=null)
-        {
-            viewHolder.vv_post_video.setVisibility(View.VISIBLE);
-            viewHolder.iv_post_pic.setVisibility(View.GONE);
 
-            Uri uri=Uri.parse(homeListDataEnt.getVideoUrl());
-            viewHolder.vv_post_video.setVideoURI(uri);
-            viewHolder.vv_post_video.requestFocus();
-            viewHolder.vv_post_video.start();
-        }
-*/
     if (homeListDataEnt.getProfile_post_pic_path().contains(".mp4"))
     {
 
@@ -169,9 +163,42 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
 
         viewHolder.txt_profileName.setText(homeListDataEnt.getProfile_name());
         viewHolder.txt_likes_count.setText(homeListDataEnt.getTotoal_likes()+" likes");
-        viewHolder. txt_commenter_Name.setText(homeListDataEnt.getFriend_name());
-        viewHolder.txt_comment.setText(homeListDataEnt.getFriend_comment());
         viewHolder.txt_view_all_comments.setText("View all "+ homeListDataEnt.getTotal_comments()+" comments");
+
+        if(homeListDataEnt.getIs_liked().contains("1"))
+        {
+            viewHolder.iv_like.setImageResource(R.drawable.heart_icon3);
+        }
+        else
+        {
+            viewHolder.iv_like.setImageResource(R.drawable.heart_icon2);
+        }
+
+       // viewHolder. txt_commenter_Name.setText(homeListDataEnt.getFriend_name());
+        if(homeListDataEnt.getCommentsArray().size()>0) {
+
+            viewHolder.txt_commenter_Name.setVisibility(View.VISIBLE);
+            viewHolder.txt_commenter_Name.setPadding(0,0,0,15);
+            viewHolder.txt_commenter_Name.setText(homeListDataEnt.getCommentsArray().get(homeListDataEnt.getCommentsArray().size() - 1).getFirst_name()+" "+homeListDataEnt.getCommentsArray().get(homeListDataEnt.getCommentsArray().size() - 1).getLast_name());
+
+            viewHolder.txt_comment.setVisibility(View.VISIBLE);
+            viewHolder.txt_comment.setPadding(0,0,0,15);
+            viewHolder.txt_comment.setText(homeListDataEnt.getCommentsArray().get(homeListDataEnt.getCommentsArray().size() - 1).getComment_text());
+        }
+        else
+
+        {
+            viewHolder.txt_commenter_Name.setVisibility(View.GONE);
+            viewHolder.txt_commenter_Name.setPadding(0,0,0,0);
+            viewHolder.txt_commenter_Name.setText("");
+
+            viewHolder.txt_comment.setPadding(0,0,0,0);
+            viewHolder.txt_comment.setVisibility(View.GONE);
+            viewHolder.txt_comment.setText("");
+
+
+        }
+        //lastPostComment.setLastCommentOnPost(viewHolder.txt_commenter_Name,viewHolder.txt_comment,homeListDataEnt.getId());
 
         viewHolder.txt_profileName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,11 +209,72 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
             }
         });
 
+        viewHolder.civ_profile_pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AppConstants.is_show_trainer = true;
+                context.addDockableFragment(TrainerProfileFragment.newInstance(homeListDataEnt.getUser_id()), "TrainerProfileFragment");
+            }
+        });
+
+
         viewHolder.iv_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                IOnLike.setLikeHit(homeListDataEnt.getId());
+
+                if(homeListDataEnt.getIs_liked().contains("0"))
+                {
+                   /* if (count==0){
+                        is_liked = true;
+
+                    }*/
+
+
+                    if(is_liked) {
+                        viewHolder.iv_like.setImageResource(R.drawable.heart_icon3);
+                        IOnLike.setLikeHit(homeListDataEnt.getId(), viewHolder.txt_likes_count, homeListDataEnt);
+
+                  // count++;
+                        is_liked=false;
+                    }
+                    else
+                    {
+                        viewHolder.iv_like.setImageResource(R.drawable.heart_icon2);
+                        IOnLike.setLikeHit(homeListDataEnt.getId(), viewHolder.txt_likes_count, homeListDataEnt);
+                        is_liked=true;
+
+                       // count=0;
+                    }
+                }
+
+                if(homeListDataEnt.getIs_liked().contains("1")){
+
+
+                    if (is_liked1) {
+                        viewHolder.iv_like.setImageResource(R.drawable.heart_icon2);
+                        IOnLike.setLikeHit(homeListDataEnt.getId(), viewHolder.txt_likes_count, homeListDataEnt);
+                      //  count++;
+                        is_liked1=false;
+                    }
+                    else
+                    {
+                        viewHolder.iv_like.setImageResource(R.drawable.heart_icon3);
+                        IOnLike.setLikeHit(homeListDataEnt.getId(), viewHolder.txt_likes_count, homeListDataEnt);
+                        is_liked1=true;
+
+                    }
+                }
+
+               /* Runnable r = new Runnable() {
+                    public void run(){
+                        viewHolder.iv_like.setImageResource(R.drawable.heart_icon2);
+                    }
+                };
+                viewHolder.iv_like.postDelayed(r,1000);*/
+
+
 
             }
         });
@@ -218,6 +306,9 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
             }
         });
 
+
+
+
     }
 
 
@@ -243,10 +334,11 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
 
             txt_profileName = (AnyTextView) view.findViewById(R.id.txt_profileName);
             txt_likes_count = (AnyTextView) view.findViewById(R.id.txt_likes_count);
-            txt_commenter_Name = (AnyTextView) view.findViewById(R.id.txt_commenter_Name);
-            txt_comment = (AnyTextView) view.findViewById(R.id.txt_comment);
             txt_view_all_comments = (AnyTextView) view.findViewById(R.id.txt_view_all_comments);
             vv_post_video=(VideoView)view.findViewById(R.id.vv_post_video);
+
+            txt_commenter_Name = (AnyTextView) view.findViewById(R.id.txt_commenter_Name);
+            txt_comment = (AnyTextView) view.findViewById(R.id.txt_comment);
 
 
         }

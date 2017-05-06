@@ -1,6 +1,5 @@
 package com.app.ace.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.app.ace.R;
 import com.app.ace.activities.MainActivity;
@@ -23,11 +21,9 @@ import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
-import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,11 +35,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
-
-import static com.app.ace.R.id.edtEmail;
-import static com.app.ace.R.id.edtPrimaryReason;
-import static com.app.ace.R.id.edtUserName;
-import static com.app.ace.R.id.riv_profile_pic;
 
 /**
  * Created by khan_muhammad on 3/18/2017.
@@ -57,11 +48,11 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
     @InjectView(R.id.civ_profile_pic)
     private CircleImageView civ_profile_pic;
 
-    @InjectView(R.id.txt_eidt_certification)
-    private AnyTextView txt_eidt_certification;
+    @InjectView(R.id.sp_speciality)
+    private Spinner sp_speciality;
 
-    @InjectView(R.id.txt_eidt_speciality)
-    private AnyTextView txt_eidt_speciality;
+    @InjectView(R.id.sp_Certification)
+    private Spinner sp_Certification;
 
     @InjectView(R.id.edtUserName)
     AnyEditTextView edtUserName;
@@ -85,16 +76,22 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
     String fullname,firstName,lastName;
 
 
+
+
     @InjectView(R.id.sp_Gender)
     private Spinner sp_Gender;
-
-
 
 
     public static EditTrainerProfileFragment newInstance(){
 
         return new EditTrainerProfileFragment();
 
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        imageLoader = ImageLoader.getInstance();
     }
 
     @Nullable
@@ -123,12 +120,17 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         sp_Gender.setAdapter(dataAdapter);
         sp_Gender.setSelection(0);
 
-
-        imageLoader = ImageLoader.getInstance();
-
         ShowProfile();
 
         setListener();
+        setSpCertification();
+        setSpSpeciality();
+
+
+
+
+
+
     }
 
     private void ShowProfile() {
@@ -205,8 +207,6 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
 
     private void setListener() {
         btnChangeProfilePhoto.setOnClickListener(this);
-        txt_eidt_certification.setOnClickListener(this);
-        txt_eidt_speciality.setOnClickListener(this);
         edtUserName.setOnClickListener(this);
         edtUniversity.setOnClickListener(this);
         edtEmail.setOnClickListener(this);
@@ -242,13 +242,13 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
 
                 break;
 
-            case R.id.txt_eidt_certification:
+            case R.id.sp_Certification:
 
                 UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
 
                 break;
 
-            case R.id.txt_eidt_speciality:
+            case R.id.sp_speciality:
 
                 UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
 
@@ -306,5 +306,54 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
     public void onNothingSelected(AdapterView<?> arg0) {
         // TODO Auto-generated method stub
     }
+    private void setSpCertification() {
 
+        ArrayList<String> Certification= new ArrayList<String>();
+
+        Certification.add("Select Certification");
+        Certification.add("Degree ");
+        Certification.add("NASM");
+        Certification.add("NCSA");
+        Certification.add("ACSM");
+        Certification.add("CHECK");
+        Certification.add("ACE");
+
+
+     ArrayList<com.app.ace.fragments.SpinnerDataItem> listVOs = new ArrayList<>();
+
+        for (int i = 0; i < Certification.size(); i++) {
+            com.app.ace.fragments.SpinnerDataItem stateVO = new com.app.ace.fragments.SpinnerDataItem();
+            stateVO.setTitle(Certification.get(i));
+            stateVO.setSelected(false);
+            listVOs.add(stateVO);
+        }
+        SpinerAdapter myAdapter = new SpinerAdapter(getDockActivity(), 0, listVOs);
+        myAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        sp_Certification.setAdapter(myAdapter);
+    }
+
+    private void setSpSpeciality() {
+        ArrayList<String> Speciality= new ArrayList<String>();
+
+        Speciality.add("Select Speciality");
+        Speciality.add("Flexibility training ");
+        Speciality.add("Dynamic strength training");
+        Speciality.add("Static strength training");
+        Speciality.add("Circuit training");
+        Speciality.add("Aerobic training");
+        Speciality.add("Body Building");
+        Speciality.add("Loose Weight");
+
+        ArrayList<com.app.ace.fragments.SpinnerDataItem> listVOs = new ArrayList<>();
+
+        for (int i = 0; i < Speciality.size(); i++) {
+            com.app.ace.fragments.SpinnerDataItem stateVO = new com.app.ace.fragments.SpinnerDataItem();
+            stateVO.setTitle(Speciality.get(i));
+            stateVO.setSelected(false);
+            listVOs.add(stateVO);
+        }
+        SpinerAdapter myAdapter = new SpinerAdapter(getDockActivity(),0, listVOs);
+        myAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        sp_speciality.setAdapter(myAdapter);
+    }
 }

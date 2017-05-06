@@ -155,7 +155,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/x10"
+
         android:paddingLeft="@dimen/x15"
         android:paddingRight="@dimen/x10">
 
@@ -167,6 +167,7 @@
             android:text="Tim Jhones"
             android:textColor="@color/black"
             android:textSize="@dimen/x14"
+            android:visibility="gone"
 
             app:typeface="Roboto-Bold.ttf" />
 
@@ -180,6 +181,7 @@
             android:text="Hi nice"
             android:textColor="@color/black"
             android:textSize="@dimen/x14"
+            android:visibility="gone"
 
             app:typeface="Roboto-Regular.ttf" />
 

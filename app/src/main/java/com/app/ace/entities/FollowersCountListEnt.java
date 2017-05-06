@@ -1,58 +1,55 @@
 package com.app.ace.entities;
 
 /**
- * Created by saeedhyder on 4/27/2017.
+ * Created by muniyemiftikhar on 5/2/2017.
  */
 
-public class User {
+public class FollowersCountListEnt {
 
-    int id;
-    int role_id;
-    String userType;
-    String user_name;
-    String first_name;
-    String last_name;
-    String full_name;
-    String email;
-    String status;
-    String dob;
-    String gender;
-    String address;
-    String city;
-    String state;
-    String country;
-    String phone_number;
-    String company_name;
-    String profile_picture;
-    String education;
-    String university;
-    String user_status;
-    String gym_name;
-    String gym_latitude;
-    String gym_longitude;
-    String speciality;
-    String experience;
-    String primary_reason;
-    String gym_days;
-    String gym_timing_from;
-    String gym_timing_to;
-    String resume;
-    String user_type;
-    String social_media_id;
-    String social_media_platform;
-    String notification_status;
-    String device_type;
-    String device_token;
-    String last_login;
-    String profile_image;
-    String verification_code;
-    String is_verified;
-    String created_at;
-    String updated_at;
-    String deleted_at;
-
-    //Rating Entity
-
+    int   id;
+    int   role_id;
+    String  userType;
+    String        user_name;
+    String   first_name;
+    String   last_name;
+    String   full_name;
+    String   email;
+    String   status;
+    String   dob;
+    String   gender;
+    String   address;
+    String   city;
+    String   state;
+    String   country;
+    String   phone_number;
+    String   company_name;
+    String   profile_picture;
+    String   education;
+    String   university;
+    String   user_status;
+    String   gym_name;
+    String   gym_latitude;
+    String   gym_longitude;
+    String   speciality;
+    String   experience;
+    String   primary_reason;
+    String   gym_days;
+    String   gym_timing_from;
+    String   gym_timing_to;
+    String   resume;
+    String   user_type;
+    String   social_media_id;
+    String   social_media_platform;
+    String   notification_status;
+    String   device_type;
+    String   device_token;
+    String   verification_code;
+    String   is_verified;
+    String   created_at;
+    String   updated_at;
+    String   deleted_at;
+    String   last_login;
+    String   profile_image;
 
     public int getId() {
         return id;
@@ -214,6 +211,14 @@ public class User {
         this.university = university;
     }
 
+    public String getUser_status() {
+        return user_status;
+    }
+
+    public void setUser_status(String user_status) {
+        this.user_status = user_status;
+    }
+
     public String getGym_name() {
         return gym_name;
     }
@@ -342,22 +347,6 @@ public class User {
         this.device_token = device_token;
     }
 
-    public String getLast_login() {
-        return last_login;
-    }
-
-    public void setLast_login(String last_login) {
-        this.last_login = last_login;
-    }
-
-    public String getProfile_image() {
-        return profile_image;
-    }
-
-    public void setProfile_image(String profile_image) {
-        this.profile_image = profile_image;
-    }
-
     public String getVerification_code() {
         return verification_code;
     }
@@ -398,6 +387,19 @@ public class User {
         this.deleted_at = deleted_at;
     }
 
+    public String getLast_login() {
+        return last_login;
+    }
 
+    public void setLast_login(String last_login) {
+        this.last_login = last_login;
+    }
 
+    public String getProfile_image() {
+        return profile_image;
+    }
+
+    public void setProfile_image(String profile_image) {
+        this.profile_image = profile_image;
+    }
 }

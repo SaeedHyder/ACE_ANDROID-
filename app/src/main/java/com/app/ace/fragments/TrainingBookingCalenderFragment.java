@@ -21,17 +21,19 @@ import com.app.ace.entities.User;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.UIHelper;
-import com.app.ace.interfaces.TrainerBookingChangeText;
 import com.app.ace.interfaces.TrainingBooking;
 import com.app.ace.retrofit.GsonFactory;
 import com.app.ace.ui.adapters.ArrayListAdapter;
+import com.app.ace.ui.adapters.CalendarArrayListAdapter;
 import com.app.ace.ui.viewbinders.TrainingBookingListItemBinder;
 import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
 import com.github.jhonnyx2012.horizontalpicker.DatePickerListener;
 
 import org.joda.time.DateTime;
+import org.joda.time.chrono.StrictChronology;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,6 +49,7 @@ import roboguice.inject.InjectView;
 
 import static com.app.ace.R.id.sp_Gender;
 import static com.app.ace.global.AppConstants.user_id;
+import static java.lang.Integer.parseInt;
 
 
 /**
@@ -84,12 +87,13 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
     TrainerBookingCalendarJson trainerBookingCalendarJson;
     ArrayList<TrainerBookingCalendarJson> trainerBookingCalendarJsonCollection;
 
+
     TrainingBookingListItemBinder trainingBookingListItemBinder;
     ScheduleTime scheduleTime;
     String trainerScheduleJson;
 
 
-    private ArrayListAdapter<TrainingBookingCalenderItem> adapter;
+    private CalendarArrayListAdapter<TrainingBookingCalenderItem> adapter;
 
     private ArrayList<TrainingBookingCalenderItem> userCollection = new ArrayList<>();
 
@@ -105,7 +109,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
         super.onCreate(savedInstanceState);
 
         trainingBookingListItemBinder = new TrainingBookingListItemBinder(getDockActivity(), this);
-        adapter = new ArrayListAdapter<TrainingBookingCalenderItem>(getDockActivity(), trainingBookingListItemBinder);
+        adapter = new CalendarArrayListAdapter<TrainingBookingCalenderItem>(getDockActivity(), trainingBookingListItemBinder);
     }
 
     @Override
@@ -149,7 +153,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
         monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         sp_month.setAdapter(monthAdapter);
-        sp_month.setSelection(0);
+
 
         sp_month.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -291,7 +295,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                   // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    //UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                     showBookingDialog();
 
                 }
@@ -383,7 +387,6 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
 
                 getDockActivity().addDockableFragment(TrainerClientScheduleFragment.newInstance(), "TrainerClientScheduleFragment");
 
-
                 break;
 
             case R.id.iv_Calander:
@@ -424,7 +427,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
          String date="2017-"+month+"-"+day;
 
          trainerBookingCalendarJson = new TrainerBookingCalendarJson();
-         trainerBookingCalendarJson.setTrainer_id(Integer.parseInt(prefHelper.getUserId()));
+         trainerBookingCalendarJson.setTrainer_id(parseInt(prefHelper.getUserId()));
          trainerBookingCalendarJson.setMonth(monthName);
 
 
@@ -432,40 +435,101 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
 
          String[] timings=data.split(",");
 
-         //SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-         //String date = DATE_FORMAT.format(entry.getKey());
-
 
          trainerBookingCalendarJson.setDate(date.toString());
 
-        // Toast.makeText(getDockActivity(),entry.getKey(),Toast.LENGTH_LONG).show();
          int i=1;
+         int hours;
+         String Starttime="";
+         String EndTime="";
+
          for (String item : timings)
          {
 
              if(i==1 && item!=null) {
-                 scheduleTime = new ScheduleTime();
-                 scheduleTime.setStart_time(item);
+
+                 Starttime=item;
+                // scheduleTime = new ScheduleTime();
+                // scheduleTime.setStart_time(item);
              }
              if(i==2 && item!=null) {
-                 scheduleTime.setEnd_time(item);
-                 scheduleTimeCollection.add(scheduleTime);
+
+                 EndTime=item;
+                 hours= TimeDifference(Starttime,EndTime);
+
+                 String[] startTime=Starttime.split(":");
+                 String StartTimeSplit=startTime[0];
+                 for(int x=0;x<hours;x++)
+                 {
+                     int IntStartTime= parseInt(StartTimeSplit.trim())+x;
+                     int IntEndTime=IntStartTime+1;
+                     scheduleTime = new ScheduleTime();
+                     scheduleTime.setStart_time(String.valueOf(IntStartTime)+":00");
+
+                     scheduleTime.setEnd_time(String.valueOf(IntEndTime)+":00");
+                     scheduleTimeCollection.add(scheduleTime);
+
+                 }
+
              }
              if(i==3 && item!=null) {
-                 scheduleTime = new ScheduleTime();
-                 scheduleTime.setStart_time(item);
+
+                 Starttime=item;
+               //  scheduleTime = new ScheduleTime();
+                // scheduleTime.setStart_time(item);
              }
              if(i==4 && item!=null) {
-                 scheduleTime.setEnd_time(item);
-                 scheduleTimeCollection.add(scheduleTime);
+
+                 EndTime=item;
+                 hours= TimeDifference(Starttime,EndTime);
+
+                 String[] startTime=Starttime.split(":");
+                 String StartTimeSplit=startTime[0];
+                 for(int x=0;x<hours;x++)
+                 {
+
+                     int IntStartTime= Integer.parseInt(StartTimeSplit.trim())+x;
+                     int IntEndTime=IntStartTime+1;
+                     scheduleTime = new ScheduleTime();
+                     scheduleTime.setStart_time(String.valueOf(IntStartTime)+":00");
+
+                     scheduleTime.setEnd_time(String.valueOf(IntEndTime)+":00");
+                     scheduleTimeCollection.add(scheduleTime);
+
+                 }
+
+
+                 //scheduleTime.setEnd_time(item);
+                // scheduleTimeCollection.add(scheduleTime);
              }
+
              if(i==5 && item!=null) {
-                 scheduleTime = new ScheduleTime();
-                 scheduleTime.setStart_time(item);
+
+                 Starttime=item;
+                 //scheduleTime = new ScheduleTime();
+                // scheduleTime.setStart_time(item);
              }
              if(i==6 && item!=null) {
-                 scheduleTime.setEnd_time(item);
-                 scheduleTimeCollection.add(scheduleTime);
+
+                 EndTime=item;
+                 hours= TimeDifference(Starttime,EndTime);
+
+                 String[] startTime=Starttime.split(":");
+                 String StartTimeSplit=startTime[0];
+                 for(int x=0;x<hours;x++)
+                 {
+                     int IntStartTime= (parseInt(StartTimeSplit.trim()))+x;
+                     int IntEndTime=IntStartTime+1;
+                     scheduleTime = new ScheduleTime();
+                     scheduleTime.setStart_time(String.valueOf(IntStartTime)+":00");
+
+                     scheduleTime.setEnd_time(String.valueOf(IntEndTime)+":00");
+                     scheduleTimeCollection.add(scheduleTime);
+
+                 }
+
+                 //scheduleTime.setEnd_time(item);
+                // scheduleTimeCollection.add(scheduleTime);
              }
 
              i++;
@@ -480,7 +544,8 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
      }
 
 
-        trainerScheduleJson = GsonFactory.getConfiguredGson().toJson(trainerBookingCalendarJsonCollection);
+
+     trainerScheduleJson = GsonFactory.getConfiguredGson().toJson(trainerBookingCalendarJsonCollection);
 
     } catch (Exception e) {
         e.printStackTrace();
@@ -488,6 +553,32 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
 
 
 
+    }
+
+
+
+    int TimeDifference(String startTime,String endTime)
+    {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        Date date1 = null;
+        Date date2 = null;
+        try {
+            date1 = simpleDateFormat.parse(startTime);
+            date2 = simpleDateFormat.parse(endTime);
+        }  catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        long difference = date2.getTime() - date1.getTime();
+        int dayss = (int) (difference / (1000*60*60*24));
+        int hours = (int) ((difference - (1000*60*60*24*dayss)) / (1000*60*60));
+        int min = (int) (difference - (1000*60*60*24*dayss) - (1000*60*60*hours)) / (1000*60);
+        hours = (hours < 0 ? -hours : hours);
+
+        //Toast.makeText(getDockActivity(), String.valueOf(hours),Toast.LENGTH_LONG).show();
+
+        return hours;
     }
 
 }

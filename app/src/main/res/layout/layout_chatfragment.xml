@@ -19,6 +19,34 @@
         android:id="@+id/bottomLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:background="@drawable/chat_bg"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <com.app.ace.ui.views.AnyEditTextView
+            android:id="@+id/edtChat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:hint="@string/write_a_message"
+            android:inputType="textNoSuggestions|textMultiLine"
+            android:layout_weight="0.85"
+            android:layout_marginLeft="@dimen/x10"
+            app:typeface="Roboto-Regular.ttf"/>
+        <ImageView
+            android:id="@+id/imgSend"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/send_btn"
+            android:layout_weight="0.15"
+            android:layout_marginRight="@dimen/x5"/>
+    </LinearLayout>
+
+   <!-- <LinearLayout
+        android:id="@+id/bottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="0.12"
         android:background="@drawable/chat_bg"
         android:gravity="center_vertical"
@@ -60,6 +88,6 @@
             android:src="@drawable/send_btn" />
 
 
-    </LinearLayout>
+    </LinearLayout>-->
 
 </LinearLayout>

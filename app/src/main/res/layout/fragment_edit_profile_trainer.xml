@@ -158,8 +158,22 @@
             android:alpha="0.6"
             android:background="@drawable/text"/>
 
+        <!--<Spinner
+            android:id="@+id/sp_Certification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/x10"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginBottom="@dimen/x15"
+            android:drawableLeft="@drawable/gender_icon"
+            android:hint="@string/edit_certification"
+            android:textColor="@color/black"
+            android:textColorHint="@color/edittext_hint_color"
+            android:textSize="@dimen/x15" />-->
 
-        <com.app.ace.ui.views.AnyTextView
+
+       <!-- <com.app.ace.ui.views.AnyTextView
             android:id="@+id/txt_eidt_certification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -175,7 +189,30 @@
             android:textStyle="bold"
             android:alpha="0.7"
             app:typeface="Roboto-Regular.ttf"
-            />
+            />-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/x15">
+
+            <Spinner
+                android:id="@+id/sp_Certification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_centerVertical="true"
+                android:hint="Male"
+                android:drawableLeft="@drawable/gender_icon"
+                android:textColorHint="@color/edittext_hint_color"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/x15"
+                android:alpha="0.6"/>
+
+
+        </RelativeLayout>
+
+
 
         <View
             android:layout_width="match_parent"
@@ -185,7 +222,7 @@
             android:background="@drawable/text"/>
 
 
-        <com.app.ace.ui.views.AnyTextView
+       <!-- <com.app.ace.ui.views.AnyTextView
             android:id="@+id/txt_eidt_speciality"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -200,7 +237,32 @@
             android:gravity="left"
             android:textStyle="bold"
             android:alpha="0.7"
-            app:typeface="Roboto-Regular.ttf" />
+            app:typeface="Roboto-Regular.ttf" />-->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/x15">
+
+            <Spinner
+                android:id="@+id/sp_speciality"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_centerVertical="true"
+                android:hint="Male"
+                android:drawableLeft="@drawable/gender_icon"
+                android:textColorHint="@color/edittext_hint_color"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/x15"
+                android:alpha="0.6"/>
+
+
+        </RelativeLayout>
+
+
+
 
         <View
             android:layout_width="match_parent"

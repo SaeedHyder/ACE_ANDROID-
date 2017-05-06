@@ -68,10 +68,21 @@ public class SearchPeopleFragment extends BaseFragment {
     }
 
     private void getSearchUserData() {
-        userCollection= new ArrayList<>();
-        userCollection.add(new SearchPeopleDataItem("drawable://" + R.drawable.profile_pic,"Charlie Hannan"));
+        userCollection = new ArrayList<>();
+        userCollection.add(new SearchPeopleDataItem("drawable://" + R.drawable.profile_pic, "Charlie Hannan"));
         userCollection.add(new SearchPeopleDataItem("drawable://" + R.drawable.profile_pic_trainer, "Tori Smith"));
         userCollection.add(new SearchPeopleDataItem("drawable://" + R.drawable.profile_pic, getString(R.string.charlie_hunnam)));
+        userCollection.add(new SearchPeopleDataItem("drawable://" + R.drawable.profile_pic, "Charlie Hannan"));
+        userCollection.add(new SearchPeopleDataItem("drawable://" + R.drawable.profile_pic, "Charlie Hannan"));
+        userCollection.add(new SearchPeopleDataItem("drawable://" + R.drawable.profile_pic, "Charlie Hannan"));
+        userCollection.add(new SearchPeopleDataItem("drawable://" + R.drawable.profile_pic, getString(R.string.charlie_hunnam)));
+        userCollection.add(new SearchPeopleDataItem("drawable://" + R.drawable.profile_pic, getString(R.string.charlie_hunnam)));
+        userCollection.add(new SearchPeopleDataItem("drawable://" + R.drawable.profile_pic, getString(R.string.charlie_hunnam)));
+        userCollection.add(new SearchPeopleDataItem("drawable://" + R.drawable.profile_pic, getString(R.string.charlie_hunnam)));
+        userCollection.add(new SearchPeopleDataItem("drawable://" + R.drawable.profile_pic, "Charlie Hannan"));
+        userCollection.add(new SearchPeopleDataItem("drawable://" + R.drawable.profile_pic, "Charlie Hannan"));
+        userCollection.add(new SearchPeopleDataItem("drawable://" + R.drawable.profile_pic, "Charlie Hannan"));
+
 
         bindData(userCollection);
     }
@@ -98,5 +109,14 @@ public class SearchPeopleFragment extends BaseFragment {
 
 
     }
+
+ /*   public void setUpdatedData(String data, int position) {
+        SearchPeopleDataItem updatedItem =   (SearchPeopleDataItem) adapter.getItem(position);
+        updatedItem.setUserName(data);
+
+        adapter.add(updatedItem);
+
+        adapter.notifyDataSetChanged();
+    }*/
 
 }

@@ -1,12 +1,12 @@
 package com.app.ace.retrofit;
 
 
-import android.media.Rating;
-
 import com.app.ace.entities.CreatePostEnt;
 import com.app.ace.entities.CreaterEnt;
 import com.app.ace.entities.FollowUser;
-import com.app.ace.entities.GetMessages;
+import com.app.ace.entities.FollowersCountListEnt;
+import com.app.ace.entities.FollowingCountListEnt;
+import com.app.ace.entities.GetTraineeBookings;
 import com.app.ace.entities.HomeResultEnt;
 import com.app.ace.entities.MsgEnt;
 import com.app.ace.entities.PostsEnt;
@@ -14,10 +14,10 @@ import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ShowComments;
 import com.app.ace.entities.TrainerBookingCalendarJson;
+import com.app.ace.entities.TrainerTimingSlots;
 import com.app.ace.entities.User;
 import com.app.ace.entities.UserProfile;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import okhttp3.MultipartBody;
@@ -32,10 +32,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 
-import static com.app.ace.R.string.university;
-import static com.app.ace.global.AppConstants.user_id;
-
-public interface WebService<T> {
+public interface WebService {
 
 
    /* @FormUrlEncoded
@@ -132,9 +129,10 @@ public interface WebService<T> {
             @Field("verification_code") String verification_code,
             @Field("user_id") String user_id);
 
-
-    @GET("post")
-    Call<ResponseWrapper<HomeResultEnt>> getAllHomePosts();
+    @FormUrlEncoded
+    @POST("post")
+    Call<ResponseWrapper<HomeResultEnt>> getAllHomePosts(
+            @Field("user_id") String user_id);
 
 
     @FormUrlEncoded
@@ -188,7 +186,7 @@ public interface WebService<T> {
             @Field("message_text") String message_text);
 
     @GET("message/{user_id}")
-    Call<ResponseWrapper<T>> userinbox(
+    Call<ResponseWrapper<ArrayList<MsgEnt>>> userinbox(
             @Path("user_id") String user_id);
 
     @FormUrlEncoded
@@ -263,6 +261,26 @@ public interface WebService<T> {
     @POST("schedule/create")
     Call<ResponseWrapper> createSchedule(
             @Body ArrayList<TrainerBookingCalendarJson> data);
+
+    @GET("schedule/get/{trainer_id}")
+    Call<ResponseWrapper<ArrayList<GetTraineeBookings>>> ShowTraineeBookings(
+            @Path("trainer_id") String trainer_id);
+
+    @GET("followers/{user_id}")
+    Call<ResponseWrapper<ArrayList<FollowersCountListEnt>>> GetFollowersCountList(
+            @Path("user_id") String user_id);
+
+    @GET("followings/{user_id}}")
+    Call<ResponseWrapper<ArrayList<FollowingCountListEnt>>> GetFollowingCountList(
+            @Path("user_id") String user_id);
+
+
+    @GET("schedule/get/{trainer_id}")
+    Call<ResponseWrapper<ArrayList<TrainerTimingSlots>>> TrainerTimingSlots(
+            @Path("trainer_id") String trainer_id);
+
+
+
 
 
 
