@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "456569388653",
+    "firebase_url": "https://axiomatic-math-167010.firebaseio.com",
+    "project_id": "axiomatic-math-167010",
+    "storage_bucket": "axiomatic-math-167010.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:456569388653:android:81230a921aafb1ee",
+        "android_client_info": {
+          "package_name": "com.app.ace"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "456569388653-cgttcevtpc7depb0k16kgphkn14im3se.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.ace",
+            "certificate_hash": "151f8c777c9f6f3d03c193f33c8a389955d58c02"
+          }
+        },
+        {
+          "client_id": "456569388653-k3knpsoenr66eos7nuqo59i6bi18jbju.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9WC6mwS0SKCV2sD04qblH6ZUlyknbPk4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "456569388653-k3knpsoenr66eos7nuqo59i6bi18jbju.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

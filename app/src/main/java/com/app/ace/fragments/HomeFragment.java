@@ -168,7 +168,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
 
         titleBar.hideButtons();
         titleBar.setSubHeading(getString(R.string.app_name));
-
+        titleBar.initBadge(getContext());
+        titleBar.addtoBadge(20);
         titleBar.hideSearchBar();
 
         titleBar.showSearchButton(new View.OnClickListener() {
