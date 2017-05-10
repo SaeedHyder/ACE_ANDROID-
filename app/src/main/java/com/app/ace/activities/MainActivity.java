@@ -193,7 +193,6 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
 
     }
 
-
     public void initFragment() {
         if (prefHelper.isLogin()) {
             if (isNotificationTap)
