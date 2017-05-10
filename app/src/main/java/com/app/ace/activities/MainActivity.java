@@ -1,12 +1,19 @@
 package com.app.ace.activities;
 
+import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,8 +31,10 @@ import com.app.ace.fragments.LoginFragment;
 import com.app.ace.fragments.SideMenuFragment;
 import com.app.ace.fragments.SignUpFragment;
 import com.app.ace.fragments.abstracts.BaseFragment;
+import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.ScreenHelper;
 import com.app.ace.helpers.UIHelper;
+import com.app.ace.ui.dialogs.DialogFactory;
 import com.app.ace.ui.views.TitleBar;
 import com.kbeanie.imagechooser.api.ChooserType;
 import com.kbeanie.imagechooser.api.ChosenFile;
@@ -83,8 +92,12 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
     private String thumbnailFilePath;
     private String thumbnailSmallFilePath;
 
+    private boolean isNotificationTap = false;
+    private final int videoDuration = 30;
+
     private Uri fileUri;
 
+    protected BroadcastReceiver broadcastReceiver;
 
     ImageSetter imageSetter;
 
@@ -92,6 +105,12 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dock);
+
+        if (getIntent() != null) {
+            if (getIntent().getExtras() != null)
+                isNotificationTap = getIntent().getExtras().getBoolean("tapped");
+        }
+
         // setBehindContentView(R.layout.fragment_frame);
         mContext = this;
         Log.i("Screen Density", ScreenHelper.getDensity(this) + "");
@@ -129,6 +148,52 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
 
 
 
+    }
+
+
+    private void onNotificationReceived() {
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // checking for type intent filter
+                if (intent.getAction().equals(AppConstants.REGISTRATION_COMPLETE)) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+                    System.out.println("registration complete");
+                    // FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
+                    System.out.println(prefHelper.getFirebase_TOKEN());
+
+                } else if (intent.getAction().equals(AppConstants.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+                    isNotificationTap = true;
+                    // String message = intent.getStringExtra("message");
+                    //message.trim();
+                    // if ( Patterns.WEB_URL.matcher(message).matches())
+
+                    //  Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                }
+            }
+        };
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
+        super.onPause();
+    }
+
+    protected void onResume() {
+        super.onResume();
+        // register GCM registration complete receiver
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
+                new IntentFilter(AppConstants.REGISTRATION_COMPLETE));
+
+        // register new push message receiver
+        // by doing this, the activity will be notified each time a new message arrives
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
+                new IntentFilter(AppConstants.PUSH_NOTIFICATION));
     }
 
     public View getDrawerView() {
@@ -390,6 +455,12 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         chooserType = ChooserType.REQUEST_CAPTURE_VIDEO;
         videoChooserManager = new VideoChooserManager(this,
                 ChooserType.REQUEST_CAPTURE_VIDEO);
+
+        Bundle bundle = new Bundle();
+        bundle.putInt(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+        bundle.putInt(MediaStore.EXTRA_DURATION_LIMIT, videoDuration);
+        videoChooserManager.setExtras(bundle);
+
         videoChooserManager.setVideoChooserListener(this);
 
         try {
@@ -426,6 +497,8 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
 
 
 
+
+
     @Override
     public void onVideoChosen(final ChosenVideo video) {
         runOnUiThread(new Runnable() {
@@ -434,15 +507,43 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
             public void run() {
 
                 if (video != null) {
-                    originalFilePath=video.getVideoFilePath().toString();
-                    thumbnailSmallFilePath=video.getThumbnailSmallPath().toString();
-                    Toast.makeText(getApplicationContext(),originalFilePath,Toast.LENGTH_LONG).show();
-                    Toast.makeText(getApplicationContext(),thumbnailSmallFilePath,Toast.LENGTH_LONG).show();
+                    try {
+                        if (video.getVideoFilePath() != null) {
 
-                    imageSetter.setVideo(originalFilePath);
+                            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                            retriever.setDataSource(video.getVideoFilePath());
+                            String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                            long timeInmillisec = Long.parseLong( time );
+                            long duration = timeInmillisec / 1000;
+                            long hours = duration / 3600;
+                            long minutes = (duration - hours * 3600) / 60;
+                            long seconds = duration - (hours * 3600 + minutes * 60);
 
-              //      videoView.setVideoURI(Uri.parse(new File(video.getVideoFilePath()).toString()));
-                //    videoView.start();
+                            if ((duration) > videoDuration) {
+                                // Show Your Messages
+                                Dialog dialog = DialogFactory.createMessageDialog(MainActivity.this, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                },"Video duration exceed its limit","UnSupportable Video");
+                                dialog.show();
+                                // UIHelper.showAlertDialog("Video duration exceed its limit","UnSupportable Video",getApplicationContext());
+                            } else {
+                                originalFilePath = video.getVideoFilePath().toString();
+                                thumbnailSmallFilePath = video.getThumbnailSmallPath().toString();
+                                Toast.makeText(getApplicationContext(), originalFilePath, Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), thumbnailSmallFilePath, Toast.LENGTH_LONG).show();
+
+                                imageSetter.setVideo(originalFilePath);
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    //      videoView.setVideoURI(Uri.parse(new File(video.getVideoFilePath()).toString()));
+                    //    videoView.start();
 
                     // imageViewThumb.setImageURI(Uri.parse(new File(video.getThumbnailPath()).toString()));
                     // imageViewThumbSmall.setImageURI(Uri.parse(new File(video.getThumbnailSmallPath()).toString()));
@@ -450,6 +551,8 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
             }
         });
     }
+
+
 
 
 
