@@ -213,6 +213,12 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         super.onViewCreated(view, savedInstanceState);
 
 
+       showProfiles();
+
+        setListener();
+    }
+
+    private void showProfiles() {
         Call<ResponseWrapper<UserProfile>> callBack = webService.UserProfile(user_id, prefHelper.getUserId());
 
         callBack.enqueue(new Callback<ResponseWrapper<UserProfile>>() {
@@ -229,6 +235,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             btn_follow.setVisibility(View.GONE);
                             btn_Unfollow.setVisibility(View.GONE);
                             btn_request.setVisibility(View.GONE);
+
                         }
 
                         if (response.body().getResult().getIs_following() == 0) {
@@ -239,7 +246,22 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             btn_Unfollow.setVisibility(View.VISIBLE);
 
                         }
+                      /*  if(response.body().getResult().getUser_type().equalsIgnoreCase(AppConstants.trainer) && response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())){
+                            btn_edit.setVisibility(View.GONE);
+                            btn_follow.setVisibility(View.VISIBLE);
+                            btn_Unfollow.setVisibility(View.GONE);
+                            btn_request.setVisibility(View.GONE);
 
+                            if (response.body().getResult().getIs_following() == 0) {
+                                btn_follow.setVisibility(View.VISIBLE);
+                                btn_Unfollow.setVisibility(View.GONE);
+                            } else {
+                                btn_follow.setVisibility(View.GONE);
+                                btn_Unfollow.setVisibility(View.VISIBLE);
+
+                            }
+                        }
+*/
                         ll_one_button.setVisibility(View.INVISIBLE);
                         ll_two_buttons.setVisibility(View.VISIBLE);
 
@@ -266,7 +288,9 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
                             ShowUserPosts(response.body().getResult().getPosts());
                         }
-                    } else {
+                    }
+
+                    else {
                         if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
                             btn_edit_or_follow.setVisibility(View.GONE);
                             btn_followTrainee.setVisibility(View.VISIBLE);
@@ -316,8 +340,6 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             }
         });
 
-
-        setListener();
     }
 
     private void ShowUserPosts(ArrayList<post> userPost) {

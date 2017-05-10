@@ -5,7 +5,12 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.support.v4.app.FragmentManager;
 import android.widget.EditText;
+
+import com.app.ace.activities.DockActivity;
+import com.app.ace.fragments.MapControllerDialog;
+import com.app.ace.fragments.MapControllerFragment;
 
 public class DialogFactory {
 	
@@ -115,6 +120,16 @@ public class DialogFactory {
 		
 		return alert.create();
 		
+	}
+
+	public static void showMapControllerDialog(DockActivity activity, MapControllerFragment fragment) {
+
+		FragmentManager fm = activity.getSupportFragmentManager();
+
+		MapControllerDialog dialogFragment = new MapControllerDialog();
+		dialogFragment.setFragment(fragment);
+		dialogFragment.show(fm, "MapControllerFragment");
+
 	}
 	
 	

@@ -7,8 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -17,13 +19,11 @@ import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.ScheduleTime;
 import com.app.ace.entities.TrainerBookingCalendarJson;
 import com.app.ace.entities.TrainingBookingCalenderItem;
-import com.app.ace.entities.User;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.TrainingBooking;
 import com.app.ace.retrofit.GsonFactory;
-import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.adapters.CalendarArrayListAdapter;
 import com.app.ace.ui.viewbinders.TrainingBookingListItemBinder;
 import com.app.ace.ui.views.AnyTextView;
@@ -31,7 +31,6 @@ import com.app.ace.ui.views.TitleBar;
 import com.github.jhonnyx2012.horizontalpicker.DatePickerListener;
 
 import org.joda.time.DateTime;
-import org.joda.time.chrono.StrictChronology;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,8 +46,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
-import static com.app.ace.R.id.sp_Gender;
-import static com.app.ace.global.AppConstants.user_id;
 import static java.lang.Integer.parseInt;
 
 
@@ -56,7 +53,7 @@ import static java.lang.Integer.parseInt;
  * Created by saeedHyder on 4/7/2017.
  */
 
-public class TrainingBookingCalenderFragment extends BaseFragment implements DatePickerListener, TrainingBooking, View.OnClickListener {
+public class TrainingBookingCalenderFragment extends BaseFragment implements DatePickerListener, TrainingBooking, View.OnClickListener, com.app.ace.interfaces.NumberPicker {
 
     @InjectView(R.id.avail)
     AnyTextView avail;
@@ -75,6 +72,12 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
     @InjectView(R.id.lv_trainingBokingCalender)
     private ListView lv_trainingBokingCalender;
 
+    @InjectView (R.id.numberPicker1)
+    NumberPicker numberPicker1;
+
+    @InjectView(R.id.btn_ok)
+    Button btn_ok;
+
     ArrayList<String> days;
 
     @InjectView(R.id.sp_month)
@@ -82,6 +85,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
     String month;
     int monthValue;
     int monthDateValue;
+    int oldValue;
 
 
     TrainerBookingCalendarJson trainerBookingCalendarJson;
@@ -91,6 +95,9 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
     TrainingBookingListItemBinder trainingBookingListItemBinder;
     ScheduleTime scheduleTime;
     String trainerScheduleJson;
+
+
+
 
 
     private CalendarArrayListAdapter<TrainingBookingCalenderItem> adapter;
@@ -108,7 +115,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        trainingBookingListItemBinder = new TrainingBookingListItemBinder(getDockActivity(), this);
+        trainingBookingListItemBinder = new TrainingBookingListItemBinder(getDockActivity(), this,this);
         adapter = new CalendarArrayListAdapter<TrainingBookingCalenderItem>(getDockActivity(), trainingBookingListItemBinder);
     }
 
@@ -128,6 +135,32 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
         getSearchUserData();
         // addList();
         setListener();
+
+
+
+    }
+
+    private void numberPicker(final AnyTextView txtTo) {
+
+        numberPicker1.setMinValue(0);
+        numberPicker1.setMaxValue(24);
+        numberPicker1.setWrapSelectorWheel(true);
+
+        numberPicker1.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                // TODO Auto-generated method stub
+
+                String Old = "Old Value : ";
+                String New = "New Value : ";
+                //tv1.setText(oldVal +":00");
+                txtTo.setText(newVal+":00");
+                //Toast.makeText(getDockActivity(),String.valueOf(newVal),Toast.LENGTH_LONG).show();
+
+
+            }
+        });
 
     }
 
@@ -258,6 +291,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
         iv_Calander.setOnClickListener(this);
         iv_profile.setOnClickListener(this);
         avail.setOnClickListener(this);
+        btn_ok.setOnClickListener(this);
 
     }
 
@@ -396,7 +430,11 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
 
             case R.id.iv_Home:
 
-                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+
+               getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+
+
+
 
                 break;
 
@@ -581,6 +619,32 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
         return hours;
     }
 
+    @Override
+    public void UpdateTime(AnyTextView txtTo) {
+
+        lv_trainingBokingCalender.setVisibility(View.GONE);
+        numberPicker1.setVisibility(View.VISIBLE);
+        btn_ok.setVisibility(View.VISIBLE);
+        numberPicker(txtTo);
+
+
+    }
+
+    @Override
+    public void PressBtn() {
+
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                numberPicker1.setVisibility(View.GONE);
+                btn_ok.setVisibility(View.GONE);
+                lv_trainingBokingCalender.setVisibility(View.VISIBLE);
+
+
+            }
+        });
+    }
 }
 
 

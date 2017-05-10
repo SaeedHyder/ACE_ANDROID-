@@ -28,6 +28,7 @@ import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.IOnLike;
 import com.app.ace.interfaces.LastPostComment;
+import com.app.ace.interfaces.SetHomeUpdatedData;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.HomeFragmentItemBinder;
 import com.app.ace.ui.views.AnyTextView;
@@ -47,7 +48,7 @@ import roboguice.inject.InjectView;
 
 import static com.app.ace.R.string.comments;
 
-public class HomeFragment extends BaseFragment implements View.OnClickListener , MainActivity.ImageSetter,IOnLike{
+public class HomeFragment extends BaseFragment implements View.OnClickListener , MainActivity.ImageSetter,IOnLike,SetHomeUpdatedData{
 
     @InjectView(R.id.gridView)
     private GridView gridView;
@@ -96,7 +97,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new ArrayListAdapter<HomeListDataEnt>(getDockActivity(), new HomeFragmentItemBinder(getDockActivity(), this));
+        adapter = new ArrayListAdapter<HomeListDataEnt>(getDockActivity(), new HomeFragmentItemBinder(getDockActivity(), this,this));
 
 
         BaseApplication.getBus().register(this);
@@ -505,7 +506,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
     }
 
     @Override
-    public void setLikeHit(final int postId, final AnyTextView txtLikeCount, final HomeListDataEnt entity) {
+    public void setLikeHit(final int postId) {
 
         Call<ResponseWrapper<PostsEnt>> callBack = webService.likePost(
                 prefHelper.getUserId(),
@@ -520,24 +521,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
                     //UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-
-
-                    if(response.body().getMessage().contains("Post Liked"))
-                    {
-                        txtLikeCount.setText(entity.getTotoal_likes() + i + " likes");
-                    }
-                    else
-                    {
-                        txtLikeCount.setText(entity.getTotoal_likes()-0 + " likes");
-                    }
-                    /*if(response.body().getMessage().contains("Post Unliked"))
-                    {
-                        txtLikeCount.setText(entity.getTotoal_likes()- 0 + " likes");
-                    }
-                    else
-                    {
-                        txtLikeCount.setText(entity.getTotoal_likes() + i + " likes");
-                    }*/
 
                 }
                 else {
@@ -555,6 +538,23 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
 
             }
         });
+
+
+
+    }
+
+    @Override
+    public void setUpdatedData(int position, String data,int likes,int comments) {
+
+
+        HomeListDataEnt updatedItem =  (HomeListDataEnt) adapter.getItem(position);
+        updatedItem.setIs_liked(data);
+        updatedItem.setTotoal_likes(likes);
+        updatedItem.setTotal_comments(comments);
+
+        adapter.add(updatedItem);
+
+        adapter.notifyDataSetChanged();
 
 
 

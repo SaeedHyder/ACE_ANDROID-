@@ -11,5 +11,5 @@ import com.app.ace.ui.views.AnyTextView;
 
 public interface IOnLike {
 
-    public void setLikeHit(int postId, AnyTextView txtLikeCount,HomeListDataEnt entity);
+    public void setLikeHit(int postId);
 }

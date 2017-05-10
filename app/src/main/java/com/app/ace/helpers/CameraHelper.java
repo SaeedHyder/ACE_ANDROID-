@@ -407,6 +407,7 @@ public class CameraHelper {
 						videoDialog.setPositiveButton("Camera", new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
+
 								activity.captureVideo();
 							}
 						});

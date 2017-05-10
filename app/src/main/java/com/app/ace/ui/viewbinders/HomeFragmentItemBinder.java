@@ -33,6 +33,7 @@ import com.app.ace.helpers.BasePreferenceHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.IOnLike;
 import com.app.ace.interfaces.LastPostComment;
+import com.app.ace.interfaces.SetHomeUpdatedData;
 import com.app.ace.retrofit.WebService;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 import com.app.ace.ui.views.AnyTextView;
@@ -66,16 +67,18 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
     boolean is_liked1=true;
     int count =0;
     int x,y=0;
+    SetHomeUpdatedData setHomeUpdatedData;
 
 
     IOnLike IOnLike;
 
-    public HomeFragmentItemBinder(DockActivity context,IOnLike IOnLike) {
+    public HomeFragmentItemBinder(DockActivity context,IOnLike IOnLike,SetHomeUpdatedData setHomeUpdatedData) {
         super(R.layout.fragment_home_item);
 
         this.context = context;
         this.IOnLike = IOnLike;
         imageLoader = ImageLoader.getInstance();
+        this.setHomeUpdatedData=setHomeUpdatedData;
     }
 
 
@@ -91,7 +94,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
 
 
     @Override
-    public void bindView(final HomeListDataEnt homeListDataEnt, int position, int grpPosition,
+    public void bindView(final HomeListDataEnt homeListDataEnt, final int position, int grpPosition,
                          View view, Activity activity) {
 
             postId=homeListDataEnt.getId();
@@ -224,35 +227,20 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
             public void onClick(View v) {
 
 
+
                 if(homeListDataEnt.getIs_liked().contains("0"))
                 {
-                   /* if (count==0){
-                        is_liked = true;
+                    IOnLike.setLikeHit(homeListDataEnt.getId());
+                    setHomeUpdatedData.setUpdatedData(position,"1",homeListDataEnt.getTotoal_likes()+1,homeListDataEnt.getTotal_comments());
 
-                    }*/
-
-
-                    if(is_liked) {
-                        viewHolder.iv_like.setImageResource(R.drawable.heart_icon3);
-                        IOnLike.setLikeHit(homeListDataEnt.getId(), viewHolder.txt_likes_count, homeListDataEnt);
-
-                  // count++;
-                        is_liked=false;
-                    }
-                    else
-                    {
-                        viewHolder.iv_like.setImageResource(R.drawable.heart_icon2);
-                        IOnLike.setLikeHit(homeListDataEnt.getId(), viewHolder.txt_likes_count, homeListDataEnt);
-                        is_liked=true;
-
-                       // count=0;
-                    }
                 }
+                else
+                {
 
-                if(homeListDataEnt.getIs_liked().contains("1")){
+                    IOnLike.setLikeHit(homeListDataEnt.getId());
+                    setHomeUpdatedData.setUpdatedData(position,"0",homeListDataEnt.getTotoal_likes()-1,homeListDataEnt.getTotal_comments());
 
-
-                    if (is_liked1) {
+                   /* if (is_liked1) {
                         viewHolder.iv_like.setImageResource(R.drawable.heart_icon2);
                         IOnLike.setLikeHit(homeListDataEnt.getId(), viewHolder.txt_likes_count, homeListDataEnt);
                       //  count++;
@@ -264,7 +252,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
                         IOnLike.setLikeHit(homeListDataEnt.getId(), viewHolder.txt_likes_count, homeListDataEnt);
                         is_liked1=true;
 
-                    }
+                    }*/
                 }
 
                /* Runnable r = new Runnable() {
