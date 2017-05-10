@@ -1,24 +1,27 @@
 package com.app.ace.activities;
 
+import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.BackStackEntry;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 
 import com.app.ace.BaseApplication;
 import com.app.ace.R;
-import com.app.ace.fragments.CalenderPopupDialogFragment;
 import com.app.ace.fragments.FriendsInfoFragment;
 import com.app.ace.fragments.HomeFragment;
 import com.app.ace.fragments.SideMenuFragment;
 import com.app.ace.fragments.abstracts.BaseFragment;
+import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.BasePreferenceHelper;
 import com.app.ace.interfaces.LoadingListener;
 import com.app.ace.ui.dialogs.DialogFactory;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.inject.Inject;
 
 import roboguice.activity.RoboFragmentActivity;
@@ -32,25 +35,25 @@ public abstract class DockActivity extends RoboFragmentActivity implements
         LoadingListener {
 
     public static final String KEY_FRAG_FIRST = "firstFrag";
-
-    public abstract int getDockFrameLayoutId();
-
-    BaseFragment baseFragment;
+    public SideMenuFragment sideMenuFragment;
 
     @Inject
     protected BasePreferenceHelper prefHelper;
-
     //For side menu
     protected DrawerLayout drawerLayout;
-    public SideMenuFragment sideMenuFragment;
+    BaseFragment baseFragment;
+
+    public abstract int getDockFrameLayoutId();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     protected void onPause() {
+
         super.onPause();
     }
 
@@ -83,8 +86,7 @@ public abstract class DockActivity extends RoboFragmentActivity implements
                     .addToBackStack(
                             getSupportFragmentManager().getBackStackEntryCount() == 0 ? KEY_FRAG_FIRST
                                     : null).commitAllowingStateLoss(); //ommit();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -215,7 +217,6 @@ public abstract class DockActivity extends RoboFragmentActivity implements
     public BaseApplication getMainApplication() {
         return (BaseApplication) getApplication();
     }
-
 
 
 }

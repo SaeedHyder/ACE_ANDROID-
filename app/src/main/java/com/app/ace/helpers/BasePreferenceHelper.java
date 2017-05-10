@@ -10,22 +10,15 @@ import com.google.inject.Inject;
 
 public class BasePreferenceHelper extends PreferenceHelper {
 
-    private Context context;
-
     protected static final String KEY_LOGIN_STATUS = "islogin";
-
-    private static final String FILENAME = "preferences";
-
     protected static final String _TOKEN = "token";
-
+    protected static final String Firebase_TOKEN = "Firebasetoken";
     protected static final String KEY_TWITTER_LOGN = "isTwitterLogin";
-
     protected static final String USERNAME = "userName";
-
-
     protected static final String USERID = "userId";
-
     protected static final String KEY_USER = "key_user";
+    private static final String FILENAME = "preferences";
+    private Context context;
 
 
     @Inject
@@ -33,57 +26,61 @@ public class BasePreferenceHelper extends PreferenceHelper {
         this.context = c;
     }
 
+    public static String getUSERID() {
+        return USERID;
+    }
+
     public SharedPreferences getSharedPreferences() {
         return context.getSharedPreferences(FILENAME, Activity.MODE_PRIVATE);
     }
 
-    public void setLoginStatus( boolean isLogin ) {
-        putBooleanPreference( context, FILENAME, KEY_LOGIN_STATUS, isLogin );
+    public void setLoginStatus(boolean isLogin) {
+        putBooleanPreference(context, FILENAME, KEY_LOGIN_STATUS, isLogin);
     }
 
     public boolean isLogin() {
         return getBooleanPreference(context, FILENAME, KEY_LOGIN_STATUS);
     }
 
-    public void setIsTwitterLogin( boolean isTwitterLogin ) {
-        putBooleanPreference( context, FILENAME, KEY_TWITTER_LOGN, isTwitterLogin );
+    public void setIsTwitterLogin(boolean isTwitterLogin) {
+        putBooleanPreference(context, FILENAME, KEY_TWITTER_LOGN, isTwitterLogin);
     }
 
     public boolean isTwitterLogin() {
         return getBooleanPreference(context, FILENAME, KEY_TWITTER_LOGN);
     }
 
-    public void setToken( String _token ) {
-        putStringPreference( context, FILENAME, _TOKEN, _token );
-    }
-
-
-    public String getToken( ) {
+    public String getToken() {
         return getStringPreference(context, FILENAME, _TOKEN);
     }
 
-    public void setUsrName( String _token ) {
-        putStringPreference( context, FILENAME, USERNAME, _token );
+    public void setToken(String _token) {
+        putStringPreference(context, FILENAME, _TOKEN, _token);
     }
 
+    public String getFirebase_TOKEN() {
+        return getStringPreference(context, FILENAME, Firebase_TOKEN);
+    }
 
-    public String getUserName( ) {
+    public void setFirebase_TOKEN(String _token) {
+        putStringPreference(context, FILENAME, Firebase_TOKEN, _token);
+    }
+
+    public void setUsrName(String _token) {
+        putStringPreference(context, FILENAME, USERNAME, _token);
+    }
+
+    public String getUserName() {
         return getStringPreference(context, FILENAME, USERNAME);
     }
 
-    public void setUsrId( String userId ) {
-        putStringPreference( context, FILENAME, USERID, userId );
+    public void setUsrId(String userId) {
+        putStringPreference(context, FILENAME, USERID, userId);
     }
 
-
-    public String getUserId( ) {
+    public String getUserId() {
         return getStringPreference(context, FILENAME, USERID);
     }
-
-    public static String getUSERID() {
-        return USERID;
-    }
-
 
     public RegistrationResult getUser() {
         return GsonFactory.getConfiguredGson().fromJson(
@@ -94,16 +91,6 @@ public class BasePreferenceHelper extends PreferenceHelper {
         putStringPreference(context, FILENAME, KEY_USER, GsonFactory
                 .getConfiguredGson().toJson(user));
     }
-
-
-
-
-
-
-
-
-
-
 
 
 }
