@@ -11,6 +11,8 @@ import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.andreabaccega.formedittextvalidator.Validator;
@@ -38,6 +40,8 @@ public abstract class BaseFragment extends RoboFragment {
 	protected BasePreferenceHelper prefHelper;
 
 	protected static WebService webService;
+	protected static WebService googleWebService ;
+
 
 	protected GPSTracker mGpsTracker;
 
@@ -50,6 +54,10 @@ public abstract class BaseFragment extends RoboFragment {
 		getDockActivity().lockDrawer();
 
 		mGpsTracker = new GPSTracker(getDockActivity());
+
+		if (googleWebService == null) {
+			googleWebService = WebServiceFactory.getWebServiceInstanceWithDefaultInterceptor(getDockActivity(), WebServiceConstants.GOOGLE_LAT_LONG_INFO_URL);
+		}
 
 		if (webService == null) {
 			webService = WebServiceFactory.getWebServiceInstanceWithCustomInterceptor(getDockActivity(), WebServiceConstants.SERVICE_BASE_URL);
@@ -121,6 +129,16 @@ public abstract class BaseFragment extends RoboFragment {
 		return activity;
 		
 	}
+
+	public void hideKeyboard() {
+		InputMethodManager imm = (InputMethodManager) getDockActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+		View view = getDockActivity().getCurrentFocus();
+		if (view == null) {
+			view = new View(getDockActivity());
+		}
+		imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+	}
+
 	
 	protected MainActivity getMainActivity() {
 		return (MainActivity) getActivity();

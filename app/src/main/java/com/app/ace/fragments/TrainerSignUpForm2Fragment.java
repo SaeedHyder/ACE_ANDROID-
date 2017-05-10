@@ -27,10 +27,13 @@ import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.DateHelper;
 import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.UIHelper;
+import com.app.ace.interfaces.IGetLocation;
+import com.app.ace.ui.dialogs.DialogFactory;
 import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.ExpandableGridView;
 import com.app.ace.ui.views.TitleBar;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import org.apache.commons.lang3.StringUtils;
@@ -54,7 +57,7 @@ import static android.app.Activity.RESULT_OK;
  * Created by khan_muhammad on 3/13/2017.
  */
 
-public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnClickListener,CompoundButton.OnCheckedChangeListener,MainActivity.ImageSetter {
+public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnClickListener,CompoundButton.OnCheckedChangeListener,MainActivity.ImageSetter,IGetLocation {
 
 
     @InjectView(R.id.btnSignUp)
@@ -165,6 +168,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
     public File resume;
     public String resumePath;
+    String gymLocation;
+    String lat;
+    String log;
 
 
     public String Education,Speciality,Years_of_Exp,Gym_days,gym_time_from,gym_time_to;
@@ -439,7 +445,10 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.txt_pref_training_gym:
 
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                MapControllerFragment mapControllerFragment = MapControllerFragment.newInstance();
+                mapControllerFragment.setDelegate(this);
+
+                DialogFactory.showMapControllerDialog(getDockActivity(), mapControllerFragment);
 
                 break;
 
@@ -504,8 +513,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
                 RequestBody.create(MediaType.parse("text/plain"),Education),
                 RequestBody.create(MediaType.parse("text/plain"),edtUniversity.getText().toString()),
                 RequestBody.create(MediaType.parse("text/plain"),""),
-                RequestBody.create(MediaType.parse("text/plain"),""),
-                RequestBody.create(MediaType.parse("text/plain"),""),
+                RequestBody.create(MediaType.parse("text/plain"),gymLocation),
+                RequestBody.create(MediaType.parse("text/plain"),lat),
+                RequestBody.create(MediaType.parse("text/plain"),log),
                 RequestBody.create(MediaType.parse("text/plain"),Speciality),
                 RequestBody.create(MediaType.parse("text/plain"),Years_of_Exp),
                 RequestBody.create(MediaType.parse("text/plain"),edtPrimaryReason.getText().toString()),
@@ -858,6 +868,21 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
     @Override
     public void setVideo(String videoPath) {
+
+    }
+
+    @Override
+    public void onLocationSet(LatLng location, String formattedAddress) {
+
+        txt_pref_training_gym.setText(formattedAddress);
+        gymLocation=formattedAddress;
+        lat=String.valueOf(location.latitude);
+        log=String.valueOf(location.longitude);
+       // Toast.makeText(getDockActivity(),location.toString(),Toast.LENGTH_LONG).show();
+       // Toast.makeText(getDockActivity(),formattedAddress,Toast.LENGTH_LONG).show();
+
+
+
 
     }
 }

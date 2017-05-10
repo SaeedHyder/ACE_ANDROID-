@@ -6,7 +6,9 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
@@ -14,6 +16,7 @@ import com.app.ace.entities.TrainingBookingCalenderItem;
 import com.app.ace.fragments.TrainingBookingCalenderFragment;
 import com.app.ace.helpers.DateHelper;
 import com.app.ace.helpers.UIHelper;
+import com.app.ace.interfaces.NumberPicker;
 import com.app.ace.interfaces.TrainingBooking;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 import com.app.ace.ui.views.AnyTextView;
@@ -24,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
+import static com.app.ace.R.id.numberPicker1;
 import static com.app.ace.R.id.time;
 import static com.app.ace.R.id.txt;
 import static com.app.ace.R.id.txtTo;
@@ -36,6 +40,7 @@ import static com.app.ace.R.id.txtback;
 public class TrainingBookingListItemBinder extends ViewBinder<TrainingBookingCalenderItem>  {
 
     Context context;
+    DockActivity dockActivity;
     TrainingBooking trainingbooking;
     public String txtTo,txtFrom,txt,txtSecTo,txtSecFrom,txtThirdFrom,txtThirdTo,selectedDay;
     String prevDay=null;
@@ -44,16 +49,21 @@ public class TrainingBookingListItemBinder extends ViewBinder<TrainingBookingCal
 
     HashMap<String,List<String>> ScheduleHashMap=new HashMap<>();
 
+    NumberPicker numberPicker;
+
 
     public String gym_time_to,gym_time_from;
 
 
 
-    public TrainingBookingListItemBinder(Context context,TrainingBooking trainingbooking) {
+    public TrainingBookingListItemBinder(DockActivity dockActivity, TrainingBooking trainingbooking, NumberPicker numberPicker) {
         super(R.layout.training_booking_calender_items);
 
         this.context= context;
+        this.dockActivity=dockActivity;
         this.trainingbooking=trainingbooking;
+        this.numberPicker=numberPicker;
+
        // this.trainerBookingChangeText=trainerBookingChangeText;
     }
 
@@ -96,7 +106,12 @@ public class TrainingBookingListItemBinder extends ViewBinder<TrainingBookingCal
             public void onClick(View v) {
 
                // openFromTimePickerDialog(viewHolder.txtTo);
-                openToTimePickerDialog(viewHolder.txtTo);
+                //openToTimePickerDialog(viewHolder.txtTo);
+
+               numberPicker.UpdateTime(viewHolder.txtTo);
+               // viewHolder.txtTo.setText(time+":00");
+
+                numberPicker.PressBtn();
 
                 viewHolder.txtTo.addTextChangedListener(new TextWatcher() {
 
@@ -139,8 +154,12 @@ public class TrainingBookingListItemBinder extends ViewBinder<TrainingBookingCal
             @Override
             public void onClick(View v) {
 
-                openToTimePickerDialog(viewHolder.txtFrom);
+                //openToTimePickerDialog(viewHolder.txtFrom);
                 //openFromTimePickerDialog(viewHolder.txtFrom);
+
+                numberPicker.UpdateTime(viewHolder.txtFrom);
+
+                numberPicker.PressBtn();
 
                 viewHolder.txtFrom.addTextChangedListener(new TextWatcher() {
 
@@ -552,6 +571,7 @@ public class TrainingBookingListItemBinder extends ViewBinder<TrainingBookingCal
         mTimePicker.show();
 
     }
+
 
 
 

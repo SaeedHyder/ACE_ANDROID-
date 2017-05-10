@@ -14,14 +14,21 @@ import com.app.ace.R;
 import com.app.ace.activities.MainActivity;
 import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.SpinnerDataItem;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.UIHelper;
+import com.app.ace.interfaces.EditTrainerData;
+import com.app.ace.interfaces.IGetLocation;
+import com.app.ace.ui.dialogs.DialogFactory;
 import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
+import com.google.android.gms.maps.model.LatLng;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,11 +43,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+import static com.app.ace.R.id.txt_pref_training_gym;
+
 /**
  * Created by khan_muhammad on 3/18/2017.
  */
 
-public class EditTrainerProfileFragment extends BaseFragment implements View.OnClickListener ,AdapterView.OnItemSelectedListener , MainActivity.ImageSetter{
+public class EditTrainerProfileFragment extends BaseFragment implements View.OnClickListener ,AdapterView.OnItemSelectedListener , MainActivity.ImageSetter,EditTrainerData,IGetLocation{
 
     @InjectView(R.id.btnChangeProfilePhoto)
     private Button btnChangeProfilePhoto;
@@ -80,6 +89,16 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
 
     @InjectView(R.id.sp_Gender)
     private Spinner sp_Gender;
+
+    String Education;
+    String Speciality;
+    String gymLocation;
+    String lat;
+    String log;
+
+    ArrayList<String> EducationArray = new ArrayList<>();
+    ArrayList<String> SpecialityArray = new ArrayList<>();
+
 
 
     public static EditTrainerProfileFragment newInstance(){
@@ -140,14 +159,13 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         edtEmail.setEnabled(false);
         edtEmail.setFocusable(false);
         edtUniversity.setText(prefHelper.getUser().getUniversity());
+        txtGymLocatoin.setText(prefHelper.getUser().getGym_address());
         imageLoader.displayImage(prefHelper.getUser().getProfile_image(), civ_profile_pic);
-
 
 
     }
 
     private void EditProfile() {
-
 
         fullname=edtUserName.getText().toString();
         if(fullname.contains(" ")) {
@@ -174,8 +192,13 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
                 RequestBody.create(MediaType.parse("text/plain"),lastName),
                 RequestBody.create(MediaType.parse("text/plain"),edtMobileNumber.getText().toString()),
                 RequestBody.create(MediaType.parse("text/plain"),edtUniversity.getText().toString()),
-                profile_picture
-               );
+                profile_picture,
+                RequestBody.create(MediaType.parse("text/plain"),Education),
+                RequestBody.create(MediaType.parse("text/plain"),Speciality),
+                RequestBody.create(MediaType.parse("text/plain"),gymLocation),
+                RequestBody.create(MediaType.parse("text/plain"),lat),
+                RequestBody.create(MediaType.parse("text/plain"),log)
+                 );
 
         callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
             @Override
@@ -224,6 +247,10 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         titleBar.showSaveButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               // setSpCertification();
+                //setSpSpeciality();
+                Education = StringUtils.join(EducationArray,",");
+                Speciality = StringUtils.join(SpecialityArray,",");
                 //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
                 EditProfile();
             }
@@ -244,15 +271,23 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
 
             case R.id.sp_Certification:
 
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+               // setSpCertification();
+
 
                 break;
 
             case R.id.sp_speciality:
 
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                //setSpSpeciality();
 
                 break;
+
+            case R.id.txtGymLocatoin:
+
+                MapControllerFragment mapControllerFragment = MapControllerFragment.newInstance();
+                mapControllerFragment.setDelegate(this);
+
+                DialogFactory.showMapControllerDialog(getDockActivity(), mapControllerFragment);
 
         }
 
@@ -319,15 +354,17 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         Certification.add("ACE");
 
 
-     ArrayList<com.app.ace.fragments.SpinnerDataItem> listVOs = new ArrayList<>();
+     ArrayList<SpinnerDataItem> listVOs = new ArrayList<>();
 
         for (int i = 0; i < Certification.size(); i++) {
-            com.app.ace.fragments.SpinnerDataItem stateVO = new com.app.ace.fragments.SpinnerDataItem();
+            SpinnerDataItem stateVO = new SpinnerDataItem();
             stateVO.setTitle(Certification.get(i));
-            stateVO.setSelected(false);
+            if(prefHelper.getUser().getEducation().contains(Certification.get(i))) {
+                stateVO.setSelected(true);
+            }
             listVOs.add(stateVO);
         }
-        SpinerAdapter myAdapter = new SpinerAdapter(getDockActivity(), 0, listVOs);
+        SpinerAdapter myAdapter = new SpinerAdapter(getDockActivity(), 0, listVOs,this);
         myAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         sp_Certification.setAdapter(myAdapter);
     }
@@ -344,16 +381,64 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         Speciality.add("Body Building");
         Speciality.add("Loose Weight");
 
-        ArrayList<com.app.ace.fragments.SpinnerDataItem> listVOs = new ArrayList<>();
+        ArrayList<SpinnerDataItem> listVOs = new ArrayList<>();
 
         for (int i = 0; i < Speciality.size(); i++) {
-            com.app.ace.fragments.SpinnerDataItem stateVO = new com.app.ace.fragments.SpinnerDataItem();
+            SpinnerDataItem stateVO = new SpinnerDataItem();
             stateVO.setTitle(Speciality.get(i));
-            stateVO.setSelected(false);
+            if(prefHelper.getUser().getSpeciality().contains(Speciality.get(i))) {
+                stateVO.setSelected(true);
+            }
             listVOs.add(stateVO);
         }
-        SpinerAdapter myAdapter = new SpinerAdapter(getDockActivity(),0, listVOs);
+        SpinerAdapter myAdapter = new SpinerAdapter(getDockActivity(),0, listVOs,this);
         myAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         sp_speciality.setAdapter(myAdapter);
+    }
+
+    @Override
+    public void updateEducationData(ArrayList<SpinnerDataItem> listState) {
+
+        EducationArray.clear();
+
+
+        for (SpinnerDataItem item : listState)
+
+        {
+            if (item.isSelected()) {
+                EducationArray.add(item.getTitle());
+            }
+
+        }
+
+
+    }
+
+    @Override
+    public void updateSpecialtyData(ArrayList<SpinnerDataItem> listState) {
+
+        SpecialityArray.clear();
+
+
+        for (SpinnerDataItem item : listState)
+
+        {
+            if (item.isSelected()) {
+                SpecialityArray.add(item.getTitle());
+            }
+
+        }
+
+
+
+    }
+
+    @Override
+    public void onLocationSet(LatLng location, String formattedAddress) {
+
+        txtGymLocatoin.setText(formattedAddress);
+        gymLocation=formattedAddress;
+        lat=String.valueOf(location.latitude);
+        log=String.valueOf(location.longitude);
     }
 }

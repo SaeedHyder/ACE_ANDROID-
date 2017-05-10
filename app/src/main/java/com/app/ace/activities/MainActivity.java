@@ -3,6 +3,8 @@ package com.app.ace.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -45,6 +47,7 @@ import java.io.File;
 import roboguice.inject.InjectView;
 
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
+import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
 
 public class MainActivity extends DockActivity implements OnClickListener, ImageChooserListener,VideoChooserListener,FileChooserListener {
 
@@ -79,6 +82,8 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
     private String originalFilePath;
     private String thumbnailFilePath;
     private String thumbnailSmallFilePath;
+
+    private Uri fileUri;
 
 
     ImageSetter imageSetter;
@@ -386,6 +391,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         videoChooserManager = new VideoChooserManager(this,
                 ChooserType.REQUEST_CAPTURE_VIDEO);
         videoChooserManager.setVideoChooserListener(this);
+
         try {
            // progressBar.setVisibility(View.VISIBLE);
             filePath = videoChooserManager.choose();
@@ -395,6 +401,9 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
             e.printStackTrace();
         }
     }
+
+
+
 
     public void pickVideo() {
         chooserType = ChooserType.REQUEST_PICK_VIDEO;
@@ -528,6 +537,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
     private void reinitializeVideoChooser() {
         videoChooserManager = new VideoChooserManager(this, chooserType, true);
         videoChooserManager.setVideoChooserListener(this);
+
         videoChooserManager.reinitialize(filePath);
     }
 

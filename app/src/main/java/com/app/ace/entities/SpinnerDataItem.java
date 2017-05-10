@@ -1,4 +1,4 @@
-package com.app.ace.fragments;
+package com.app.ace.entities;
 
 /**
  * Created by muniyemiftikhar on 4/29/2017.

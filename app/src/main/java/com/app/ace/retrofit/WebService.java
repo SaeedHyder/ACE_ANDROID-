@@ -7,6 +7,7 @@ import com.app.ace.entities.FollowUser;
 import com.app.ace.entities.FollowersCountListEnt;
 import com.app.ace.entities.FollowingCountListEnt;
 import com.app.ace.entities.GetTraineeBookings;
+import com.app.ace.entities.GoogleGeoCodeResponse;
 import com.app.ace.entities.HomeResultEnt;
 import com.app.ace.entities.MsgEnt;
 import com.app.ace.entities.PostsEnt;
@@ -19,6 +20,7 @@ import com.app.ace.entities.User;
 import com.app.ace.entities.UserProfile;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -31,6 +33,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface WebService {
 
@@ -79,6 +82,7 @@ public interface WebService {
             @Part("education") RequestBody education,
             @Part("university") RequestBody university,
             @Part("gym_name") RequestBody gym_name,
+            @Part("gym_address") RequestBody gym_address,
             @Part("gym_latitude") RequestBody gym_latitude,
             @Part("gym_longitude") RequestBody gym_longitude,
             @Part("speciality") RequestBody speciality,
@@ -247,7 +251,13 @@ public interface WebService {
             @Part("last_name") RequestBody last_name,
             @Part("phone_number") RequestBody phone_number,
             @Part("university") RequestBody university,
-             @Part MultipartBody.Part profile_picture
+             @Part MultipartBody.Part profile_picture,
+            @Part("education") RequestBody education,
+            @Part("speciality") RequestBody speciality,
+            @Part("gym_address") RequestBody gym_address,
+            @Part("gym_latitude") RequestBody gym_latitude,
+            @Part("gym_longitude") RequestBody gym_longitude
+
     );
 
     @FormUrlEncoded
@@ -278,6 +288,12 @@ public interface WebService {
     @GET("schedule/get/{trainer_id}")
     Call<ResponseWrapper<ArrayList<TrainerTimingSlots>>> TrainerTimingSlots(
             @Path("trainer_id") String trainer_id);
+
+    @GET("/maps/api/geocode/json")
+    Call<GoogleServiceResponse<List<GoogleGeoCodeResponse>>> getLatLongInfo(
+
+            @Query("address") String address,
+            @Query("sensor") String sensor);
 
 
 
