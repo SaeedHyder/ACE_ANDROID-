@@ -28,6 +28,7 @@ import com.app.ace.R;
 import com.app.ace.fragments.HomeFragment;
 import com.app.ace.fragments.LanguageFragment;
 import com.app.ace.fragments.LoginFragment;
+import com.app.ace.fragments.NotificationListingFragment;
 import com.app.ace.fragments.SideMenuFragment;
 import com.app.ace.fragments.SignUpFragment;
 import com.app.ace.fragments.abstracts.BaseFragment;
@@ -91,6 +92,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
     private String originalFilePath;
     private String thumbnailFilePath;
     private String thumbnailSmallFilePath;
+
 
     private boolean isNotificationTap = false;
     private final int videoDuration = 30;
@@ -218,14 +220,21 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
     }
 
 
+
+
+
     public void initFragment() {
         if (prefHelper.isLogin()) {
-            addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+            if (isNotificationTap)
+                addDockableFragment(NotificationListingFragment.newInstance(), "NotificationFragment");
+            else
+                addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
         } else {
             addDockableFragment(LanguageFragment.newInstance(), "LanguageFragment");
             //addDockableFragment(LoginFragment.newInstance(),"LoginFragment");
         }
     }
+
 
     @Override
     public void onLoadingStarted() {
