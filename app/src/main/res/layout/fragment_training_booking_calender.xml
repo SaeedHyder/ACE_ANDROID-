@@ -32,22 +32,6 @@
                 />
 
 
-
-
-            <!--   <Spinner
-                   android:id="@+id/sp_Gender"
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:layout_toRightOf="@+id/iv_Gender"
-                   android:layout_centerVertical="true"
-                   android:hint="Male"
-                   android:drawableLeft="@drawable/gender_icon"
-                   android:textColorHint="@color/edittext_hint_color"
-                   android:textColor="@color/dark_grey"
-                   android:textSize="@dimen/x15"
-                   android:alpha="0.6"/>-->
-
-
         </LinearLayout>
 
         <LinearLayout
@@ -82,7 +66,7 @@
 
 
             </LinearLayout>
-
+        </LinearLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -109,15 +93,266 @@
                     android:visibility="gone"
                     android:text="OK"/>
 
+                <LinearLayout
+                    android:id="@+id/SecondAvail"
+                    android:layout_width="match_parent"
+                    android:layout_below="@+id/firstAvail"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <ListView
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0.5dp"
+                    android:alpha="0.6"
+                    android:background="@drawable/text"/>
+
+                    <LinearLayout
+                        android:id="@+id/SecondAvailchild"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="10">
+
+
+                        <com.app.ace.ui.views.AnyTextView
+                            android:id="@+id/txtDayDate1"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x15"
+                            android:layout_marginRight="@dimen/x15"
+                            android:layout_marginTop="@dimen/x10"
+                            android:layout_weight="2"
+                            android:gravity="center|center_vertical|center_horizontal"
+                            android:text="Fri 7"
+                            app:typeface="Roboto-Regular.ttf"
+
+                            />
+
+
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:alpha="0.6"
+                            android:background="@drawable/text" />
+
+
+
+                        <com.app.ace.ui.views.AnyTextView
+                            android:id="@+id/SndtxtTo"
+                            android:layout_width="@dimen/x75"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x15"
+                            android:layout_marginRight="@dimen/x15"
+                            android:layout_marginTop="@dimen/x10"
+                            android:layout_weight="2"
+                            android:background="@drawable/background_day_hover"
+                            android:gravity="center|center_vertical|center_horizontal"
+                            android:text=""
+                            app:typeface="Roboto-Regular.ttf"
+
+                            />
+
+                        <com.app.ace.ui.views.AnyTextView
+                            android:id="@+id/Sndtxtcenter"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x5"
+                            android:layout_marginRight="@dimen/x5"
+                            android:layout_marginTop="@dimen/x10"
+                            android:layout_weight="4"
+                            android:gravity="center|center_vertical|center_horizontal"
+                            android:text="to"
+                            app:typeface="Roboto-Regular.ttf"
+
+                            />
+
+                        <com.app.ace.ui.views.AnyTextView
+                            android:id="@+id/SndtxtFrom"
+                            android:layout_width="@dimen/x75"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x15"
+                            android:layout_marginRight="@dimen/x15"
+                            android:layout_marginTop="@dimen/x10"
+                            android:layout_weight="2"
+                            android:background="@drawable/background_day_hover"
+                            android:gravity="center|center_vertical|center_horizontal"
+                            android:text=""
+                            app:typeface="Roboto-Regular.ttf"
+
+
+                            />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:alpha="0.6"
+                            android:background="@drawable/text" />
+
+                        <com.app.ace.ui.views.AnyTextView
+                            android:id="@+id/SndtxtIncre"
+                            android:layout_width="20dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/x10"
+                            android:layout_marginLeft="@dimen/x10"
+                            android:layout_marginRight="@dimen/x10"
+                            android:layout_marginTop="@dimen/x10"
+                            android:layout_weight="0.5"
+                            android:background="@drawable/addinc"
+                            android:gravity="center|center_vertical|center_horizontal"
+                            app:typeface="Roboto-Regular.ttf" />
+
+
+                    </LinearLayout>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0.5dp"
+                    android:alpha="0.6"
+                    android:layout_below="@+id/firstAvailchild"
+                    android:background="@drawable/text"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/firstAvail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="0.5dp"
+                        android:alpha="0.6"
+                        android:background="@drawable/text"/>
+
+                    <LinearLayout
+                        android:id="@+id/firstAvailchild"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="10">
+
+
+                        <com.app.ace.ui.views.AnyTextView
+                            android:id="@+id/txtDayDate"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x15"
+                            android:layout_marginRight="@dimen/x15"
+                            android:layout_marginTop="@dimen/x10"
+                            android:layout_weight="2"
+                            android:gravity="center|center_vertical|center_horizontal"
+                            android:text="Fri 7"
+                            app:typeface="Roboto-Regular.ttf"
+
+                            />
+
+
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:alpha="0.6"
+                            android:background="@drawable/text" />
+
+
+
+                        <com.app.ace.ui.views.AnyTextView
+                            android:id="@+id/txtTo"
+                            android:layout_width="@dimen/x75"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x15"
+                            android:layout_marginRight="@dimen/x15"
+                            android:layout_marginTop="@dimen/x10"
+                            android:layout_weight="2"
+                            android:background="@drawable/background_day_hover"
+                            android:gravity="center|center_vertical|center_horizontal"
+                            android:text=""
+                            app:typeface="Roboto-Regular.ttf"
+
+                            />
+
+                        <com.app.ace.ui.views.AnyTextView
+                            android:id="@+id/txtcenter"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x5"
+                            android:layout_marginRight="@dimen/x5"
+                            android:layout_marginTop="@dimen/x10"
+                            android:layout_weight="4"
+                            android:gravity="center|center_vertical|center_horizontal"
+                            android:text="to"
+                            app:typeface="Roboto-Regular.ttf"
+
+                            />
+
+                        <com.app.ace.ui.views.AnyTextView
+                            android:id="@+id/txtFrom"
+                            android:layout_width="@dimen/x75"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x15"
+                            android:layout_marginRight="@dimen/x15"
+                            android:layout_marginTop="@dimen/x10"
+                            android:layout_weight="2"
+                            android:background="@drawable/background_day_hover"
+                            android:gravity="center|center_vertical|center_horizontal"
+                            android:text=""
+                            app:typeface="Roboto-Regular.ttf"
+
+
+                            />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:alpha="0.6"
+                            android:background="@drawable/text" />
+
+                        <com.app.ace.ui.views.AnyTextView
+                            android:id="@+id/txtIncre"
+                            android:layout_width="20dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/x10"
+                            android:layout_marginLeft="@dimen/x10"
+                            android:layout_marginRight="@dimen/x10"
+                            android:layout_marginTop="@dimen/x10"
+                            android:layout_weight="0.5"
+                            android:background="@drawable/addinc"
+                            android:gravity="center|center_vertical|center_horizontal"
+                            app:typeface="Roboto-Regular.ttf" />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="0.5dp"
+                        android:alpha="0.6"
+                        android:layout_below="@+id/firstAvailchild"
+                        android:background="@drawable/text"/>
+
+                </LinearLayout>
+
+
+
+
+
+
+
+
+               <!-- <ListView
                     android:id="@+id/lv_trainingBokingCalender"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/x17"
                     android:visibility="visible">
 
-                </ListView>
+                </ListView>-->
 
 
                 <View
@@ -127,7 +362,7 @@
                     android:background="@drawable/text" />
             </RelativeLayout>
 
-        </LinearLayout>
+
 
     </LinearLayout>
 
