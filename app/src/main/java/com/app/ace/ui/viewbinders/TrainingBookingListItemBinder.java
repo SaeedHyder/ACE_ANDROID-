@@ -83,16 +83,20 @@ public class TrainingBookingListItemBinder extends ViewBinder<TrainingBookingCal
 
         if(entity.getTxtDayDate().contains("Sat")) {
             viewHolder.txtDayDate.setTextColor(R.color.red);
+            //viewHolder.txtDayDate.getResources().getColor(R.color.red);
             viewHolder.txtDayDate.setText(date);
         }
         else if(entity.getTxtDayDate().contains("Sun"))
         {
             viewHolder.txtDayDate.setTextColor(R.color.red);
+           // viewHolder.txtDayDate.getResources().getColor(R.color.red);
             viewHolder.txtDayDate.setText(date);
         }
         else
         {
+
             viewHolder.txtDayDate.setTextColor(R.color.black);
+
             viewHolder.txtDayDate.setText(date);
         }
       //  viewHolder.txtTo.setText(entity.getTxtTo());
@@ -109,6 +113,7 @@ public class TrainingBookingListItemBinder extends ViewBinder<TrainingBookingCal
                 //openToTimePickerDialog(viewHolder.txtTo);
 
                numberPicker.UpdateTime(viewHolder.txtTo);
+
                // viewHolder.txtTo.setText(time+":00");
 
                 numberPicker.PressBtn();
