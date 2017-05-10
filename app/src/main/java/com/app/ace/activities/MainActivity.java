@@ -205,7 +205,6 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         }
     }
 
-
     @Override
     public void onLoadingStarted() {
 
