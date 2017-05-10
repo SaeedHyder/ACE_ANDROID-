@@ -9,10 +9,8 @@ import android.content.IntentFilter;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -27,10 +25,8 @@ import android.widget.VideoView;
 import com.app.ace.R;
 import com.app.ace.fragments.HomeFragment;
 import com.app.ace.fragments.LanguageFragment;
-import com.app.ace.fragments.LoginFragment;
 import com.app.ace.fragments.NotificationListingFragment;
 import com.app.ace.fragments.SideMenuFragment;
-import com.app.ace.fragments.SignUpFragment;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.ScreenHelper;
@@ -40,7 +36,6 @@ import com.app.ace.ui.views.TitleBar;
 import com.kbeanie.imagechooser.api.ChooserType;
 import com.kbeanie.imagechooser.api.ChosenFile;
 import com.kbeanie.imagechooser.api.ChosenImage;
-//import com.kbeanie.imagechooser.api.ChosenImages;
 import com.kbeanie.imagechooser.api.ChosenImages;
 import com.kbeanie.imagechooser.api.ChosenVideo;
 import com.kbeanie.imagechooser.api.ChosenVideos;
@@ -52,57 +47,37 @@ import com.kbeanie.imagechooser.api.IntentUtils;
 import com.kbeanie.imagechooser.api.VideoChooserListener;
 import com.kbeanie.imagechooser.api.VideoChooserManager;
 
-import java.io.File;
-
 import roboguice.inject.InjectView;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
-import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
+//import com.kbeanie.imagechooser.api.ChosenImages;
 
-public class MainActivity extends DockActivity implements OnClickListener, ImageChooserListener,VideoChooserListener,FileChooserListener {
+public class MainActivity extends DockActivity implements OnClickListener, ImageChooserListener, VideoChooserListener, FileChooserListener {
 
+    private final static String TAG = "ICA";
+    private final int videoDuration = 30;
     @InjectView(R.id.header_main)
     public TitleBar titleBar;
-
+    protected BroadcastReceiver broadcastReceiver;
     @InjectView(R.id.progressBar)
     ProgressBar progressBar;
-
     @InjectView(R.id.mainFrameLayout)
     FrameLayout mainFrameLayout;
-
+    ImageSetter imageSetter;
     private MainActivity mContext;
-
     private boolean loading;
-
     private float lastTranslate = 0.0f;
-
-
     private ImageChooserManager imageChooserManager;
     private VideoChooserManager videoChooserManager;
     private VideoView videoView;
     private String filePath;
-
     private FileChooserManager fm;
-
     private int chooserType;
-    private final static String TAG = "ICA";
-
     private boolean isActivityResultOver = false;
-
     private String originalFilePath;
     private String thumbnailFilePath;
     private String thumbnailSmallFilePath;
-
-
     private boolean isNotificationTap = false;
-    private final int videoDuration = 30;
-
     private Uri fileUri;
-
-    protected BroadcastReceiver broadcastReceiver;
-
-    ImageSetter imageSetter;
-
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,7 +122,6 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
 
         if (savedInstanceState == null)
             initFragment();
-
 
 
     }
@@ -218,9 +192,6 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         return R.id.sideMneuFragmentContainer;
 
     }
-
-
-
 
 
     public void initFragment() {
@@ -390,15 +361,13 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         fm = new FileChooserManager(this);
         fm.setFileChooserListener(this);
         try {
-           // progressBar.setVisibility(View.VISIBLE);
+            // progressBar.setVisibility(View.VISIBLE);
             fm.choose();
         } catch (Exception e) {
-           // progressBar.setVisibility(View.INVISIBLE);
+            // progressBar.setVisibility(View.INVISIBLE);
             e.printStackTrace();
         }
     }
-
-
 
 
     @Override
@@ -418,8 +387,8 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
                 if (image != null) {
                     Log.i(TAG, "Chosen Image: Is not null");
 
-                   // Toast.makeText(getApplication(),thumbnailFilePath,Toast.LENGTH_LONG).show();
-                   imageSetter.setImage(thumbnailFilePath);
+                    // Toast.makeText(getApplication(),thumbnailFilePath,Toast.LENGTH_LONG).show();
+                    imageSetter.setImage(thumbnailFilePath);
 
                     //loadImage(imageViewThumbnail, image.getFileThumbnail());
                 } else {
@@ -430,8 +399,6 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         });
 
     }
-
-
 
 
     @Override
@@ -473,7 +440,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         videoChooserManager.setVideoChooserListener(this);
 
         try {
-           // progressBar.setVisibility(View.VISIBLE);
+            // progressBar.setVisibility(View.VISIBLE);
             filePath = videoChooserManager.choose();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -481,8 +448,6 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
             e.printStackTrace();
         }
     }
-
-
 
 
     public void pickVideo() {
@@ -495,17 +460,13 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         videoChooserManager.setVideoChooserListener(this);
         try {
             videoChooserManager.choose();
-        //    progressBar.setVisibility(View.VISIBLE);
+            //    progressBar.setVisibility(View.VISIBLE);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
-
-
 
 
     @Override
@@ -522,7 +483,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
                             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
                             retriever.setDataSource(video.getVideoFilePath());
                             String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-                            long timeInmillisec = Long.parseLong( time );
+                            long timeInmillisec = Long.parseLong(time);
                             long duration = timeInmillisec / 1000;
                             long hours = duration / 3600;
                             long minutes = (duration - hours * 3600) / 60;
@@ -535,7 +496,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
                                     }
-                                },"Video duration exceed its limit","UnSupportable Video");
+                                }, "Video duration exceed its limit", "UnSupportable Video");
                                 dialog.show();
                                 // UIHelper.showAlertDialog("Video duration exceed its limit","UnSupportable Video",getApplicationContext());
                             } else {
@@ -562,9 +523,6 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
     }
 
 
-
-
-
     @Override
     public void onVideosChosen(final ChosenVideos videos) {
         runOnUiThread(new Runnable() {
@@ -582,32 +540,32 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         Log.i(TAG, "File Path : " + filePath);
         Log.i(TAG, "Chooser Type: " + chooserType);
 
-            if (requestCode == ChooserType.REQUEST_PICK_FILE && resultCode == RESULT_OK) {
-                if (fm == null) {
-                    fm = new FileChooserManager(this);
-                    fm.setFileChooserListener(this);
-                }
-                Log.i(TAG, "Probable file size: " + fm.queryProbableFileSize(data.getData(), this));
-                fm.submit(requestCode, data);
+        if (requestCode == ChooserType.REQUEST_PICK_FILE && resultCode == RESULT_OK) {
+            if (fm == null) {
+                fm = new FileChooserManager(this);
+                fm.setFileChooserListener(this);
             }
-            if (resultCode == RESULT_OK
-                    && (requestCode == ChooserType.REQUEST_CAPTURE_VIDEO || requestCode == ChooserType.REQUEST_PICK_VIDEO)) {
-                if (videoChooserManager == null) {
-                    reinitializeVideoChooser();
-                }
-                videoChooserManager.submit(requestCode, data);
-            } else {
-                //progressBar.setVisibility(View.GONE);
+            Log.i(TAG, "Probable file size: " + fm.queryProbableFileSize(data.getData(), this));
+            fm.submit(requestCode, data);
+        }
+        if (resultCode == RESULT_OK
+                && (requestCode == ChooserType.REQUEST_CAPTURE_VIDEO || requestCode == ChooserType.REQUEST_PICK_VIDEO)) {
+            if (videoChooserManager == null) {
+                reinitializeVideoChooser();
             }
-            if (resultCode == RESULT_OK
-                    && (requestCode == ChooserType.REQUEST_PICK_PICTURE || requestCode == ChooserType.REQUEST_CAPTURE_PICTURE)) {
-                if (imageChooserManager == null) {
-                    reinitializeImageChooser();
-                }
-                imageChooserManager.submit(requestCode, data);
-            } else {
-               // progressBar.setVisibility(View.GONE);
+            videoChooserManager.submit(requestCode, data);
+        } else {
+            //progressBar.setVisibility(View.GONE);
+        }
+        if (resultCode == RESULT_OK
+                && (requestCode == ChooserType.REQUEST_PICK_PICTURE || requestCode == ChooserType.REQUEST_CAPTURE_PICTURE)) {
+            if (imageChooserManager == null) {
+                reinitializeImageChooser();
             }
+            imageChooserManager.submit(requestCode, data);
+        } else {
+            // progressBar.setVisibility(View.GONE);
+        }
 
 
         BaseFragment fragment = (BaseFragment) getSupportFragmentManager().findFragmentById(getDockFrameLayoutId());
@@ -626,7 +584,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-               // progressBar.setVisibility(View.INVISIBLE);
+                // progressBar.setVisibility(View.INVISIBLE);
                 imageSetter.setFilePath(file.getFilePath());
                 populateFileDetails(file);
             }
@@ -641,9 +599,8 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         text.append("File extn: " + file.getExtension() + "\n\n");
         text.append("File size: " + file.getFileSize() / 1024 + "KB");
 
-        Toast.makeText(this,text.toString(),Toast.LENGTH_LONG).show();
+        Toast.makeText(this, text.toString(), Toast.LENGTH_LONG).show();
     }
-
 
 
     private void reinitializeVideoChooser() {
@@ -695,10 +652,6 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
     }
 
 
-
-
-
-
     private void checkForSharedVideo(Intent intent) {
         if (intent != null) {
             if (intent.getAction() != null && intent.getType() != null && intent.getExtras() != null) {
@@ -710,18 +663,17 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         }
     }
 
-
-
+    public void setImageSetter(ImageSetter imageSetter) {
+        this.imageSetter = imageSetter;
+    }
 
     public interface ImageSetter {
 
         public void setImage(String imagePath);
+
         public void setFilePath(String filePath);
+
         public void setVideo(String videoPath);
 
-    }
-
-    public void setImageSetter(ImageSetter imageSetter) {
-        this.imageSetter = imageSetter;
     }
 }
