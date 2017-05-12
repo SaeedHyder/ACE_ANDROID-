@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -10,16 +11,29 @@
         android:background="@drawable/bg"
         android:orientation="vertical"
         android:layout_weight="1">
-
+        <com.app.ace.ui.views.AnyTextView
+            android:id="@+id/txt_noresult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:paddingBottom="@dimen/x5"
+            android:paddingLeft="@dimen/x8"
+            android:paddingTop="@dimen/x2"
+            android:text="@string/no_result_found"
+            android:textColor="@color/black"
+            android:textSize="@dimen/x20"
+            android:textStyle="normal"
+            android:visibility="gone"
+            app:typeface="Roboto-Regular.ttf" />
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/x3"
         android:divider="@null"
-        >
+        />
 
-    </ListView>
+
 
     </LinearLayout>
 

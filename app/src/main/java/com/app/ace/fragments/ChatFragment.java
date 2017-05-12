@@ -7,11 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.ace.R;
 import com.app.ace.entities.ChatDataItem;
-import com.app.ace.entities.HomeListDataEnt;
 import com.app.ace.entities.MsgEnt;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
@@ -31,57 +31,54 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
-import static android.os.Build.VERSION_CODES.M;
-import static com.app.ace.fragments.TrainerProfileFragment.USER_ID;
-import static com.app.ace.global.AppConstants.user_id;
-
 /**
  * Created by khan_muhammad on 3/20/2017.
  */
 
 public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
-    @InjectView(R.id.listView)
-    private ListView listView;
-
-    @InjectView(R.id.edtChat)
-    private AnyEditTextView edtChat;
-
-    @InjectView(R.id.imgSend)
-    private ImageView imgSend;
-
-    boolean isSender=true;
-
+    public static String SIGNUP_MODEL = "signup_model";
+    public static String CONVERSATION_ID = "conversation_id";
+    public static String Receiver_ID = "Receiver_id";
+    public int receiverId;
+    public int SenderId;
+    boolean isSender = true;
     String stringer;
     String SenderFullName;
     String ConversationId;
-    public int receiverId;
-    public int SenderId;
-
-    public static String SIGNUP_MODEL = "signup_model";
-    public static String CONVERSATION_ID = "conversation_id";
-
+    CommentToChatMsgConstants commentToChatMsgConstants;
+    @InjectView(R.id.listView)
+    private ListView listView;
+    @InjectView(R.id.edtChat)
+    private AnyEditTextView edtChat;
+    @InjectView(R.id.imgSend)
+    private ImageView imgSend;
+    @InjectView(R.id.txt_noresult)
+    private TextView txt_noresult;
     private ArrayListAdapter<ChatDataItem> adapter;
     private ArrayList<ChatDataItem> collection = new ArrayList<>();
 
-
-    CommentToChatMsgConstants commentToChatMsgConstants;
-
-    public static ChatFragment newInstance()
-    {
+    public static ChatFragment newInstance() {
         return new ChatFragment();
     }
 
-    public static ChatFragment newInstance(String conversationId)
-    {
+   /* public static ChatFragment newInstance(String conversationId) {
         Bundle args = new Bundle();
         args.putString(CONVERSATION_ID, conversationId);
         ChatFragment fragment = new ChatFragment();
         fragment.setArguments(args);
 
         return fragment;
-    }
+    }*/
+    public static ChatFragment newInstance(String conversationId,String receiver_id) {
+        Bundle args = new Bundle();
+        args.putString(CONVERSATION_ID, conversationId);
+        args.putString(Receiver_ID, receiver_id);
+        ChatFragment fragment = new ChatFragment();
+        fragment.setArguments(args);
 
+        return fragment;
+    }
     public static ChatFragment newInstance(CommentToChatMsgConstants commentToChatMsgConstants) {
 
         Bundle args = new Bundle();
@@ -99,10 +96,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
         if (getArguments() != null) {
             ConversationId = getArguments().getString(CONVERSATION_ID);
-           // Toast.makeText(getDockActivity(), ConversationId, Toast.LENGTH_LONG).show();
-        }
-        else{
-            Toast.makeText(getDockActivity(), "No Conversation", Toast.LENGTH_LONG).show();
+            Receiver_ID = getArguments().getString(Receiver_ID);
+            SenderId = Integer.parseInt(prefHelper.getUserId());
+            // Toast.makeText(getDockActivity(), ConversationId, Toast.LENGTH_LONG).show();
         }
 
 
@@ -150,8 +146,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
                     setConversation(response.body().getResult());
 
-                }
-                else {
+                } else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
             }
@@ -166,26 +161,36 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-
     private void setConversation(ArrayList<MsgEnt> msgArrayList) {
 
         collection = new ArrayList<>();
+       /* if (msgArrayList.size() <= 0) {
+            txt_noresult.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+        }
+        else {
+            txt_noresult.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+        }*/
 
-        SenderId= msgArrayList.get(0).getSender().getId();
-        receiverId=msgArrayList.get(0).getReceiver().getId();
-
-        for(MsgEnt msgEnt : msgArrayList){
 
 
-            if(msgEnt.getSender().getId()== Integer.parseInt(prefHelper.getUserId()))
-            {
-                isSender=false;
-            }
-            else {
+
+
+        for (MsgEnt msgEnt : msgArrayList) {
+
+
+            if (msgEnt.getSender().getId() == Integer.parseInt(prefHelper.getUserId())) {
+                isSender = false;
+            } else {
                 isSender = true;
             }
-
-            collection.add(new ChatDataItem(msgEnt.getSender().getProfile_image(),msgEnt.getMessage().getMessage_text(),msgEnt.getMessage().getCreated_at(),msgEnt.getReceiver().getProfile_image(),msgEnt.getMessage().getMessage_text(),msgEnt.getMessage().getCreated_at(),isSender,msgEnt.getSender().getId()));
+            if (msgEnt.getSender()!=null && msgEnt.getReceiver() != null && msgEnt.getMessage() !=null) {
+                collection.add(new ChatDataItem(msgEnt.getSender().getProfile_image(),
+                        msgEnt.getMessage().getMessage_text(), msgEnt.getMessage().getCreated_at(),
+                        msgEnt.getReceiver().getProfile_image(), msgEnt.getMessage().getMessage_text(),
+                        msgEnt.getMessage().getCreated_at(), isSender, msgEnt.getSender().getId()));
+            }
 
         }
         bindData(collection);
@@ -249,9 +254,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 if (edtChat.getText().length() > 0) {
 
                     sendMsg();
-                   // collection.add(new ChatDataItem("drawable://" + R.drawable.profile_pic, getString(R.string.i_wont_be), "3 mins ago", "drawable://" + R.drawable.profile_pic_trainer, edtChat.getText().toString(), "6 mins ago", false));
+                    // collection.add(new ChatDataItem("drawable://" + R.drawable.profile_pic, getString(R.string.i_wont_be), "3 mins ago", "drawable://" + R.drawable.profile_pic_trainer, edtChat.getText().toString(), "6 mins ago", false));
                     edtChat.getText().clear();
-                  //  bindData(collection);
+                    //  bindData(collection);
                 }
                 break;
         }
@@ -263,7 +268,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
         Call<ResponseWrapper<ArrayList<MsgEnt>>> callBack = webService.SendMsg(
                 prefHelper.getUserId(),
-                String.valueOf(receiverId),
+                Receiver_ID,
                 edtChat.getText().toString());
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<MsgEnt>>>() {
             @Override
@@ -272,14 +277,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    ArrayList<MsgEnt> msg =response.body().getResult();
+                    ArrayList<MsgEnt> msg = response.body().getResult();
                     msg.get(0);
 
-                    collection.add(new ChatDataItem(msg.get(0).getSender().getProfile_image(),msg.get(0).getMessage_text(),msg.get(0).getCreated_at(),msg.get(0).getReceiver().getProfile_image(),msg.get(0).getMessage_text(),msg.get(0).getCreated_at(),false,msg.get(0).getSender_id()));
+                    collection.add(new ChatDataItem(msg.get(0).getSender().getProfile_image(), msg.get(0).getMessage_text(), msg.get(0).getCreated_at(), msg.get(0).getReceiver().getProfile_image(), msg.get(0).getMessage_text(), msg.get(0).getCreated_at(), false, msg.get(0).getSender_id()));
                     bindData(collection);
-                }
-                else {
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
             }
 
@@ -287,6 +289,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             public void onFailure(Call<ResponseWrapper<ArrayList<MsgEnt>>> call, Throwable t) {
 
                 loadingFinished();
+                System.out.println(t.toString());
                 UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
             }
         });

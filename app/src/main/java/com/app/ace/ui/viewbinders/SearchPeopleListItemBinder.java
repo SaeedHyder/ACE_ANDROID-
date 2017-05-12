@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.app.ace.R;
 import com.app.ace.entities.SearchPeopleDataItem;
+import com.app.ace.entities.UserProfile;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 import com.app.ace.ui.views.AnyTextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -15,7 +16,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by saeedhyder on 4/4/2017.
  */
 
-public class SearchPeopleListItemBinder extends ViewBinder<SearchPeopleDataItem> {
+public class SearchPeopleListItemBinder extends ViewBinder<UserProfile> {
 
     private ImageLoader imageLoader;
 
@@ -31,12 +32,12 @@ public class SearchPeopleListItemBinder extends ViewBinder<SearchPeopleDataItem>
     }
 
     @Override
-    public void bindView(SearchPeopleDataItem entity, int position, int grpPosition, View view, Activity activity) {
+    public void bindView(UserProfile entity, int position, int grpPosition, View view, Activity activity) {
 
         SearchPeopleListItemBinder.ViewHolder viewHolder = (SearchPeopleListItemBinder.ViewHolder) view.getTag();
 
-        imageLoader.displayImage(entity.getImage(), viewHolder.userImage);
-        viewHolder.txtUserName.setText(entity.getUserName());
+        imageLoader.displayImage(entity.getProfile_image(), viewHolder.userImage);
+        viewHolder.txtUserName.setText(entity.getFirst_name()+" "+entity.getLast_name());
 
 
     }

@@ -481,7 +481,10 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
         loadingStarted();
 
         MultipartBody.Part filePart = MultipartBody.Part.createFormData("profile_picture",  signupFormConstants.getProfilePic().getName(), RequestBody.create(MediaType.parse("image/*"),  signupFormConstants.getProfilePic()));
-       MultipartBody.Part  cvFile = MultipartBody.Part.createFormData("resume",resumePath, RequestBody.create(MediaType.parse("*/*"), resume));
+
+          MultipartBody.Part  cvFile = MultipartBody.Part.createFormData("resume",resumePath, RequestBody.create(MediaType.parse("*/*"), resume));
+
+
 
 
         String SocialMediaName = "";

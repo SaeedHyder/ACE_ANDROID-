@@ -63,6 +63,7 @@
     <color name="darkbrown">#660004</color>
     <color name="calendar_lightgray">#e9e9e9</color>
     <color name="textcolor_lightgray">#3f3f3f</color>
+    <color name="scheduleHeader">#a90007</color>
 
     <!--Detailed Screen-->
     <color name="profile_name_darkBrown">#9e0007</color>

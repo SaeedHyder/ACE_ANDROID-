@@ -7,18 +7,29 @@ import android.util.Log;
 
 import com.app.ace.R;
 import com.app.ace.activities.MainActivity;
+import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.countEnt;
 import com.app.ace.global.AppConstants;
+import com.app.ace.global.WebServiceConstants;
+import com.app.ace.helpers.BasePreferenceHelper;
 import com.app.ace.helpers.NotificationHelper;
+import com.app.ace.retrofit.WebService;
+import com.app.ace.retrofit.WebServiceFactory;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = MyFirebaseMessagingService.class.getSimpleName();
-
+    private WebService webservice;
+    private BasePreferenceHelper preferenceHelper;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -62,30 +73,62 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private void handleDataMessage(JSONObject json) {
+    private void handleDataMessage(final JSONObject json) {
         Log.e(TAG, "push json: " + json.toString());
 
-        try {
-            JSONObject data = json.getJSONObject("data");
-
-            System.out.println(data);
-            String title = data.getString("title");
-            String message = data.getString("message");
-            String timestamp = data.getString("timestamp");
 
 
-            Log.e(TAG, "DATA: " + data);
-            Log.e(TAG, "message: " + message);
-            Log.e(TAG, "timestamp: " + timestamp);
-            Intent resultIntent = new Intent(getApplicationContext(), MainActivity.class);
-            resultIntent.putExtra("message", message);
-            resultIntent.putExtra("tapped", true);
-            showNotificationMessage(getApplicationContext(), title, message, timestamp, resultIntent);
-        } catch (JSONException e) {
-            Log.e(TAG, "Json Exception: " + e.getMessage());
-        } catch (Exception e) {
-            Log.e(TAG, "Exception: " + e.getMessage());
-        }
+            webservice = WebServiceFactory.getWebServiceInstanceWithCustomInterceptor(getApplicationContext(),
+                    WebServiceConstants.SERVICE_BASE_URL);
+            preferenceHelper = new BasePreferenceHelper(getApplicationContext());
+            Call<ResponseWrapper<countEnt>> callback = webservice.getNotificationCount(preferenceHelper.getUserId());
+            callback.enqueue(new Callback<ResponseWrapper<countEnt>>() {
+                @Override
+                public void onResponse(Call<ResponseWrapper<countEnt>> call, Response<ResponseWrapper<countEnt>> response) {
+                    ;
+                    preferenceHelper.setBadgeCount(response.body().getResult().getCount());
+                    try {
+                        JSONObject data = json.getJSONObject("data");
+
+                        System.out.println(data);
+                        String title = data.getString("title");
+                        String message = data.getString("message");
+                        String timestamp = data.getString("timestamp");
+
+                        Log.e(TAG, "DATA: " + data);
+                        Log.e(TAG, "message: " + message);
+                        Log.e(TAG, "timestamp: " + timestamp);
+                        Intent resultIntent = new Intent(getApplicationContext(), MainActivity.class);
+                        resultIntent.putExtra("message", message);
+                        resultIntent.putExtra("tapped", true);
+                        Intent pushNotification = new Intent(AppConstants.PUSH_NOTIFICATION);
+                        pushNotification.putExtra("message", message);
+                        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(pushNotification);
+                        showNotificationMessage(getApplicationContext(), title, message, timestamp, resultIntent);
+
+                    } catch (JSONException e) {
+                        Log.e(TAG, "Json Exception: " + e.getMessage());
+                    } catch (Exception e) {
+                        Log.e(TAG, "Exception: " + e.getMessage());
+                    }
+
+                    Log.e(TAG,"aasd"+preferenceHelper.getUserId()+response.body().getResult().getCount());
+                    //  SendNotification(response.body().getResult().getCount(), json);
+                }
+
+                @Override
+                public void onFailure(Call<ResponseWrapper<countEnt>> call, Throwable t) {
+                    Log.e(TAG,t.toString());
+                    System.out.println(t.toString());
+                }
+            });
+
+
+
+    }
+
+    private void SendNotification(int count, JSONObject json) {
+
     }
 
     /**

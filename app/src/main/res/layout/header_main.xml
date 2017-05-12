@@ -30,6 +30,9 @@
             android:hint="Search"
             android:paddingLeft="@dimen/x10"
             android:visibility="gone"
+            android:imeOptions="actionSearch"
+            android:singleLine="true"
+            android:maxLines="1"
             app:typeface="Roboto-Regular.ttf" />
 
         <com.app.ace.ui.views.AnyTextView

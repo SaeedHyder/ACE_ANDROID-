@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.app.ace.R;
 import com.app.ace.entities.CreaterEnt;
@@ -38,10 +39,11 @@ public class InboxListFragment extends BaseFragment {
 
     @InjectView(R.id.listView)
     private ListView listView;
+    @InjectView(R.id.txt_noresult)
+    private TextView txt_noresult;
+    private ArrayListAdapter<MsgEnt> adapter;
 
-    private ArrayListAdapter<InboxDataItem> adapter;
-
-    private ArrayList<InboxDataItem> userCollection = new ArrayList<>();
+    private ArrayList<MsgEnt> userCollection = new ArrayList<>();
 
     public static InboxListFragment newInstance() {
 
@@ -52,7 +54,7 @@ public class InboxListFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new ArrayListAdapter<InboxDataItem>(getDockActivity(), new InboxListItemBinder(getDockActivity()));
+        adapter = new ArrayListAdapter<MsgEnt>(getDockActivity(), new InboxListItemBinder(getDockActivity()));
     }
 
     @Nullable
@@ -102,8 +104,23 @@ public class InboxListFragment extends BaseFragment {
     private void AddInboxData(ArrayList<MsgEnt> result) {
 
         userCollection = new ArrayList<>();
+       /* if (result.size() <= 0) {
+            txt_noresult.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+        }
+        else {
+            txt_noresult.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+        }*/
 
-        for(MsgEnt msg : result){
+
+            userCollection.addAll(result);
+            bindData(userCollection);
+
+
+
+
+        /*for(MsgEnt msg : result){
 
 
            //    userCollection.add(new InboxDataItem(msg.getSender().getProfile_image(),msg.getSender().getFirst_name()+" "+msg.getSender().getLast_name(),msg.getMessage().getMessage_text(),msg.getMessage().getConversation_id()));
@@ -111,9 +128,8 @@ public class InboxListFragment extends BaseFragment {
 
             //  userCollection.add(new InboxDataItem(msg.getReceiver().getProfile_image(),msg.getReceiver().getFirst_name()+" "+msg.getReceiver().getLast_name(),msg.getMessage().getMessage_text(),msg.getMessage().getConversation_id()));
 
-        }
+        }*/
 
-        bindData(userCollection);
     }
 
 
@@ -139,7 +155,7 @@ public class InboxListFragment extends BaseFragment {
         });
     }
 
-    private void bindData(ArrayList<InboxDataItem> userCollection) {
+    private void bindData(ArrayList<MsgEnt> userCollection) {
         adapter.clearList();
         listView.setAdapter(adapter);
         adapter.addAll(userCollection);

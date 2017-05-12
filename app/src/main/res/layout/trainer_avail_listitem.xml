@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/x10"
-                android:gravity="center"
+                android:gravity="start"
                 android:text="@string/james_blunt"
                 android:textColor="@color/black"
                 android:textSize="@dimen/x15"

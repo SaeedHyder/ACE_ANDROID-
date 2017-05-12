@@ -452,14 +452,17 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.setSubHeading(getString(R.string.profile));
-
+        titleBar.hideSearchBar();
         titleBar.showSearchButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
-                //   homeFragment.popUpDropdown(v);
-                popUpDropDown(v);
+                if (prefHelper.getUser().getUser_type().equals(AppConstants.trainer))
+                    getDockActivity().addDockableFragment(SearchTraineeFragment.newInstance(), "SearchTraineeFragment");
+                else
+                    popUpDropDown(v);
+
+
 
             }
         });
@@ -717,7 +720,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         txt_TrainerProfileFrag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getDockActivity().addDockableFragment(SearchPeopleFragment.newInstance(), "SearchPeopleFragment");
+                getDockActivity().addDockableFragment(SearchTrainerFragment.newInstance(), "SearchTraineeFragment");
                 popupWindow.dismiss();
             }
         });

@@ -1,9 +1,6 @@
 package com.app.ace.ui.views;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,7 +12,6 @@ import android.widget.TextView;
 import com.app.ace.R;
 import com.app.ace.helpers.UIHelper;
 
-import berlin.volders.badger.BadgeDrawable;
 import berlin.volders.badger.BadgeShape;
 import berlin.volders.badger.Badger;
 import berlin.volders.badger.CountBadge;
@@ -104,14 +100,18 @@ public class TitleBar extends RelativeLayout {
 
     }
 
-    public void showSearchBar() {
+    public AnyEditTextView showSearchBar() {
         searchbar.setVisibility(View.VISIBLE);
+        return searchbar;
     }
 
     public void hideSearchBar() {
         searchbar.setVisibility(View.GONE);
+        clearSearchedText();
     }
-
+    private void clearSearchedText(){
+        searchbar.setText("");
+    }
 
     public void showAddButton(View.OnClickListener addBtnListener) {
         btnRight.setVisibility(View.VISIBLE);
@@ -191,44 +191,66 @@ public class TitleBar extends RelativeLayout {
         imgNotificationCounter.setVisibility(View.GONE);
     }
 
-    public void initBadge(Context mcontext) {
+    public ImageView getImgNotificationCounter(){
+        return imgNotificationCounter;
+    }
+
+    public CountBadge initBadge(Context mcontext) {
         imgNotificationCounter.setVisibility(View.VISIBLE);
         CountBadge.Factory circle = new CountBadge.Factory(BadgeShape.circle(.7f, Gravity.END | Gravity.TOP),
                 getResources().getColor(R.color.white), getResources().getColor(R.color.black));
 
         Badger<CountBadge> badger = Badger.sett(getResources().getDrawable(R.drawable.ic_badge), circle);
-         imgNotificationCounter.setImageDrawable(badger.drawable);
-        badge= badger.badge;
+        imgNotificationCounter.setImageDrawable(badger.drawable);
+        badge = badger.badge;
         badge.setCount(0);
-
-
+        return badge;
 
     }
 
     public void addtoBadge(int count) {
         try {
-            if (count > 99){
+            if (count > 99) {
                 CountBadge.Factory circle = new CountBadge.Factory(BadgeShape.oval(1f, 2f, Gravity.BOTTOM),
                         getResources().getColor(R.color.white), getResources().getColor(R.color.black));
 
                 Badger<CountBadge> badger = Badger.sett(getResources().getDrawable(R.drawable.ic_badge), circle);
                 imgNotificationCounter.setImageDrawable(badger.drawable);
-                badge= badger.badge;
+                badge = badger.badge;
                 badge.setCount(count);
-            }
-            else
-            badge.setCount(count);
-        }
-        catch (Exception e){
-            UIHelper.showShortToastInCenter(context,"Initialize Badge First");
+            } else
+                badge.setCount(count);
+        } catch (Exception e) {
+          e.printStackTrace();
         }
     }
-    public int getBadgeCount(){
+    public void addtoBadge(int count,CountBadge countBadge) {
         try {
-           return badge.getCount();
+            if (count > 99) {
+                CountBadge.Factory circle = new CountBadge.Factory(BadgeShape.oval(1f, 2f, Gravity.BOTTOM),
+                        getResources().getColor(R.color.white), getResources().getColor(R.color.black));
+
+                Badger<CountBadge> badger = Badger.sett(getResources().getDrawable(R.drawable.ic_badge), circle);
+                imgNotificationCounter.setImageDrawable(badger.drawable);
+                countBadge = badger.badge;
+                countBadge.setCount(count);
+            } else
+                countBadge.setCount(count);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        catch (Exception e){
-            UIHelper.showShortToastInCenter(context,"Initialize Badge First");
+    }
+    public boolean isBadgeVisible(){
+    return imgNotificationCounter.getVisibility()==VISIBLE;
+    }
+    public void showBadge(){
+        imgNotificationCounter.setVisibility(VISIBLE);
+    }
+    public int getBadgeCount() {
+        try {
+            return badge.getCount();
+        } catch (Exception e) {
+            UIHelper.showShortToastInCenter(context, "Initialize Badge First");
         }
         return -1;
     }
