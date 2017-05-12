@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 
 import com.app.ace.BaseApplication;
+
 import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
 import com.app.ace.activities.MainActivity;
@@ -401,6 +402,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
                 break;
 
             case R.id.iv_Calander:
+
+
 
                 //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
                 if (prefHelper.getUser().getUser_type().equalsIgnoreCase("trainer")) {

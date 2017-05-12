@@ -7,7 +7,7 @@
 
 
     -->
-    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppBaseTheme" parent="Theme.AppCompat">
         <!--<item name="android:splitMotionEvents">false</item>
         <item name="android:colorForeground">@android:color/background_dark</item>
         <item name="android:textColorPrimary">@android:color/black</item>-->
@@ -63,7 +63,7 @@
         &lt;!&ndash;<item name="android:activatedBackgroundIndicator">@drawable/star2</item>&ndash;&gt;
     </style>-->
 
-    <style name="RatingBar" parent="Theme.AppCompat">
+    <style name="RatingBar" parent="AppBaseTheme">
        <!-- <item name="colorControlNormal">#8EBFE0</item>
         <item name="colorControlActivated">#FFA800</item>-->
         <!--<item name="colorControlNormal">@color/white</item>

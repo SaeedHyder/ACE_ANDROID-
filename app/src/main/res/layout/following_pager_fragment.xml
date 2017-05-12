@@ -26,6 +26,8 @@
         app:tabTextColor="@color/lightish_grey"
         app:tabSelectedTextColor="@color/top_bar_color1"
         app:tabIndicatorColor="@color/top_bar_color1"
+        app:tabGravity="fill"
+        app:tabMode="fixed"
         android:elevation="8dp"
 
         />
