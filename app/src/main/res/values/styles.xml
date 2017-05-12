@@ -7,7 +7,7 @@
 
 
     -->
-    <style name="AppBaseTheme"  parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppBaseTheme"  parent="@style/Theme.AppCompat.Light">
         <!--<item name="android:splitMotionEvents">false</item>
         <item name="android:colorForeground">@android:color/background_dark</item>
         <item name="android:textColorPrimary">@android:color/black</item>-->
@@ -24,6 +24,15 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <!-- For Date Picker -->
+
+  <!--  <style name="DatePickerTheme" parent="@android:style/Theme">
+        <item name="calendarViewStyle">@style/Widget.Holo.CalendarView</item>
+        <item name="datePickerStyle">@style/Widget.Holo.DatePicker</item>
+        <item name="numberPickerStyle">@style/NPWidget.Holo.NumberPicker</item>
+    </style>-->
+
+
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
 
