@@ -6,6 +6,7 @@ import android.view.View;
 import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
 import com.app.ace.entities.InboxDataItem;
+import com.app.ace.entities.MsgEnt;
 import com.app.ace.fragments.ChatFragment;
 import com.app.ace.fragments.TrainerProfileFragment;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
@@ -19,7 +20,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by khan_muhammad on 3/20/2017.
  */
 
-public class InboxListItemBinder extends ViewBinder<InboxDataItem> {
+public class InboxListItemBinder extends ViewBinder<MsgEnt> {
 
     private ImageLoader imageLoader;
     DockActivity context;
@@ -42,24 +43,35 @@ public class InboxListItemBinder extends ViewBinder<InboxDataItem> {
     }
 
     @Override
-    public void bindView(final InboxDataItem entity, int position, int grpPosition,
+    public void bindView(final MsgEnt entity, int position, int grpPosition,
                          View view, Activity activity) {
 
 
         InboxListItemBinder.ViewHolder viewHolder = (InboxListItemBinder.ViewHolder) view.getTag();
 
-        imageLoader.displayImage(entity.getUserImage(), viewHolder.userImage);
-        viewHolder.userImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        showInboxData(entity, viewHolder);
 
-                context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getConversationId())), "ChatFragment");
+    }
 
-            }
-        });
+    private void showInboxData(final MsgEnt entity, ViewHolder viewHolder) {
+        if (entity.getSender() == null || entity.getMessage() == null){
 
-        viewHolder.txtUserName.setText(entity.getUserName());
-        viewHolder.txtUserMessage.setText(entity.getUserMessage());
+        }
+        else {
+            imageLoader.displayImage(entity.getSender().getProfile_image(), viewHolder.userImage);
+            viewHolder.userImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getMessage().getConversation_id()),
+                            String.valueOf(entity.getMessage().getReceiver_id())), "ChatFragment");
+
+                }
+            });
+
+            viewHolder.txtUserName.setText(entity.getSender().getFirst_name() + " " + entity.getSender().getLast_name());
+            viewHolder.txtUserMessage.setText(entity.getMessage().getMessage_text());
+        }
     }
 
     public static class ViewHolder extends BaseViewHolder {

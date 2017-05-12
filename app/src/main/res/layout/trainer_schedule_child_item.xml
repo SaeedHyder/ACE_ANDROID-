@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_day_hover"
+        android:layout_marginTop="@dimen/x5"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <com.app.ace.ui.views.AnyTextView
+            android:id="@+id/txtStart"
+            android:layout_width="@dimen/x75"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/x10"
+            android:layout_marginLeft="@dimen/x15"
+            android:layout_marginRight="@dimen/x15"
+            android:layout_marginTop="@dimen/x10"
+
+            android:background="@drawable/background_day_hover"
+            android:gravity="center|center_vertical|center_horizontal"
+            android:text=""
+            app:typeface="Roboto-Regular.ttf"
+
+            />
+
+
+        <com.app.ace.ui.views.AnyTextView
+            android:id="@+id/txtcenter"
+            android:layout_width="@dimen/x20"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/x10"
+            android:layout_marginLeft="@dimen/x5"
+            android:layout_marginRight="@dimen/x5"
+            android:layout_marginTop="@dimen/x10"
+
+            android:gravity="center|center_vertical|center_horizontal"
+            android:text="to"
+            app:typeface="Roboto-Regular.ttf"
+
+            />
+
+        <com.app.ace.ui.views.AnyTextView
+            android:id="@+id/txtEnd"
+            android:layout_width="@dimen/x75"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/x10"
+            android:layout_marginLeft="@dimen/x15"
+            android:layout_marginRight="@dimen/x15"
+            android:layout_marginTop="@dimen/x10"
+
+            android:background="@drawable/background_day_hover"
+            android:gravity="center|center_vertical|center_horizontal"
+            android:text=""
+            app:typeface="Roboto-Regular.ttf"
+
+
+            />
+
+    </LinearLayout>
+
+</FrameLayout>

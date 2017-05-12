@@ -8,9 +8,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.app.ace.R;
 import com.app.ace.entities.NotificationDataItem;
+import com.app.ace.entities.NotificationEnt;
+import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.UserProfile;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.UIHelper;
@@ -20,6 +24,9 @@ import com.app.ace.ui.views.TitleBar;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import roboguice.inject.InjectView;
 
 /**
@@ -28,7 +35,8 @@ import roboguice.inject.InjectView;
 
 public class NotificationListingFragment  extends BaseFragment implements View.OnClickListener{
 
-
+    @InjectView(R.id.txt_noresult)
+    private TextView txt_noresult;
     @InjectView(R.id.listView)
     private ListView listView;
 
@@ -47,8 +55,8 @@ public class NotificationListingFragment  extends BaseFragment implements View.O
     @InjectView(R.id.iv_profile)
     private ImageView iv_profile;
 
-    private ArrayListAdapter<NotificationDataItem> adapter;
-    private ArrayList<NotificationDataItem> dataCollection = new ArrayList<>();
+    private ArrayListAdapter<NotificationEnt> adapter;
+    private ArrayList<NotificationEnt> dataCollection = new ArrayList<>();
 
     public static NotificationListingFragment newInstance() {
 
@@ -59,7 +67,7 @@ public class NotificationListingFragment  extends BaseFragment implements View.O
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new ArrayListAdapter<NotificationDataItem>(getDockActivity(), new NotificationListItemBinder());
+        adapter = new ArrayListAdapter<NotificationEnt>(getDockActivity(), new NotificationListItemBinder(getDockActivity()));
     }
 
     @Nullable
@@ -71,9 +79,23 @@ public class NotificationListingFragment  extends BaseFragment implements View.O
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         setListener();
-        getNotificationData();
+
+        Call<ResponseWrapper<ArrayList<NotificationEnt>>>callback = webService.getAppNotification(prefHelper.getUserId());
+        System.out.println(prefHelper.getUserId());
+        callback.enqueue(new Callback<ResponseWrapper<ArrayList<NotificationEnt>>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<ArrayList<NotificationEnt>>> call, Response<ResponseWrapper<ArrayList<NotificationEnt>>> response) {
+                getNotificationData(response.body().getResult());
+                prefHelper.setBadgeCount(0);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<ArrayList<NotificationEnt>>> call, Throwable t) {
+            System.out.println(t.toString());
+            }
+        });
+
     }
 
     private void setListener() {
@@ -83,28 +105,25 @@ public class NotificationListingFragment  extends BaseFragment implements View.O
         iv_Camera.setOnClickListener(this);
         iv_Fav.setOnClickListener(this);
         iv_profile.setOnClickListener(this);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                UIHelper.showLongToastInCenter(getDockActivity(), "Will be implemented in beta");
-            }
-        });
     }
 
-    private void getNotificationData() {
+    private void getNotificationData(ArrayList<NotificationEnt> notificationList) {
 
         dataCollection = new ArrayList<>();
 
-        dataCollection.add(new NotificationDataItem("Lorel ispum dolor set", "Wed at 08:00 am"));
-        dataCollection.add(new NotificationDataItem("Etiam in ante odio pulvinar ", "Wed at 07:00 pm"));
-        dataCollection.add(new NotificationDataItem("Steve Camb", "Wed at 04:45 am"));
-
+        if (notificationList.size() <= 0) {
+            txt_noresult.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+        } else {
+            txt_noresult.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+        }
+        dataCollection.addAll(notificationList);
         bindData(dataCollection);
 
     }
 
-    private void bindData(ArrayList<NotificationDataItem> dataCollection) {
+    private void bindData(ArrayList<NotificationEnt> dataCollection) {
         adapter.clearList();
         listView.setAdapter(adapter);
         adapter.addAll(dataCollection);
@@ -116,15 +135,8 @@ public class NotificationListingFragment  extends BaseFragment implements View.O
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.setSubHeading(getString(R.string.notifications));
-
-        titleBar.showNotificationButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
-
-            }
-        });
+        titleBar.showBackButton();
+        titleBar.hideBadge();
     }
 
     @Override

@@ -10,14 +10,19 @@ import com.app.ace.entities.GetTraineeBookings;
 import com.app.ace.entities.GoogleGeoCodeResponse;
 import com.app.ace.entities.HomeResultEnt;
 import com.app.ace.entities.MsgEnt;
+import com.app.ace.entities.NotificationDataItem;
+import com.app.ace.entities.NotificationEnt;
 import com.app.ace.entities.PostsEnt;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.RegistrationResult;
+import com.app.ace.entities.SearchEnt;
 import com.app.ace.entities.ShowComments;
 import com.app.ace.entities.TrainerBookingCalendarJson;
 import com.app.ace.entities.TrainerTimingSlots;
 import com.app.ace.entities.User;
 import com.app.ace.entities.UserProfile;
+import com.app.ace.entities.countEnt;
+import com.app.ace.helpers.NotificationHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,8 +142,21 @@ public interface WebService {
     @POST("post")
     Call<ResponseWrapper<HomeResultEnt>> getAllHomePosts(
             @Field("user_id") String user_id);
-
-
+    @FormUrlEncoded
+    @POST("user/search")
+    Call<ResponseWrapper<ArrayList<UserProfile>>> getSearchUser(
+            @Field("keyword") String username,
+            @Field("user_type") String user_type);
+    @FormUrlEncoded
+    @POST("user/search")
+    Call<ResponseWrapper<ArrayList<UserProfile>>> getTrainingSearch(
+            @Field("keyword") String username,
+            @Field("body_building_type") String body_building_type
+            ) ;
+   @GET ("notification/app/{user_id}")
+   Call<ResponseWrapper<ArrayList<NotificationEnt>>> getAppNotification(
+           @Path("user_id") String userid
+   ) ;
     @FormUrlEncoded
     @POST("user/sociallogin")
     Call<ResponseWrapper<RegistrationResult>> socialLogin(
@@ -188,7 +206,9 @@ public interface WebService {
             @Field("sender_id") String sender_id,
             @Field("receiver_id") String receiver_id,
             @Field("message_text") String message_text);
-
+    @GET ("notification/count/{user_id}")
+    Call<ResponseWrapper<countEnt>> getNotificationCount(
+            @Path("user_id") String user_id);
     @GET("message/{user_id}")
     Call<ResponseWrapper<ArrayList<MsgEnt>>> userinbox(
             @Path("user_id") String user_id);

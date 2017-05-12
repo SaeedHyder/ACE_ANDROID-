@@ -17,7 +17,9 @@ public class BasePreferenceHelper extends PreferenceHelper {
     protected static final String USERNAME = "userName";
     protected static final String USERID = "userId";
     protected static final String KEY_USER = "key_user";
+    protected static final String BADGE_COUNT = "BADGE_COUNT";
     private static final String FILENAME = "preferences";
+
     private Context context;
 
 
@@ -49,7 +51,13 @@ public class BasePreferenceHelper extends PreferenceHelper {
     public boolean isTwitterLogin() {
         return getBooleanPreference(context, FILENAME, KEY_TWITTER_LOGN);
     }
+    public Integer getBadgeCount() {
+        return getIntegerPreference(context, FILENAME, BADGE_COUNT);
+    }
 
+    public void setBadgeCount(Integer _BADGE_COUNT) {
+        putIntegerPreference(context, FILENAME, BADGE_COUNT, _BADGE_COUNT);
+    }
     public String getToken() {
         return getStringPreference(context, FILENAME, _TOKEN);
     }

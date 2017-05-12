@@ -25,7 +25,6 @@ import android.widget.VideoView;
 import com.app.ace.R;
 import com.app.ace.fragments.HomeFragment;
 import com.app.ace.fragments.LanguageFragment;
-import com.app.ace.fragments.NotificationListingFragment;
 import com.app.ace.fragments.SideMenuFragment;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
@@ -57,7 +56,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
     private final int videoDuration = 30;
     @InjectView(R.id.header_main)
     public TitleBar titleBar;
-    protected BroadcastReceiver broadcastReceiver;
+
     @InjectView(R.id.progressBar)
     ProgressBar progressBar;
     @InjectView(R.id.mainFrameLayout)
@@ -76,9 +75,8 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
     private String originalFilePath;
     private String thumbnailFilePath;
     private String thumbnailSmallFilePath;
-    private boolean isNotificationTap = false;
+    public boolean isNotificationTap = false;
     private Uri fileUri;
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dock);
@@ -86,6 +84,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         if (getIntent() != null) {
             if (getIntent().getExtras() != null)
                 isNotificationTap = getIntent().getExtras().getBoolean("tapped");
+
         }
 
         // setBehindContentView(R.layout.fragment_frame);
@@ -119,14 +118,15 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
                 }
             }
         });
-
+      //  onNotificationReceived();
         if (savedInstanceState == null)
             initFragment();
 
 
     }
+/*
 
-
+    protected BroadcastReceiver broadcastReceiver;
     private void onNotificationReceived() {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -143,6 +143,8 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
                 } else if (intent.getAction().equals(AppConstants.PUSH_NOTIFICATION)) {
                     // new push notification is received
                     isNotificationTap = true;
+                    Toast.makeText(getApplicationContext(), "REciecsdf", Toast.LENGTH_SHORT).show();
+                    System.out.println(prefHelper.getFirebase_TOKEN());
                     // String message = intent.getStringExtra("message");
                     //message.trim();
                     // if ( Patterns.WEB_URL.matcher(message).matches())
@@ -171,6 +173,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
                 new IntentFilter(AppConstants.PUSH_NOTIFICATION));
     }
+*/
 
     public View getDrawerView() {
         return getLayoutInflater().inflate(getSideMenuFrameLayoutId(), null);
@@ -195,9 +198,6 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
 
     public void initFragment() {
         if (prefHelper.isLogin()) {
-            if (isNotificationTap)
-                addDockableFragment(NotificationListingFragment.newInstance(), "NotificationFragment");
-            else
                 addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
         } else {
             addDockableFragment(LanguageFragment.newInstance(), "LanguageFragment");

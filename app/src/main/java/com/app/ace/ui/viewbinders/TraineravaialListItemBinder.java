@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.app.ace.R;
 import com.app.ace.entities.TrainerAvailDataItem;
+import com.app.ace.entities.UserProfile;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 import com.app.ace.ui.views.AnyTextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -15,7 +16,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by muniyemiftikhar on 4/4/2017.
  */
 
-public class TraineravaialListItemBinder extends ViewBinder<TrainerAvailDataItem> {
+public class TraineravaialListItemBinder extends ViewBinder<UserProfile> {
     private ImageLoader imageLoader;
     public TraineravaialListItemBinder() {
         super(R.layout.trainer_avail_listitem);
@@ -29,13 +30,13 @@ public class TraineravaialListItemBinder extends ViewBinder<TrainerAvailDataItem
     }
 
     @Override
-    public void bindView(TrainerAvailDataItem entity, int position, int grpPosition, View view, Activity activity) {
+    public void bindView(UserProfile entity, int position, int grpPosition, View view, Activity activity) {
 
         TraineravaialListItemBinder.ViewHolder viewHolder = (TraineravaialListItemBinder.ViewHolder) view.getTag();
 
-        imageLoader.displayImage(entity.getUserImage(), viewHolder.userImage);
-        viewHolder.txtUserName.setText(entity.getUserName());
-        viewHolder.txtUserDetail.setText(entity.getUserMessage());
+        imageLoader.displayImage(entity.getProfile_image(), viewHolder.userImage);
+        viewHolder.txtUserName.setText(entity.getFirst_name()+" "+entity.getLast_name());
+        viewHolder.txtUserDetail.setText(entity.getSpeciality());
 
     }
 
