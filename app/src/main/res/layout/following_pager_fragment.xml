@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context="com.app.ace.fragments.FollowingFragment"
     >
 
     <!--<android.support.v7.widget.Toolbar
@@ -23,20 +24,17 @@
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabTextColor="@color/lightish_grey"
         app:tabSelectedTextColor="@color/top_bar_color1"
         app:tabIndicatorColor="@color/top_bar_color1"
         app:tabGravity="fill"
         app:tabMode="fixed"
         android:elevation="8dp"
-
         />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-
         android:layout_below="@id/tab_layout"/>
 
 </RelativeLayout>
