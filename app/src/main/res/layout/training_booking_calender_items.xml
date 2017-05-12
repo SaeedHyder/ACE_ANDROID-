@@ -100,7 +100,7 @@
             />
 
         <com.app.ace.ui.views.AnyTextView
-            android:id="@+id/txtTo"
+            android:id="@+id/txtTo1"
             android:layout_width="@dimen/x75"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/x15"
@@ -131,7 +131,7 @@
             />
 
         <com.app.ace.ui.views.AnyTextView
-            android:id="@+id/txtcenter"
+            android:id="@+id/txtcenter1"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/x5"
@@ -145,7 +145,7 @@
             />
 
         <com.app.ace.ui.views.AnyTextView
-            android:id="@+id/txtFrom"
+            android:id="@+id/txtFrom1"
             android:layout_width="@dimen/x75"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/x15"
@@ -201,7 +201,7 @@
             android:background="@drawable/text" />
 
         <com.app.ace.ui.views.AnyTextView
-            android:id="@+id/txtIncre"
+            android:id="@+id/txtIncre1"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/x10"

@@ -164,6 +164,8 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     AnyTextView txt_LocationProfileFrag;
     private ImageLoader imageLoader;
 
+    String Trainer,Trainee;
+
     public static String USER_ID = "User_Id";
     String user_id;
     int rating=5;
@@ -230,6 +232,8 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
                     if (response.body().getResult().getUser_type().equalsIgnoreCase(AppConstants.trainer)) {
 
+                        Trainer=AppConstants.trainer;
+
                         if (response.body().getResult().getId() == Integer.parseInt(prefHelper.getUserId())) {
                             btn_edit.setVisibility(View.VISIBLE);
                             btn_follow.setVisibility(View.GONE);
@@ -285,6 +289,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             txt_postCount.setText(response.body().getResult().getPosts_count());
                             txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
                             txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
+                            rbAddRating.setScore(response.body().getResult().getRating());
 
                             ShowUserPosts(response.body().getResult().getPosts());
                         }
@@ -324,6 +329,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             txt_postCount.setText(response.body().getResult().getPosts_count());
                             txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
                             txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
+                            rbAddRating.setScore(response.body().getResult().getRating());
                             ShowUserPosts(response.body().getResult().getPosts());
                         }
                     }
@@ -576,8 +582,8 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
             case R.id.iv_Calander:
 
-                if (AppConstants.is_show_trainer) {
-                    getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(), "TrainerBookingCalendarFragment");
+                if (Trainer.contains("trainer")) {
+                    getDockActivity().addDockableFragment(TrainingBookingCalenderFragment.newInstance(), "TrainingBookingCalenderFragment");
 
                 } else {
                     getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(), "TraineeScheduleFragment");
