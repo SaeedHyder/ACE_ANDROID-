@@ -67,6 +67,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
     boolean is_liked1=true;
     int count =0;
     int x,y=0;
+    int postId;
     SetHomeUpdatedData setHomeUpdatedData;
 
 
@@ -89,7 +90,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
         return new HomeFragmentItemBinder.ViewHolder(view);
     }
 
-     int postId;
+
 
 
 
@@ -182,11 +183,11 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
 
             viewHolder.txt_commenter_Name.setVisibility(View.VISIBLE);
             viewHolder.txt_commenter_Name.setPadding(0,0,0,15);
-            viewHolder.txt_commenter_Name.setText(homeListDataEnt.getCommentsArray().get(homeListDataEnt.getCommentsArray().size() - 1).getFirst_name()+" "+homeListDataEnt.getCommentsArray().get(homeListDataEnt.getCommentsArray().size() - 1).getLast_name());
+            viewHolder.txt_commenter_Name.setText(homeListDataEnt.getCommentsArray().get(0).getFirst_name()+" "+homeListDataEnt.getCommentsArray().get(0).getLast_name());
 
             viewHolder.txt_comment.setVisibility(View.VISIBLE);
             viewHolder.txt_comment.setPadding(0,0,0,15);
-            viewHolder.txt_comment.setText(homeListDataEnt.getCommentsArray().get(homeListDataEnt.getCommentsArray().size() - 1).getComment_text());
+            viewHolder.txt_comment.setText(homeListDataEnt.getCommentsArray().get(0).getComment_text());
         }
         else
 

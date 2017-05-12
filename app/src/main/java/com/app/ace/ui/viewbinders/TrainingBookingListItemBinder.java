@@ -5,16 +5,16 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateUtils;
 import android.view.View;
 
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
 import com.app.ace.entities.TrainingBookingCalenderItem;
-import com.app.ace.fragments.TrainingBookingCalenderFragment;
 import com.app.ace.helpers.DateHelper;
+import com.app.ace.helpers.Datedialoghelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.NumberPicker;
 import com.app.ace.interfaces.TrainingBooking;
@@ -26,13 +26,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-
-import static com.app.ace.R.id.numberPicker1;
-import static com.app.ace.R.id.time;
-import static com.app.ace.R.id.txt;
-import static com.app.ace.R.id.txtTo;
-import static com.app.ace.R.id.txtback;
-
 /**
  * Created by saeedhyder on 4/7/2017.
  */
@@ -42,7 +35,7 @@ public class TrainingBookingListItemBinder extends ViewBinder<TrainingBookingCal
     Context context;
     DockActivity dockActivity;
     TrainingBooking trainingbooking;
-    public String txtTo,txtFrom,txt,txtSecTo,txtSecFrom,txtThirdFrom,txtThirdTo,selectedDay;
+    public String txtTo,txtFrom,txtSecTo,txtSecFrom,txtThirdFrom,txtThirdTo,selectedDay;
     String prevDay=null;
 
     List<String> timeArray=new ArrayList();
@@ -83,16 +76,20 @@ public class TrainingBookingListItemBinder extends ViewBinder<TrainingBookingCal
 
         if(entity.getTxtDayDate().contains("Sat")) {
             viewHolder.txtDayDate.setTextColor(R.color.red);
+            //viewHolder.txtDayDate.getResources().getColor(R.color.red);
             viewHolder.txtDayDate.setText(date);
         }
         else if(entity.getTxtDayDate().contains("Sun"))
         {
             viewHolder.txtDayDate.setTextColor(R.color.red);
+           // viewHolder.txtDayDate.getResources().getColor(R.color.red);
             viewHolder.txtDayDate.setText(date);
         }
         else
         {
+
             viewHolder.txtDayDate.setTextColor(R.color.black);
+
             viewHolder.txtDayDate.setText(date);
         }
       //  viewHolder.txtTo.setText(entity.getTxtTo());
@@ -109,6 +106,7 @@ public class TrainingBookingListItemBinder extends ViewBinder<TrainingBookingCal
                 //openToTimePickerDialog(viewHolder.txtTo);
 
                numberPicker.UpdateTime(viewHolder.txtTo);
+
                // viewHolder.txtTo.setText(time+":00");
 
                 numberPicker.PressBtn();

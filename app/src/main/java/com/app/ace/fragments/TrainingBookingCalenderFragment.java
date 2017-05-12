@@ -1,16 +1,17 @@
 package com.app.ace.fragments;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.NumberPicker;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -18,19 +19,15 @@ import com.app.ace.R;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.ScheduleTime;
 import com.app.ace.entities.TrainerBookingCalendarJson;
-import com.app.ace.entities.TrainingBookingCalenderItem;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.Datedialoghelper;
 import com.app.ace.helpers.UIHelper;
-import com.app.ace.interfaces.TrainingBooking;
+import com.app.ace.interfaces.SetTimeDataOnTextView;
 import com.app.ace.retrofit.GsonFactory;
-import com.app.ace.ui.adapters.CalendarArrayListAdapter;
-import com.app.ace.ui.viewbinders.TrainingBookingListItemBinder;
 import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
-import com.github.jhonnyx2012.horizontalpicker.DatePickerListener;
 
-import org.joda.time.DateTime;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -46,6 +43,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+
+import static com.app.ace.R.id.SecondtxtFrom;
+import static com.app.ace.R.id.SecondtxtTo;
+import static com.app.ace.R.id.ThirdtxtFrom;
+import static com.app.ace.R.id.ThirdtxtTo;
+import static com.app.ace.R.id.textView;
+import static com.app.ace.R.id.txt;
+import static com.app.ace.R.id.txtDayDate;
+import static com.app.ace.R.id.txtFrom;
 import static java.lang.Integer.parseInt;
 
 
@@ -53,14 +59,18 @@ import static java.lang.Integer.parseInt;
  * Created by saeedHyder on 4/7/2017.
  */
 
-public class TrainingBookingCalenderFragment extends BaseFragment implements DatePickerListener, TrainingBooking, View.OnClickListener, com.app.ace.interfaces.NumberPicker {
+public class TrainingBookingCalenderFragment extends BaseFragment implements View.OnClickListener,SetTimeDataOnTextView {
 
-    @InjectView(R.id.avail)
-    AnyTextView avail;
 
 
     @InjectView(R.id.iv_Home)
     private ImageView iv_Home;
+
+    @InjectView(R.id.SecondAvail)
+    LinearLayout SecondAvail;
+
+    @InjectView(R.id.ThirdAvail)
+    LinearLayout ThirdAvail;
 
     @InjectView(R.id.iv_Calander)
     private ImageView iv_Calander;
@@ -68,55 +78,82 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
     @InjectView(R.id.iv_profile)
     private ImageView iv_profile;
 
+    @InjectView(R.id.SelectDatecalendar)
+    ImageView SelectDatecalendar;
 
-    @InjectView(R.id.lv_trainingBokingCalender)
-    private ListView lv_trainingBokingCalender;
+    @InjectView(R.id.txt_Date)
+    AnyTextView txt_Date;
 
-    @InjectView (R.id.numberPicker1)
-    NumberPicker numberPicker1;
+    @InjectView(R.id.sp_weeks)
+    Spinner sp_weeks;
 
-    @InjectView(R.id.btn_ok)
-    Button btn_ok;
+    @InjectView(R.id.txtTo)
+    AnyTextView txtTo;
 
-    ArrayList<String> days;
+    @InjectView(R.id.txtFrom)
+    AnyTextView txtFrom;
 
-    @InjectView(R.id.sp_month)
-    Spinner sp_month;
+    @InjectView(R.id.SecondtxtTo)
+    AnyTextView SecondtxtTo;
+
+    @InjectView(R.id.SecondtxtFrom)
+    AnyTextView SecondtxtFrom;
+
+    @InjectView(R.id.ThirdtxtTo)
+    AnyTextView ThirdtxtTo;
+
+    @InjectView(R.id.ThirdtxtFrom)
+    AnyTextView ThirdtxtFrom;
+
+    @InjectView(R.id.txtIncre)
+    ImageView txtIncre;
+
+    @InjectView(R.id.SecondtxtIncre)
+    ImageView SecondtxtIncre;
+
+    @InjectView(R.id.ThirdtxtIncre)
+    ImageView ThirdtxtIncre;
+
+
     String month;
     int monthValue;
     int monthDateValue;
+    ArrayList<String> days;
     int oldValue;
+    Object textView ;
+
+    String TimeSelected;
+
+    Calendar calendar ;
+
+    int Year, Month, Day ;
 
 
     TrainerBookingCalendarJson trainerBookingCalendarJson;
     ArrayList<TrainerBookingCalendarJson> trainerBookingCalendarJsonCollection;
 
+    HashMap<String,List<String>> ScheduleHashMap=new HashMap<>();
+    List<String> timeArray=new ArrayList();
 
-    TrainingBookingListItemBinder trainingBookingListItemBinder;
-    ScheduleTime scheduleTime;
+    public String StxtTo,StxtFrom,txtSecTo,txtSecFrom,txtThirdFrom,txtThirdTo,selectedDay;
+    public String prevDay=null;
+    public Date dateSpecified;
+    public Date EndDate;
+
+
     String trainerScheduleJson;
 
 
-
-
-
-    private CalendarArrayListAdapter<TrainingBookingCalenderItem> adapter;
-
-    private ArrayList<TrainingBookingCalenderItem> userCollection = new ArrayList<>();
-
     public static TrainingBookingCalenderFragment newInstance() {
-
-        //this.trainingBookingListItemBinder=trainingBookingListItemBinder;
 
         return new TrainingBookingCalenderFragment();
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        trainingBookingListItemBinder = new TrainingBookingListItemBinder(getDockActivity(), this,this);
-        adapter = new CalendarArrayListAdapter<TrainingBookingCalenderItem>(getDockActivity(), trainingBookingListItemBinder);
     }
 
     @Override
@@ -128,140 +165,87 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SpinnerData();
-
         days = DaysOfMonth(monthValue);
+        setDatePickerVariables();
 
-        getSearchUserData();
-        // addList();
+        setEndTimeSpinner();
+
         setListener();
+    }
 
 
+
+    private void ShowRadioListDialog() {
+
+        final DialogBox successPopUp  = DialogBox.newInstance();
+        successPopUp.setDocActivityContext(getDockActivity());
+        successPopUp.SetTimeDataOnTextViewContext(this);
+        successPopUp.setPopupData("select",true);
+        successPopUp.show(getDockActivity().getSupportFragmentManager(), "listDilog");
 
     }
 
-    private void numberPicker(final AnyTextView txtTo) {
+    private void setEndTimeSpinner() {
+        List<String> timeDuration = new ArrayList<String>();
+        timeDuration.add("2 Week");
+        timeDuration.add("1 Month");
+        timeDuration.add("3 Months");
+        timeDuration.add("6 Months");
 
-        numberPicker1.setMinValue(0);
-        numberPicker1.setMaxValue(24);
-        numberPicker1.setWrapSelectorWheel(true);
-
-        numberPicker1.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                // TODO Auto-generated method stub
-
-                String Old = "Old Value : ";
-                String New = "New Value : ";
-                //tv1.setText(oldVal +":00");
-                txtTo.setText(newVal+":00");
-                //Toast.makeText(getDockActivity(),String.valueOf(newVal),Toast.LENGTH_LONG).show();
-
-
-            }
-        });
-
+        ArrayAdapter<String> TimeDurationAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, timeDuration);
+        TimeDurationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_weeks.setAdapter(TimeDurationAdapter);
     }
 
-    private void SpinnerData() {
-
-        List<String> months = new ArrayList<String>();
-        months.add("January");
-        months.add("February");
-        months.add("March");
-        months.add("April");
-        months.add("May");
-        months.add("June");
-        months.add("July");
-        months.add("August");
-        months.add("September");
-        months.add("October");
-        months.add("November");
-        months.add("December");
-
-       // ArrayAdapter<String> monthAdapter = new ArrayAdapter<String>(getDockActivity(), R.layout.spinner, months);
-      //  monthAdapter.setDropDownViewResource(R.layout.spinner);
-        ArrayAdapter<String> monthAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_dropdown_item, months);
-        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        sp_month.setAdapter(monthAdapter);
-
-
-        sp_month.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                month = sp_month.getSelectedItem().toString();
-
-                if (month.contains("January")) {
-                    monthValue = 0;
-                    days = DaysOfMonth(monthValue);
-                    getSearchUserData();
-                }
-                if (month.contains("February")) {
-                    monthValue = 1;
-                    days = DaysOfMonth(monthValue);
-                    getSearchUserData();
-                }
-                if (month.contains("March")) {
-                    monthValue = 2;
-                    days = DaysOfMonth(monthValue);
-                    getSearchUserData();
-                }
-                if (month.contains("April")) {
-                    monthValue = 3;
-                    days = DaysOfMonth(monthValue);
-                    getSearchUserData();
-                }
-                if (month.contains("May")) {
-                    monthValue = 4;
-                    days = DaysOfMonth(monthValue);
-                    getSearchUserData();
-                }
-                if (month.contains("June")) {
-                    monthValue = 5;
-                    days = DaysOfMonth(monthValue);
-                    getSearchUserData();
-                }
-                if (month.contains("July")) {
-                    monthValue = 6;
-                    days = DaysOfMonth(monthValue);
-                    getSearchUserData();
-                }
-                if (month.contains("August")) {
-                    monthValue = 7;
-                    days = DaysOfMonth(monthValue);
-                    getSearchUserData();
-                }
-                if (month.contains("September")) {
-                    monthValue = 8;
-                    days = DaysOfMonth(monthValue);
-                    getSearchUserData();
-                }
-                if (month.contains("October")) {
-                    monthValue = 9;
-                    days = DaysOfMonth(monthValue);
-                    getSearchUserData();
-                }
-                if (month.contains("November")) {
-                    monthValue = 10;
-                    days = DaysOfMonth(monthValue);
-                    getSearchUserData();
-                }
-                if (month.contains("December")) {
-                    monthValue = 11;
-                    days = DaysOfMonth(monthValue);
-                    getSearchUserData();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+    private void setDatePickerVariables() {
+        calendar = Calendar.getInstance();
+        Year = calendar.get(Calendar.YEAR) ;
+        Month = calendar.get(Calendar.MONTH);
+        Day = calendar.get(Calendar.DAY_OF_MONTH);
     }
+
+
+   void ShowDateDialog(final AnyTextView txtView)
+   {
+       final Datedialoghelper datedialoghelper =  new Datedialoghelper();
+       datedialoghelper.initDateDialog(getDockActivity(), Year, Month, Day, new DatePickerDialog.OnDateSetListener() {
+           @Override
+           public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+               SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+               Date todayDate = null;
+               try {
+                   todayDate = sdf.parse(sdf.format(new Date()));
+               } catch (ParseException e) {
+                   e.printStackTrace();
+               }
+
+               calendar.set(Calendar.YEAR, year);
+               calendar.set(Calendar.MONTH, month);
+               calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+               dateSpecified = calendar.getTime();
+
+                   if(dateSpecified.before(todayDate))
+                   {
+                       Toast.makeText(getDockActivity(),"Date Should Not Be Less Than Current Date",Toast.LENGTH_LONG).show();
+                   }
+                   else
+                   {
+                       txtView.setText(dayOfMonth+"/"+month+"/"+year);
+                   }
+
+           }
+       },"TextTo");
+       datedialoghelper.showDate();
+   }
+
+   public String parseDate(String dateSpecified)
+   {
+       String[] SplitDate=dateSpecified.split(" ");
+       String day=SplitDate[0];
+
+       return day;
+   }
+
 
     private ArrayList<String> DaysOfMonth(int monthValue) {
 
@@ -282,7 +266,6 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
 
         return allDays;
 
-
     }
 
     private void setListener() {
@@ -290,33 +273,19 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
         iv_Home.setOnClickListener(this);
         iv_Calander.setOnClickListener(this);
         iv_profile.setOnClickListener(this);
-        avail.setOnClickListener(this);
-        btn_ok.setOnClickListener(this);
+        txtTo.setOnClickListener(this);
+        txtFrom.setOnClickListener(this);
+        SecondtxtTo.setOnClickListener(this);
+        SecondtxtFrom.setOnClickListener(this);
+        ThirdtxtTo.setOnClickListener(this);
+        ThirdtxtFrom.setOnClickListener(this);
+        SelectDatecalendar.setOnClickListener(this);
+        txtIncre.setOnClickListener(this);
+        SecondtxtIncre.setOnClickListener(this);
+        ThirdtxtIncre.setOnClickListener(this);
 
     }
 
-
-    private void getSearchUserData() {
-        userCollection = new ArrayList<>();
-        for (String item : days) {
-            userCollection.add(new TrainingBookingCalenderItem(item, "00:00", "00:00", "00:00", "00:00","00:00", "00:00"));
-        }
-        //userCollection.add(new DetailedScreenItem("Training","BodyBuilding"));
-        //addList();
-      /*  userCollection= new ArrayList<>();
-        userCollection.add(new TrainingBookingCalenderItem("6:00","8:00"));
-        userCollection.add(new TrainingBookingCalenderItem("6:00","8:00"));*/
-
-        bindData(userCollection);
-    }
-
-    private void bindData(ArrayList<TrainingBookingCalenderItem> userCollection) {
-        adapter.clearList();
-        adapter.addAll(userCollection);
-        lv_trainingBokingCalender.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-
-    }
 
     private void createTrainerSchedule(ArrayList<TrainerBookingCalendarJson> jsonObject)
     {
@@ -382,35 +351,19 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
             @Override
             public void onClick(View v) {
 
-                trainingBookingListItemBinder.getTimeArray();
-                setDataInJson(trainingBookingListItemBinder.getTimeArray());
-                createTrainerSchedule(trainerBookingCalendarJsonCollection);
+              //  trainingBookingListItemBinder.getTimeArray();
+               // setDataInJson(trainingBookingListItemBinder.getTimeArray());
+                setDataInJson(ScheduleHashMap);
+                //createTrainerSchedule(trainerBookingCalendarJsonCollection);
             }
         });
         titleBar.setSubHeading("Trainer Calendar");
 
     }
 
-    @Override
-    public void onDateSelected(DateTime dateSelected) {
-    }
 
-    @Override
-    public void LastAvailtxt() {
-        avail.setText("3rd Availabilty");
 
-    }
 
-    @Override
-    public void backList() {
-        avail.setText("Availabilty");
-//getSearchUserData();
-    }
-
-    @Override
-    public void textList() {
-        avail.setText("Second Availabilty");
-    }
 
     @Override
     public void onClick(View view) {
@@ -430,18 +383,233 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
 
             case R.id.iv_Home:
 
-
                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
 
+                break;
 
+            case R.id.txtTo:
+                ShowRadioListDialog();
+                textView = txtTo;
+
+                txtTo.addTextChangedListener(new TextWatcher() {
+
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        selectedDay = parseDate(dateSpecified.toString());
+
+                            StxtTo = s.toString();
+                            timeArray.add(s.toString());
+                            ScheduleHashMap.put(selectedDay, timeArray);
+
+                    }
+                });
 
 
                 break;
+
+            case R.id.txtFrom:
+                ShowRadioListDialog();
+                textView = txtFrom;
+
+                txtFrom.addTextChangedListener(new TextWatcher() {
+
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        selectedDay = parseDate(dateSpecified.toString());
+
+                        StxtTo = s.toString();
+                        timeArray.add(s.toString());
+                        ScheduleHashMap.put(selectedDay, timeArray);
+
+                    }
+                });
+                break;
+
+            case R.id.SecondtxtTo:
+                ShowRadioListDialog();
+                textView = SecondtxtTo;
+
+                SecondtxtTo.addTextChangedListener(new TextWatcher() {
+
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        selectedDay = parseDate(dateSpecified.toString());
+
+                        StxtTo = s.toString();
+                        timeArray.add(s.toString());
+                        ScheduleHashMap.put(selectedDay, timeArray);
+                    }
+                });
+
+
+                break;
+
+            case R.id.SecondtxtFrom:
+                ShowRadioListDialog();
+                textView = SecondtxtFrom;
+
+                SecondtxtFrom.addTextChangedListener(new TextWatcher() {
+
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        selectedDay = parseDate(dateSpecified.toString());
+
+                        StxtTo = s.toString();
+                        timeArray.add(s.toString());
+                        ScheduleHashMap.put(selectedDay, timeArray);
+
+                    }
+                });
+
+                break;
+
+
+            case R.id.ThirdtxtTo:
+                ShowRadioListDialog();
+                textView = ThirdtxtTo;
+
+                ThirdtxtTo.addTextChangedListener(new TextWatcher() {
+
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        selectedDay = parseDate(dateSpecified.toString());
+
+                        StxtTo = s.toString();
+                        timeArray.add(s.toString());
+                        ScheduleHashMap.put(selectedDay, timeArray);
+
+                    }
+                });
+                break;
+
+            case R.id.ThirdtxtFrom:
+                ShowRadioListDialog();
+                textView = ThirdtxtFrom;
+
+                ThirdtxtFrom.addTextChangedListener(new TextWatcher() {
+
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        selectedDay = parseDate(dateSpecified.toString());
+
+
+                            StxtTo = s.toString();
+                            timeArray.add(s.toString());
+                            ScheduleHashMap.put(selectedDay, timeArray);
+
+                    }
+
+                });
+
+                break;
+
+            case R.id.SelectDatecalendar:
+                ShowDateDialog(txt_Date);
+                break;
+
+            case R.id.txtIncre:
+                SecondAvail.setVisibility(View.VISIBLE);
+                break;
+
+            case R.id.SecondtxtIncre:
+                SecondAvail.setVisibility(View.VISIBLE);
+                ThirdAvail.setVisibility(View.VISIBLE);
+                ThirdtxtIncre.setVisibility(View.INVISIBLE);
+                break;
+
 
 
         }
 
     }
+
+    public Date EndDate(String days)
+    {
+        if(days.contains("2 weeks")) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(dateSpecified);
+            cal.add(Calendar.DATE, 14);
+             EndDate = cal.getTime();
+        }
+
+        if(days.contains("1 Month")) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(dateSpecified);
+            cal.add(Calendar.DATE, 30);
+            EndDate = cal.getTime();
+        }
+        if(days.contains("3 Months")) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(dateSpecified);
+            cal.add(Calendar.DATE, 90);
+            EndDate = cal.getTime();
+        }
+        if(days.contains("6 Months")) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(dateSpecified);
+            cal.add(Calendar.DATE, 180);
+            EndDate = cal.getTime();
+        }
+
+        return EndDate;
+
+    }
+
+
 
     public void setDataInJson(HashMap<String, List<String>> timeArray)
 {
@@ -458,11 +626,18 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
      for( HashMap.Entry<String, List<String>> entry : timeArray.entrySet())
      {
 
-         String[] days=entry.getKey().replace(" ","").split(",");
-         String day=days[1];
-         String month=days[2];
-         String monthName=days[3];
+
+         String Selecteddate=dateSpecified.toString();
+         String[] days=Selecteddate.split(" ");
+         String monthName=days[1];
+         int day= Integer.parseInt(days[2]);
+
+         //int day=dateSpecified.getDay();
+         int month=dateSpecified.getMonth();
+
          String date="2017-"+month+"-"+day;
+
+         Date EndDate1=EndDate("1 Month");
 
          trainerBookingCalendarJson = new TrainerBookingCalendarJson();
          trainerBookingCalendarJson.setTrainer_id(parseInt(prefHelper.getUserId()));
@@ -582,7 +757,6 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
      }
 
 
-
      trainerScheduleJson = GsonFactory.getConfiguredGson().toJson(trainerBookingCalendarJsonCollection);
 
     } catch (Exception e) {
@@ -592,7 +766,6 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
 
 
     }
-
 
 
     int TimeDifference(String startTime,String endTime)
@@ -619,32 +792,19 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Dat
         return hours;
     }
 
+
+
     @Override
-    public void UpdateTime(AnyTextView txtTo) {
-
-        lv_trainingBokingCalender.setVisibility(View.GONE);
-        numberPicker1.setVisibility(View.VISIBLE);
-        btn_ok.setVisibility(View.VISIBLE);
-        numberPicker(txtTo);
-
+    public void setData(String itemPosition)
+    {
+        AnyTextView textView= (AnyTextView) this.textView;
+        textView.setText(itemPosition);
 
     }
 
-    @Override
-    public void PressBtn() {
-
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                numberPicker1.setVisibility(View.GONE);
-                btn_ok.setVisibility(View.GONE);
-                lv_trainingBokingCalender.setVisibility(View.VISIBLE);
 
 
-            }
-        });
-    }
+
 }
 
 

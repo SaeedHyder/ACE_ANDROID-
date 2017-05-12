@@ -83,6 +83,7 @@ dependencies {
     compile 'com.makeramen:roundedimageview:2.2.1'
     compile 'com.weiwangcn.betterspinner:library-material:1.1.0'
     compile 'com.kbeanie:image-chooser-library:1.5.8@aar'
+    compile 'com.github.flavienlaurent.datetimepicker:library:0.0.2'
 
     compile project(':horizontal-picker')
     compile 'com.squareup.retrofit2:retrofit:2.0.2'

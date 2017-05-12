@@ -657,6 +657,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
                 m.setVideoChooserListener(this);
 
                 m.submit(ChooserType.REQUEST_PICK_VIDEO, IntentUtils.getIntentForMultipleSelection(intent));
+
             }
         }
     }

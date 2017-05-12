@@ -25,7 +25,7 @@ public class DateHelper {
 
 	/**
 	 * Compare Dates to return the difference in formated fashion. Since it
-	 * access values and requires context, it shoudnt be put in DateHelper.
+	 * access values and requires context, it shoudnt be put in Datedialoghelper.
 	 * 
 	 * Yet to decide the best place for this context dependendent code.
 	 * <p>

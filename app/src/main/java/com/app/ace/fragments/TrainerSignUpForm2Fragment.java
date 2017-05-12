@@ -1,9 +1,6 @@
 package com.app.ace.fragments;
 
 import android.app.TimePickerDialog;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -13,25 +10,23 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.app.ace.R;
 import com.app.ace.activities.MainActivity;
 import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
-import com.app.ace.entities.TwitterUser;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.global.SignupFormConstants;
 import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.DateHelper;
+import com.app.ace.helpers.Datedialoghelper;
 import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.IGetLocation;
 import com.app.ace.ui.dialogs.DialogFactory;
 import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.AnyTextView;
-import com.app.ace.ui.views.ExpandableGridView;
 import com.app.ace.ui.views.TitleBar;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
@@ -49,9 +44,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
-
-import static android.R.attr.path;
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by khan_muhammad on 3/13/2017.
