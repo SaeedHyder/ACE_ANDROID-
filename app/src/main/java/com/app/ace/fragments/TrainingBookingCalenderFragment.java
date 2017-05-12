@@ -135,10 +135,10 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     HashMap<String,List<String>> ScheduleHashMap=new HashMap<>();
     List<String> timeArray=new ArrayList();
 
-    public String StxtTo,StxtFrom,txtSecTo,txtSecFrom,txtThirdFrom,txtThirdTo,selectedDay;
-    public String prevDay=null;
+    public String selectedDay;
     public Date dateSpecified;
     public Date EndDate;
+    public String JsonDate;
 
 
     String trainerScheduleJson;
@@ -230,6 +230,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                    }
                    else
                    {
+                       JsonDate=year+"-"+month+"-"+dayOfMonth;
                        txtView.setText(dayOfMonth+"/"+month+"/"+year);
                    }
 
@@ -351,9 +352,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
             @Override
             public void onClick(View v) {
 
-              //  trainingBookingListItemBinder.getTimeArray();
-               // setDataInJson(trainingBookingListItemBinder.getTimeArray());
-                setDataInJson(ScheduleHashMap);
+                     setDataInJson(ScheduleHashMap);
                 //createTrainerSchedule(trainerBookingCalendarJsonCollection);
             }
         });
@@ -406,7 +405,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                     public void afterTextChanged(Editable s) {
                         selectedDay = parseDate(dateSpecified.toString());
 
-                            StxtTo = s.toString();
+
                             timeArray.add(s.toString());
                             ScheduleHashMap.put(selectedDay, timeArray);
 
@@ -435,7 +434,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                     public void afterTextChanged(Editable s) {
                         selectedDay = parseDate(dateSpecified.toString());
 
-                        StxtTo = s.toString();
+
                         timeArray.add(s.toString());
                         ScheduleHashMap.put(selectedDay, timeArray);
 
@@ -462,7 +461,6 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                     public void afterTextChanged(Editable s) {
                         selectedDay = parseDate(dateSpecified.toString());
 
-                        StxtTo = s.toString();
                         timeArray.add(s.toString());
                         ScheduleHashMap.put(selectedDay, timeArray);
                     }
@@ -490,7 +488,6 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                     public void afterTextChanged(Editable s) {
                         selectedDay = parseDate(dateSpecified.toString());
 
-                        StxtTo = s.toString();
                         timeArray.add(s.toString());
                         ScheduleHashMap.put(selectedDay, timeArray);
 
@@ -519,7 +516,6 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                     public void afterTextChanged(Editable s) {
                         selectedDay = parseDate(dateSpecified.toString());
 
-                        StxtTo = s.toString();
                         timeArray.add(s.toString());
                         ScheduleHashMap.put(selectedDay, timeArray);
 
@@ -547,7 +543,6 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                         selectedDay = parseDate(dateSpecified.toString());
 
 
-                            StxtTo = s.toString();
                             timeArray.add(s.toString());
                             ScheduleHashMap.put(selectedDay, timeArray);
 
@@ -630,12 +625,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
          String Selecteddate=dateSpecified.toString();
          String[] days=Selecteddate.split(" ");
          String monthName=days[1];
-         int day= Integer.parseInt(days[2]);
 
-         //int day=dateSpecified.getDay();
-         int month=dateSpecified.getMonth();
-
-         String date="2017-"+month+"-"+day;
 
          Date EndDate1=EndDate("1 Month");
 
@@ -649,7 +639,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
          String[] timings=data.split(",");
 
 
-         trainerBookingCalendarJson.setDate(date.toString());
+         trainerBookingCalendarJson.setDate(JsonDate);
 
          int i=1;
          int hours;
