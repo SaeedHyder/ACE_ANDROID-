@@ -7,6 +7,7 @@ import android.util.Log;
 
 
 import com.app.ace.helpers.BasePreferenceHelper;
+import com.app.ace.helpers.TokenUpdater;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
@@ -23,7 +24,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         super.onTokenRefresh();
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-
+        preferenceHelper = new BasePreferenceHelper(getApplicationContext());
         // Saving reg id to shared preferences
         storeRegIdInPref(refreshedToken);
 
@@ -39,10 +40,11 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private void sendRegistrationToServer(final String token) {
         // sending gcm token to server
         Log.e(TAG, "sendRegistrationToServer: " + token);
+        TokenUpdater.getInstance().UpdateToken(getApplicationContext(),preferenceHelper.getUserId(),"Android",token);
     }
 
     private void storeRegIdInPref(String token) {
-        preferenceHelper = new BasePreferenceHelper(getApplicationContext());
+
         preferenceHelper.setFirebase_TOKEN(token);
     }
 }

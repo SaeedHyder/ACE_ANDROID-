@@ -85,6 +85,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
             if (getIntent().getExtras() != null)
                 isNotificationTap = getIntent().getExtras().getBoolean("tapped");
 
+
         }
 
 

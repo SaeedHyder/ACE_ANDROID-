@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -18,16 +20,23 @@ import android.widget.Toast;
 
 import com.app.ace.R;
 import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.ScheduleEnt;
 import com.app.ace.entities.ScheduleTime;
 import com.app.ace.entities.TrainerBookingCalendarJson;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.Datedialoghelper;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.SetTimeDataOnTextView;
 import com.app.ace.retrofit.GsonFactory;
+import com.app.ace.ui.ArrayListExpandableAdapter;
+import com.app.ace.ui.viewbinders.ScheduleExpendableList;
 import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+
+import org.joda.time.DateTime;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,6 +46,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,6 +68,8 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     public String prevDay = null;
     public Date dateSpecified;
     public Date EndDate;
+
+    ExpandableListView expandablelistview;
     @InjectView(R.id.SecondAvail)
     LinearLayout SecondAvail;
     @InjectView(R.id.ThirdAvail)
@@ -94,18 +107,26 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     String TimeSelected;
     Calendar calendar;
     int Year, Month, Day;
-    TrainerBookingCalendarJson trainerBookingCalendarJson;
+    int mMonth = 0, mDay = 0, mYear = 0;
+    TrainerBookingCalendarJson trainerBookingCalendarJson = new TrainerBookingCalendarJson();
     ArrayList<TrainerBookingCalendarJson> trainerBookingCalendarJsonCollection;
-    HashMap<String,HashMap<String, List<String>>> datemap = new HashMap<>();
-    HashMap<String,String> ScheduleHashMap = new HashMap<>();
+    HashMap<String, HashMap<String, List<String>>> datemap = new HashMap<>();
+    HashMap<Integer, String> ScheduleHashMap = new HashMap<>();
+    ArrayList<String> alreadySelectedTime = new ArrayList<>();
     List<String> timeArray = new ArrayList();
     String trainerScheduleJson;
+    int LastSelectHour = 0;
+    ArrayList<String> listDataHeader;
+    HashMap<String, ArrayList<String>> listDataChild;
+    ArrayListExpandableAdapter<String, HashMap<String, ArrayList<String>>> adapter;
+    ScheduleExpendableList listItemBinder;
     @InjectView(R.id.iv_Home)
     private ImageView iv_Home;
     @InjectView(R.id.iv_Calander)
     private ImageView iv_Calander;
     @InjectView(R.id.iv_profile)
     private ImageView iv_profile;
+    private String spinerValue = "2 Week";
 
     public static TrainingBookingCalenderFragment newInstance() {
 
@@ -127,7 +148,9 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        expandablelistview = (ExpandableListView) view.findViewById(R.id.expandablelistview);
+        loadingStarted();
+        getSavedSchedule(prefHelper.getUserId());
         days = DaysOfMonth(monthValue);
         setDatePickerVariables();
 
@@ -136,6 +159,84 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
         setListener();
     }
 
+    private void getSavedSchedule(String userId) {
+        //  UIHelper.showShortToastInCenter(getDockActivity(), "asda" + prefHelper.getUserId());
+        Call<ResponseWrapper<ArrayList<ScheduleEnt>>> callback = webService.getSchedule(userId);
+        callback.enqueue(new Callback<ResponseWrapper<ArrayList<ScheduleEnt>>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<ArrayList<ScheduleEnt>>> call, Response<ResponseWrapper<ArrayList<ScheduleEnt>>> response) {
+
+                bindData(response.body().getResult());
+                loadingFinished();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<ArrayList<ScheduleEnt>>> call, Throwable t) {
+                Log.e("BoookingCalender", t.toString());
+                loadingFinished();
+            }
+        });
+    }
+
+    private void bindData(ArrayList<ScheduleEnt> result) {
+        listDataHeader = new ArrayList<String>();
+        listDataChild = new HashMap<String, ArrayList<String>>();
+        ArrayList<String> childData = new ArrayList<>();
+        if (result.size() <= 0) {
+            expandablelistview.setVisibility(View.GONE);
+        } else {
+            expandablelistview.setVisibility(View.VISIBLE);
+        }
+        int j = -1;
+        for (ScheduleEnt entity : result
+                ) {
+            j++;
+            if (entity.getStartDate() != null && entity.getEndDate() != null) {
+                String header = entity.getStartDate() + "," + entity.getEndDate();
+                listDataHeader.add(header);
+                if (!entity.getTimeStart1().equals("00:00:00") && !entity.getTimeEnd1().equals("00:00:00")) {
+                    childData.add(entity.getTimeStart1() + "," + entity.getTimeEnd1());
+                }
+                if (!entity.getTimeStart2().equals("00:00:00") && !entity.getTimeEnd2().equals("00:00:00")) {
+                    childData.add(entity.getTimeStart2() + "," + entity.getTimeEnd2());
+                }
+                if (!entity.getTimeStart3().equals("00:00:00") && !entity.getTimeEnd3().equals("00:00:00")) {
+                    childData.add(entity.getTimeStart3() + "," + entity.getTimeEnd3());
+                }
+
+                listDataChild.put(header, childData);
+                childData = new ArrayList<>();
+            }
+
+        }
+        bindView();
+    }
+
+    private void bindView() {
+        listItemBinder = new ScheduleExpendableList();
+        adapter = new ArrayListExpandableAdapter<>(getDockActivity(),
+                listDataHeader,
+                listDataChild,
+                listItemBinder);
+      /*  int width = getResources().getDisplayMetrics().widthPixels;
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            expandablelistview.setIndicatorBounds(width - getPixelValue(Math.round(getResources().getDimension(R.dimen.x10)))
+                    , width - getPixelValue(Math.round(getResources().getDimension(R.dimen.x5))));
+        } else {
+            expandablelistview.setIndicatorBoundsRelative(width - getPixelValue(Math.round(getResources().getDimension(R.dimen.x10))
+            ), width - getPixelValue(Math.round(getResources().getDimension(R.dimen.x5))));
+        }*/
+        expandablelistview.setChildDivider(getResources().getDrawable((R.drawable.line)));
+        expandablelistview.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
+    }
+
+    public int getPixelValue(int dp) {
+
+        final float scale = getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
+    }
 
     private void ShowRadioListDialog() {
 
@@ -148,15 +249,29 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     }
 
     private void setEndTimeSpinner() {
-        List<String> timeDuration = new ArrayList<String>();
+        final List<String> timeDuration = new ArrayList<String>();
         timeDuration.add("2 Week");
         timeDuration.add("1 Month");
         timeDuration.add("3 Months");
         timeDuration.add("6 Months");
-
+        EndDate = getEndDate(timeDuration.get(0));
         ArrayAdapter<String> TimeDurationAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, timeDuration);
         TimeDurationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_weeks.setAdapter(TimeDurationAdapter);
+        sp_weeks.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spinerValue = timeDuration.get(position);
+                EndDate = getEndDate(timeDuration.get(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                spinerValue = timeDuration.get(0);
+                EndDate = getEndDate(timeDuration.get(0));
+            }
+        });
+
     }
 
     private void setDatePickerVariables() {
@@ -168,8 +283,6 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
 
     void ShowDateDialog(final AnyTextView txtView) {
-
-
 
 
         DatePickerDialog dpd = DatePickerDialog.newInstance(
@@ -188,70 +301,25 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                         calendar.set(Calendar.MONTH, monthOfYear);
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                         dateSpecified = calendar.getTime();
-
+                        mMonth = monthOfYear;
+                        mDay = dayOfMonth;
+                        mYear = year;
                         if (dateSpecified.before(todayDate)) {
                             Toast.makeText(getDockActivity(), "Date Should Not Be Less Than Current Date", Toast.LENGTH_LONG).show();
                         } else {
-                            txtView.setText(dayOfMonth + "/" + month + "/" + year);
+                            if (txtView.getText().toString().equals(dayOfMonth + "/" + month + "/" + year)) {
+
+                            } else {
+                                txtView.setText(dayOfMonth + "/" + monthOfYear + "/" + year);
+                            }
+
                         }
                     }
                 }, Year, Month, Day
         );
         dpd.show(getFragmentManager(), "Datepickerdialog");
 
-        /*DatePickerDialog datePicker = new DatePickerDialog(getDockActivity(), new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date todayDate = null;
-                try {
-                    todayDate = sdf.parse(sdf.format(new Date()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
 
-                calendar.set(Calendar.YEAR, year);
-                calendar.set(Calendar.MONTH, month);
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                dateSpecified = calendar.getTime();
-
-                if (dateSpecified.before(todayDate)) {
-                    Toast.makeText(getDockActivity(), "Date Should Not Be Less Than Current Date", Toast.LENGTH_LONG).show();
-                } else {
-                    txtView.setText(dayOfMonth + "/" + month + "/" + year);
-                }
-
-            }
-        }, Year, Month, Day);
-        datePicker.show();*/
- /*      datedialoghelper.initDateDialog(getDockActivity(), Year, Month, Day, new DatePickerDialog.OnDateSetListener() {
-           @Override
-           public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-               SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-               Date todayDate = null;
-               try {
-                   todayDate = sdf.parse(sdf.format(new Date()));
-               } catch (ParseException e) {
-                   e.printStackTrace();
-               }
-
-               calendar.set(Calendar.YEAR, year);
-               calendar.set(Calendar.MONTH, month);
-               calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-               dateSpecified = calendar.getTime();
-
-                   if(dateSpecified.before(todayDate))
-                   {
-                       Toast.makeText(getDockActivity(),"Date Should Not Be Less Than Current Date",Toast.LENGTH_LONG).show();
-                   }
-                   else
-                   {
-                       txtView.setText(dayOfMonth+"/"+month+"/"+year);
-                   }
-
-           }
-       },"TextTo");
-       datedialoghelper.showDate();*/
     }
 
     public String parseDate(String dateSpecified) {
@@ -305,13 +373,12 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     private void createTrainerSchedule(ArrayList<TrainerBookingCalendarJson> jsonObject) {
         Call<ResponseWrapper> callBack = webService.createSchedule(
                 jsonObject);
-
         callBack.enqueue(new Callback<ResponseWrapper>() {
             @Override
             public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-
+                    loadingFinished();
                     //UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                     showBookingDialog();
 
@@ -322,6 +389,9 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
             @Override
             public void onFailure(Call<ResponseWrapper> call, Throwable t) {
+                loadingFinished();
+                System.out.println(t.toString());
+                Log.e("Calender", t.toString());
                 UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
             }
         });
@@ -352,21 +422,17 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
-        titleBar.showRepeatButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getDockActivity(), "Repeat", Toast.LENGTH_LONG).show();
-            }
-        });
+
 
         titleBar.showTickButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                loadingStarted();
                 //  trainingBookingListItemBinder.getTimeArray();
                 // setDataInJson(trainingBookingListItemBinder.getTimeArray());
-
-                setDataInJson(ScheduleHashMap);
+                Map<Integer, String> map = new TreeMap<Integer, String>(ScheduleHashMap);
+                // ScheduleHashMap =  new TreeMap<Integer, String>(ScheduleHashMap);
+                setDataInJson(map);
                 //createTrainerSchedule(trainerBookingCalendarJsonCollection);
             }
         });
@@ -374,6 +440,40 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
     }
 
+    private void ShowRepeatButton() {
+
+        getTitleBar().showRepeatButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                setupCalenderDialog();
+                v.invalidate();
+            }
+        });
+        getTitleBar().invalidate();
+
+
+    }
+
+    private void setupCalenderDialog() {
+        final DialogHelper dialog = new DialogHelper(getDockActivity());
+
+            EndDate = getEndDate(spinerValue);
+
+
+        dialog.initDialog(R.layout.dialog_repeat,EndDate);
+        dialog.setDuration(getDockActivity());
+
+
+        dialog.setSummitButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EndDate = dialog.dismissDialog();
+                System.out.println(EndDate.toString());
+            }
+        });
+        dialog.showDialog();
+    }
 
     @Override
     public void onClick(View view) {
@@ -398,145 +498,202 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                 break;
 
             case R.id.txtTo:
-                ShowRadioListDialog();
-                textView = txtTo;
+                if (dateSpecified != null) {
+                    ShowRadioListDialog();
+                    textView = txtTo;
 
-                txtTo.addTextChangedListener(new TextWatcher() {
+                    txtTo.addTextChangedListener(new TextWatcher() {
 
 
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            alreadySelectedTime.remove(txtTo.getText().toString());
+                        }
 
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    }
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        }
 
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                      addtoArray(s,"txtTo");
-                    }
-                });
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            System.out.println("asdasdasd");
+                            addtoArray(s, 1);
+                        }
 
+
+                    });
+                } else {
+                    UIHelper.showShortToastInCenter(getDockActivity(), "Select Start Date First");
+                }
 
                 break;
 
             case R.id.txtFrom:
-                ShowRadioListDialog();
-                textView = txtFrom;
+                if (checkorder(null, txtTo, 2)) {
+                    ShowRadioListDialog();
+                    textView = txtFrom;
 
-                txtFrom.addTextChangedListener(new TextWatcher() {
+                    txtFrom.addTextChangedListener(new TextWatcher() {
 
 
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            alreadySelectedTime.remove(txtFrom.getText().toString());
 
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    }
+                        }
 
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        checkorder(s,txtTo);
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        }
 
-                    }
-                });
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+
+                            checkorder(s, txtTo, 2);
+                            ShowRepeatButton();
+
+                        }
+
+                    });
+                }
                 break;
 
             case R.id.SecondtxtTo:
-                ShowRadioListDialog();
-                textView = SecondtxtTo;
+                if (checkprevious(txtTo, txtFrom)) {
 
-                SecondtxtTo.addTextChangedListener(new TextWatcher() {
+                    ShowRadioListDialog();
+                    textView = SecondtxtTo;
+
+                    SecondtxtTo.addTextChangedListener(new TextWatcher() {
+
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            alreadySelectedTime.remove(SecondtxtTo.getText().toString());
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                            if (checkprevious(txtTo, txtFrom)) {
 
 
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
+                                addtoArray(s, 3);
 
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        if (txtFrom.getText().toString().isEmpty())
-                        checkorder(s,txtTo);
-                    }
-                });
-
+                            }
+                        }
+                    });
+                } else {
+                    UIHelper.showShortToastInCenter(getDockActivity(), "Please Fill in Order");
+                }
 
                 break;
 
             case R.id.SecondtxtFrom:
-                ShowRadioListDialog();
-                textView = SecondtxtFrom;
+                if (checkprevious(txtTo, txtFrom)) {
+                    if (checkorder(null, SecondtxtTo, 4)) {
+                        ShowRadioListDialog();
+                        textView = SecondtxtFrom;
 
-                SecondtxtFrom.addTextChangedListener(new TextWatcher() {
+                        SecondtxtFrom.addTextChangedListener(new TextWatcher() {
 
 
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                alreadySelectedTime.remove(SecondtxtFrom.getText().toString());
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+
+                                if (checkprevious(txtTo, txtFrom)) {
+
+
+                                    checkorder(s, SecondtxtTo, 4);
+
+                                }
+                            }
+                        });
                     }
+                }
 
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        addtoArray(s,"SecondtxtFrom");
-
-                    }
-                });
 
                 break;
 
 
             case R.id.ThirdtxtTo:
-                ShowRadioListDialog();
-                textView = ThirdtxtTo;
+                if (checkprevious(SecondtxtTo, SecondtxtFrom)) {
+                    ShowRadioListDialog();
+                    textView = ThirdtxtTo;
 
-                ThirdtxtTo.addTextChangedListener(new TextWatcher() {
+                    ThirdtxtTo.addTextChangedListener(new TextWatcher() {
 
 
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            alreadySelectedTime.remove(ThirdtxtTo.getText().toString());
+                        }
 
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    }
 
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        addtoArray(s,"ThirdtxtTo");
-                    }
-                });
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                            if (checkprevious(SecondtxtTo, SecondtxtFrom)) {
+
+
+                                addtoArray(s, 5);
+
+                            }
+                        }
+                    });
+                } else {
+                    UIHelper.showShortToastInCenter(getDockActivity(), "Please Fill in Order");
+                }
                 break;
 
             case R.id.ThirdtxtFrom:
-                ShowRadioListDialog();
-                textView = ThirdtxtFrom;
+                if (checkprevious(SecondtxtTo, SecondtxtFrom)) {
+                    if (checkorder(null, ThirdtxtTo, 6)) {
+                        ShowRadioListDialog();
+                        textView = ThirdtxtFrom;
 
-                ThirdtxtFrom.addTextChangedListener(new TextWatcher() {
+                        ThirdtxtFrom.addTextChangedListener(new TextWatcher() {
 
 
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                alreadySelectedTime.remove(ThirdtxtFrom.getText().toString());
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+
+                                if (checkprevious(SecondtxtTo, SecondtxtFrom)) {
+                                    checkorder(s, ThirdtxtTo, 6);
+
+                                }
+                            }
+
+                        });
                     }
+                }
 
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        addtoArray(s,"ThirdtxtFrom");
-                    }
-
-                });
 
                 break;
 
@@ -559,94 +716,111 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
     }
 
-    private void checkorder(Editable s, TextView textview) {
-        if (textview.getText().toString().isEmpty()){
-            UIHelper.showShortToastInCenter(getDockActivity(),"Please Fill in Proper order");
-        }
-        else {
-            addtoArray(s, "txtFrom");
-        }
+    private boolean checkprevious(TextView textto, TextView textfrom) {
+        return !textto.getText().toString().isEmpty() && !textfrom.getText().toString().isEmpty();
     }
 
-    private void addtoArray(Editable s,String key) {
-        if (dateSpecified ==null){
-            UIHelper.showShortToastInCenter(getDockActivity(),"Please Select Start Date First");
-        }
-        else {
-            if (ScheduleHashMap.containsKey(key)){
-                ScheduleHashMap.remove(key);
-                selectedDay = parseDate(dateSpecified.toString());
-                timeArray.add(s.toString());
-                ScheduleHashMap.put(key,s.toString());
+    private Boolean checkorder(Editable s, TextView txtview, Integer key) {
 
+        if (txtview.getText().toString().isEmpty()) {
+            UIHelper.showShortToastInCenter(getDockActivity(), "Please Fill in Start First");
+            return false;
+        } else {
+            if (s != null) {
+                String[] time = txtview.getText().toString().split(":00");
+                int hour = Integer.parseInt(time[0]);
+                String[] time1 = s.toString().split(":00");
+                int hour1 = Integer.parseInt(time1[0]);
+                if (hour > hour1) {
+                    UIHelper.showShortToastInCenter(getDockActivity(), "End Time is Lesser then Start Time");
+                } else {
+                    addtoArray(s, key);
+                }
             }
-            else {
+
+        }
+        return true;
+    }
+
+    private void addtoArray(Editable s, Integer key) {
+        if (dateSpecified == null) {
+            UIHelper.showShortToastInCenter(getDockActivity(), "Please Select Start Date First");
+            s.clear();
+        } else {
+            /*if (ScheduleHashMap.containsKey(key)) {
+                ScheduleHashMap.remove(key);
                 selectedDay = parseDate(dateSpecified.toString());
                 timeArray.add(s.toString());
                 ScheduleHashMap.put(key, s.toString());
 
-            }
+            } else {*/
+            selectedDay = parseDate(dateSpecified.toString());
+            timeArray.add(s.toString());
+            ScheduleHashMap.put(key, s.toString());
+
+            //}
         }
 
     }
 
-    public Date EndDate(String days) {
-        if (days.contains("2 weeks")) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(dateSpecified);
-            cal.add(Calendar.DATE, 14);
-            EndDate = cal.getTime();
-        }
+    public Date getEndDate(String days) {
+        if (dateSpecified != null) {
+            if (days.contains("2 Week")) {
+                Calendar enddate = Calendar.getInstance();
+                enddate.setTime(dateSpecified);
+                enddate.add(Calendar.DAY_OF_MONTH, 14);
+                EndDate = enddate.getTime();
+            }
 
-        if (days.contains("1 Month")) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(dateSpecified);
-            cal.add(Calendar.DATE, 30);
-            EndDate = cal.getTime();
+            if (days.contains("1 Month")) {
+                Calendar enddate = Calendar.getInstance();
+                enddate.setTime(dateSpecified);
+                enddate.add(Calendar.MONTH, 1);
+                EndDate = enddate.getTime();
+            }
+            if (days.contains("3 Months")) {
+                Calendar enddate = Calendar.getInstance();
+                enddate.setTime(dateSpecified);
+                enddate.add(Calendar.MONTH, 3);
+                EndDate = enddate.getTime();
+            }
+            if (days.contains("6 Months")) {
+                Calendar enddate = Calendar.getInstance();
+                enddate.setTime(dateSpecified);
+                enddate.add(Calendar.MONTH, 6);
+                EndDate = enddate.getTime();
+            }
         }
-        if (days.contains("3 Months")) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(dateSpecified);
-            cal.add(Calendar.DATE, 90);
-            EndDate = cal.getTime();
-        }
-        if (days.contains("6 Months")) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(dateSpecified);
-            cal.add(Calendar.DATE, 180);
-            EndDate = cal.getTime();
-        }
-
         return EndDate;
 
     }
 
 
-    public void setDataInJson(HashMap<String, String> timeArray) {
+    public void setDataInJson(Map<Integer, String> timeArray) {
 
         ArrayList<ScheduleTime> scheduleTimeCollection = new ArrayList();
         ScheduleTime scheduleTime = null;
-
         trainerBookingCalendarJsonCollection = new ArrayList<>();
 
         try {
             String Starttime = "";
             String EndTime = "";
-            int i =0;
+            int i = 0;
             int hours;
-
-            for (HashMap.Entry<String, String> entry : timeArray.entrySet()) {
+            int TotalHours = 0;
+            for (HashMap.Entry<Integer, String> entry : timeArray.entrySet()) {
 
                 i++;
                 String Selecteddate = dateSpecified.toString();
-                if (i==1 && entry.getValue()!=null) {
+                if (i == 1 && entry.getValue() != null) {
                     Starttime = entry.getValue();
                 }
-                if (i==2 && entry.getValue() != null) {
+                if (i == 2 && entry.getValue() != null) {
+                    i = 0;
                     EndTime = entry.getValue();
 
                     hours = TimeDifference(Starttime, EndTime);
-
+                    TotalHours = TotalHours + hours;
                     String[] startTime = Starttime.split(":");
                     String StartTimeSplit = startTime[0];
                     for (int x = 0; x < hours; x++) {
@@ -658,7 +832,114 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                         scheduleTime.setEnd_time(String.valueOf(IntEndTime) + ":00");
                         scheduleTimeCollection.add(scheduleTime);
 
+                    }
+
                 }
+
+
+            }
+            if (TotalHours > 24) {
+                UIHelper.showShortToastInCenter(getDockActivity(), "Total Slots exceeds 24 Hours");
+            } else {
+                System.out.println(prefHelper.getUserId());
+                trainerBookingCalendarJson.setTrainer_id(Integer.parseInt(prefHelper.getUserId()));
+                trainerBookingCalendarJson.setMonth(Datedialoghelper.getFullMonthName(mYear, mMonth, mDay));
+                trainerBookingCalendarJson.setStart_date(new SimpleDateFormat(
+                        "yyyy-MM-dd", Locale.ENGLISH).format(dateSpecified.getTime()));
+                if (EndDate == null)
+                EndDate = getEndDate(spinerValue);
+
+                trainerBookingCalendarJson.setEnd_date(new SimpleDateFormat(
+                        "yyyy-MM-dd", Locale.ENGLISH).format(EndDate.getTime()));
+
+
+                if (timeArray.containsKey(1) && timeArray.containsKey(2)) {
+                    trainerBookingCalendarJson.setTime_start_1(timeArray.get(1));
+                    trainerBookingCalendarJson.setTime_end_1(timeArray.get(2));
+                } else {
+                    trainerBookingCalendarJson.setTime_start_1("");
+                    trainerBookingCalendarJson.setTime_end_1("");
+                }
+                if (timeArray.containsKey(3) && timeArray.containsKey(4)) {
+                    trainerBookingCalendarJson.setTime_start_2(timeArray.get(3));
+                    trainerBookingCalendarJson.setTime_end_2(timeArray.get(4));
+                } else {
+                    trainerBookingCalendarJson.setTime_start_2("");
+                    trainerBookingCalendarJson.setTime_end_2("");
+                }
+                if (timeArray.containsKey(5) && timeArray.containsKey(6)) {
+                    trainerBookingCalendarJson.setTime_start_3(timeArray.get(5));
+                    trainerBookingCalendarJson.setTime_end_3(timeArray.get(6));
+                } else {
+                    trainerBookingCalendarJson.setTime_start_3("");
+                    trainerBookingCalendarJson.setTime_end_3("");
+                }
+
+                trainerBookingCalendarJson.setTime(scheduleTimeCollection);
+                trainerBookingCalendarJsonCollection.add(trainerBookingCalendarJson);
+                scheduleTimeCollection = new ArrayList();
+                trainerScheduleJson = GsonFactory.getConfiguredGson().toJson(trainerBookingCalendarJsonCollection);
+                System.out.println(trainerScheduleJson);
+                createTrainerSchedule(trainerBookingCalendarJsonCollection);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    int TimeDifference(String startTime, String endTime) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        Date date1 = null;
+        Date date2 = null;
+        try {
+            date1 = simpleDateFormat.parse(startTime);
+            date2 = simpleDateFormat.parse(endTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        long difference = date2.getTime() - date1.getTime();
+        int dayss = (int) (difference / (1000 * 60 * 60 * 24));
+        int hours = (int) ((difference - (1000 * 60 * 60 * 24 * dayss)) / (1000 * 60 * 60));
+        int min = (int) (difference - (1000 * 60 * 60 * 24 * dayss) - (1000 * 60 * 60 * hours)) / (1000 * 60);
+        hours = (hours < 0 ? -hours : hours);
+
+        //Toast.makeText(getDockActivity(), String.valueOf(hours),Toast.LENGTH_LONG).show();
+
+        return hours;
+    }
+
+
+    @Override
+    public void setData(String itemPosition) {
+        if (!itemPosition.isEmpty()) {
+            if (alreadySelectedTime.contains(itemPosition)) {
+                UIHelper.showShortToastInCenter(getDockActivity(), "Time Already Selected Please select a Differnet time");
+            } else {
+                String[] time = itemPosition.split(":00");
+                int hour = Integer.parseInt(time[0]);
+                if (hour < LastSelectHour) {
+                    UIHelper.showShortToastInCenter(getDockActivity(), "Selected Time is Lesser then Previous Selected Time");
+                } else {
+                    AnyTextView textView = (AnyTextView) this.textView;
+                    textView.setText(itemPosition);
+                    alreadySelectedTime.add(itemPosition);
+                    String[] thistime = itemPosition.split(":00");
+                    LastSelectHour = Integer.parseInt(time[0]);
+
+                }
+            }
+        }
+    }
+
+
+}
+
+
 
 
               /*  String[] days = Selecteddate.split(" ");
@@ -670,7 +951,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
                 String date = "2017-" + month + "-" + day;
 
-                Date EndDate1 = EndDate("1 Month");
+                Date EndDate1 = getEnd_date("1 Month");
 
                 trainerBookingCalendarJson = new TrainerBookingCalendarJson();
                 trainerBookingCalendarJson.setTrainer_id(parseInt(prefHelper.getUserId()));
@@ -776,58 +1057,4 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
                     i++;*/
 
-                    //  Toast.makeText(getDockActivity(),item,Toast.LENGTH_LONG).show();
-                }
-
-
-
-            }
-
-            trainerBookingCalendarJson.setTime(scheduleTimeCollection);
-            trainerBookingCalendarJsonCollection.add(trainerBookingCalendarJson);
-            scheduleTimeCollection = new ArrayList();
-            trainerScheduleJson = GsonFactory.getConfiguredGson().toJson(trainerBookingCalendarJsonCollection);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
-
-    int TimeDifference(String startTime, String endTime) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-        Date date1 = null;
-        Date date2 = null;
-        try {
-            date1 = simpleDateFormat.parse(startTime);
-            date2 = simpleDateFormat.parse(endTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-
-        long difference = date2.getTime() - date1.getTime();
-        int dayss = (int) (difference / (1000 * 60 * 60 * 24));
-        int hours = (int) ((difference - (1000 * 60 * 60 * 24 * dayss)) / (1000 * 60 * 60));
-        int min = (int) (difference - (1000 * 60 * 60 * 24 * dayss) - (1000 * 60 * 60 * hours)) / (1000 * 60);
-        hours = (hours < 0 ? -hours : hours);
-
-        //Toast.makeText(getDockActivity(), String.valueOf(hours),Toast.LENGTH_LONG).show();
-
-        return hours;
-    }
-
-
-    @Override
-    public void setData(String itemPosition) {
-        AnyTextView textView = (AnyTextView) this.textView;
-        textView.setText(itemPosition);
-
-    }
-
-
-}
-
-
+//  Toast.makeText(getDockActivity(),item,Toast.LENGTH_LONG).show();

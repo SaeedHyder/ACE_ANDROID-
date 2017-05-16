@@ -62,16 +62,26 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
 
     int days;
     List<String> timings=new ArrayList<String>();
+    public static String START_DATE = "signup_model";
 
-
-    public static CalendarFragment newInstance() {
-
-        return new CalendarFragment();
+    public static CalendarFragment newInstance(String startDate) {
+        Bundle args = new Bundle();
+        args.putString(START_DATE, startDate);
+        CalendarFragment fragment = new CalendarFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
+    public static CalendarFragment newInstance() {
+       return new CalendarFragment();
 
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            START_DATE = getArguments().getString(START_DATE);
+            // Toast.makeText(getDockActivity(), ConversationId, Toast.LENGTH_LONG).show();
+        }
 
     }
 
@@ -244,7 +254,6 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         calendarView.init(new Date(), nextYear.getTime()) //
                 .inMode(CalendarPickerView.SelectionMode.RANGE) //
                 .withSelectedDates(dates);
-
 
     }
 

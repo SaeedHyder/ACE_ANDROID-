@@ -59,6 +59,7 @@ public class SearchTraineeFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_search_trainee, container, false);
     }
 
@@ -78,7 +79,8 @@ public class SearchTraineeFragment extends BaseFragment {
 
     private void getSearchUserData() {
         if (edtsearch != null) {
-            Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edtsearch.getText().toString(), AppConstants.trainee);
+            Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser
+                    (edtsearch.getText().toString(), AppConstants.trainee);
 
             callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
                 @Override

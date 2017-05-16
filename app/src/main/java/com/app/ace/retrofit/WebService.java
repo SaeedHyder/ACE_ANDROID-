@@ -10,12 +10,11 @@ import com.app.ace.entities.GetTraineeBookings;
 import com.app.ace.entities.GoogleGeoCodeResponse;
 import com.app.ace.entities.HomeResultEnt;
 import com.app.ace.entities.MsgEnt;
-import com.app.ace.entities.NotificationDataItem;
 import com.app.ace.entities.NotificationEnt;
 import com.app.ace.entities.PostsEnt;
-import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.RegistrationResult;
-import com.app.ace.entities.SearchEnt;
+import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.ScheduleEnt;
 import com.app.ace.entities.ShowComments;
 import com.app.ace.entities.TrainerBookingCalendarJson;
 import com.app.ace.entities.TrainerTimingSlots;
@@ -23,7 +22,6 @@ import com.app.ace.entities.User;
 import com.app.ace.entities.UserNotificatoin;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.entities.countEnt;
-import com.app.ace.helpers.NotificationHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +38,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-
-import static com.app.ace.global.AppConstants.user_id;
 
 public interface WebService {
 
@@ -298,6 +294,22 @@ public interface WebService {
     Call<ResponseWrapper> createSchedule(
             @Body ArrayList<TrainerBookingCalendarJson> data);
 
+    @FormUrlEncoded
+    @POST("user/updatetoken")
+    Call<ResponseWrapper> updateToken(
+            @Field("user_id") String userid,
+            @Field("device_type") String deviceType,
+            @Field("device_token") String token
+    );
+
+    @GET("schedule/getTrainer/{trainer_id}")
+    Call<ResponseWrapper<ArrayList<ScheduleEnt>>> getSchedule(
+            @Path("trainer_id") String user_id);
+
+    @GET("schedule/get/{trainer_id}")
+    Call<ResponseWrapper<ArrayList<ScheduleEnt>>> getScheduleTrainee(
+            @Path("trainer_id") String user_id);
+
     @GET("schedule/get/{trainer_id}")
     Call<ResponseWrapper<ArrayList<GetTraineeBookings>>> ShowTraineeBookings(
             @Path("trainer_id") String trainer_id);
@@ -320,6 +332,7 @@ public interface WebService {
 
             @Query("address") String address,
             @Query("sensor") String sensor);
+
 
     @FormUrlEncoded
     @POST("message/block")
