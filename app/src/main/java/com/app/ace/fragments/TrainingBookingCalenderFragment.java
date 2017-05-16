@@ -377,7 +377,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
 
 
-        
+
 
 
 
