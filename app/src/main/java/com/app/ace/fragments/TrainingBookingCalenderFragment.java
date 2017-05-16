@@ -377,8 +377,10 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
 
 
-
         
+
+
+
         callBack.enqueue(new Callback<ResponseWrapper>() {
             @Override
             public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
