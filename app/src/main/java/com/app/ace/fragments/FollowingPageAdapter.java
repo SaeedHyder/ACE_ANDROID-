@@ -3,16 +3,18 @@ package com.app.ace.fragments;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by muniyemiftikhar on 4/24/2017.
  */
 
-public class FollowingPageAdapter extends FragmentPagerAdapter {
-    private final ArrayList<Fragment> mFragmentList = new ArrayList<>();
-    private final ArrayList<String> mFragmentTitleList = new ArrayList<>();
+public class FollowingPageAdapter extends FragmentStatePagerAdapter {
+    private final List<Fragment> mFragmentList = new ArrayList<>();
+    private final List<String> mFragmentTitleList = new ArrayList<>();
 
     public FollowingPageAdapter(FragmentManager manager) {
         super(manager);
@@ -36,5 +38,14 @@ public class FollowingPageAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return mFragmentTitleList.get(position);
+    }
+    /**
+     * Get the Fragment by position
+     *
+     * @param position tab position of the fragment
+     * @return
+     */
+    public Fragment getRegisteredFragment(int position) {
+        return mFragmentList.get(position);
     }
 }

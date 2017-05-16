@@ -39,6 +39,7 @@ public class SearchTrainerFragment extends BaseFragment {
     private ListView SearchTrainee_ListView;
     @InjectView(R.id.txt_noresult)
     private TextView txt_noresult;
+
     private AnyEditTextView edtsearch;
     private ArrayListAdapter<UserProfile> adapter;
 

@@ -9,6 +9,8 @@ import com.app.ace.entities.InboxDataItem;
 import com.app.ace.entities.MsgEnt;
 import com.app.ace.fragments.ChatFragment;
 import com.app.ace.fragments.TrainerProfileFragment;
+import com.app.ace.helpers.BasePreferenceHelper;
+import com.app.ace.helpers.PreferenceHelper;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 import com.app.ace.ui.views.AnyTextView;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -24,13 +26,14 @@ public class InboxListItemBinder extends ViewBinder<MsgEnt> {
 
     private ImageLoader imageLoader;
     DockActivity context;
+    public BasePreferenceHelper preferenceHelper;
+    public String UserName;
 
-    public InboxListItemBinder(DockActivity context) {
+    public InboxListItemBinder(DockActivity context,BasePreferenceHelper preferenceHelper) {
         super(R.layout.inbox_list_item);
 
-
         imageLoader = ImageLoader.getInstance();
-
+        this.preferenceHelper=preferenceHelper;
         this.context=context;
 
     }
@@ -39,6 +42,8 @@ public class InboxListItemBinder extends ViewBinder<MsgEnt> {
     @Override
     public ViewBinder.BaseViewHolder createViewHolder(
             View view) {
+
+
         return new InboxListItemBinder.ViewHolder(view);
     }
 
@@ -51,6 +56,7 @@ public class InboxListItemBinder extends ViewBinder<MsgEnt> {
 
         showInboxData(entity, viewHolder);
 
+
     }
 
     private void showInboxData(final MsgEnt entity, ViewHolder viewHolder) {
@@ -58,19 +64,37 @@ public class InboxListItemBinder extends ViewBinder<MsgEnt> {
 
         }
         else {
-            imageLoader.displayImage(entity.getSender().getProfile_image(), viewHolder.userImage);
+            if(entity.getSender().getId()==Integer.parseInt(preferenceHelper.getUserId()))
+           {
+                   imageLoader.displayImage(entity.getReceiver().getProfile_image(), viewHolder.userImage);
+                    viewHolder.txtUserName.setText(entity.getReceiver().getFirst_name() + " " + entity.getSender().getLast_name());
+                   viewHolder.txtUserMessage.setText(entity.getMessage().getMessage_text());
+            }
+            else if(entity.getReceiver().getId()==Integer.parseInt(preferenceHelper.getUserId())) {
+                imageLoader.displayImage(entity.getSender().getProfile_image(), viewHolder.userImage);
+                viewHolder.txtUserName.setText(entity.getSender().getFirst_name() + " " + entity.getSender().getLast_name());
+                viewHolder.txtUserMessage.setText(entity.getMessage().getMessage_text());
+            }
+
+
             viewHolder.userImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(entity.getSender().getId()==Integer.parseInt(preferenceHelper.getUserId()))
+                    {
+                        UserName=entity.getReceiver().getFirst_name()+" "+entity.getReceiver().getLast_name();
+                    }
+                    else if(entity.getReceiver().getId()==Integer.parseInt(preferenceHelper.getUserId())) {
+                        UserName=entity.getSender().getFirst_name()+" "+entity.getSender().getLast_name();
+                    }
 
-                    context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getMessage().getConversation_id()),
-                            String.valueOf(entity.getMessage().getReceiver_id())), "ChatFragment");
+
+                    context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getMessage().getConversation_id()),String.valueOf(entity.getMessage().getReceiver_id()),UserName, String.valueOf(entity.getIs_following()),entity.getReceiver().getProfile_image(),entity.getReceiver().getFirst_name()+" "+entity.getReceiver().getLast_name()), "ChatFragment");
 
                 }
             });
 
-            viewHolder.txtUserName.setText(entity.getSender().getFirst_name() + " " + entity.getSender().getLast_name());
-            viewHolder.txtUserMessage.setText(entity.getMessage().getMessage_text());
+
         }
     }
 

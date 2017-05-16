@@ -8,11 +8,11 @@ public class YouDataItem {
     private String userImage;
     private String userName;
     private String userDetail;
-    private Integer youImage;
+    private String youImage;
 
 
 
-    public YouDataItem(String userImage, String userName, String userDetail, Integer youImage){
+    public YouDataItem(String userImage, String userName, String userDetail, String youImage){
         setUserImage(userImage);
         setUserName(userName);
         setUserMessage(userDetail);
@@ -43,13 +43,19 @@ public class YouDataItem {
         this.userDetail = userMessage;
     }
 
-    public Integer getYouImage() {
+    public String getUserDetail() {
+        return userDetail;
+    }
+
+    public void setUserDetail(String userDetail) {
+        this.userDetail = userDetail;
+    }
+
+    public String getYouImage() {
         return youImage;
     }
 
-    public void setYouImage(Integer youImage) {
+    public void setYouImage(String youImage) {
         this.youImage = youImage;
     }
-
-
 }

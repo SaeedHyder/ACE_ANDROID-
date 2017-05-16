@@ -27,6 +27,13 @@ public class MsgEnt {
     String receiver_flag;
     public Message message;
 
+    int sender_block;
+    int receiver_block;
+    int sender_mute;
+    int receiver_mute;
+    int is_following;
+
+
 
     public String getMessage_id() {
         return message_id;
@@ -155,8 +162,43 @@ public class MsgEnt {
     }
 
 
+    public int getSender_block() {
+        return sender_block;
+    }
 
+    public void setSender_block(int sender_block) {
+        this.sender_block = sender_block;
+    }
 
+    public int getReceiver_block() {
+        return receiver_block;
+    }
 
+    public void setReceiver_block(int receiver_block) {
+        this.receiver_block = receiver_block;
+    }
 
+    public int getSender_mute() {
+        return sender_mute;
+    }
+
+    public void setSender_mute(int sender_mute) {
+        this.sender_mute = sender_mute;
+    }
+
+    public int getReceiver_mute() {
+        return receiver_mute;
+    }
+
+    public void setReceiver_mute(int receiver_mute) {
+        this.receiver_mute = receiver_mute;
+    }
+
+    public int getIs_following() {
+        return is_following;
+    }
+
+    public void setIs_following(int is_following) {
+        this.is_following = is_following;
+    }
 }

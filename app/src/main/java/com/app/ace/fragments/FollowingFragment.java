@@ -37,7 +37,7 @@ public class FollowingFragment extends BaseFragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new FollowingPageAdapter( getFragmentManager() );
+        adapter = new FollowingPageAdapter( getChildFragmentManager() );
     }
 
     @Nullable
@@ -53,6 +53,8 @@ public class FollowingFragment extends BaseFragment{
         //setListener();
         getUserData();
     }
+
+
 
     private void getUserData() {
 

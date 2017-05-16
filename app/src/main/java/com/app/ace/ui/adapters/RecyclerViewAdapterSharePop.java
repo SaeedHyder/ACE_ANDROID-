@@ -9,7 +9,9 @@ import android.widget.TextView;
 import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
 import com.app.ace.entities.SharePopUpItemsEnt;
+import com.app.ace.entities.UserProfile;
 import com.app.ace.fragments.ChatFragment;
+import com.app.ace.fragments.NewMsgChat_Screen_Fragment;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -27,9 +29,10 @@ public class RecyclerViewAdapterSharePop extends RecyclerView.Adapter<RecyclerVi
 
     DockActivity context;
     private ImageLoader imageLoader;
+    public String post_pic_path;
 
 
-    private List<SharePopUpItemsEnt> SharePopUpList;
+    private List<UserProfile> SharePopUpList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public CircleImageView images;
@@ -44,10 +47,11 @@ public class RecyclerViewAdapterSharePop extends RecyclerView.Adapter<RecyclerVi
     }
 
 
-    public RecyclerViewAdapterSharePop(List<SharePopUpItemsEnt> sharePopUpList, DockActivity a) {
+    public RecyclerViewAdapterSharePop(List<UserProfile> sharePopUpList, DockActivity a, String post_pic_path) {
         this.SharePopUpList = sharePopUpList;
         this.context=a;
         imageLoader = ImageLoader.getInstance();
+        this.post_pic_path=post_pic_path;
     }
 
     @Override
@@ -60,15 +64,17 @@ public class RecyclerViewAdapterSharePop extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        SharePopUpItemsEnt sharePopUpItemsEnt =SharePopUpList.get(position);
+        final UserProfile sharePopUpItemsEnt =SharePopUpList.get(position);
 
-        holder.tv_name.setText(sharePopUpItemsEnt.getTv_name());
-        imageLoader.displayImage(sharePopUpItemsEnt.getImages(),holder.images);
+        holder.tv_name.setText(sharePopUpItemsEnt.getFirst_name()+" "+sharePopUpItemsEnt.getLast_name());
+        imageLoader.displayImage(sharePopUpItemsEnt.getProfile_image(),holder.images);
 
         holder.images.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.addDockableFragment(ChatFragment.newInstance(), "Chat Fragment");
+                //context.addDockableFragment(ChatFragment.newInstance(), "Chat Fragment");
+                String UserName=sharePopUpItemsEnt.getFirst_name()+" "+sharePopUpItemsEnt.getLast_name();
+                context.addDockableFragment(NewMsgChat_Screen_Fragment.newInstance(sharePopUpItemsEnt.getId(),UserName,post_pic_path), "NewMsgChat_Screen_Fragment");
             }
         });
     }

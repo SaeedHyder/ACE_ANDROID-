@@ -24,11 +24,12 @@
             android:textColor="@color/txtview_title_color"
             app:typeface="Roboto-Regular.ttf" />
 
-        <com.app.ace.ui.views.AnyEditTextView
+        <com.app.ace.ui.views.AnyTextView
             android:id="@+id/edit_sendTo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="James Blunt"
+            android:textSize="@dimen/x20"
             android:paddingTop="@dimen/x4"
             app:typeface="Roboto-Regular.ttf" />
 

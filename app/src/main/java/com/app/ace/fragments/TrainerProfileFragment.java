@@ -284,7 +284,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             txt_profileName.setText(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
                             imageLoader.displayImage(response.body().getResult().getProfile_image(), riv_profile_pic);
                             txt_education_cirtification_dis.setText(response.body().getResult().getEducation() + " " + response.body().getResult().getUniversity());
-                            txt_preffered_training_loc_dis.setText(response.body().getResult().getAddress());
+                            txt_preffered_training_loc_dis.setText(response.body().getResult().getGym_address());
                             txt_avaliability_dis.setText(response.body().getResult().getGym_days() + " " + response.body().getResult().getGym_timing_from() + "-" + response.body().getResult().getGym_timing_to());
                             txt_postCount.setText(response.body().getResult().getPosts_count());
                             txt_FollowersCount.setText(response.body().getResult().getFollowers_count());

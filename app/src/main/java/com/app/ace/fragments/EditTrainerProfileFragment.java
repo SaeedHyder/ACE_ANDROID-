@@ -90,11 +90,11 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
     @InjectView(R.id.sp_Gender)
     private Spinner sp_Gender;
 
-    String Education;
-    String Speciality;
-    String gymLocation;
-    String lat;
-    String log;
+    String Education="";
+    String Speciality="";
+    String gymLocation="";
+    String lat="";
+    String log="";
 
     ArrayList<String> EducationArray = new ArrayList<>();
     ArrayList<String> SpecialityArray = new ArrayList<>();
@@ -177,8 +177,12 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         {
             firstName=fullname;
             lastName=" ";
-
         }
+        if(prefHelper.getUser().getGym_address()!=null)
+        {
+            gymLocation=prefHelper.getUser().getGym_address();
+        }
+
         MultipartBody.Part profile_picture = null;
         if(profilePic != null) {
            profile_picture = MultipartBody.Part.createFormData("profile_picture", profilePath, RequestBody.create(MediaType.parse("image/*"), profilePic));

@@ -281,7 +281,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
             @Override
             public void onClick(View v) {
                // UIHelper.showShortToastInCenter(context,context.getString(R.string.will_be_implemented));
-                context.addDockableFragment(SharePopUpfragment.newInstance(), "SharePopUpfragment");
+                context.addDockableFragment(SharePopUpfragment.newInstance(homeListDataEnt.getProfile_post_pic_path()), "SharePopUpfragment");
             }
         });
 

@@ -29,6 +29,7 @@ public class UserProfile {
     String education;
     String university;
     String gym_name;
+    String gym_address;
     String gym_latitude;
     String gym_longitude;
     String speciality;
@@ -205,6 +206,14 @@ public class UserProfile {
 
     public void setProfile_picture(String profile_picture) {
         this.profile_picture = profile_picture;
+    }
+
+    public String getGym_address() {
+        return gym_address;
+    }
+
+    public void setGym_address(String gym_address) {
+        this.gym_address = gym_address;
     }
 
     public String getEducation() {

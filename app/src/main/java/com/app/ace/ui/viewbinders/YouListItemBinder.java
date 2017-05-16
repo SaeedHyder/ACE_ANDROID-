@@ -38,7 +38,8 @@ public class YouListItemBinder extends ViewBinder<YouDataItem> {
         imageLoader.displayImage(entity.getUserImage(), viewHolder.userImage);
         viewHolder.txtUserName.setText(entity.getUserName());
         viewHolder.txtUserDetail.setText(entity.getUserMessage());
-        viewHolder.imgYou.setImageResource(entity.getYouImage());
+        imageLoader.displayImage(entity.getYouImage(), viewHolder.imgYou);
+
         //imageLoader.displayImage(entity.getYouImage(),viewHolder.imgYou);
 
     }

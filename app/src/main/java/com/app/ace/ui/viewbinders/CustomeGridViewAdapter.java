@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
 import com.app.ace.R;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -16,12 +17,12 @@ import java.util.ArrayList;
  * Created by muniyemiftikhar on 4/18/2017.
  */
 
-public class CustomeGridViewAdapter extends ArrayAdapter<Integer> {
+public class CustomeGridViewAdapter extends ArrayAdapter<String> {
 
-   private ArrayList<Integer> arrChildCollection = new ArrayList<>();
+   private ArrayList<String> arrChildCollection = new ArrayList<>();
 
 
-    public CustomeGridViewAdapter(Context context, int resource, ArrayList<Integer> objects) {
+    public CustomeGridViewAdapter(Context context, int resource, ArrayList<String> objects) {
         super(context, resource, objects);
         this.arrChildCollection = objects;
 
@@ -65,8 +66,8 @@ public class CustomeGridViewAdapter extends ArrayAdapter<Integer> {
         //holder.imgChildGrid.setImageResource(R.drawable.images);//mi
 
 //        holder.imgChildGrid.setImageResource(arrChildCollection.get(position).getImage());
-
-        holder.imgChildGrid.setImageResource(arrChildCollection.get(position));
+        ImageLoader.getInstance().displayImage(arrChildCollection.get(position),holder.imgChildGrid);
+       // holder.imgChildGrid.setImageResource(arrChildCollection.get(position));
 
         //holder.imgChildGrid.setImageResource(arrChildCollection.get(getPosition(currentText)).getImage());
 
