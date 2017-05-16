@@ -30,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.88"
+            android:textSize="@dimen/x20"
             android:hint="James Blunt"
             android:paddingTop="@dimen/x4"
             app:typeface="Roboto-Regular.ttf"

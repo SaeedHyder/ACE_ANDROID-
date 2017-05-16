@@ -17,6 +17,7 @@ import com.app.ace.entities.PostsEnt;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.PreferenceHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.InboxListItemBinder;
@@ -54,7 +55,7 @@ public class InboxListFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new ArrayListAdapter<MsgEnt>(getDockActivity(), new InboxListItemBinder(getDockActivity()));
+        adapter = new ArrayListAdapter<MsgEnt>(getDockActivity(), new InboxListItemBinder(getDockActivity(),prefHelper));
     }
 
     @Nullable

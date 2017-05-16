@@ -23,6 +23,7 @@ import com.squareup.timessquare.CalendarPickerView;
 import com.squareup.timessquare.DefaultDayViewAdapter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -239,7 +240,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
 
         //dates.add(today.getTime());
         calendarView.setDecorators(Collections.<CalendarCellDecorator>emptyList());
-        //calendarView.setDecorators(Arrays.<CalendarCellDecorator>asList(new SampleDecorator()));
+       // calendarView.setDecorators(Arrays.<CalendarCellDecorator>asList(new SampleDecorator()));
         calendarView.init(new Date(), nextYear.getTime()) //
                 .inMode(CalendarPickerView.SelectionMode.RANGE) //
                 .withSelectedDates(dates);

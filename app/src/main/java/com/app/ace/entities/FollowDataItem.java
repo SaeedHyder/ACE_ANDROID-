@@ -13,9 +13,9 @@ public class FollowDataItem {
 
     //private Integer imgChildGrid;
 
-    private ArrayList<Integer> imgChildGrid;
+    private ArrayList<String> imgChildGrid;
 
-    public FollowDataItem(String userImage, String userName, String userDetail , ArrayList<Integer> imgChildGrid){
+    public FollowDataItem(String userImage, String userName, String userDetail , ArrayList<String> imgChildGrid){
         setUserImage(userImage);
         setUserName(userName);
         setUserMessage(userDetail);
@@ -45,15 +45,23 @@ public class FollowDataItem {
         this.userDetail = userMessage;
     }
 
-    public ArrayList<Integer> getImgChildGrid() {
+    public String getUserDetail() {
+        return userDetail;
+    }
+
+    public void setUserDetail(String userDetail) {
+        this.userDetail = userDetail;
+    }
+
+    public ArrayList<String> getImgChildGrid() {
         return imgChildGrid;
     }
 
-    public void setImgChildGrid(ArrayList<Integer> imgChildGrid) {
+    public void setImgChildGrid(ArrayList<String> imgChildGrid) {
         this.imgChildGrid = imgChildGrid;
     }
 
-/*  public Integer getImgChildGrid() {
+  /*  public Integer getImgChildGrid() {
         return imgChildGrid;
     }
 

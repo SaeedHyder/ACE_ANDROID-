@@ -25,6 +25,7 @@
             android:layout_marginRight="@dimen/x10" />
 
         <LinearLayout
+            android:id="@+id/leftLayoutChild"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/img_chat_sender"
@@ -33,6 +34,7 @@
             android:paddingTop="@dimen/x10"
             android:gravity="center_vertical"
             android:orientation="vertical"
+            android:visibility="visible"
             android:layout_toRightOf="@id/userImage">
 
             <com.app.ace.ui.views.AnyTextView
@@ -49,6 +51,44 @@
 
             <com.app.ace.ui.views.AnyTextView
                 android:id="@+id/txtSenderDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtSenderChat"
+                android:layout_marginTop="@dimen/x5"
+                android:layout_gravity="right"
+                android:paddingLeft="@dimen/x10"
+                android:paddingRight="@dimen/x10"
+                android:text="3 mins ago"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/x12"
+                android:layout_marginBottom="@dimen/x5"
+                app:typeface="Roboto-Regular.ttf" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/leftLayoutImageChild"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/img_chat_sender"
+            android:paddingLeft="@dimen/x10"
+            android:paddingRight="@dimen/x10"
+            android:paddingTop="@dimen/x10"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_toRightOf="@id/userImage">
+
+            <ImageView
+                android:id="@+id/iv_postPicLeft"
+                android:layout_width="@dimen/x280"
+                android:layout_height="@dimen/x200"
+
+                />
+
+
+            <com.app.ace.ui.views.AnyTextView
+                android:id="@+id/txtSenderDateImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtSenderChat"
@@ -94,6 +134,7 @@
         android:orientation="vertical"
         android:paddingLeft="@dimen/x10"
         android:paddingRight="@dimen/x10"
+        android:visibility="visible"
 
         >
 
@@ -123,6 +164,41 @@
 
 
     </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/rightLayoutImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/userImage2"
+
+            android:gravity="right"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/x10"
+            android:paddingRight="@dimen/x10"
+            android:visibility="gone"
+
+            >
+
+         <ImageView
+             android:id="@+id/iv_postPic"
+             android:layout_width="@dimen/x280"
+             android:layout_height="@dimen/x200"
+
+             />
+
+            <com.app.ace.ui.views.AnyTextView
+                android:id="@+id/txtReceiverDateImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x10"
+                android:paddingRight="@dimen/x10"
+                android:text="3 mins ago"
+                android:textColor="@color/white"
+                android:textSize="@dimen/x12"
+                app:typeface="Roboto-Regular.ttf" />
+
+
+        </LinearLayout>
 
     </RelativeLayout>
 

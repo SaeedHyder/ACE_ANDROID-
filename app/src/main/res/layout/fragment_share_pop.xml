@@ -70,10 +70,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="11dp"
                 android:background="@drawable/search_box"
-                android:layout_below="@+id/txt_line"
-                android:layout_centerHorizontal="true"
                 android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:layout_below="@+id/txt_line"
+                android:layout_centerHorizontal="true">
                 <ImageView
                     android:id="@+id/iv_SearchIcon"
                     android:layout_width="wrap_content"
@@ -81,6 +81,7 @@
                     android:src="@drawable/search"
                     android:layout_marginLeft="@dimen/x10"
                     android:layout_marginStart="@dimen/x15" />
+
                 <com.app.ace.ui.views.AnyEditTextView
                     android:id="@+id/tv_Search"
                     android:layout_width="wrap_content"
@@ -100,7 +101,23 @@
                 android:layout_marginLeft="@dimen/x25"
                 android:layout_marginRight="@dimen/x25"
                 android:baselineAligned="false"
+                android:orientation="horizontal"
                 android:weightSum="3">
+
+                <com.app.ace.ui.views.AnyTextView
+                    android:id="@+id/txt_noresult"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="@dimen/x5"
+                    android:paddingLeft="@dimen/x8"
+                    android:paddingTop="@dimen/x2"
+                    android:text="@string/no_result_found"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/x20"
+                    android:textStyle="normal"
+                    android:visibility="gone"
+                    app:typeface="Roboto-Regular.ttf" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/lv_SendTo"

@@ -7,6 +7,7 @@ import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
 import com.app.ace.entities.NewMessageDataItem;
 import com.app.ace.entities.SearchPeopleDataItem;
+import com.app.ace.entities.UserProfile;
 import com.app.ace.fragments.ChatFragment;
 import com.app.ace.fragments.NewMessageFragment;
 import com.app.ace.fragments.NewMsgChat_Screen_Fragment;
@@ -22,7 +23,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by saeedhyder on 4/6/2017.
  */
 
-public class NewMessageListItemBinder extends ViewBinder<NewMessageDataItem> {
+public class NewMessageListItemBinder extends ViewBinder<UserProfile> {
 
     private ImageLoader imageLoader;
     private DockActivity context;
@@ -39,18 +40,20 @@ public class NewMessageListItemBinder extends ViewBinder<NewMessageDataItem> {
     }
 
     @Override
-    public void bindView(final NewMessageDataItem entity, int position, int grpPosition, View view, Activity activity) {
+    public void bindView(final UserProfile entity, int position, int grpPosition, View view, Activity activity) {
 
         NewMessageListItemBinder.ViewHolder viewHolder = (NewMessageListItemBinder.ViewHolder) view.getTag();
 
-        imageLoader.displayImage(entity.getImage(), viewHolder.userImage);
-        viewHolder.txtUserName.setText(entity.getUserName());
+        imageLoader.displayImage(entity.getProfile_image(), viewHolder.userImage);
+        viewHolder.txtUserName.setText(entity.getFirst_name()+" "+entity.getLast_name());
+
 
         viewHolder.userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AppConstants.is_show_trainer = false;
-                context.addDockableFragment(NewMsgChat_Screen_Fragment.newInstance(), "NewMsgChat_Screen_Fragment");
+                String UserName=entity.getFirst_name()+" "+entity.getLast_name();
+                context.addDockableFragment(NewMsgChat_Screen_Fragment.newInstance(entity.getId(),UserName), "NewMsgChat_Screen_Fragment");
             }
         });
 

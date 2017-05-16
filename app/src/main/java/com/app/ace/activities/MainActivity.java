@@ -87,6 +87,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
 
         }
 
+
         // setBehindContentView(R.layout.fragment_frame);
         mContext = this;
         Log.i("Screen Density", ScreenHelper.getDensity(this) + "");

@@ -31,6 +31,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+import static com.app.ace.fragments.NewMsgChat_Screen_Fragment.USERNAME;
+
 /**
  * Created by khan_muhammad on 3/20/2017.
  */
@@ -40,7 +42,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public static String SIGNUP_MODEL = "signup_model";
     public static String CONVERSATION_ID = "conversation_id";
     public static String Receiver_ID = "Receiver_id";
-    public int receiverId;
+    public static String USERNAME = "UserName";
+    public static String POSTPATH = "postPath";
+    public static String ISFOLLOWING = "isfollowing";
+    public static String PROFILEIMAGE = "profileimage";
+    public static String FULLNAME = "fullname";
+    String IsFollowing;
+    String ProfileImage;
+    String FullName;
+    public String PostPath;
+    public String UserName;
+    public String receiverId;
     public int SenderId;
     boolean isSender = true;
     String stringer;
@@ -62,18 +74,43 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         return new ChatFragment();
     }
 
-   /* public static ChatFragment newInstance(String conversationId) {
+
+    public static ChatFragment newInstance(String conversationId,String receiver_id,String UserName ) {
         Bundle args = new Bundle();
         args.putString(CONVERSATION_ID, conversationId);
+        args.putString(Receiver_ID, receiver_id);
+        args.putString(USERNAME, UserName);
+
         ChatFragment fragment = new ChatFragment();
         fragment.setArguments(args);
 
         return fragment;
-    }*/
-    public static ChatFragment newInstance(String conversationId,String receiver_id) {
+    }
+
+    public static ChatFragment newInstance(String conversationId,String receiver_id,String UserName,String IsFollowing,String ProfileImage,String FullName) {
         Bundle args = new Bundle();
         args.putString(CONVERSATION_ID, conversationId);
         args.putString(Receiver_ID, receiver_id);
+        args.putString(USERNAME, UserName);
+        args.putString(ISFOLLOWING,IsFollowing);
+        args.putString(PROFILEIMAGE,ProfileImage);
+        args.putString(FULLNAME,FullName);
+
+        ChatFragment fragment = new ChatFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+    public static ChatFragment newInstance(String conversationId,String receiver_id,String UserName,String Post_Path,String IsFollowing,String ProfileImage,String FullName) {
+        Bundle args = new Bundle();
+        args.putString(CONVERSATION_ID, conversationId);
+        args.putString(Receiver_ID, receiver_id);
+        args.putString(USERNAME, UserName);
+        args.putString(POSTPATH, Post_Path);
+        args.putString(ISFOLLOWING,IsFollowing);
+        args.putString(PROFILEIMAGE,ProfileImage);
+        args.putString(FULLNAME,FullName);
+
         ChatFragment fragment = new ChatFragment();
         fragment.setArguments(args);
 
@@ -96,8 +133,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
         if (getArguments() != null) {
             ConversationId = getArguments().getString(CONVERSATION_ID);
-            Receiver_ID = getArguments().getString(Receiver_ID);
+            receiverId = getArguments().getString(Receiver_ID);
             SenderId = Integer.parseInt(prefHelper.getUserId());
+            UserName=getArguments().getString(USERNAME);
+            PostPath=getArguments().getString(POSTPATH);
+            IsFollowing=getArguments().getString(ISFOLLOWING);
+            ProfileImage=getArguments().getString(PROFILEIMAGE);
+            FullName=getArguments().getString(FULLNAME);
+
             // Toast.makeText(getDockActivity(), ConversationId, Toast.LENGTH_LONG).show();
         }
 
@@ -185,11 +228,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             } else {
                 isSender = true;
             }
-            if (msgEnt.getSender()!=null && msgEnt.getReceiver() != null && msgEnt.getMessage() !=null) {
-                collection.add(new ChatDataItem(msgEnt.getSender().getProfile_image(),
-                        msgEnt.getMessage().getMessage_text(), msgEnt.getMessage().getCreated_at(),
-                        msgEnt.getReceiver().getProfile_image(), msgEnt.getMessage().getMessage_text(),
-                        msgEnt.getMessage().getCreated_at(), isSender, msgEnt.getSender().getId()));
+            if(PostPath!=null)
+            {
+                if (msgEnt.getSender()!=null && msgEnt.getReceiver() != null && msgEnt.getMessage() !=null) {
+                    collection.add(new ChatDataItem(msgEnt.getSender().getProfile_image(),
+                            PostPath, msgEnt.getMessage().getCreated_at(),
+                            msgEnt.getReceiver().getProfile_image(), msgEnt.getMessage().getMessage_text(),
+                            msgEnt.getMessage().getCreated_at(), isSender, msgEnt.getSender().getId()));
+                }
+
+            }
+            else {
+                if (msgEnt.getSender() != null && msgEnt.getReceiver() != null && msgEnt.getMessage() != null) {
+                    collection.add(new ChatDataItem(msgEnt.getSender().getProfile_image(),
+                            msgEnt.getMessage().getMessage_text(), msgEnt.getMessage().getCreated_at(),
+                            msgEnt.getReceiver().getProfile_image(), msgEnt.getMessage().getMessage_text(),
+                            msgEnt.getMessage().getCreated_at(), isSender, msgEnt.getSender().getId()));
+                }
             }
 
         }
@@ -240,11 +295,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 // UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
-                getDockActivity().addDockableFragment(FriendsInfoFragment.newInstance(), "FriendsInfoFragment");
+                getDockActivity().addDockableFragment(FriendsInfoFragment.newInstance(ConversationId,receiverId,IsFollowing,ProfileImage,FullName), "FriendsInfoFragment");
             }
         });
 
-        titleBar.setSubHeading(getString(R.string.james_blunt));
+        titleBar.setSubHeading(UserName);
     }
 
     @Override
@@ -268,7 +323,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
         Call<ResponseWrapper<ArrayList<MsgEnt>>> callBack = webService.SendMsg(
                 prefHelper.getUserId(),
-                Receiver_ID,
+                receiverId,
                 edtChat.getText().toString());
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<MsgEnt>>>() {
             @Override
@@ -277,11 +332,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    ArrayList<MsgEnt> msg = response.body().getResult();
-                    msg.get(0);
+                    if(response.body().getResult().isEmpty())
+                    {
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    }
+                    else {
+                        ArrayList<MsgEnt> msg = response.body().getResult();
+                        msg.get(0);
 
-                    collection.add(new ChatDataItem(msg.get(0).getSender().getProfile_image(), msg.get(0).getMessage_text(), msg.get(0).getCreated_at(), msg.get(0).getReceiver().getProfile_image(), msg.get(0).getMessage_text(), msg.get(0).getCreated_at(), false, msg.get(0).getSender_id()));
-                    bindData(collection);
+                        collection.add(new ChatDataItem(msg.get(0).getSender().getProfile_image(), msg.get(0).getMessage_text(), msg.get(0).getCreated_at(), msg.get(0).getReceiver().getProfile_image(), msg.get(0).getMessage_text(), msg.get(0).getCreated_at(), false, msg.get(0).getSender_id()));
+                        bindData(collection);
+                    }
+                }
+                else
+                {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
             }
 

@@ -20,6 +20,7 @@ import com.app.ace.entities.ShowComments;
 import com.app.ace.entities.TrainerBookingCalendarJson;
 import com.app.ace.entities.TrainerTimingSlots;
 import com.app.ace.entities.User;
+import com.app.ace.entities.UserNotificatoin;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.entities.countEnt;
 import com.app.ace.helpers.NotificationHelper;
@@ -39,6 +40,8 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+
+import static com.app.ace.global.AppConstants.user_id;
 
 public interface WebService {
 
@@ -206,6 +209,7 @@ public interface WebService {
             @Field("sender_id") String sender_id,
             @Field("receiver_id") String receiver_id,
             @Field("message_text") String message_text);
+
     @GET ("notification/count/{user_id}")
     Call<ResponseWrapper<countEnt>> getNotificationCount(
             @Path("user_id") String user_id);
@@ -314,6 +318,24 @@ public interface WebService {
 
             @Query("address") String address,
             @Query("sensor") String sensor);
+
+    @FormUrlEncoded
+    @POST("message/block")
+    Call<ResponseWrapper> muteConversation(
+            @Field("conversation_id") String conversation_id,
+            @Field("sender_block") int sender_block,
+            @Field("receiver_block") int receiver_block);
+
+
+    @GET("notification/user/{user_id}")
+    Call<ResponseWrapper<ArrayList<UserNotificatoin>>> UserNotification(
+            @Path("user_id") String user_id);
+
+    @GET("notification/following/{user_id}")
+    Call<ResponseWrapper<ArrayList<UserNotificatoin>>> FollowingNotification(
+            @Path("user_id") String user_id);
+
+
 
 
 

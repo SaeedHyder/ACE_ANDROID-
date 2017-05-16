@@ -76,8 +76,6 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
         });
         if (getArguments() != null) {
             post_id = getArguments().getString(POSTID);
-        } else {
-
         }
     }
 
