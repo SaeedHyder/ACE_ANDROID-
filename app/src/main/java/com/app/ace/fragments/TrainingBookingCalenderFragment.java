@@ -373,14 +373,6 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     private void createTrainerSchedule(ArrayList<TrainerBookingCalendarJson> jsonObject) {
         Call<ResponseWrapper> callBack = webService.createSchedule(
                 jsonObject);
-
-
-
-
-
-
-
-
         callBack.enqueue(new Callback<ResponseWrapper>() {
             @Override
             public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
