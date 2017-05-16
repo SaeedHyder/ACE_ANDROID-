@@ -44,15 +44,15 @@ public class Datedialoghelper {
         Calendar calendar = new GregorianCalendar(year, month, day);
         return new SimpleDateFormat("EEEE", Locale.ENGLISH).format(calendar.getTime());
     }
-    public String getShortMonthName(int year, int month, int day) {
+    public static String getShortMonthName(int year, int month, int day) {
         Calendar calendar = new GregorianCalendar(year, month, day);
         return new SimpleDateFormat("MMM", Locale.ENGLISH).format(calendar.getTime());
     }
-    public String getFullMonthName(int year, int month, int day) {
+    public static String getFullMonthName(int year, int month, int day) {
         Calendar calendar = new GregorianCalendar(year, month, day);
         return new SimpleDateFormat("MMMM", Locale.ENGLISH).format(calendar.getTime());
     }
-    public String getStringDate(int year, int month, int day) {
+    public static String getStringDate(int year, int month, int day) {
         Calendar calendar = new GregorianCalendar(year, month, day);
         return new SimpleDateFormat("yyyy MMM dd", Locale.ENGLISH).format(calendar.getTime());
     }

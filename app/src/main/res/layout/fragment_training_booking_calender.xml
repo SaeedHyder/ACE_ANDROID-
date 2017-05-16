@@ -1,34 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg">
+    android:background="@drawable/bg"
+    android:orientation="vertical">
+
 
     <LinearLayout
         android:id="@+id/ll_mainFrameTraingBookingCalender"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="0.8"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="1">
 
         <LinearLayout
             android:id="@+id/ll_calender"
             android:layout_width="match_parent"
             android:layout_height="@dimen/x32"
             android:background="@color/darkbrown"
+            android:orientation="vertical"></LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/expandablecontainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
 
+            <ExpandableListView
+                android:id="@+id/expandablelistview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@android:color/darker_gray"
+                android:dividerHeight="0.7dp"
+                android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
 
+                android:visibility="visible">
+                <!--"-->
+            </ExpandableListView>
         </LinearLayout>
-
 
         <LinearLayout
             android:id="@+id/ll_TrainerTimeAvaliablity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="0.4"
             android:orientation="vertical">
 
             <LinearLayout
@@ -117,6 +135,7 @@
 
                         <Spinner
                             android:id="@+id/sp_weeks"
+
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1" />
@@ -155,9 +174,6 @@
                     android:orientation="horizontal">
 
 
-
-
-
                     <com.app.ace.ui.views.AnyTextView
                         android:id="@+id/txtTo"
                         android:layout_width="0dp"
@@ -190,8 +206,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:gravity="center"
                         android:background="@drawable/background_day_hover"
+                        android:gravity="center"
                         android:hint="End Time"
                         android:text=""
                         app:typeface="Roboto-Regular.ttf"
@@ -247,9 +263,6 @@
                     android:orientation="horizontal">
 
 
-
-
-
                     <com.app.ace.ui.views.AnyTextView
                         android:id="@+id/SecondtxtTo"
                         android:layout_width="0dp"
@@ -282,8 +295,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:gravity="center"
                         android:background="@drawable/background_day_hover"
+                        android:gravity="center"
                         android:hint="End Time"
                         android:text=""
                         app:typeface="Roboto-Regular.ttf"
@@ -339,9 +352,6 @@
                     android:orientation="horizontal">
 
 
-
-
-
                     <com.app.ace.ui.views.AnyTextView
                         android:id="@+id/ThirdtxtTo"
                         android:layout_width="0dp"
@@ -374,8 +384,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:gravity="center"
                         android:background="@drawable/background_day_hover"
+                        android:gravity="center"
                         android:hint="End Time"
                         android:text=""
                         app:typeface="Roboto-Regular.ttf"
@@ -405,37 +415,38 @@
 
             </LinearLayout>
 
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/x1"
+                android:alpha="0.2"
+                android:background="@drawable/text" />
         </LinearLayout>
 
 
         <!-- <ListView
-                    android:id="@+id/lv_trainingBokingCalender"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/x17"
-                    android:visibility="visible">
+                android:id="@+id/lv_trainingBokingCalender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/x17"
+                android:visibility="visible">
 
-                </ListView>-->
+            </ListView>-->
 
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/x1"
-            android:alpha="0.2"
-            android:background="@drawable/text" />
     </LinearLayout>
 
 
     <LinearLayout
+
         android:id="@+id/ll_bottom_bar"
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="@dimen/x50"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom"
         android:layout_alignParentBottom="true"
-        android:gravity="center_vertical"
         android:layout_centerVertical="true"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:weightSum="3">
 
 
@@ -444,11 +455,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="@dimen/x15"
-            android:src="@drawable/calendar"
             android:gravity="center_vertical"
-            />
-
+            android:padding="@dimen/x15"
+            android:src="@drawable/calendar" />
 
 
         <ImageView
@@ -456,20 +465,18 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="@dimen/x15"
-            android:src="@drawable/profile"
             android:gravity="center_vertical"
-            />
+            android:padding="@dimen/x15"
+            android:src="@drawable/profile" />
 
         <ImageView
             android:id="@+id/iv_Home"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="@dimen/x15"
-            android:src="@drawable/home_icon"
             android:gravity="center_vertical"
-            />
+            android:padding="@dimen/x15"
+            android:src="@drawable/home_icon" />
 
     </LinearLayout>
 

@@ -1,5 +1,7 @@
 package com.app.ace.interfaces;
 
+import android.view.View;
+
 import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.AnyTextView;
 

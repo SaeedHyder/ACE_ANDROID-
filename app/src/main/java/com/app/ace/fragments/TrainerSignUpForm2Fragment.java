@@ -22,6 +22,7 @@ import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.DateHelper;
 import com.app.ace.helpers.Datedialoghelper;
 import com.app.ace.helpers.InternetHelper;
+import com.app.ace.helpers.TokenUpdater;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.IGetLocation;
 import com.app.ace.ui.dialogs.DialogFactory;
@@ -415,6 +416,7 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
                 if(validateOtherData() && validateEditText()){
                     if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()))
+                        TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"Android",prefHelper.getFirebase_TOKEN());
                         signupTrainer();
                     //getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(), "VarificationCodeFragment");
                 }

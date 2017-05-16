@@ -23,6 +23,7 @@ import com.app.ace.global.AppConstants;
 import com.app.ace.global.PasswordEditTextChangeListener;
 import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.InternetHelper;
+import com.app.ace.helpers.TokenUpdater;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.AnyTextView;
@@ -205,6 +206,7 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
                             UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.password_length_alert));
                         } else {
                             if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()))
+                                TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"Android",prefHelper.getFirebase_TOKEN());
                                 signupTrainee();
                         }
                     }

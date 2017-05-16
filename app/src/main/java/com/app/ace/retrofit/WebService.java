@@ -10,19 +10,17 @@ import com.app.ace.entities.GetTraineeBookings;
 import com.app.ace.entities.GoogleGeoCodeResponse;
 import com.app.ace.entities.HomeResultEnt;
 import com.app.ace.entities.MsgEnt;
-import com.app.ace.entities.NotificationDataItem;
 import com.app.ace.entities.NotificationEnt;
 import com.app.ace.entities.PostsEnt;
-import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.RegistrationResult;
-import com.app.ace.entities.SearchEnt;
+import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.ScheduleEnt;
 import com.app.ace.entities.ShowComments;
 import com.app.ace.entities.TrainerBookingCalendarJson;
 import com.app.ace.entities.TrainerTimingSlots;
 import com.app.ace.entities.User;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.entities.countEnt;
-import com.app.ace.helpers.NotificationHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,21 +140,25 @@ public interface WebService {
     @POST("post")
     Call<ResponseWrapper<HomeResultEnt>> getAllHomePosts(
             @Field("user_id") String user_id);
+
     @FormUrlEncoded
     @POST("user/search")
     Call<ResponseWrapper<ArrayList<UserProfile>>> getSearchUser(
             @Field("keyword") String username,
             @Field("user_type") String user_type);
+
     @FormUrlEncoded
     @POST("user/search")
     Call<ResponseWrapper<ArrayList<UserProfile>>> getTrainingSearch(
             @Field("keyword") String username,
             @Field("body_building_type") String body_building_type
-            ) ;
-   @GET ("notification/app/{user_id}")
-   Call<ResponseWrapper<ArrayList<NotificationEnt>>> getAppNotification(
-           @Path("user_id") String userid
-   ) ;
+    );
+
+    @GET("notification/app/{user_id}")
+    Call<ResponseWrapper<ArrayList<NotificationEnt>>> getAppNotification(
+            @Path("user_id") String userid
+    );
+
     @FormUrlEncoded
     @POST("user/sociallogin")
     Call<ResponseWrapper<RegistrationResult>> socialLogin(
@@ -178,7 +180,6 @@ public interface WebService {
             @Part("caption") RequestBody caption,
             @Part MultipartBody.Part image,
             @Part("user_id") RequestBody user_id);
-
 
 
     @GET("user/{user_id}")
@@ -206,9 +207,11 @@ public interface WebService {
             @Field("sender_id") String sender_id,
             @Field("receiver_id") String receiver_id,
             @Field("message_text") String message_text);
-    @GET ("notification/count/{user_id}")
+
+    @GET("notification/count/{user_id}")
     Call<ResponseWrapper<countEnt>> getNotificationCount(
             @Path("user_id") String user_id);
+
     @GET("message/{user_id}")
     Call<ResponseWrapper<ArrayList<MsgEnt>>> userinbox(
             @Path("user_id") String user_id);
@@ -241,21 +244,19 @@ public interface WebService {
             @Field("comment_text") String comment_text,
             @Field("tag_ids") int tag_ids
             //@Field("parent_comment_id") String parent_comment_id
-            );
-
+    );
 
 
     @GET("post/comment/{post_id}")
     Call<ResponseWrapper<ArrayList<ShowComments>>> ShowComments(
-            @Path("post_id") String post_id   );
-
+            @Path("post_id") String post_id);
 
 
     @Multipart
     @POST("user/update")
     Call<ResponseWrapper<RegistrationResult>> UpdateTrainee(
             @Part("user_id") RequestBody user_id,
-          //  @Part("password") RequestBody password,
+            //  @Part("password") RequestBody password,
             @Part("first_name") RequestBody first_name,
             @Part("last_name") RequestBody last_name,
             @Part("user_status") RequestBody user_status,
@@ -266,12 +267,12 @@ public interface WebService {
     @POST("user/update")
     Call<ResponseWrapper<RegistrationResult>> UpdateTrainer(
             @Part("user_id") RequestBody user_id,
-           // @Part("password") RequestBody password,
+            // @Part("password") RequestBody password,
             @Part("first_name") RequestBody first_name,
             @Part("last_name") RequestBody last_name,
             @Part("phone_number") RequestBody phone_number,
             @Part("university") RequestBody university,
-             @Part MultipartBody.Part profile_picture,
+            @Part MultipartBody.Part profile_picture,
             @Part("education") RequestBody education,
             @Part("speciality") RequestBody speciality,
             @Part("gym_address") RequestBody gym_address,
@@ -292,6 +293,20 @@ public interface WebService {
     Call<ResponseWrapper> createSchedule(
             @Body ArrayList<TrainerBookingCalendarJson> data);
 
+    @FormUrlEncoded
+    @POST("user/updatetoken")
+    Call<ResponseWrapper> updateToken(
+            @Field("user_id") String userid,
+            @Field("device_type") String deviceType,
+            @Field("device_token") String token
+    );
+
+    @GET("schedule/getTrainer/{trainer_id}")
+    Call<ResponseWrapper<ArrayList<ScheduleEnt>>> getSchedule(
+            @Path("trainer_id") String user_id);
+    @GET("schedule/get/{trainer_id}")
+    Call<ResponseWrapper<ArrayList<ScheduleEnt>>> getScheduleTrainee(
+            @Path("trainer_id") String user_id);
     @GET("schedule/get/{trainer_id}")
     Call<ResponseWrapper<ArrayList<GetTraineeBookings>>> ShowTraineeBookings(
             @Path("trainer_id") String trainer_id);
