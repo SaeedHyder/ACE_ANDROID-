@@ -13,8 +13,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/CircularImageSharePop"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:src="@drawable/profile_pic_trainer" />
     <com.app.ace.ui.views.AnyTextView
         android:id="@+id/tv_NameSharePop"

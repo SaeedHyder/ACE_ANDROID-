@@ -10,16 +10,19 @@ public class FollowDataItem {
     private String userImage;
     private String userName;
     private String userDetail;
-
+    private String created_at;
+    private int senderId;
     //private Integer imgChildGrid;
 
     private ArrayList<String> imgChildGrid;
 
-    public FollowDataItem(String userImage, String userName, String userDetail , ArrayList<String> imgChildGrid){
+    public FollowDataItem(String userImage, String userName, String userDetail, ArrayList<String> imgChildGrid, String created_at, int sender_id){
         setUserImage(userImage);
         setUserName(userName);
         setUserMessage(userDetail);
         setImgChildGrid(imgChildGrid);
+        setCreated_at(created_at);
+        setSenderId(sender_id);
     }
     public String getUserImage() {
         return userImage;
@@ -61,7 +64,23 @@ public class FollowDataItem {
         this.imgChildGrid = imgChildGrid;
     }
 
-  /*  public Integer getImgChildGrid() {
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
+
+    public int getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(int senderId) {
+        this.senderId = senderId;
+    }
+
+   /*  public Integer getImgChildGrid() {
         return imgChildGrid;
     }
 

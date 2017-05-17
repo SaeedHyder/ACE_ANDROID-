@@ -51,9 +51,8 @@ buildscript {
 repositories {
     maven { url 'https://maven.fabric.io/public' }
     maven { url "https://jitpack.io" }
-
-
 }
+
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -101,6 +100,7 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:10.2.0'
     //Badge
     compile 'berlin.volders:badger:0.2.1'
+
 }
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'

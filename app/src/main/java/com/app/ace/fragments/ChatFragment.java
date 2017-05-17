@@ -47,9 +47,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public static String ISFOLLOWING = "isfollowing";
     public static String PROFILEIMAGE = "profileimage";
     public static String FULLNAME = "fullname";
-    String IsFollowing;
-    String ProfileImage;
-    String FullName;
+    public static String SENDERBLOCK = "senderblock";
+    public static String RECEIVERBLOCK = "receiverblock";
+    public static String SENDERMUTE = "sendermute";
+    public static String RECEIVERMUTE = "receivermute";
+    public String sender_block;
+    public String receiver_block;
+    public String sender_mute;
+    public String receiver_mute;
+    public String IsFollowing;
+    public String ProfileImage;
+    public String FullName;
     public String PostPath;
     public String UserName;
     public String receiverId;
@@ -87,7 +95,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         return fragment;
     }
 
-    public static ChatFragment newInstance(String conversationId,String receiver_id,String UserName,String IsFollowing,String ProfileImage,String FullName) {
+    public static ChatFragment newInstance(String conversationId, String receiver_id, String UserName, String IsFollowing, String ProfileImage, String FullName, int senderblock, int receiverblock, int sendermute, int receivermute) {
         Bundle args = new Bundle();
         args.putString(CONVERSATION_ID, conversationId);
         args.putString(Receiver_ID, receiver_id);
@@ -95,13 +103,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         args.putString(ISFOLLOWING,IsFollowing);
         args.putString(PROFILEIMAGE,ProfileImage);
         args.putString(FULLNAME,FullName);
+        args.putString(SENDERBLOCK, String.valueOf(senderblock));
+        args.putString(RECEIVERBLOCK, String.valueOf(receiverblock));
+        args.putString(SENDERMUTE, String.valueOf(sendermute));
+        args.putString(RECEIVERMUTE, String.valueOf(receivermute));
 
         ChatFragment fragment = new ChatFragment();
         fragment.setArguments(args);
 
         return fragment;
     }
-    public static ChatFragment newInstance(String conversationId,String receiver_id,String UserName,String Post_Path,String IsFollowing,String ProfileImage,String FullName) {
+    public static ChatFragment newInstance(String conversationId, String receiver_id, String UserName, String Post_Path, String IsFollowing, String ProfileImage, String FullName, int sender_block, int receiver_block) {
         Bundle args = new Bundle();
         args.putString(CONVERSATION_ID, conversationId);
         args.putString(Receiver_ID, receiver_id);
@@ -110,6 +122,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         args.putString(ISFOLLOWING,IsFollowing);
         args.putString(PROFILEIMAGE,ProfileImage);
         args.putString(FULLNAME,FullName);
+        args.putString(SENDERBLOCK, String.valueOf(sender_block));
+        args.putString(RECEIVERBLOCK, String.valueOf(receiver_block));
 
         ChatFragment fragment = new ChatFragment();
         fragment.setArguments(args);
@@ -140,6 +154,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             IsFollowing=getArguments().getString(ISFOLLOWING);
             ProfileImage=getArguments().getString(PROFILEIMAGE);
             FullName=getArguments().getString(FULLNAME);
+            sender_block=getArguments().getString(SENDERBLOCK);
+            receiver_block=getArguments().getString(RECEIVERBLOCK);
+            sender_mute=getArguments().getString(SENDERMUTE);
+            receiver_mute=getArguments().getString(RECEIVERMUTE);
 
             // Toast.makeText(getDockActivity(), ConversationId, Toast.LENGTH_LONG).show();
         }
@@ -295,7 +313,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 // UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
-                getDockActivity().addDockableFragment(FriendsInfoFragment.newInstance(ConversationId,receiverId,IsFollowing,ProfileImage,FullName), "FriendsInfoFragment");
+                getDockActivity().addDockableFragment(FriendsInfoFragment.newInstance(ConversationId,receiverId,IsFollowing,ProfileImage,FullName,sender_block,receiver_block), "FriendsInfoFragment");
             }
         });
 

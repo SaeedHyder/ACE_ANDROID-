@@ -52,7 +52,7 @@ public class FollowListFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new ArrayListAdapter<FollowDataItem>(getDockActivity(), new FollowListItemBinder());
+        adapter = new ArrayListAdapter<FollowDataItem>(getDockActivity(), new FollowListItemBinder(getDockActivity()));
     }
 
     @Nullable
@@ -108,7 +108,7 @@ public class FollowListFragment extends BaseFragment {
             }
 
 
-                userCollection.add(new FollowDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(),arrChildCollection ));
+                userCollection.add(new FollowDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(),arrChildCollection ,item.getCreated_at(),item.getSender_id()));
 
 
         }

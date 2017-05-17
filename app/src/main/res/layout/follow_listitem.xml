@@ -30,18 +30,38 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
 
             <com.app.ace.ui.views.AnyTextView
                 android:id="@+id/txtUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_weight="0.8"
                 android:layout_marginLeft="@dimen/x10"
-                android:gravity="center"
                 android:text="@string/james_blunt"
                 android:textColor="@color/black"
-                android:textSize="@dimen/x15"
+                android:textSize="@dimen/x14"
                 app:typeface="Roboto-Bold.ttf" />
+
+            <com.app.ace.ui.views.AnyTextView
+                android:id="@+id/txtTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/x10"
+                android:gravity="start"
+                android:alpha="0.7"
+                android:text="17m"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/x12"
+                app:typeface="Roboto-Regular.ttf" />
+
+                </LinearLayout>
 
             <com.app.ace.ui.views.AnyTextView
                 android:id="@+id/txtUserDetail"

@@ -214,10 +214,10 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        setListener();
        showProfiles();
 
-        setListener();
+
     }
 
     private void showProfiles() {
@@ -232,11 +232,19 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
                     if (response.body().getResult().getUser_type().equalsIgnoreCase(AppConstants.trainer)) {
 
+
                         Trainer=AppConstants.trainer;
 
                         if (response.body().getResult().getId() == Integer.parseInt(prefHelper.getUserId())) {
                             btn_edit.setVisibility(View.VISIBLE);
                             btn_follow.setVisibility(View.GONE);
+                            btn_Unfollow.setVisibility(View.GONE);
+                            btn_request.setVisibility(View.GONE);
+
+                        }
+                        if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
+                            btn_edit.setVisibility(View.GONE);
+                            btn_follow.setVisibility(View.VISIBLE);
                             btn_Unfollow.setVisibility(View.GONE);
                             btn_request.setVisibility(View.GONE);
 

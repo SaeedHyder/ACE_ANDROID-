@@ -8,13 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.app.ace.R;
-import com.app.ace.entities.MsgEnt;
+import com.app.ace.entities.FollowUser;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.UserNotificatoin;
 import com.app.ace.entities.YouDataItem;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.UIHelper;
+import com.app.ace.interfaces.FollowService;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.YouListItemBinder;
 import com.app.ace.ui.views.TitleBar;
@@ -26,11 +27,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+import static com.app.ace.R.string.comments;
+
 /**
  * Created by muniyemiftikhar on 4/4/2017.
  */
 
-public class YouListFragment extends BaseFragment {
+public class YouListFragment extends BaseFragment implements FollowService {
 
     @InjectView(R.id.listViewFollow)
     private ListView listView;
@@ -48,7 +51,7 @@ public class YouListFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new ArrayListAdapter<YouDataItem>(getDockActivity(), new YouListItemBinder());
+        adapter = new ArrayListAdapter<YouDataItem>(getDockActivity(), new YouListItemBinder(this,getDockActivity()));
     }
 
     @Nullable
@@ -98,11 +101,12 @@ public class YouListFragment extends BaseFragment {
 
         for(UserNotificatoin item : result) {
             if(item.getAction_type().contains("post")) {
-                userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), item.getPost().getPost_image()));
+
+                userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), item.getPost().getPost_image(),item.getCreated_at(),item.getSender_id(),null));
             }
             else
             {
-                userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(),"drawable://" + R.drawable.follow));
+                userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(),null,item.getCreated_at(), item.getSender_id(),item.getIs_following()));
             }
             }
         bindData(userCollection);
@@ -148,5 +152,80 @@ public class YouListFragment extends BaseFragment {
                 UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
             }
         });*/
+    }
+
+    @Override
+    public void followUser(String senderId, int position, int i) {
+
+            Call<ResponseWrapper<FollowUser>> callBack = webService.follow(
+                    prefHelper.getUserId(),
+                    senderId
+            );
+
+            callBack.enqueue(new Callback<ResponseWrapper<FollowUser>>() {
+                @Override
+                public void onResponse(Call<ResponseWrapper<FollowUser>> call, Response<ResponseWrapper<FollowUser>> response) {
+
+                    if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+
+                    } else {
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<ResponseWrapper<FollowUser>> call, Throwable t) {
+
+                    UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+
+                }
+            });
+
+        YouDataItem updatedItem = (YouDataItem) adapter.getItem(position);
+        updatedItem.setIsfollowing(String.valueOf(i));
+        adapter.add(updatedItem);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void UnFollowUser(String senderId, int position, int i) {
+        Call<ResponseWrapper<FollowUser>> callBack = webService.unfollow(
+                prefHelper.getUserId(),
+                senderId
+        );
+
+        callBack.enqueue(new Callback<ResponseWrapper<FollowUser>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<FollowUser>> call, Response<ResponseWrapper<FollowUser>> response) {
+
+
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+
+
+                } else {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<FollowUser>> call, Throwable t) {
+
+
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+
+            }
+        });
+
+        YouDataItem updatedItem = (YouDataItem) adapter.getItem(position);
+        updatedItem.setIsfollowing(String.valueOf(i));
+        adapter.add(updatedItem);
+        adapter.notifyDataSetChanged();
+
     }
 }
