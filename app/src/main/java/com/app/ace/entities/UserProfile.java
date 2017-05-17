@@ -56,7 +56,7 @@ public class UserProfile {
     String followers_count;
     String following_count;
     String posts_count;
-    int rating;
+    float rating;
     int is_following;
 
 
@@ -464,11 +464,11 @@ public class UserProfile {
         this.posts = posts;
     }
 
-    public int getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 }

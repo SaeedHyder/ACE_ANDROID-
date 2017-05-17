@@ -178,10 +178,10 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
             firstName=fullname;
             lastName=" ";
         }
-        if(prefHelper.getUser().getGym_address()!=null)
+       /* if(prefHelper.getUser().getGym_address()!=null)
         {
             gymLocation=prefHelper.getUser().getGym_address();
-        }
+        }*/
 
         MultipartBody.Part profile_picture = null;
         if(profilePic != null) {
@@ -292,6 +292,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
                 mapControllerFragment.setDelegate(this);
 
                 DialogFactory.showMapControllerDialog(getDockActivity(), mapControllerFragment);
+                break;
 
         }
 

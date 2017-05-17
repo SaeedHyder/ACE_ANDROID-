@@ -5,11 +5,14 @@ import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Filter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.app.ace.R;
 import com.app.ace.entities.NewMessageDataItem;
@@ -79,9 +82,18 @@ public class NewMessageFragment extends BaseFragment implements TextWatcher {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        edit_sendTo.addTextChangedListener(this);
+       // edit_sendTo.addTextChangedListener(this);
+        edit_sendTo.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    getNewMsgUserData();
+                }
+                return false;
+            }
+        });
 
-        getNewMsgUserData();
+       // getNewMsgUserData();
     }
 
     private void getNewMsgUserData() {

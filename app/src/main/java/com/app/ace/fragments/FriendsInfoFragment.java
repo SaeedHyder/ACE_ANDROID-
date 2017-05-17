@@ -31,12 +31,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+
 import static com.app.ace.R.id.riv_profile_pic;
 import static com.app.ace.fragments.ChatFragment.CONVERSATION_ID;
 import static com.app.ace.fragments.ChatFragment.FULLNAME;
 import static com.app.ace.fragments.ChatFragment.ISFOLLOWING;
 import static com.app.ace.fragments.ChatFragment.PROFILEIMAGE;
+import static com.app.ace.fragments.ChatFragment.RECEIVERBLOCK;
 import static com.app.ace.fragments.ChatFragment.Receiver_ID;
+import static com.app.ace.fragments.ChatFragment.SENDERBLOCK;
 import static com.app.ace.global.AppConstants.user_id;
 
 
@@ -45,8 +48,11 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
     @InjectView(R.id.toggle_private_or_public)
     ToggleButton toggle_private_or_public;
 
-    @InjectView(R.id.iv_block)
-    ImageView iv_block;
+    @InjectView(R.id.btn_block)
+    Button btn_block;
+
+    @InjectView(R.id.btn_Unblock)
+    Button btn_Unblock;
 
     @InjectView(R.id.ProfileImage)
     CircleImageView ProfileImage;
@@ -68,6 +74,11 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
     public static String ISFOLLOWING = "isfollowing";
     public static String PROFILEIMAGE = "profileimage";
     public static String FULLNAME = "fullname";
+    public static String SENDERBLOCK = "senderblock";
+    public static String RECEIVERBLOCK = "receiverblock";
+
+    public String SenderBlock;
+    public String ReceiverBlock;
     String IsFollowing;
     String ProfilePicture;
     String FullName;
@@ -82,7 +93,7 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
         return new FriendsInfoFragment();
     }
 
-    public static FriendsInfoFragment newInstance(String conversationId, String receiver_ID, String isFollowing, String profileImage, String fullName) {
+    public static FriendsInfoFragment newInstance(String conversationId, String receiver_ID, String isFollowing, String profileImage, String fullName, String senderblock, String receiverblock) {
 
         Bundle args = new Bundle();
         args.putString(CONVERSATION_ID, conversationId);
@@ -90,6 +101,8 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
         args.putString(ISFOLLOWING,isFollowing);
         args.putString(PROFILEIMAGE,profileImage);
         args.putString(FULLNAME,fullName);
+        args.putString(SENDERBLOCK, String.valueOf(senderblock));
+        args.putString(RECEIVERBLOCK, String.valueOf(receiverblock));
 
         FriendsInfoFragment fragment = new FriendsInfoFragment();
         fragment.setArguments(args);
@@ -109,6 +122,8 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
             IsFollowing=getArguments().getString(ISFOLLOWING);
             ProfilePicture=getArguments().getString(PROFILEIMAGE);
             FullName=getArguments().getString(FULLNAME);
+            SenderBlock=getArguments().getString(SENDERBLOCK);
+            ReceiverBlock=getArguments().getString(RECEIVERBLOCK);
 
         }
         imageLoader = ImageLoader.getInstance();
@@ -133,16 +148,43 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void Listners() {
-        iv_block.setOnClickListener(this);
+        btn_block.setOnClickListener(this);
         btn_follow.setOnClickListener(this);
         btn_Unfollow.setOnClickListener(this);
-        iv_block.setOnClickListener(this);
+        btn_Unblock.setOnClickListener(this);
     }
 
     private void setData() {
 
         imageLoader.displayImage(ProfilePicture, ProfileImage);
         txt_UserName.setText(FullName);
+
+        if(prefHelper.getUserId().equals(receiverId)) {
+            if(SenderBlock.contains("0"))
+            {
+                btn_Unblock.setVisibility(View.GONE);
+                btn_block.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                btn_Unblock.setVisibility(View.VISIBLE);
+                btn_block.setVisibility(View.GONE);
+            }
+        }
+        else {
+            if(ReceiverBlock.contains("0"))
+            {
+                btn_Unblock.setVisibility(View.GONE);
+                btn_block.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                btn_Unblock.setVisibility(View.VISIBLE);
+                btn_block.setVisibility(View.GONE);
+            }
+
+        }
+
 
         if(IsFollowing.contains("0"))
         {
@@ -291,7 +333,11 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
     public void onClick(View v) {
 
         switch (v.getId()) {
-            case R.id.iv_block:
+            case R.id.btn_block:
+
+                btn_Unblock.setVisibility(View.VISIBLE);
+                btn_block.setVisibility(View.GONE);
+
                 if(prefHelper.getUserId().equals(receiverId)) {
                     setMuteService(1, 0);
                 }
@@ -300,6 +346,21 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
                     setMuteService(0,1);
                 }
                 break;
+
+            case R.id.btn_Unblock:
+
+                btn_Unblock.setVisibility(View.GONE);
+                btn_block.setVisibility(View.VISIBLE);
+
+                if(prefHelper.getUserId().equals(receiverId)) {
+                    setMuteService(0, 0);
+                }
+                else
+                {
+                    setMuteService(0,0);
+                }
+                break;
+
 
             case R.id.btn_follow:
 

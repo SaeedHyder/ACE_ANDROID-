@@ -67,7 +67,7 @@ public class InboxListItemBinder extends ViewBinder<MsgEnt> {
             if(entity.getSender().getId()==Integer.parseInt(preferenceHelper.getUserId()))
            {
                    imageLoader.displayImage(entity.getReceiver().getProfile_image(), viewHolder.userImage);
-                    viewHolder.txtUserName.setText(entity.getReceiver().getFirst_name() + " " + entity.getSender().getLast_name());
+                    viewHolder.txtUserName.setText(entity.getReceiver().getFirst_name() + " " + entity.getReceiver().getLast_name());
                    viewHolder.txtUserMessage.setText(entity.getMessage().getMessage_text());
             }
             else if(entity.getReceiver().getId()==Integer.parseInt(preferenceHelper.getUserId())) {
@@ -89,7 +89,7 @@ public class InboxListItemBinder extends ViewBinder<MsgEnt> {
                     }
 
 
-                    context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getMessage().getConversation_id()),String.valueOf(entity.getMessage().getReceiver_id()),UserName, String.valueOf(entity.getIs_following()),entity.getReceiver().getProfile_image(),entity.getReceiver().getFirst_name()+" "+entity.getReceiver().getLast_name()), "ChatFragment");
+                    context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getMessage().getConversation_id()),String.valueOf(entity.getMessage().getReceiver_id()),UserName, String.valueOf(entity.getIs_following()),entity.getReceiver().getProfile_image(),entity.getReceiver().getFirst_name()+" "+entity.getReceiver().getLast_name(),entity.getSender_block(),entity.getReceiver_block(),entity.getSender_mute(),entity.getReceiver_mute()), "ChatFragment");
 
                 }
             });

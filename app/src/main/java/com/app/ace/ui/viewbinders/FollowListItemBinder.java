@@ -5,7 +5,9 @@ import android.view.View;
 
 import com.app.ace.R;
 
+import com.app.ace.activities.DockActivity;
 import com.app.ace.entities.FollowDataItem;
+import com.app.ace.fragments.TrainerProfileFragment;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.ExpandableGridView;
@@ -22,8 +24,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class FollowListItemBinder extends ViewBinder<FollowDataItem> {
     private ImageLoader imageLoader;
     ArrayList<FollowDataItem> Array = new ArrayList<>();
-    public FollowListItemBinder() {
+    DockActivity context;
+    public FollowListItemBinder( DockActivity context) {
         super(R.layout.follow_listitem);
+
+        this.context=context;
 
         imageLoader = ImageLoader.getInstance();
     }
@@ -34,13 +39,24 @@ public class FollowListItemBinder extends ViewBinder<FollowDataItem> {
     }
 
     @Override
-    public void bindView(FollowDataItem entity, int position, int grpPosition, View view, Activity activity) {
+    public void bindView(final FollowDataItem entity, int position, int grpPosition, View view, Activity activity) {
 
         FollowListItemBinder.ViewHolder viewHolder = (FollowListItemBinder.ViewHolder) view.getTag();
+
+        String[] SplitTime=entity.getCreated_at().split(" ");
+        String time=SplitTime[1];
 
         imageLoader.displayImage(entity.getUserImage(), viewHolder.userImage);
         viewHolder.txtUserName.setText(entity.getUserName());
         viewHolder.txtUserDetail.setText(entity.getUserMessage());
+        viewHolder.txtTime.setText(time);
+
+        viewHolder.userImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.addDockableFragment(TrainerProfileFragment.newInstance(entity.getSenderId()), "TrainerProfileFragment");
+            }
+        });
 
 
         CustomeGridViewAdapter adapterCustomeGridView;
@@ -55,6 +71,7 @@ public class FollowListItemBinder extends ViewBinder<FollowDataItem> {
         private CircleImageView userImage;
         private AnyTextView txtUserName;
         private AnyTextView txtUserDetail;
+        private AnyTextView txtTime;
 
         ExpandableGridView gridview;
 
@@ -63,7 +80,7 @@ public class FollowListItemBinder extends ViewBinder<FollowDataItem> {
             userImage = (CircleImageView) view.findViewById(R.id.userImage);
             txtUserName = (AnyTextView) view.findViewById(R.id.txtUserName);
             txtUserDetail = (AnyTextView) view.findViewById(R.id.txtUserDetail);
-
+            txtTime=(AnyTextView) view.findViewById(R.id.txtTime);
             gridview = (ExpandableGridView) view.findViewById(R.id.gridId);
 
         }

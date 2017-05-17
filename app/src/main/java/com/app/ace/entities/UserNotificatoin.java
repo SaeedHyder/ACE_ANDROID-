@@ -17,6 +17,7 @@ public class UserNotificatoin {
     String is_read;
     String created_at;
     String updated_at;
+    String is_following;
     Sender sender;
     PostLiked post;
 
@@ -122,5 +123,13 @@ public class UserNotificatoin {
 
     public void setPost(PostLiked post) {
         this.post = post;
+    }
+
+    public String getIs_following() {
+        return is_following;
+    }
+
+    public void setIs_following(String is_following) {
+        this.is_following = is_following;
     }
 }

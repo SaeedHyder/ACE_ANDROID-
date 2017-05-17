@@ -9,14 +9,20 @@ public class YouDataItem {
     private String userName;
     private String userDetail;
     private String youImage;
+    private String time;
+    private String SenderId;
+    private String Isfollowing;
 
 
 
-    public YouDataItem(String userImage, String userName, String userDetail, String youImage){
+    public YouDataItem(String userImage, String userName, String userDetail, String youImage, String time, int sender_id, String is_following){
         setUserImage(userImage);
         setUserName(userName);
         setUserMessage(userDetail);
         setYouImage(youImage);
+        setTime(time);
+        setSenderId(String.valueOf(sender_id));
+        setIsfollowing(is_following);
 
     }
     public String getUserImage() {
@@ -57,5 +63,29 @@ public class YouDataItem {
 
     public void setYouImage(String youImage) {
         this.youImage = youImage;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getSenderId() {
+        return SenderId;
+    }
+
+    public void setSenderId(String senderId) {
+        SenderId = senderId;
+    }
+
+    public String getIsfollowing() {
+        return Isfollowing;
+    }
+
+    public void setIsfollowing(String isfollowing) {
+        Isfollowing = isfollowing;
     }
 }

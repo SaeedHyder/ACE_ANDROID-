@@ -112,6 +112,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     HashMap<Integer, String> ScheduleHashMap = new HashMap<>();
     ArrayList<String> alreadySelectedTime = new ArrayList<>();
     List<String> timeArray = new ArrayList();
+    public String arrayLastItem="";
     String trainerScheduleJson;
     int LastSelectHour = 0;
     ArrayList<String> listDataHeader;
@@ -916,10 +917,34 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
     @Override
     public void setData(String itemPosition) {
+
+        if(alreadySelectedTime.size()>0) {
+            arrayLastItem = alreadySelectedTime.get(alreadySelectedTime.size() - 1);
+        }
+
         if (!itemPosition.isEmpty()) {
-            if (alreadySelectedTime.contains(itemPosition)) {
+            if(!arrayLastItem.equals("") && arrayLastItem.contains(itemPosition))
+            {
+                if(alreadySelectedTime.contains(itemPosition))
+                {
+                    String[] time = itemPosition.split(":00");
+                    int hour = Integer.parseInt(time[0]);
+                    if (hour < LastSelectHour) {
+                        UIHelper.showShortToastInCenter(getDockActivity(), "Selected Time is Lesser then Previous Selected Time");
+                    } else {
+                        AnyTextView textView = (AnyTextView) this.textView;
+                        textView.setText(itemPosition);
+                        alreadySelectedTime.add(itemPosition);
+                        String[] thistime = itemPosition.split(":00");
+                        LastSelectHour = Integer.parseInt(time[0]);
+
+                    }
+                }
+            }
+            else if (!arrayLastItem.contains(itemPosition) && alreadySelectedTime.contains(itemPosition)) {
                 UIHelper.showShortToastInCenter(getDockActivity(), "Time Already Selected Please select a Differnet time");
-            } else {
+            }
+            else {
                 String[] time = itemPosition.split(":00");
                 int hour = Integer.parseInt(time[0]);
                 if (hour < LastSelectHour) {
