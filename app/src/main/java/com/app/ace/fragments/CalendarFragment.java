@@ -1,7 +1,13 @@
 package com.app.ace.fragments;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,75 +17,91 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.app.ace.R;
-import com.app.ace.entities.FollowingCountListEnt;
+import com.app.ace.entities.BookingSchedule;
+import com.app.ace.entities.CalenderEnt;
 import com.app.ace.entities.ResponseWrapper;
-import com.app.ace.entities.TrainerTimingSlots;
+import com.app.ace.entities.Slot;
+import com.app.ace.entities.TrainerBooking;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
+import com.app.ace.retrofit.GsonFactory;
 import com.app.ace.ui.views.TitleBar;
-import com.squareup.timessquare.CalendarCellDecorator;
-import com.squareup.timessquare.CalendarPickerView;
-import com.squareup.timessquare.DefaultDayViewAdapter;
+import com.roomorama.caldroid.CaldroidFragment;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
-import static com.app.ace.global.AppConstants.trainer;
-
 /**
  * Created by saeedhyder on 4/4/2017.
  */
 
 public class CalendarFragment extends BaseFragment implements View.OnClickListener {
-
-    @InjectView (R.id.calendarView)
-    CalendarPickerView calendarView;
-
-    @InjectView (R.id.btn_avaliablity)
+    public static String USER_ID = "USER_ID";
+    final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
+    @InjectView(R.id.btn_avaliablity)
     Button btn_avaliablity;
+    int TotalArray = -1;
 
+    /* @InjectView(R.id.calendarView)
+     CalendarPickerView calendarView;*/
     @InjectView(R.id.sp_trainerTime)
     Spinner sp_timer;
-
     @InjectView(R.id.sp_weeks)
     Spinner sp_weeks;
-
     @InjectView(R.id.sp_category)
     Spinner sp_category;
-
     @InjectView(R.id.btn_training_Search_Submit)
     Button btn_training_Search_Submit;
-
-    int days;
-    List<String> timings=new ArrayList<String>();
-    public static String START_DATE = "signup_model";
+    String buildingTypes = "Types of Training";
+    Map<Date, Drawable> dateDrawableMap = new TreeMap<>();
+    Map<Date, Integer> dateTextDrawableMap = new TreeMap<>();
+    BookingSchedule bookingSchedule;
+    private CaldroidFragment caldroidFragment;
+    private CaldroidFragment dialogCaldroidFragment;
+    private String duration = "2 Week";
+    private int days = 14;
+    private List<String> timings = new ArrayList<String>();
+    private Date EndDate;
+    private ArrayList<Slot> slots = new ArrayList<>();
+    private ArrayList<BookingSchedule> bookingScheduleArrayList = new ArrayList<>();
+    private ArrayList<CalenderEnt> calenderids = new ArrayList<>();
+    private ArrayList<Date> totaldate = new ArrayList<>();
 
     public static CalendarFragment newInstance(String startDate) {
         Bundle args = new Bundle();
-        args.putString(START_DATE, startDate);
+        args.putString(USER_ID, startDate);
         CalendarFragment fragment = new CalendarFragment();
         fragment.setArguments(args);
         return fragment;
     }
+
     public static CalendarFragment newInstance() {
-       return new CalendarFragment();
+        return new CalendarFragment();
 
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            START_DATE = getArguments().getString(START_DATE);
+            USER_ID = getArguments().getString(USER_ID);
             // Toast.makeText(getDockActivity(), ConversationId, Toast.LENGTH_LONG).show();
         }
 
@@ -97,10 +119,53 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        caldroidFragment = new CaldroidFragment();
+        if (savedInstanceState != null) {
+            caldroidFragment.restoreStatesFromKey(savedInstanceState,
+                    "CALDROID_SAVED_STATE");
+        }
+        // If activity is created from fresh
+        else {
+            Bundle args = new Bundle();
+            Calendar cal = Calendar.getInstance();
+            args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
+            args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
+            args.putBoolean(CaldroidFragment.ENABLE_SWIPE, true);
+            args.putBoolean(CaldroidFragment.SIX_WEEKS_IN_CALENDAR, true);
 
-        trainerTimeSlots();
+            // Uncomment this to customize startDayOfWeek
+            // args.putInt(CaldroidFragment.START_DAY_OF_WEEK,
+            // CaldroidFragment.TUESDAY); // Tuesday
+
+            // Uncomment this line to use Caldroid in compact mode
+            // args.putBoolean(CaldroidFragment.SQUARE_TEXT_VIEW_CELL, false);
+
+            //  Uncomment this line to use dark theme
+//         args.putInt(CaldroidFragment.THEME_RESOURCE, com.caldroid.R.style..CaldroidDefaultDark);
+
+            caldroidFragment.setArguments(args);
+        }
 
 
+        // Attach to the activity
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction t = fragmentManager.beginTransaction();
+
+        if (caldroidFragment.isAdded()) {
+            fragmentManager.beginTransaction().remove(caldroidFragment).commitNow();
+        }
+
+        t.replace(R.id.calendar1, caldroidFragment);
+        t.commit();
+
+        initCategorySpinner();
+        initDurationSpinner();
+
+
+        setListener();
+    }
+
+    private void initDurationSpinner() {
         //Spinner Weeks
         List<String> timeDuration = new ArrayList<String>();
         timeDuration.add("Select time duration");
@@ -113,52 +178,37 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         TimeDurationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_weeks.setAdapter(TimeDurationAdapter);
 
-        //Spinner Category
-        List<String> category = new ArrayList<String>();
-        category.add("Types of Training");
-        category.add("Flexiblity training");
-        category.add("Dynamic Strength training");
-        category.add("Static strength training");
-        category.add("Circuit training");
-        category.add("Aerobic training");
-        category.add("Body Building");
-        category.add("Lose Weight");
-        
-        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, category);
-        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sp_category.setAdapter(categoryAdapter);
+
+
        /* String calendarDate = calendarView.getDate()+"";
         Toast.makeText(getDockActivity(),calendarDate,Toast.LENGTH_LONG).show();*/
+        //  EndDate = getEndDate(duration);
 
-
-
-        setCalendarView(days);
+        //setCalendarView(days);
 
         sp_weeks.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                final String duration = sp_weeks.getSelectedItem().toString();
-                if(duration=="2 Week")
-                {
-                    days=14;
+                duration = sp_weeks.getSelectedItem().toString();
+                EndDate = getEndDate(duration);
+
+                /*if (duration == "2 Week") {
+                    days = 14;
                     setCalendarView(days);
 
                 }
-                if(duration=="1 Month")
-                {
-                    days=30;
+                if (duration == "1 Month") {
+                    days = 30;
                     setCalendarView(days);
                 }
-                if(duration=="3 Months")
-                {
-                    days=90;
+                if (duration == "3 Months") {
+                    days = 90;
                     setCalendarView(days);
                 }
-                if(duration=="6 Months")
-                {
-                    days=180;
+                if (duration == "6 Months") {
+                    days = 180;
                     setCalendarView(days);
-                }
+                }*/
 
             }
 
@@ -167,61 +217,354 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
 
             }
         });
-
-
-
-        setListener();
     }
 
-    private void trainerTimeSlots() {
+    private void initCategorySpinner() {
+        //Spinner Category
+        final List<String> category = new ArrayList<String>();
+        category.add("Types of Training");
+        category.add("Flexiblity training");
+        category.add("Dynamic Strength training");
+        category.add("Static strength training");
+        category.add("Circuit training");
+        category.add("Aerobic training");
+        category.add("Body Building");
+        category.add("Lose Weight");
 
-        Call<ResponseWrapper<ArrayList<TrainerTimingSlots>>> callBack = webService.TrainerTimingSlots(prefHelper.getUserId());
-        loadingStarted();
-
-        callBack.enqueue(new Callback<ResponseWrapper<ArrayList<TrainerTimingSlots>>>() {
+        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, category);
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_category.setAdapter(categoryAdapter);
+        sp_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onResponse(Call<ResponseWrapper<ArrayList<TrainerTimingSlots>>> call, Response<ResponseWrapper<ArrayList<TrainerTimingSlots>>> response) {
-                loadingFinished();
-                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS))
-                {
-                    getTrainerTimingSlots(response.body().getResult());
-                }
-                else
-                {
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                }
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                buildingTypes = category.get(position);
             }
 
             @Override
-            public void onFailure(Call<ResponseWrapper<ArrayList<TrainerTimingSlots>>> call, Throwable t) {
-
-                loadingFinished();
-                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
+    }
+
+
+    public Date getEndDate(String days) {
+
+
+        if (days.contains("2 Week")) {
+            Calendar enddate = Calendar.getInstance();
+            enddate.add(Calendar.DAY_OF_MONTH, 14);
+            EndDate = enddate.getTime();
+        }
+
+        if (days.contains("1 Month")) {
+            Calendar enddate = Calendar.getInstance();
+            enddate.add(Calendar.MONTH, 1);
+            EndDate = enddate.getTime();
+        }
+        if (days.contains("3 Months")) {
+            Calendar enddate = Calendar.getInstance();
+            enddate.add(Calendar.MONTH, 3);
+            EndDate = enddate.getTime();
+        }
+        if (days.contains("6 Months")) {
+            Calendar enddate = Calendar.getInstance();
+            enddate.add(Calendar.MONTH, 6);
+            EndDate = enddate.getTime();
+        }
+
+        return EndDate;
 
     }
 
-    private void getTrainerTimingSlots(ArrayList<TrainerTimingSlots> result) {
+    private void trainerTimeSlots() {
+        if (EndDate == null)
+            UIHelper.showShortToastInCenter(getDockActivity(), "Select Duration First");
+        else {
+            String StartDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date().getTime());
 
-        timings.add("Slots Avaliable");
+            //EndDate = getEndDate(duration);
 
-        for(TrainerTimingSlots item: result)
-        {
-            timings.add(item.getStart_time()+" to "+item.getEnd_time());
+            String endDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(EndDate.getTime());
+            Call<ResponseWrapper<TrainerBooking>> callBack = webService.getScheduleTrainee(USER_ID, StartDate, endDate);
+            loadingStarted();
+
+            callBack.enqueue(new Callback<ResponseWrapper<TrainerBooking>>() {
+                @Override
+                public void onResponse(Call<ResponseWrapper<TrainerBooking>> call, Response<ResponseWrapper<TrainerBooking>> response) {
+                    loadingFinished();
+                    if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                        getTrainerTimingSlots(response.body().getResult());
+                    } else {
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseWrapper<TrainerBooking>> call, Throwable t) {
+
+                    loadingFinished();
+                    UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+
+                }
+            });
+        }
+    }
+
+    private void getTrainerTimingSlots(TrainerBooking result) {
+        UIHelper.showShortToastInCenter(getDockActivity(), "asd" + USER_ID);
+        //timings.add("Slots Avaliable");
+        slots = result.getSlots();
+     /*   ColorDrawable red = new ColorDrawable(getResources().getColor(R.color.red));
+        ColorDrawable green = new ColorDrawable(Color.GREEN);
+        ColorDrawable white = new ColorDrawable(Color.WHITE);*/
+
+        for (Slot item : slots) {
+            timings.add(item.getStartTime() + " to " + item.getEndTime());
 
         }
 
-        ArrayAdapter<String> timerAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, timings);
-
-        timerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sp_timer.setAdapter(timerAdapter);
+        initTimerSpinner();
 
     }
 
-    private void setCalendarView(int days) {
-       /* calendarView.state().edit()
+    private void initTimerSpinner() {
+        final ArrayAdapter<String> timerAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, timings);
+
+        timerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_timer.setAdapter(timerAdapter);
+        sp_timer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                calenderids.clear();
+                dateDrawableMap.clear();
+                dateTextDrawableMap.clear();
+                totaldate.clear();
+                TotalArray = -1;
+                showDateinCalender(timerAdapter.getItem(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void showDateinCalender(String timeSlot) {
+        Drawable green = getResources().getDrawable(R.drawable.booked);
+        Drawable white = getResources().getDrawable(R.drawable.available);
+        Drawable red = getResources().getDrawable(R.drawable.not_available);
+        Date date = null;
+        int index = 0;
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        for (Slot item : slots
+                ) {
+            String slottime = item.getStartTime() + " to " + item.getEndTime();
+            try {
+                date = dateFormat.parse(item.getDate());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            totaldate.add(date);
+            if (date != null) {
+                index++;
+
+                if (slottime.equals(timeSlot)) {
+                    TotalArray++;
+                    // totaldate.remove(index);
+                    if (item.getBookings() != null) {
+                        dateDrawableMap.put(date, green);
+                        dateTextDrawableMap.put(date, R.color.white);
+                    } else {
+                        calenderids.add(new CalenderEnt(item.getId()));
+                        dateDrawableMap.put(date, white);
+                        dateTextDrawableMap.put(date, R.color.black);
+
+                    }
+                }
+            }
+          /*  else{
+                dateDrawableMap.put(date, red);
+                dateTextDrawableMap.put(date, R.color.white);
+            }*/
+        }
+        Collections.sort(totaldate);
+
+      /*  Collections.sort(totaldate, new Comparator<MyObject>() {
+            public int compare(MyObject o1, MyObject o2) {
+                return o1.getDateTime().compareTo(o2.getDateTime());
+            }
+        });*/
+
+
+        Calendar calender = Calendar.getInstance();
+        if (!totaldate.isEmpty()) {
+
+            final List<Map.Entry<Date, Drawable>> entries =
+                    new ArrayList<Map.Entry<Date, Drawable>>(dateDrawableMap.entrySet());
+            Map.Entry<Date,Drawable> entry=dateDrawableMap.entrySet().iterator().next();
+       if (entry.getKey() !=null){
+           Date date1 =entry.getKey();
+           Date currentDate = new Date();
+           while (currentDate.before(date1)) {
+               calender.add(Calendar.DAY_OF_MONTH, 1);
+               currentDate = calender.getTime();
+               dateDrawableMap.put(calender.getTime(), red);
+               dateTextDrawableMap.put(calender.getTime(), R.color.white);
+           }
+       }
+            Map.Entry<Date,Drawable> lastentry = entries.get(entries.size()-1);
+           if (lastentry.getKey()!=null){
+               Date date2 = lastentry.getKey(); //totaldate.get(totaldate.size() - 1);
+               calender.setTime(date2);
+               while (date2.before(EndDate)) {
+                   calender.add(Calendar.DAY_OF_MONTH, 1);
+                   date2 = calender.getTime();
+                   dateDrawableMap.put(calender.getTime(), red);
+                   dateTextDrawableMap.put(calender.getTime(), R.color.white);
+               }
+           }
+        }
+        setCustomResourceForDates();
+
+        // Attach to the activity
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction t = fragmentManager.beginTransaction();
+
+        if (caldroidFragment.isAdded()) {
+            fragmentManager.beginTransaction().remove(caldroidFragment).commitNow();
+        }
+
+        t.replace(R.id.calendar1, caldroidFragment);
+        t.commit();
+    }
+
+    private void setBooking(ArrayList<BookingSchedule> result) {
+        Call<ResponseWrapper> callback = webService.bookTrainer(result);
+        callback.enqueue(new Callback<ResponseWrapper>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                    loadingFinished();
+                    //UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(), "TraineeScheduleFragment");
+
+                } else {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper> call, Throwable t) {
+                loadingFinished();
+                System.out.println(t.toString());
+                Log.e("Calender", t.toString());
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+            }
+        });
+    }
+
+    private void bookTrainer() {
+
+            bookingSchedule = new BookingSchedule();
+            bookingSchedule.setUser_id(Integer.parseInt(prefHelper.getUserId()));
+            bookingSchedule.setTraining_type(buildingTypes);
+            bookingSchedule.setAll_ids(calenderids);
+            bookingScheduleArrayList.add(bookingSchedule);
+            setBooking(bookingScheduleArrayList);
+            String sad = GsonFactory.getConfiguredGson().toJson(bookingScheduleArrayList);
+            System.out.println(sad);
+
+    }
+
+    private void setCustomResourceForDates() {
+        Calendar cal = Calendar.getInstance();
+
+        // Min date is last 7 days
+        // cal.add(Calendar.DATE, -7);
+        Date blueDate = cal.getTime();
+
+        // Max date is next 7 days
+        cal = Calendar.getInstance();
+        cal.setTime(EndDate);
+      /*      cal.add(Calendar.DATE, 7);*/
+        Date greenDate = cal.getTime();
+
+        if (caldroidFragment != null) {
+            ColorDrawable blue = new ColorDrawable(getResources().getColor(R.color.blue));
+            ColorDrawable green = new ColorDrawable(Color.GREEN);
+            if (dateDrawableMap.size() > 1) {
+                caldroidFragment.setBackgroundDrawableForDates(dateDrawableMap);
+                caldroidFragment.setTextColorForDates(dateTextDrawableMap);
+            }
+         /*   caldroidFragment.setBackgroundDrawableForDate(blue, blueDate);
+            caldroidFragment.setBackgroundDrawableForDate(green, greenDate);
+            caldroidFragment.setTextColorForDate(R.color.white, blueDate);
+            caldroidFragment.setTextColorForDate(R.color.white, greenDate);*/
+        }
+    }
+
+    private void setListener() {
+        btn_avaliablity.setOnClickListener(this);
+        btn_training_Search_Submit.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        // TODO Auto-generated method stub
+        switch (v.getId()) {
+            case R.id.btn_training_Search_Submit:
+                if (TotalArray == calenderids.size()) {
+                    setupDialog();
+                } else {
+                    UIHelper.showShortToastInCenter(getDockActivity(), "Trainer is not available for whole Duration");
+                }
+
+                //getDockActivity().addDockableFragment(CalenderPopupDialogFragment.newInstance(), "CalenderPopupDialogFragment");
+                break;
+            case R.id.btn_avaliablity:
+                trainerTimeSlots();
+                break;
+        }
+    }
+
+    private void setupDialog() {
+        final DialogHelper dialog = new DialogHelper(getDockActivity(), true);
+        dialog.initDialog(R.layout.calendar_popup);
+        dialog.initPositiveBtn(R.id.btndialogCalendar_1, "CONFIRM", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadingStarted();
+                bookTrainer();
+                dialog.dismisspoptuDialog();
+            }
+        });
+        dialog.initNegativeBtn(R.id.btndialogCalendar_2, "CANCEL", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismisspoptuDialog();
+            }
+        });
+        dialog.showDialog();
+    }
+
+
+    @Override
+    public void setTitleBar(TitleBar titleBar) {
+        super.setTitleBar(titleBar);
+        titleBar.hideButtons();
+        titleBar.showBackButton();
+        titleBar.setSubHeading("May");
+
+    }
+
+}
+ /* private void setCalendarView(int days) {
+       *//* calendarView.state().edit()
                 .setFirstDayOfWeek(Calendar.SUNDAY)
                 .setMinimumDate(CalendarDay.from(1990, 1, 1))
                 .setMaximumDate(CalendarDay.from(2060, 12,31))
@@ -229,7 +572,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
                 .commit();
 
         calendarView.setSelectionMode(MaterialCalendarView.SELECTION_MODE_RANGE);
-        calendarView.selectRange(CalendarDay.from(2017, 4, 12), CalendarDay.from(2017, 4, 15));*/
+        calendarView.selectRange(CalendarDay.from(2017, 4, 12), CalendarDay.from(2017, 4, 15));*//*
 
 
         Calendar nextYear = Calendar.getInstance();
@@ -250,37 +593,9 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
 
         //dates.add(today.getTime());
         calendarView.setDecorators(Collections.<CalendarCellDecorator>emptyList());
-       // calendarView.setDecorators(Arrays.<CalendarCellDecorator>asList(new SampleDecorator()));
+        // calendarView.setDecorators(Arrays.<CalendarCellDecorator>asList(new SampleDecorator()));
         calendarView.init(new Date(), nextYear.getTime()) //
                 .inMode(CalendarPickerView.SelectionMode.RANGE) //
                 .withSelectedDates(dates);
 
-    }
-
-    private void setListener() {
-
-        btn_training_Search_Submit.setOnClickListener(this);
-
-    }
-
-    @Override
-    public void onClick( View v ) {
-        // TODO Auto-generated method stub
-        switch (v.getId()) {
-            case R.id.btn_training_Search_Submit:
-
-                getDockActivity().addDockableFragment(CalenderPopupDialogFragment.newInstance(),"CalenderPopupDialogFragment");
-                break;
-        }}
-
-
-    @Override
-    public void setTitleBar(TitleBar titleBar) {
-        super.setTitleBar(titleBar);
-        titleBar.hideButtons();
-        titleBar.showBackButton();
-        titleBar.setSubHeading("May");
-
-    }
-
-}
+    }*/

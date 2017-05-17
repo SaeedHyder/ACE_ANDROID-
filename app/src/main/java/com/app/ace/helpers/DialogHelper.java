@@ -35,7 +35,15 @@ int days = 1;
     Date StartDate;
     public DialogHelper(Context context) {
         this.dialog = new Dialog(context);
-       /* dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);*/
+       /* */
+    }
+    public DialogHelper(Context context,boolean title) {
+        this.dialog = new Dialog(context);
+        if (title){
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        }
+
+       /* */
     }
 
 
@@ -44,6 +52,12 @@ int days = 1;
         this.dialog.setContentView(layoutID);
         calendarView = (CalendarPickerView) this.dialog.findViewById(R.id.calendarView);
         StartDate = startDate;
+        return this.dialog;
+    }
+    public Dialog initDialog(int layoutID) {
+
+        this.dialog.setContentView(layoutID);
+
         return this.dialog;
     }
 
@@ -133,6 +147,7 @@ int days = 1;
         //dates.add(today.getTime());
         calendarView.setDecorators(Collections.<CalendarCellDecorator>emptyList());
         //calendarView.setDecorators(Arrays.<CalendarCellDecorator>asList(new SampleDecorator()));
+
         calendarView.init(StartDate, nextYear.getTime()) //
                 .inMode(CalendarPickerView.SelectionMode.RANGE) //
                 .withSelectedDates(dates);
@@ -170,6 +185,9 @@ int days = 1;
         calendar.setTime(calendarView.getSelectedDate());
         calendar.add(Calendar.DAY_OF_MONTH,days);
         return calendar.getTime();
+    }
+    public void dismisspoptuDialog(){
+        this.dialog.dismiss();
     }
 
 

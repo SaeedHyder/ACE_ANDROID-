@@ -87,7 +87,7 @@ public class ArrayListExpandableAdapter<T,E> extends BaseExpandableListAdapter {
         }
 
         T groupItem = (T) getGroup(groupPosition);
-        viewBinder.bindGroupView(groupItem, groupPosition, 0, convertView, mContext);
+        viewBinder.bindGroupView(groupItem, groupPosition, 0, convertView, mContext,isExpanded);
 
         return convertView;
 

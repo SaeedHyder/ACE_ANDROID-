@@ -101,6 +101,9 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:10.2.0'
     //Badge
     compile 'berlin.volders:badger:0.2.1'
+
+    //Calender
+    compile 'com.roomorama:caldroid:3.0.1'
 }
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'

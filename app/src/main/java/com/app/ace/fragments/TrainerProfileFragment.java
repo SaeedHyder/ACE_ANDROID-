@@ -522,7 +522,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             case R.id.btn_request:
 
                 //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
-                getDockActivity().addDockableFragment(CalendarFragment.newInstance(), "CalendarFragment");
+                getDockActivity().addDockableFragment(CalendarFragment.newInstance(user_id), "CalendarFragment");
 
 
                 break;

@@ -1,6 +1,7 @@
 package com.app.ace.retrofit;
 
 
+import com.app.ace.entities.BookingSchedule;
 import com.app.ace.entities.CreatePostEnt;
 import com.app.ace.entities.CreaterEnt;
 import com.app.ace.entities.FollowUser;
@@ -16,6 +17,7 @@ import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.ScheduleEnt;
 import com.app.ace.entities.ShowComments;
+import com.app.ace.entities.TrainerBooking;
 import com.app.ace.entities.TrainerBookingCalendarJson;
 import com.app.ace.entities.TrainerTimingSlots;
 import com.app.ace.entities.User;
@@ -302,13 +304,20 @@ public interface WebService {
             @Field("device_token") String token
     );
 
+    @POST("schedule/book")
+    Call<ResponseWrapper> bookTrainer(
+            @Body ArrayList<BookingSchedule> data);
+
     @GET("schedule/getTrainer/{trainer_id}")
     Call<ResponseWrapper<ArrayList<ScheduleEnt>>> getSchedule(
             @Path("trainer_id") String user_id);
 
-    @GET("schedule/get/{trainer_id}")
-    Call<ResponseWrapper<ArrayList<ScheduleEnt>>> getScheduleTrainee(
-            @Path("trainer_id") String user_id);
+    @FormUrlEncoded
+    @POST("schedule/get")
+    Call<ResponseWrapper<TrainerBooking>> getScheduleTrainee(
+            @Field("trainer_id") String user_id,
+            @Field("start_date") String startDate,
+            @Field("end_date")String Enddate);
 
     @GET("schedule/get/{trainer_id}")
     Call<ResponseWrapper<ArrayList<GetTraineeBookings>>> ShowTraineeBookings(

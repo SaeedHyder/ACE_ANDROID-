@@ -36,8 +36,6 @@ import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
-import org.joda.time.DateTime;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -302,6 +300,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                         dateSpecified = calendar.getTime();
                         mMonth = monthOfYear;
+
                         mDay = dayOfMonth;
                         mYear = year;
                         if (dateSpecified.before(todayDate)) {
@@ -310,7 +309,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                             if (txtView.getText().toString().equals(dayOfMonth + "/" + month + "/" + year)) {
 
                             } else {
-                                txtView.setText(dayOfMonth + "/" + monthOfYear + "/" + year);
+                                txtView.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                             }
 
                         }
@@ -430,9 +429,10 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                 loadingStarted();
                 //  trainingBookingListItemBinder.getTimeArray();
                 // setDataInJson(trainingBookingListItemBinder.getTimeArray());
+
                 Map<Integer, String> map = new TreeMap<Integer, String>(ScheduleHashMap);
-                // ScheduleHashMap =  new TreeMap<Integer, String>(ScheduleHashMap);
-                setDataInJson(map);
+                if (!map.isEmpty())
+                    setDataInJson(map);
                 //createTrainerSchedule(trainerBookingCalendarJsonCollection);
             }
         });
@@ -458,10 +458,10 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     private void setupCalenderDialog() {
         final DialogHelper dialog = new DialogHelper(getDockActivity());
 
-            EndDate = getEndDate(spinerValue);
+        EndDate = getEndDate(spinerValue);
 
 
-        dialog.initDialog(R.layout.dialog_repeat,EndDate);
+        dialog.initDialog(R.layout.dialog_repeat, EndDate);
         dialog.setDuration(getDockActivity());
 
 
@@ -847,7 +847,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                 trainerBookingCalendarJson.setStart_date(new SimpleDateFormat(
                         "yyyy-MM-dd", Locale.ENGLISH).format(dateSpecified.getTime()));
                 if (EndDate == null)
-                EndDate = getEndDate(spinerValue);
+                    EndDate = getEndDate(spinerValue);
 
                 trainerBookingCalendarJson.setEnd_date(new SimpleDateFormat(
                         "yyyy-MM-dd", Locale.ENGLISH).format(EndDate.getTime()));

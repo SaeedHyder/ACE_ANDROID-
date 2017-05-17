@@ -134,11 +134,12 @@
 
                   </CalendarView>-->
 
-            <com.squareup.timessquare.CalendarPickerView
-                android:id="@+id/calendarView"
+            <LinearLayout
+                android:id="@+id/calendar1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg"
+                android:orientation="vertical"></LinearLayout>
 
         </LinearLayout>
 

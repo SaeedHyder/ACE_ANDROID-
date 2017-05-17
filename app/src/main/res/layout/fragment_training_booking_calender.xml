@@ -35,10 +35,9 @@
                 android:layout_height="wrap_content"
                 android:divider="@android:color/darker_gray"
                 android:dividerHeight="0.7dp"
-                android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
-
-                android:visibility="visible">
-                <!--"-->
+                android:groupIndicator="@null"
+                android:visibility="gone">
+                <!--  android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"-->
             </ExpandableListView>
         </LinearLayout>
 

@@ -2,6 +2,7 @@ package com.app.ace.ui.viewbinders;
 
 import android.app.Activity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.ace.R;
@@ -34,10 +35,15 @@ public class ScheduleExpendableList<E> extends ExpandableListViewBinder<String, 
     }
 
     @Override
-    public void bindGroupView(String entity, int position, int grpPosition, View view, Activity activity) {
+    public void bindGroupView(String entity, int position, int grpPosition, View view, Activity activity,boolean isExpended) {
         try {
             if (!entity.equals("null,null") ) {
                 NewExpListGroupItemViewHolder groupItemViewHolder = (NewExpListGroupItemViewHolder) view.getTag();
+                if (isExpended){
+                    groupItemViewHolder.indicator.setImageResource(R.drawable.dropdownup);
+                }
+                else
+                    groupItemViewHolder.indicator.setImageResource(R.drawable.dropdowndown);
                 String head = entity;
                 String[] date = head.split(",");
 
@@ -81,9 +87,10 @@ public class ScheduleExpendableList<E> extends ExpandableListViewBinder<String, 
 
     public static class NewExpListGroupItemViewHolder extends BaseGroupViewHolder {
         TextView txtHeader;
-
+        ImageView indicator;
         public NewExpListGroupItemViewHolder(View view) {
             txtHeader = (TextView) view.findViewById(R.id.txt_date_group);
+            indicator = (ImageView)view.findViewById(R.id.groupindicator);
         }
     }
 

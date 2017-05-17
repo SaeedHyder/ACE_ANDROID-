@@ -165,6 +165,7 @@
     <orderEntry type="library" exported="" name="guice-3.0-no_aop" level="project" />
     <orderEntry type="library" exported="" name="transition-25.3.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-wearable-10.2.0" level="project" />
+    <orderEntry type="library" exported="" name="caldroid-3.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-cast-framework-10.2.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-location-10.2.0" level="project" />
     <orderEntry type="library" exported="" name="annotations-1.0.0" level="project" />
@@ -202,6 +203,7 @@
     <orderEntry type="library" exported="" name="firebase-analytics-impl-10.2.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-instantapps-10.2.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-iid-10.2.0" level="project" />
+    <orderEntry type="library" exported="" name="hirondelle-date4j-1.5.1" level="project" />
     <orderEntry type="library" exported="" name="logging-interceptor-3.0.1" level="project" />
     <orderEntry type="library" exported="" name="twitter-text-1.13.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-panorama-10.2.0" level="project" />
@@ -213,7 +215,6 @@
     <orderEntry type="module" module-name="horizontal-picker" exported="" />
     <orderEntry type="module" module-name="commons-lang3-3.1" exported="" />
     <orderEntry type="module" module-name="library" exported="" />
-    <orderEntry type="library" exported="" name="android-android-25" level="project" />
     <orderEntry type="library" exported="" name="support-compat-25.1.1" level="project" />
     <orderEntry type="library" exported="" name="joda-time-2.9.7" level="project" />
     <orderEntry type="library" exported="" name="support-core-ui-25.1.1" level="project" />
