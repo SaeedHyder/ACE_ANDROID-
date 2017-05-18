@@ -108,8 +108,6 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
 
         viewHolder.vv_post_video.setVisibility(View.VISIBLE);
         viewHolder.iv_post_pic.setVisibility(View.GONE);
-       // viewHolder.iv_playBtn.setVisibility(View.VISIBLE);
-
 
         MediaController mediaController= new MediaController(context);
         mediaController.setAnchorView(viewHolder.vv_post_video);
@@ -121,8 +119,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
         viewHolder.vv_post_video.setMediaController(mediaController);
         viewHolder.vv_post_video.requestFocus();
         viewHolder.vv_post_video.start();
-     //   mediaController.hide();
-
+        mediaController.hide();
      /*   viewHolder.iv_playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
