@@ -2,6 +2,7 @@ package com.app.ace.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,19 +12,31 @@ import android.widget.ListView;
 
 import com.app.ace.R;
 import com.app.ace.entities.DetailedScreenItem;
+import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.SearchPeopleDataItem;
 import com.app.ace.entities.Slot;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DateHelper;
 import com.app.ace.retrofit.GsonFactory;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.DetailedScreenListItemBinder;
 import com.app.ace.ui.viewbinders.SearchPeopleListItemBinder;
+import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
+import org.joda.time.DateTime;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import roboguice.inject.InjectView;
 
 import static com.app.ace.R.id.iv_Camera;
@@ -39,8 +52,8 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
     @InjectView(R.id.lv_detailedScreen)
     private ListView lv_detailedScreen;
 
-    @InjectView(R.id.btn_training_Search_Submit)
-    Button btn_training_Search_Submit;
+    @InjectView(R.id.btn_cancel_booking)
+    Button btn_cancel_booking;
 
     @InjectView(R.id.iv_CalanderDetailedScreen)
     private ImageView iv_CalanderDetailedScreen;
@@ -50,6 +63,15 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
 
     @InjectView(R.id.iv_Home)
     private ImageView iv_Home;
+
+    @InjectView(R.id.txt_day)
+    private AnyTextView txt_day;
+    @InjectView(R.id.txt_time)
+    private AnyTextView txt_time;
+
+    @InjectView(R.id.txt_detailedS_ProfileName)
+    private AnyTextView txt_detailedS_ProfileName;
+
     private Slot currentSlot;
     private static String SLOT = "SLOT";
     private ArrayListAdapter<DetailedScreenItem> adapter;
@@ -90,14 +112,28 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (currentSlot!=null){
+            txt_detailedS_ProfileName.setText(currentSlot.getBookings().getUser().getFirst_name()
+                    +" "+currentSlot.getBookings().getUser().getLast_name());
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+            try {
+                Date date = format.parse(currentSlot.getDate());
+                String dayOfWeek = new SimpleDateFormat("EEEE", Locale.getDefault()).format(date);
+                txt_day.setText(dayOfWeek);
+                txt_time.setText(currentSlot.getStartTime()+"-"+currentSlot.getEndTime()+" "+"1hr");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
+
+        }
         getSearchUserData();
         setListener();
     }
 
     private void setListener() {
 
-        btn_training_Search_Submit.setOnClickListener(this);
+        btn_cancel_booking.setOnClickListener(this);
         iv_Home.setOnClickListener(this);
         iv_profile.setOnClickListener(this);
         iv_CalanderDetailedScreen.setOnClickListener(this);
@@ -138,9 +174,23 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
 
         switch(view.getId())
         {
-            case R.id.btn_training_Search_Submit:
+            case R.id.btn_cancel_booking:
+                Call<ResponseWrapper>callback = webService.deleteBooking(String.valueOf(currentSlot.getBookings().getId()),
+                        prefHelper.getUserId());
+                callback.enqueue(new Callback<ResponseWrapper>() {
+                    @Override
+                    public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
 
-                getDockActivity().addDockableFragment(NotificationListingFragment.newInstance(),"NotificationListingFragment");
+                            getDockActivity().addDockableFragment(NotificationListingFragment.newInstance(),"NotificationListingFragment");
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseWrapper> call, Throwable t) {
+                        Log.e("DetailedScreenFragment",t.toString());
+                    }
+                });
+
 
                 break;
 

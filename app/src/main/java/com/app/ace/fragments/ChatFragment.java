@@ -273,6 +273,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
             if(PostPath!=null)
             {
+
                 if (msgEnt.getSender()!=null && msgEnt.getReceiver() != null && msgEnt.getMessage() !=null) {
                     collection.add(new ChatDataItem(msgEnt.getSender().getProfile_image(),
                             PostPath, msgEnt.getMessage().getCreated_at(),
@@ -283,6 +284,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
             else {
                 if (msgEnt.getSender() != null && msgEnt.getReceiver() != null && msgEnt.getMessage() != null) {
+
                     collection.add(new ChatDataItem(msgEnt.getSender().getProfile_image(),
                             msgEnt.getMessage().getMessage_text(), msgEnt.getMessage().getCreated_at(),
                             msgEnt.getReceiver().getProfile_image(), msgEnt.getMessage().getMessage_text(),
@@ -291,6 +293,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
 
         }
+        if (msgArrayList.size()>0){
+            if (isSender){
+                USERNAME = msgArrayList.get(0).getReceiver().getFirst_name()
+                        +" "+msgArrayList.get(0).getReceiver().getLast_name();
+            }
+            else{
+                USERNAME = msgArrayList.get(0).getSender().getFirst_name()
+                        +" "+msgArrayList.get(0).getSender().getLast_name();
+
+            }
+        }
+        getMainActivity().titleBar.setSubHeading(USERNAME);
+        getMainActivity().titleBar.invalidate();
         bindData(collection);
 
     }
@@ -342,7 +357,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
         });
 
-        titleBar.setSubHeading(UserName);
+        //titleBar.setSubHeading(UserName);
     }
 
     @Override

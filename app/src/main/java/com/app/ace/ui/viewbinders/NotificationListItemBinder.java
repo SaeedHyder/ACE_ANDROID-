@@ -52,7 +52,7 @@ public class NotificationListItemBinder extends ViewBinder<NotificationEnt> impl
                 NotificationEnt entity = (NotificationEnt)v.getTag();
                 switch (entity.getAction_type()){
                     case "conversation":
-                        context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getId()),String.valueOf(entity.getReceiver_id()),"UserName"), "ChatFragment");
+                        context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getAction_id()),String.valueOf(entity.getReceiver_id()),"UserName"), "ChatFragment");
                         break;
                 }
                 break;

@@ -50,9 +50,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.e(TAG, "Data Payload: " + remoteMessage.getData().toString());
 
             try {
-                JSONObject json = new JSONObject(remoteMessage.getData().toString());
-                Log.e(TAG, "DATA: " + json);
-                handleDataMessage(json);
+              /*  JSONObject json = new JSONObject(remoteMessage.getData().toString());
+                Log.e(TAG, "DATA: " + json);*/
+                handleDataMessage(remoteMessage);
             } catch (Exception e) {
                 Log.e(TAG, "Exception: " + e.getMessage());
             }
@@ -73,8 +73,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private void handleDataMessage(final JSONObject json) {
-        Log.e(TAG, "push json: " + json.toString());
+    private void handleDataMessage(final RemoteMessage messageBody) {
+
 
 
 
@@ -88,26 +88,22 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     ;
                     preferenceHelper.setBadgeCount(response.body().getResult().getCount());
                     try {
-                        JSONObject data = json.getJSONObject("data");
 
-                        System.out.println(data);
-                        String title = data.getString("title");
-                        String message = data.getString("message");
-                        String timestamp = data.getString("timestamp");
 
-                        Log.e(TAG, "DATA: " + data);
+                        String title = "ACE";
+                        String message = messageBody.getData().get("message");
+
+
                         Log.e(TAG, "message: " + message);
-                        Log.e(TAG, "timestamp: " + timestamp);
+
                         Intent resultIntent = new Intent(getApplicationContext(), MainActivity.class);
                         resultIntent.putExtra("message", message);
                         resultIntent.putExtra("tapped", true);
                         Intent pushNotification = new Intent(AppConstants.PUSH_NOTIFICATION);
                         pushNotification.putExtra("message", message);
                         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(pushNotification);
-                        showNotificationMessage(getApplicationContext(), title, message, timestamp, resultIntent);
+                        showNotificationMessage(getApplicationContext(), title, message, "", resultIntent);
 
-                    } catch (JSONException e) {
-                        Log.e(TAG, "Json Exception: " + e.getMessage());
                     } catch (Exception e) {
                         Log.e(TAG, "Exception: " + e.getMessage());
                     }

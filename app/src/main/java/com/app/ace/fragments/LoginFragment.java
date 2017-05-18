@@ -117,7 +117,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 	}
 
 	private void setTwitterLogin() {
-		TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"Android",prefHelper.getFirebase_TOKEN());
+		TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"android",prefHelper.getFirebase_TOKEN());
 		twitterLogin.setCallback(new TwitterLoginHelper() {
 			@Override
 			public void onSuccess(final TwitterUser user) {
@@ -183,7 +183,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 			public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
 				try {
 					loadingFinished();
-					TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"Android",prefHelper.getFirebase_TOKEN());
+					TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"android",prefHelper.getFirebase_TOKEN());
 					if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
 						getDockActivity().popBackStackTillEntry(0);
@@ -277,7 +277,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 			@Override
 			public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
 				try {
-					TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"Android",prefHelper.getFirebase_TOKEN());
+					TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"android",prefHelper.getFirebase_TOKEN());
 					loadingFinished();
 
 					if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {

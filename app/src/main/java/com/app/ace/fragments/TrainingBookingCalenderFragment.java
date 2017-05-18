@@ -60,14 +60,14 @@ import static java.lang.Integer.parseInt;
  * Created by saeedHyder on 4/7/2017.
  */
 
-public class TrainingBookingCalenderFragment extends BaseFragment implements View.OnClickListener, SetTimeDataOnTextView,OndeleteListener {
+public class TrainingBookingCalenderFragment extends BaseFragment implements View.OnClickListener, SetTimeDataOnTextView, OndeleteListener {
 
 
     public String StxtTo, StxtFrom, txtSecTo, txtSecFrom, txtThirdFrom, txtThirdTo, selectedDay;
     public String prevDay = null;
     public Date dateSpecified;
     public Date EndDate;
-
+    public String arrayLastItem = "";
     ExpandableListView expandablelistview;
     @InjectView(R.id.SecondAvail)
     LinearLayout SecondAvail;
@@ -113,13 +113,14 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     HashMap<Integer, String> ScheduleHashMap = new HashMap<>();
     ArrayList<String> alreadySelectedTime = new ArrayList<>();
     List<String> timeArray = new ArrayList();
-    public String arrayLastItem="";
     String trainerScheduleJson;
     int LastSelectHour = 0;
     ArrayList<String> listDataHeader;
     HashMap<String, ArrayList<String>> listDataChild;
     ArrayListExpandableAdapter<String, HashMap<String, ArrayList<String>>> adapter;
     ScheduleExpendableList listItemBinder;
+    @InjectView(R.id.expandablecontainer)
+    private LinearLayout expandablecontainer;
     @InjectView(R.id.iv_Home)
     private ImageView iv_Home;
     @InjectView(R.id.iv_Calander)
@@ -183,9 +184,9 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
         listDataChild = new HashMap<String, ArrayList<String>>();
         ArrayList<String> childData = new ArrayList<>();
         if (result.size() <= 0) {
-            expandablelistview.setVisibility(View.GONE);
+            expandablecontainer.setVisibility(View.GONE);
         } else {
-            expandablelistview.setVisibility(View.VISIBLE);
+            expandablecontainer.setVisibility(View.VISIBLE);
         }
         int j = -1;
         for (ScheduleEnt entity : result
@@ -213,7 +214,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     }
 
     private void bindView() {
-        listItemBinder = new ScheduleExpendableList(getDockActivity(),this);
+        listItemBinder = new ScheduleExpendableList(getDockActivity(), this);
         adapter = new ArrayListExpandableAdapter<>(getDockActivity(),
                 listDataHeader,
                 listDataChild,
@@ -226,6 +227,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
             expandablelistview.setIndicatorBoundsRelative(width - getPixelValue(Math.round(getResources().getDimension(R.dimen.x10))
             ), width - getPixelValue(Math.round(getResources().getDimension(R.dimen.x5))));
         }*/
+
         expandablelistview.setChildDivider(getResources().getDrawable((R.drawable.line)));
         expandablelistview.setAdapter(adapter);
 
@@ -919,15 +921,13 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     @Override
     public void setData(String itemPosition) {
 
-        if(alreadySelectedTime.size()>0) {
+        if (alreadySelectedTime.size() > 0) {
             arrayLastItem = alreadySelectedTime.get(alreadySelectedTime.size() - 1);
         }
 
         if (!itemPosition.isEmpty()) {
-            if(!arrayLastItem.equals("") && arrayLastItem.contains(itemPosition))
-            {
-                if(alreadySelectedTime.contains(itemPosition))
-                {
+            if (!arrayLastItem.equals("") && arrayLastItem.contains(itemPosition)) {
+                if (alreadySelectedTime.contains(itemPosition)) {
                     String[] time = itemPosition.split(":00");
                     int hour = Integer.parseInt(time[0]);
                     if (hour < LastSelectHour) {
@@ -941,11 +941,9 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
                     }
                 }
-            }
-            else if (!arrayLastItem.contains(itemPosition) && alreadySelectedTime.contains(itemPosition)) {
+            } else if (!arrayLastItem.contains(itemPosition) && alreadySelectedTime.contains(itemPosition)) {
                 UIHelper.showShortToastInCenter(getDockActivity(), "Time Already Selected Please select a Differnet time");
-            }
-            else {
+            } else {
                 String[] time = itemPosition.split(":00");
                 int hour = Integer.parseInt(time[0]);
                 if (hour < LastSelectHour) {
@@ -966,6 +964,11 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     @Override
     public void Ondelete() {
         getDockActivity().addDockableFragment(TrainingBookingCalenderFragment.newInstance(), "TrainingBookingCalenderFragment");
+    }
+
+    @Override
+    public void OndeleteTrainee(int position) {
+
     }
 }
 

@@ -17,6 +17,7 @@ import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.ScheduleEnt;
 import com.app.ace.entities.ShowComments;
+import com.app.ace.entities.TraineeScheduleEnt;
 import com.app.ace.entities.TrainerBooking;
 import com.app.ace.entities.TrainerBookingCalendarJson;
 import com.app.ace.entities.TrainerTimingSlots;
@@ -32,6 +33,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -162,6 +164,19 @@ public interface WebService {
             @Path("user_id") String userid
     );
 
+    @DELETE("booking/{booking_id}")
+    Call<ResponseWrapper> deleteBooking(
+            @Path("booking_id") String booking_id,
+            @Query("user_id") String user_id
+    );
+
+    @FormUrlEncoded
+    @POST("trainee/schedule/get")
+    Call<ResponseWrapper<TraineeScheduleEnt>> getTraineeSchedule(
+            @Field("trainee_id") String trainee_id,
+            @Field("date") String date
+    );
+
     @FormUrlEncoded
     @POST("user/sociallogin")
     Call<ResponseWrapper<RegistrationResult>> socialLogin(
@@ -195,13 +210,14 @@ public interface WebService {
             @Field("user_id") String user_id,
             @Field("visitor_id") String visitor_id);
 
-@FormUrlEncoded
-@POST("schedule/delete")
-Call<ResponseWrapper> deleteSchedule(
-        @Field("trainer_id")String trainer_id,
-        @Field("start_date")String start_date,
-        @Field("end_date") String end_date
-);
+    @FormUrlEncoded
+    @POST("schedule/delete")
+    Call<ResponseWrapper> deleteSchedule(
+            @Field("trainer_id") String trainer_id,
+            @Field("start_date") String start_date,
+            @Field("end_date") String end_date
+    );
+
     @GET("post/user/{user_id}")
     Call<ResponseWrapper<CreaterEnt>> UserProfilePosts(
             @Path("user_id") String user_id);
@@ -338,7 +354,7 @@ Call<ResponseWrapper> deleteSchedule(
     Call<ResponseWrapper<TrainerBooking>> getScheduleTrainee(
             @Field("trainer_id") String user_id,
             @Field("start_date") String startDate,
-            @Field("end_date")String Enddate);
+            @Field("end_date") String Enddate);
 
     @GET("schedule/get/{trainer_id}")
     Call<ResponseWrapper<ArrayList<GetTraineeBookings>>> ShowTraineeBookings(

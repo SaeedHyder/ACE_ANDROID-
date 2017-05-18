@@ -142,7 +142,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
 
         final DialogFragment successPopUp = DialogFragment.newInstance();
         successPopUp.setPopupData(getString(R.string.sign_via_twitter), "", "",  "",true,true);
-        TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"Android",prefHelper.getFirebase_TOKEN());
+        TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"android",prefHelper.getFirebase_TOKEN());
         successPopUp.setbtndialog_1_Listener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
