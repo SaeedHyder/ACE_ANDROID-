@@ -32,6 +32,8 @@ import com.app.ace.ui.views.TitleBar;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -269,7 +271,6 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     private void initCategorySpinner() {
         //Spinner Category
         final List<String> category = new ArrayList<String>();
-        category.add("Types of Training");
         category.add("Flexiblity training");
         category.add("Dynamic Strength training");
         category.add("Static strength training");
@@ -612,7 +613,11 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         switch (v.getId()) {
             case R.id.btn_training_Search_Submit:
                 if (TotalArray == (calenderids.size()-1)) {
-                    setupDialog();
+                    if (buildingTypes!=null && !buildingTypes.isEmpty()) {
+                        setupDialog();
+                    }else{
+                        UIHelper.showShortToastInCenter(getDockActivity(),"Select Training Type First");
+                    }
                 } else {
                     UIHelper.showShortToastInCenter(getDockActivity(), "Trainer is not available for whole Duration");
                 }

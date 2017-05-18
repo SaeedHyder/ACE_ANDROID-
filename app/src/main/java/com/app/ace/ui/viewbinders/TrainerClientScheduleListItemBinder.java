@@ -43,13 +43,14 @@ public class TrainerClientScheduleListItemBinder extends ViewBinder<Slot> {
 
             viewHolder.btnName.setText(entity.getBookings().getUser().getFirst_name()
                     +" "+entity.getBookings().getUser().getLast_name());
-            String slotjson =  GsonFactory.getConfiguredGson().toJson(entity);
+            final String slotjson =  GsonFactory.getConfiguredGson().toJson(entity);
+
        /* viewHolder.showdate.setText(entity.getshowdate());*/
 
             viewHolder.btnName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    context.addDockableFragment(DetailedScreenFragment.newInstance(), "DetailedScreenFragment");
+                    context.addDockableFragment(DetailedScreenFragment.newInstance(slotjson), "DetailedScreenFragment");
 
                 }
             });

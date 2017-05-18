@@ -83,36 +83,61 @@ public class InboxListItemBinder extends ViewBinder<MsgEnt> {
                     if(entity.getSender().getId()==Integer.parseInt(preferenceHelper.getUserId()))
                     {
                         UserName=entity.getReceiver().getFirst_name()+" "+entity.getReceiver().getLast_name();
+                        receivebyReceiver(entity);
                     }
                     else if(entity.getReceiver().getId()==Integer.parseInt(preferenceHelper.getUserId())) {
                         UserName=entity.getSender().getFirst_name()+" "+entity.getSender().getLast_name();
+                        receivebySender(entity);
                     }
-
-
-                    context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getMessage().getConversation_id()),String.valueOf(entity.getMessage().getReceiver_id()),UserName, String.valueOf(entity.getIs_following()),entity.getReceiver().getProfile_image(),entity.getReceiver().getFirst_name()+" "+entity.getReceiver().getLast_name(),entity.getSender_block(),entity.getReceiver_block(),entity.getSender_mute(),entity.getReceiver_mute()), "ChatFragment");
-
                 }
             });
 
             viewHolder.txtUserName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(entity.getSender().getId()==Integer.parseInt(preferenceHelper.getUserId()))
+                    if(entity.getMessage().getSender_id()==Integer.parseInt(preferenceHelper.getUserId()))
                     {
                         UserName=entity.getReceiver().getFirst_name()+" "+entity.getReceiver().getLast_name();
+                        receivebyReceiver(entity);
+
+
                     }
-                    else if(entity.getReceiver().getId()==Integer.parseInt(preferenceHelper.getUserId())) {
+                    else if(entity.getMessage().getReceiver_id()==Integer.parseInt(preferenceHelper.getUserId())) {
                         UserName=entity.getSender().getFirst_name()+" "+entity.getSender().getLast_name();
+                        receivebySender(entity);
+
+
                     }
 
 
-                    context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getMessage().getConversation_id()),String.valueOf(entity.getMessage().getReceiver_id()),UserName, String.valueOf(entity.getIs_following()),entity.getReceiver().getProfile_image(),entity.getReceiver().getFirst_name()+" "+entity.getReceiver().getLast_name(),entity.getSender_block(),entity.getReceiver_block(),entity.getSender_mute(),entity.getReceiver_mute()), "ChatFragment");
 
                 }
             });
 
 
         }
+    }
+
+    private void receivebyReceiver(MsgEnt entity) {
+        context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getMessage().getConversation_id())
+                ,String.valueOf(entity.getMessage().getReceiver_id())
+                ,String.valueOf(entity.getMessage().getSender_id())
+                ,UserName, String.valueOf(entity.getIs_following())
+                ,entity.getReceiver().getProfile_image()
+                ,entity.getReceiver().getFirst_name()+" "+entity.getReceiver().getLast_name()
+                ,entity.getSender_block(),entity.getReceiver_block()
+                ,entity.getSender_mute(),entity.getReceiver_mute()), "ChatFragment");
+    }
+
+    private void receivebySender(MsgEnt entity) {
+        context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getMessage().getConversation_id())
+                ,String.valueOf(entity.getMessage().getSender_id())
+                ,String.valueOf(entity.getMessage().getSender_id())
+                ,UserName, String.valueOf(entity.getIs_following())
+                ,entity.getReceiver().getProfile_image()
+                ,entity.getReceiver().getFirst_name()+" "+entity.getReceiver().getLast_name()
+                ,entity.getSender_block(),entity.getReceiver_block()
+                ,entity.getSender_mute(),entity.getReceiver_mute()), "ChatFragment");
     }
 
     public static class ViewHolder extends BaseViewHolder {

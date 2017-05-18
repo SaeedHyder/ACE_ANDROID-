@@ -51,6 +51,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public static String RECEIVERBLOCK = "receiverblock";
     public static String SENDERMUTE = "sendermute";
     public static String RECEIVERMUTE = "receivermute";
+    public static String SENDER_ID = "0";
     public String sender_block;
     public String receiver_block;
     public String sender_mute;
@@ -95,10 +96,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         return fragment;
     }
 
-    public static ChatFragment newInstance(String conversationId, String receiver_id, String UserName, String IsFollowing, String ProfileImage, String FullName, int senderblock, int receiverblock, int sendermute, int receivermute) {
+    public static ChatFragment newInstance(String conversationId,
+                                           String receiver_id,
+                                           String sender_id,
+                                           String UserName,
+                                           String IsFollowing,
+                                           String ProfileImage,
+                                           String FullName,
+                                           int senderblock,
+                                           int receiverblock,
+                                           int sendermute,
+                                           int receivermute) {
         Bundle args = new Bundle();
         args.putString(CONVERSATION_ID, conversationId);
         args.putString(Receiver_ID, receiver_id);
+        args.putString(SENDER_ID, sender_id);
         args.putString(USERNAME, UserName);
         args.putString(ISFOLLOWING,IsFollowing);
         args.putString(PROFILEIMAGE,ProfileImage);
@@ -113,7 +125,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
         return fragment;
     }
-    public static ChatFragment newInstance(String conversationId, String receiver_id, String UserName, String Post_Path, String IsFollowing, String ProfileImage, String FullName, int sender_block, int receiver_block) {
+    public static ChatFragment newInstance(String conversationId,
+                                           String receiver_id,
+                                           String UserName,
+                                           String Post_Path,
+                                           String IsFollowing,
+                                           String ProfileImage,
+                                           String FullName,
+                                           int sender_block,
+                                           int receiver_block) {
         Bundle args = new Bundle();
         args.putString(CONVERSATION_ID, conversationId);
         args.putString(Receiver_ID, receiver_id);
@@ -148,7 +168,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         if (getArguments() != null) {
             ConversationId = getArguments().getString(CONVERSATION_ID);
             receiverId = getArguments().getString(Receiver_ID);
-            SenderId = Integer.parseInt(prefHelper.getUserId());
+            if (getArguments().getString(SENDER_ID)==null){
+                SenderId = Integer.parseInt(prefHelper.getUserId());
+            }
+            else{
+                SenderId = Integer.parseInt(getArguments().getString(SENDER_ID));
+            }
             UserName=getArguments().getString(USERNAME);
             PostPath=getArguments().getString(POSTPATH);
             IsFollowing=getArguments().getString(ISFOLLOWING);

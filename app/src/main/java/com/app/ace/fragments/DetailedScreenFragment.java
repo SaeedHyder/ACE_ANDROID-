@@ -106,10 +106,12 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
 
     private void getSearchUserData() {
         userCollection= new ArrayList<>();
-        userCollection.add(new DetailedScreenItem("Dates Schedule","10 May - 23 May"));
-        userCollection.add(new DetailedScreenItem("Time Slot","16:00 - 17:00"));
-        userCollection.add(new DetailedScreenItem("Training","BodyBuilding"));
+        if (currentSlot!=null) {
+            userCollection.add(new DetailedScreenItem("Dates Schedule", currentSlot.getDate()));
+            userCollection.add(new DetailedScreenItem("Time Slot", currentSlot.getStartTime()+"-"+currentSlot.getEndTime()));
+            userCollection.add(new DetailedScreenItem("Training", currentSlot.getBookings().getTrainingType()));
 
+        }
         bindData(userCollection);
     }
 
