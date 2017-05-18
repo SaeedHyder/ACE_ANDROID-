@@ -68,7 +68,19 @@
             android:layout_gravity="center_horizontal"
             />
 
+
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_playBtn"
+            android:layout_width="@dimen/x100"
+            android:layout_height="@dimen/x100"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:indeterminate="true"
+            android:visibility="visible"
+            android:src="@drawable/playbtn"/>
+
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleLarge"

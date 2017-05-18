@@ -52,8 +52,30 @@ public class FollowingFragment extends BaseFragment{
 
         //setListener();
         getUserData();
+
+        setListener();
     }
 
+    private void setListener() {
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        pager.setCurrentItem(1);
+    }
 
 
     private void getUserData() {

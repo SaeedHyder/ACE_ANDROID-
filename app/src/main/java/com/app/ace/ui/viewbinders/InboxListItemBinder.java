@@ -94,6 +94,23 @@ public class InboxListItemBinder extends ViewBinder<MsgEnt> {
                 }
             });
 
+            viewHolder.txtUserName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(entity.getSender().getId()==Integer.parseInt(preferenceHelper.getUserId()))
+                    {
+                        UserName=entity.getReceiver().getFirst_name()+" "+entity.getReceiver().getLast_name();
+                    }
+                    else if(entity.getReceiver().getId()==Integer.parseInt(preferenceHelper.getUserId())) {
+                        UserName=entity.getSender().getFirst_name()+" "+entity.getSender().getLast_name();
+                    }
+
+
+                    context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getMessage().getConversation_id()),String.valueOf(entity.getMessage().getReceiver_id()),UserName, String.valueOf(entity.getIs_following()),entity.getReceiver().getProfile_image(),entity.getReceiver().getFirst_name()+" "+entity.getReceiver().getLast_name(),entity.getSender_block(),entity.getReceiver_block(),entity.getSender_mute(),entity.getReceiver_mute()), "ChatFragment");
+
+                }
+            });
+
 
         }
     }

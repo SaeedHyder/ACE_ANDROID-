@@ -242,13 +242,22 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             btn_request.setVisibility(View.GONE);
 
                         }
-                       /* if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
+                        if(response.body().getResult().getUser_type().equalsIgnoreCase(prefHelper.getUser().getUser_type()))
+                        {
+                        if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
                             btn_edit.setVisibility(View.GONE);
                             btn_follow.setVisibility(View.VISIBLE);
                             btn_Unfollow.setVisibility(View.GONE);
                             btn_request.setVisibility(View.GONE);
 
-                        }*/
+                        }}
+                        else
+                        {
+                            btn_edit.setVisibility(View.GONE);
+                            btn_follow.setVisibility(View.VISIBLE);
+                            btn_Unfollow.setVisibility(View.GONE);
+                            btn_request.setVisibility(View.VISIBLE);
+                        }
 
                         if (response.body().getResult().getIs_following() == 0) {
                             btn_follow.setVisibility(View.VISIBLE);
@@ -309,6 +318,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             btn_followTrainee.setVisibility(View.VISIBLE);
 
                         }
+
                         if (response.body().getResult().getIs_following() == 0) {
                             btn_followTrainee.setVisibility(View.VISIBLE);
                             btn_unfollowTrainee.setVisibility(View.GONE);

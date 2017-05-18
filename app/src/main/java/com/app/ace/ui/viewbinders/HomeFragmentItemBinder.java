@@ -106,13 +106,10 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
     if (homeListDataEnt.getProfile_post_pic_path().contains(".mp4"))
     {
 
-        /*RelativeLayout.LayoutParams lv= new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT);
-        lv.addRule(RelativeLayout.CENTER_HORIZONTAL);*/
-
-       // Toast.makeText(context,homeListDataEnt.getProfile_post_pic_path(),Toast.LENGTH_LONG).show();
         viewHolder.vv_post_video.setVisibility(View.VISIBLE);
         viewHolder.iv_post_pic.setVisibility(View.GONE);
+       // viewHolder.iv_playBtn.setVisibility(View.VISIBLE);
+
 
         MediaController mediaController= new MediaController(context);
         mediaController.setAnchorView(viewHolder.vv_post_video);
@@ -124,21 +121,22 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
         viewHolder.vv_post_video.setMediaController(mediaController);
         viewHolder.vv_post_video.requestFocus();
         viewHolder.vv_post_video.start();
-        mediaController.hide();
+     //   mediaController.hide();
 
+     /*   viewHolder.iv_playBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewHolder.vv_post_video.start();
+            }
+        });*/
 
-    /*   if (viewHolder.vv_post_video.isScrollContainer())
-        {
-            viewHolder.vv_post_video.pause();
-            mediaController.hide();
-        }
-*/
     }
     else
     {
 
         viewHolder.vv_post_video.setVisibility(View.GONE);
         viewHolder.iv_post_pic.setVisibility(View.VISIBLE);
+        viewHolder.iv_playBtn.setVisibility(View.GONE);
         imageLoader.displayImage(homeListDataEnt.getProfile_post_pic_path(), viewHolder.iv_post_pic, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
@@ -310,6 +308,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
         private ImageView iv_post_pic,iv_like,iv_do_comment,iv_sendto;
         private VideoView vv_post_video;
         AnyTextView txt_profileName,txt_likes_count,txt_commenter_Name,txt_comment,txt_view_all_comments;
+        private ImageView iv_playBtn;
 
         public ViewHolder(View view) {
 
@@ -328,6 +327,8 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
 
             txt_commenter_Name = (AnyTextView) view.findViewById(R.id.txt_commenter_Name);
             txt_comment = (AnyTextView) view.findViewById(R.id.txt_comment);
+
+            iv_playBtn=(ImageView)view.findViewById(R.id.iv_playBtn);
 
 
         }

@@ -290,6 +290,14 @@ Call<ResponseWrapper> deleteSchedule(
 
     );
 
+    @Multipart
+    @POST("user/update")
+    Call<ResponseWrapper<RegistrationResult>> NotificationStatus(
+            @Part("user_id") RequestBody user_id,
+            @Part("notification_status") RequestBody notification_status,
+            @Part("private_account") RequestBody private_account
+    );
+
     @FormUrlEncoded
     @POST("user/rating/add")
     Call<ResponseWrapper<User>> rating(
@@ -363,6 +371,20 @@ Call<ResponseWrapper> deleteSchedule(
     @GET("notification/following/{user_id}")
     Call<ResponseWrapper<ArrayList<UserNotificatoin>>> FollowingNotification(
             @Path("user_id") String user_id);
+
+    @FormUrlEncoded
+    @POST("changepassword")
+    Call<ResponseWrapper> ChangePassword(
+            @Query("user_id") String user_id,
+            @Field("password") String password,
+            @Field("old_password") String old_password);
+
+    @FormUrlEncoded
+    @POST("contactus")
+    Call<ResponseWrapper> ContactUs(
+            @Field("user_id") String user_id,
+            @Field("message") String message);
+
 
 
 

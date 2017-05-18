@@ -27,7 +27,7 @@
         />
 
     <com.app.ace.ui.views.AnyEditTextView
-        android:id="@+id/edtUserName"
+        android:id="@+id/txt_CurrentPassword"
         style="@style/form_edttext_fields_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
         android:background="@drawable/text"/>
 
     <com.app.ace.ui.views.AnyEditTextView
-        android:id="@+id/edtUniversity"
+        android:id="@+id/edit_newPassword"
         style="@style/form_edttext_fields_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
         android:background="@drawable/text"/>
 
     <com.app.ace.ui.views.AnyEditTextView
-        android:id="@+id/txtGymLocatoin"
+        android:id="@+id/edit_conNewPassword"
         style="@style/form_edttext_fields_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -316,7 +316,7 @@
             app:typeface="Roboto-Bold.ttf"
             android:id="@+id/anyTextView4" />
 
-        <com.app.ace.ui.views.AnyTextView
+        <com.app.ace.ui.views.AnyEditTextView
             android:id="@+id/txt_contact_us_disc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
