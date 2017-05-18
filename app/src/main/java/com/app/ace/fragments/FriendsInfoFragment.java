@@ -52,7 +52,7 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
     @InjectView(R.id.muteConversation)
     ToggleButton muteConversation;
 
-    
+
     @InjectView(R.id.btn_block)
     Button btn_block;
 
