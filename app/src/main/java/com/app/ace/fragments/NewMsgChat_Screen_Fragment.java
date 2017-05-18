@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.app.ace.R;
-import com.app.ace.entities.ChatDataItem;
 import com.app.ace.entities.MsgEnt;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
@@ -25,40 +24,31 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
-import static com.app.ace.R.id.edtChat;
-import static com.app.ace.fragments.ChatFragment.CONVERSATION_ID;
-import static com.app.ace.fragments.ChatFragment.Receiver_ID;
-
 /**
  * Created by saeedhyder on 4/6/2017.
  */
 
 public class NewMsgChat_Screen_Fragment extends BaseFragment implements View.OnClickListener {
 
-    @InjectView(R.id.iv_sendbtn)
-    ImageView iv_sendbtn;
-
-    @InjectView(R.id.edit_sendTo)
-    AnyTextView edit_sendTo;
-
-    @InjectView (R.id.edit_msgText)
-    AnyEditTextView edit_msgText;
-
     public static String USERNAME = "userName";
     public static String ID = "id";
-    public static String POSTPATH="postpath";
+    public static String POSTPATH = "postpath";
     public String post_path;
     public String username;
     public String Receiverid;
+    @InjectView(R.id.iv_sendbtn)
+    ImageView iv_sendbtn;
+    @InjectView(R.id.edit_sendTo)
+    AnyTextView edit_sendTo;
+    @InjectView(R.id.edit_msgText)
+    AnyEditTextView edit_msgText;
 
-    public static NewMsgChat_Screen_Fragment newInstance()
-    {
+    public static NewMsgChat_Screen_Fragment newInstance() {
         return new NewMsgChat_Screen_Fragment();
     }
 
 
-    public static NewMsgChat_Screen_Fragment newInstance(int id, String userName)
-    {
+    public static NewMsgChat_Screen_Fragment newInstance(int id, String userName) {
         Bundle args = new Bundle();
         args.putString(ID, String.valueOf(id));
         args.putString(USERNAME, userName);
@@ -67,12 +57,11 @@ public class NewMsgChat_Screen_Fragment extends BaseFragment implements View.OnC
         return fragment;
     }
 
-    public static NewMsgChat_Screen_Fragment newInstance(int id, String userName,String PostPath)
-    {
+    public static NewMsgChat_Screen_Fragment newInstance(int id, String userName, String PostPath) {
         Bundle args = new Bundle();
         args.putString(ID, String.valueOf(id));
         args.putString(USERNAME, userName);
-        args.putString(POSTPATH,PostPath);
+        args.putString(POSTPATH, PostPath);
         NewMsgChat_Screen_Fragment fragment = new NewMsgChat_Screen_Fragment();
         fragment.setArguments(args);
         return fragment;
@@ -85,7 +74,7 @@ public class NewMsgChat_Screen_Fragment extends BaseFragment implements View.OnC
 
             Receiverid = getArguments().getString(ID);
             username = getArguments().getString(USERNAME);
-            post_path=getArguments().getString(POSTPATH);
+            post_path = getArguments().getString(POSTPATH);
 
         }
     }
@@ -127,19 +116,14 @@ public class NewMsgChat_Screen_Fragment extends BaseFragment implements View.OnC
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    if(response.body().getResult().isEmpty())
-                    {
+                    if (response.body().getResult().isEmpty()) {
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                    }
-                    else
-                    {
-                        ArrayList<MsgEnt> msg =response.body().getResult();
-                        getDockActivity().addDockableFragment(ChatFragment.newInstance(msg.get(0).getConversation_id(), String.valueOf(msg.get(0).getReceiver().getId()),username,post_path, String.valueOf(msg.get(0).getIs_following()),msg.get(0).getReceiver().getProfile_image(),msg.get(0).getReceiver().getFirst_name()+" "+msg.get(0).getReceiver().getLast_name(),msg.get(0).getSender_block(),msg.get(0).getReceiver_block()),"ChatFragment");
+                    } else {
+                        ArrayList<MsgEnt> msg = response.body().getResult();
+                        getDockActivity().addDockableFragment(ChatFragment.newInstance(msg.get(0).getConversation_id(), String.valueOf(msg.get(0).getReceiver().getId()), username, post_path, String.valueOf(msg.get(0).getIs_following()), msg.get(0).getReceiver().getProfile_image(), msg.get(0).getReceiver().getFirst_name() + " " + msg.get(0).getReceiver().getLast_name(), msg.get(0).getSender_block(), msg.get(0).getReceiver_block()), "ChatFragment");
 
                     }
-                }
-                else
-                {
+                } else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
             }
@@ -168,8 +152,7 @@ public class NewMsgChat_Screen_Fragment extends BaseFragment implements View.OnC
 
     @Override
     public void onClick(View view) {
-        switch (view.getId())
-        {
+        switch (view.getId()) {
             case R.id.iv_sendbtn:
 
                 sendMsg();

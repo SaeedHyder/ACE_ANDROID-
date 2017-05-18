@@ -163,6 +163,7 @@
     <string name="toast_gym_days_empty">Please select Gym Days</string>
     <string name="toast_time_from_empty">Please select time from</string>
     <string name="toast_time_to_empty">Please select time to</string>
+    <string name="toast_location_to_empty">Please select a Location</string>
 
     //forgot Passowrd
     <string name="forgot_password">Forgot Password?</string>

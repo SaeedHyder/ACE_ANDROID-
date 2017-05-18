@@ -6,4 +6,5 @@ package com.app.ace.interfaces;
 
 public interface OndeleteListener {
     public void Ondelete();
+    public void OndeleteTrainee(int position);
 }

@@ -270,7 +270,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
 
     private void initCategorySpinner() {
         //Spinner Category
-        
+
         final List<String> category = new ArrayList<String>();
         category.add("Flexiblity training");
         category.add("Dynamic Strength training");

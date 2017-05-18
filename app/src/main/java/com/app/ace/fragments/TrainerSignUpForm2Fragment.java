@@ -161,12 +161,12 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
     public File resume;
     public String resumePath;
-    String gymLocation;
+    String gymLocation="";
     String lat;
     String log;
 
 
-    public String Education,Speciality,Years_of_Exp,Gym_days,gym_time_from,gym_time_to;
+    public String Education = "",Speciality= "",Years_of_Exp= "",Gym_days= "",gym_time_from= "",gym_time_to= "";
 
     ArrayList<String> EducationArray = new ArrayList<>();
     ArrayList<String> SpecialityArray = new ArrayList<>();
@@ -370,32 +370,37 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
    private boolean validateOtherData() {
 
-        if(Education.length() == 0){
+        if(Education.isEmpty()){
             UIHelper.showLongToastInCenter(getDockActivity(),  getString(R.string.toast_education_empty));
             return false;
         }
-       else if(Speciality.length() == 0){
+       else if(Speciality.isEmpty()){
             UIHelper.showLongToastInCenter(getDockActivity(),  getString(R.string.toast_speciality_empty));
             return false;
         }
-        else if(Years_of_Exp.length() == 0){
+        else if(Years_of_Exp.isEmpty()){
             UIHelper.showLongToastInCenter(getDockActivity(),  getString(R.string.toast_experience_empty));
             return false;
         }
-        else if(Gym_days.length() == 0){
+        else if(Gym_days.isEmpty()){
             UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.toast_gym_days_empty));
             return false;
         }
-        else if(txt_from.length() == 0){
+        else if(txt_from.getText().toString().isEmpty()){
             UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.toast_time_from_empty));
             return false;
         }
-        else if(txt_to.length() == 0){
+        else if(txt_to.getText().toString().isEmpty()){
             UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.toast_time_to_empty));
             return false;
-        }else{
+        }else if (gymLocation.isEmpty()){
+            UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.toast_location_to_empty));
+            return false;
+        } else{
             return true;
-        }
+            }
+
+
 
    }
 
@@ -481,12 +486,17 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
     private void signupTrainer() {
 
         loadingStarted();
-
+        MultipartBody.Part cvFile;
         MultipartBody.Part filePart = MultipartBody.Part.createFormData("profile_picture",  signupFormConstants.getProfilePic().getName(), RequestBody.create(MediaType.parse("image/*"),  signupFormConstants.getProfilePic()));
+        if (resumePath!=null && resume !=null) {
+            cvFile = MultipartBody.Part.createFormData("resume", resumePath,
+                    RequestBody.create(MediaType.parse("*/*"), resume));
 
-          MultipartBody.Part  cvFile = MultipartBody.Part.createFormData("resume",resumePath, RequestBody.create(MediaType.parse("*/*"), resume));
-
-
+        }
+        else{
+            cvFile = MultipartBody.Part.createFormData("resume", "",
+                    RequestBody.create(MediaType.parse("*/*"), ""));
+        }
 
 
         String SocialMediaName = "";

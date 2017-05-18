@@ -9,6 +9,26 @@ public class NotificationEnt {
     int id;
     int sender_id;
     int receiver_id;
+
+    public String getAction_id() {
+        return action_id;
+    }
+
+    public void setAction_id(String action_id) {
+        this.action_id = action_id;
+    }
+
+    public String getPost_id() {
+        return post_id;
+    }
+
+    public void setPost_id(String post_id) {
+        this.post_id = post_id;
+    }
+
+    String action_id;
+    String post_id;
+
     String action_type;
     String message;
     String notification_type;
