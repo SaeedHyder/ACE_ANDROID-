@@ -1,12 +1,19 @@
 package com.app.ace.ui.viewbinders;
 
 import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.ace.R;
-import com.app.ace.helpers.Datedialoghelper;
+import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.global.WebServiceConstants;
+import com.app.ace.helpers.BasePreferenceHelper;
+import com.app.ace.interfaces.OndeleteListener;
+import com.app.ace.retrofit.WebService;
+import com.app.ace.retrofit.WebServiceFactory;
 import com.app.ace.ui.viewbinders.abstracts.ExpandableListViewBinder;
 
 import java.text.SimpleDateFormat;
@@ -15,17 +22,32 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  * Created on 5/4/2017.
  */
 
-public class ScheduleExpendableList<E> extends ExpandableListViewBinder<String, E> {
-    public ScheduleExpendableList() {
+public class ScheduleExpendableList<E> extends ExpandableListViewBinder<String, E> implements View.OnClickListener {
+    OndeleteListener deleteListener;
+    private WebService service;
+    Context context;
+    private BasePreferenceHelper preferenceHelper;
+    public ScheduleExpendableList(Context context , OndeleteListener ondeleteListener) {
+
         super(R.layout.trainer_schedule_header_item, R.layout.trainer_schedule_child_item);
+        deleteListener = ondeleteListener;
+        context = context;
+        service = WebServiceFactory.getWebServiceInstanceWithCustomInterceptor(context,
+                WebServiceConstants.SERVICE_BASE_URL);
+        preferenceHelper = new BasePreferenceHelper(context);
     }
 
     @Override
     public BaseGroupViewHolder createGroupViewHolder(View view) {
+
         return new NewExpListGroupItemViewHolder(view);
     }
 
@@ -44,9 +66,11 @@ public class ScheduleExpendableList<E> extends ExpandableListViewBinder<String, 
                 }
                 else
                     groupItemViewHolder.indicator.setImageResource(R.drawable.dropdowndown);
+
+                groupItemViewHolder.deleteSchedule.setOnClickListener(this);
                 String head = entity;
                 String[] date = head.split(",");
-
+                groupItemViewHolder.deleteSchedule.setTag(entity);
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date startDate = dateFormat.parse(date[0]);
                 Date endDate = dateFormat.parse(date[1]);
@@ -67,6 +91,7 @@ public class ScheduleExpendableList<E> extends ExpandableListViewBinder<String, 
             e.printStackTrace();
         }
     }
+
     public  String getShortMonthName(int year, int month, int day) {
         Calendar calendar = new GregorianCalendar(year, month, day);
         return new SimpleDateFormat("MMM", Locale.ENGLISH).format(calendar.getTime());
@@ -84,13 +109,40 @@ public class ScheduleExpendableList<E> extends ExpandableListViewBinder<String, 
         }
     }
 
+    @Override
+    public void onClick(View v) {
+      switch (v.getId()){
+          case R.id.img_deleteSchedule:
+              String entity = (String)v.getTag();
+              String head = entity;
+              String[] date = head.split(",");
+              System.out.println(preferenceHelper.getUserId());
+              Call<ResponseWrapper> callback = service.deleteSchedule(preferenceHelper.getUserId(),date[0],date[1]);
+              callback.enqueue(new Callback<ResponseWrapper>() {
+                  @Override
+                  public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
+                      Log.e("BINDEREXPANDABLE",response.message());
+                      deleteListener.Ondelete();
+                  }
+
+                  @Override
+                  public void onFailure(Call<ResponseWrapper> call, Throwable t) {
+                      Log.e("BINDEREXPANDABLE",t.toString());
+                  }
+              });
+              break;
+      }
+    }
+
 
     public static class NewExpListGroupItemViewHolder extends BaseGroupViewHolder {
         TextView txtHeader;
         ImageView indicator;
+        ImageView deleteSchedule;
         public NewExpListGroupItemViewHolder(View view) {
             txtHeader = (TextView) view.findViewById(R.id.txt_date_group);
             indicator = (ImageView)view.findViewById(R.id.groupindicator);
+            deleteSchedule = (ImageView)view.findViewById(R.id.img_deleteSchedule);
         }
     }
 

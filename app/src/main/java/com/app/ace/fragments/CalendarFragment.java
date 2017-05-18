@@ -24,11 +24,13 @@ import com.app.ace.entities.Slot;
 import com.app.ace.entities.TrainerBooking;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DateHelper;
 import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.retrofit.GsonFactory;
 import com.app.ace.ui.views.TitleBar;
 import com.roomorama.caldroid.CaldroidFragment;
+import com.roomorama.caldroid.CaldroidListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -83,7 +85,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     private ArrayList<BookingSchedule> bookingScheduleArrayList = new ArrayList<>();
     private ArrayList<CalenderEnt> calenderids = new ArrayList<>();
     private ArrayList<Date> totaldate = new ArrayList<>();
-
+    private Date startDate;
     public static CalendarFragment newInstance(String startDate) {
         Bundle args = new Bundle();
         args.putString(USER_ID, startDate);
@@ -120,6 +122,52 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         caldroidFragment = new CaldroidFragment();
+        InitCalenderFragment(savedInstanceState);
+
+
+        // Attach to the activity
+
+        setCalenderListener();
+        initCategorySpinner();
+        initDurationSpinner();
+
+
+        setListener();
+    }
+
+    private void setCalenderListener() {
+        final CaldroidListener caldroidListener = new CaldroidListener() {
+            @Override
+            public void onSelectDate(Date date, View view) {
+                caldroidFragment.clearSelectedDates();
+                caldroidFragment.moveToDate(date);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+
+               EndDate = getEndDate(calendar.getTime(),duration);
+               /* caldroidFragment.setMinDate(date);
+                caldroidFragment.setMaxDate(EndDate);*/
+               caldroidFragment.setSelectedDates(date,EndDate);
+                // Attach to the activity
+                startDate = date;
+                resetDate();
+                caldroidFragment.refreshView();
+           /*     FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction t = fragmentManager.beginTransaction();
+
+                if (caldroidFragment.isAdded()) {
+                    fragmentManager.beginTransaction().remove(caldroidFragment).commitNow();
+                }
+
+                t.replace(R.id.calendar1, caldroidFragment);
+                t.commit();*/
+
+            }
+        };
+        caldroidFragment.setCaldroidListener(caldroidListener);
+    }
+
+    private void InitCalenderFragment(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             caldroidFragment.restoreStatesFromKey(savedInstanceState,
                     "CALDROID_SAVED_STATE");
@@ -145,9 +193,6 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
 
             caldroidFragment.setArguments(args);
         }
-
-
-        // Attach to the activity
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction t = fragmentManager.beginTransaction();
 
@@ -157,12 +202,14 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
 
         t.replace(R.id.calendar1, caldroidFragment);
         t.commit();
+    }
 
-        initCategorySpinner();
-        initDurationSpinner();
-
-
-        setListener();
+    private void resetDate() {
+        calenderids.clear();
+        dateDrawableMap.clear();
+        dateTextDrawableMap.clear();
+        totaldate.clear();
+        TotalArray = -1;
     }
 
     private void initDurationSpinner() {
@@ -247,13 +294,44 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         });
     }
 
+    public Date getEndDate(Date date,String days) {
 
+
+        if (days.contains("2 Week")) {
+            Calendar enddate = Calendar.getInstance();
+            enddate.setTime(date);
+            enddate.add(Calendar.DAY_OF_MONTH, 13);
+            EndDate = enddate.getTime();
+        }
+
+        if (days.contains("1 Month")) {
+            Calendar enddate = Calendar.getInstance();
+            enddate.setTime(date);
+            enddate.add(Calendar.MONTH, 1);
+            EndDate = enddate.getTime();
+        }
+        if (days.contains("3 Months")) {
+            Calendar enddate = Calendar.getInstance();
+            enddate.setTime(date);
+            enddate.add(Calendar.MONTH, 3);
+            EndDate = enddate.getTime();
+        }
+        if (days.contains("6 Months")) {
+            Calendar enddate = Calendar.getInstance();
+            enddate.setTime(date);
+            enddate.add(Calendar.MONTH, 6);
+            EndDate = enddate.getTime();
+        }
+
+        return EndDate;
+
+    }
     public Date getEndDate(String days) {
 
 
         if (days.contains("2 Week")) {
             Calendar enddate = Calendar.getInstance();
-            enddate.add(Calendar.DAY_OF_MONTH, 14);
+            enddate.add(Calendar.DAY_OF_MONTH, 13);
             EndDate = enddate.getTime();
         }
 
@@ -281,7 +359,10 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         if (EndDate == null)
             UIHelper.showShortToastInCenter(getDockActivity(), "Select Duration First");
         else {
-            String StartDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(new Date().getTime());
+            if (startDate == null){
+                startDate =new Date();
+            }
+            String StartDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(startDate.getTime());
 
             //EndDate = getEndDate(duration);
 
@@ -314,10 +395,12 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     private void getTrainerTimingSlots(TrainerBooking result) {
         UIHelper.showShortToastInCenter(getDockActivity(), "asd" + USER_ID);
         //timings.add("Slots Avaliable");
+        slots.clear();
         slots = result.getSlots();
      /*   ColorDrawable red = new ColorDrawable(getResources().getColor(R.color.red));
         ColorDrawable green = new ColorDrawable(Color.GREEN);
         ColorDrawable white = new ColorDrawable(Color.WHITE);*/
+        timings.clear();
 
         for (Slot item : slots) {
             timings.add(item.getStartTime() + " to " + item.getEndTime());
@@ -336,11 +419,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         sp_timer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                calenderids.clear();
-                dateDrawableMap.clear();
-                dateTextDrawableMap.clear();
-                totaldate.clear();
-                TotalArray = -1;
+                resetDate();
                 showDateinCalender(timerAdapter.getItem(position));
             }
 
@@ -408,28 +487,42 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
        if (entry.getKey() !=null){
            Date date1 =entry.getKey();
            Date currentDate = new Date();
-           while (currentDate.before(date1)) {
-               calender.add(Calendar.DAY_OF_MONTH, 1);
+           int numadd =0;
+           SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+           String currentDatestring = f.format(currentDate);
+           String startdateString = f.format(date1);
+           while (!currentDatestring.equals(startdateString)) {
+               calender.add(Calendar.DAY_OF_MONTH, numadd);
+               numadd = 1;
                currentDate = calender.getTime();
+               currentDatestring = f.format(currentDate);
                dateDrawableMap.put(calender.getTime(), red);
                dateTextDrawableMap.put(calender.getTime(), R.color.white);
+               //calender.add(Calendar.DAY_OF_MONTH, 1);
            }
        }
             Map.Entry<Date,Drawable> lastentry = entries.get(entries.size()-1);
            if (lastentry.getKey()!=null){
                Date date2 = lastentry.getKey(); //totaldate.get(totaldate.size() - 1);
                calender.setTime(date2);
-               while (date2.before(EndDate)) {
-                   calender.add(Calendar.DAY_OF_MONTH, 1);
+               int numadd =0;
+               SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+               String enddatestring = f.format(EndDate);
+               String startdateString = f.format(date2);
+               while (!startdateString.equals(enddatestring)) {
+                   calender.add(Calendar.DAY_OF_MONTH, numadd);
+                   numadd = 1;
                    date2 = calender.getTime();
+                   startdateString = f.format(date2);
                    dateDrawableMap.put(calender.getTime(), red);
                    dateTextDrawableMap.put(calender.getTime(), R.color.white);
+                 //  calender.add(Calendar.DAY_OF_MONTH, 1);
                }
            }
         }
         setCustomResourceForDates();
-
-        // Attach to the activity
+        caldroidFragment.refreshView();
+      /*  // Attach to the activity
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction t = fragmentManager.beginTransaction();
 
@@ -438,7 +531,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         }
 
         t.replace(R.id.calendar1, caldroidFragment);
-        t.commit();
+        t.commit();*/
     }
 
     private void setBooking(ArrayList<BookingSchedule> result) {
@@ -518,7 +611,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         // TODO Auto-generated method stub
         switch (v.getId()) {
             case R.id.btn_training_Search_Submit:
-                if (TotalArray == calenderids.size()) {
+                if (TotalArray == (calenderids.size()-1)) {
                     setupDialog();
                 } else {
                     UIHelper.showShortToastInCenter(getDockActivity(), "Trainer is not available for whole Duration");

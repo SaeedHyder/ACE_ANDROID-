@@ -28,6 +28,7 @@
         android:gravity="center|center_vertical|center_horizontal"
         app:typeface="Roboto-Regular.ttf"/>
     <ImageView
+        android:id="@+id/img_deleteSchedule"
         android:layout_width="@dimen/x25"
         android:layout_height="@dimen/x25"
         android:src="@drawable/substract"

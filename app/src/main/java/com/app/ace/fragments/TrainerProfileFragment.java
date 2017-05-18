@@ -242,13 +242,13 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             btn_request.setVisibility(View.GONE);
 
                         }
-                        if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
+                       /* if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
                             btn_edit.setVisibility(View.GONE);
                             btn_follow.setVisibility(View.VISIBLE);
                             btn_Unfollow.setVisibility(View.GONE);
                             btn_request.setVisibility(View.GONE);
 
-                        }
+                        }*/
 
                         if (response.body().getResult().getIs_following() == 0) {
                             btn_follow.setVisibility(View.VISIBLE);

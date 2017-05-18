@@ -85,6 +85,7 @@ public class SearchTrainerFragment extends BaseFragment {
                 @Override
                 public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
                     //  resultuser = response.body().getResult();
+                    if (response.body()!= null)
                     bindview(response.body().getResult());
                     // System.out.println(response.body().getResult().get(0).getId());
                 }

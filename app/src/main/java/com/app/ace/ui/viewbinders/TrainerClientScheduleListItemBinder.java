@@ -6,9 +6,12 @@ import android.widget.Button;
 
 import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
+import com.app.ace.entities.Booking;
+import com.app.ace.entities.Slot;
 import com.app.ace.entities.TrainerClientScheduleItem;
 import com.app.ace.fragments.DetailedScreenFragment;
 import com.app.ace.fragments.TrainerClientScheduleFragment;
+import com.app.ace.retrofit.GsonFactory;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 import com.app.ace.ui.views.AnyTextView;
 
@@ -16,7 +19,7 @@ import com.app.ace.ui.views.AnyTextView;
  * Created by saeedhyder on 4/6/2017.
  */
 
-public class TrainerClientScheduleListItemBinder extends ViewBinder<TrainerClientScheduleItem> {
+public class TrainerClientScheduleListItemBinder extends ViewBinder<Slot> {
 
     DockActivity context;
 
@@ -32,21 +35,25 @@ public class TrainerClientScheduleListItemBinder extends ViewBinder<TrainerClien
     }
 
     @Override
-    public void bindView(TrainerClientScheduleItem entity, int position, int grpPosition, View view, Activity activity) {
+    public void bindView(Slot entity, int position, int grpPosition, View view, Activity activity) {
 
         TrainerClientScheduleListItemBinder.ViewHolder viewHolder = (TrainerClientScheduleListItemBinder.ViewHolder) view.getTag();
+        if (entity.getBookings()!=null) {
+            viewHolder.txtTime.setText(entity.getStartTime() + "-" + entity.getEndTime());
 
-        viewHolder.txtTime.setText(entity.gettxtTime());
-        viewHolder.btnName.setText(entity.gebtnName());
+            viewHolder.btnName.setText(entity.getBookings().getUser().getFirst_name()
+                    +" "+entity.getBookings().getUser().getLast_name());
+            String slotjson =  GsonFactory.getConfiguredGson().toJson(entity);
        /* viewHolder.showdate.setText(entity.getshowdate());*/
 
-        viewHolder.btnName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                context.addDockableFragment(DetailedScreenFragment.newInstance(), "DetailedScreenFragment");
+            viewHolder.btnName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    context.addDockableFragment(DetailedScreenFragment.newInstance(), "DetailedScreenFragment");
 
-            }
-        });
+                }
+            });
+        }
 
     }
 
