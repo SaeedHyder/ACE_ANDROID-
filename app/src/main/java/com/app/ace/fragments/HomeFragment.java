@@ -407,7 +407,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
                 //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
                 if (prefHelper.getUser().getUser_type().equalsIgnoreCase("trainer")) {
-                    getDockActivity().addDockableFragment(TrainingBookingCalenderFragment.newInstance(), "TrainerBookingCalendarFragment");
+                    getDockActivity().addDockableFragment(TrainingBookingCalenderFragment.newInstance(), "TrainingBookingCalenderFragment");
                 } else {
                     getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(), "TraineeScheduleFragment");
                 }
