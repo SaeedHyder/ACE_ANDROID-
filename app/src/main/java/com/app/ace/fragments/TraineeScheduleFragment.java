@@ -23,6 +23,7 @@ import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
 import com.github.jhonnyx2012.horizontalpicker.DatePickerListener;
 import com.github.jhonnyx2012.horizontalpicker.HorizontalPicker;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.joda.time.DateTime;
 
@@ -43,7 +44,8 @@ import roboguice.inject.InjectView;
 
 public class TraineeScheduleFragment extends BaseFragment implements View.OnClickListener, DatePickerListener,OndeleteListener {
 
-
+@InjectView(R.id.img_DetailedProfile)
+ImageView img_DetailedProfile;
     @InjectView(R.id.iv_Home)
     ImageView iv_Home;
     @InjectView(R.id.iv_Calander)
@@ -123,6 +125,7 @@ public class TraineeScheduleFragment extends BaseFragment implements View.OnClic
     }
 
     private void setTraineeScheduleData(TraineeScheduleEnt result) {
+        ImageLoader.getInstance().displayImage(result.getUser().getProfile_image(),img_DetailedProfile);
         txt_detailedS_ProfileName.setText(result.getUser().getFirst_name()
                 +" "+result.getUser().getLast_name());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
