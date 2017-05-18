@@ -213,19 +213,7 @@
             android:gravity="center|center_vertical|center_horizontal"
             app:typeface="Roboto-Regular.ttf" />
 
-        <com.app.ace.ui.views.AnyTextView
-            android:id="@+id/txtIncre1"
-            android:layout_width="20dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/x10"
-            android:layout_marginLeft="@dimen/x10"
-            android:layout_marginRight="@dimen/x10"
-            android:layout_marginTop="@dimen/x10"
-            android:layout_weight="0.5"
-            android:background="@drawable/addinc"
-            android:gravity="center|center_vertical|center_horizontal"
-            android:visibility="gone"
-            app:typeface="Roboto-Regular.ttf" />
+
 
     </LinearLayout>
 

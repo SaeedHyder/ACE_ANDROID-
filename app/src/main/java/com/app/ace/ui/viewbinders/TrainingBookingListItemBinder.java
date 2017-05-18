@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.view.View;
 
+import android.widget.ImageView;
 import android.widget.TimePicker;
 
 import com.app.ace.R;
@@ -584,7 +585,7 @@ public class TrainingBookingListItemBinder extends ViewBinder<TrainingBookingCal
         private AnyTextView txtThirdTo;
         private AnyTextView txtThirdFrom;
         private AnyTextView txtback;
-        private AnyTextView txtIncre;
+        private ImageView txtIncre;
         private AnyTextView txtback1;
         private AnyTextView txtIncre1;
 
@@ -602,7 +603,7 @@ public class TrainingBookingListItemBinder extends ViewBinder<TrainingBookingCal
             txtThirdFrom = (AnyTextView) view.findViewById(R.id.txtThirdFrom);
 
             txtback= (AnyTextView) view.findViewById(R.id.txtback);
-            txtIncre = (AnyTextView) view.findViewById(R.id.txtIncre);
+            txtIncre = (ImageView) view.findViewById(R.id.txtIncre);
 
             txtback1= (AnyTextView) view.findViewById(R.id.txtback1);
             txtIncre1 = (AnyTextView) view.findViewById(R.id.txtIncre1);
