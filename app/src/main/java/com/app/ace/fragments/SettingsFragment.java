@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ToggleButton;
 
 import com.app.ace.R;
@@ -51,6 +52,9 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     @InjectView(R.id.toggle_private_or_public)
     private ToggleButton toggle_private_or_public;
 
+    @InjectView(R.id.cb_english)
+    CheckBox cb_english;
+
 
 
     public static SettingsFragment newInstance() {
@@ -76,6 +80,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         txt_logout.setOnClickListener(this);
         toggle_private_or_public.setOnClickListener(this);
         toggle_notifications.setOnClickListener(this);
+        cb_english.setOnClickListener(this);
     }
 
 
@@ -104,8 +109,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         UpdatePassword();
         contactUs();
         NotificationStatus();
-
-
+        cb_english.setChecked(true);
 
     }
 

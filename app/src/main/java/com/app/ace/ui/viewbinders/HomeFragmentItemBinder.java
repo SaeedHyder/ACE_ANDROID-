@@ -108,27 +108,23 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
 
         viewHolder.vv_post_video.setVisibility(View.VISIBLE);
         viewHolder.iv_post_pic.setVisibility(View.GONE);
-       // viewHolder.iv_playBtn.setVisibility(View.VISIBLE);
+        viewHolder.iv_playBtn.setVisibility(View.VISIBLE);
 
-
-        MediaController mediaController= new MediaController(context);
+        final MediaController mediaController= new MediaController(context);
         mediaController.setAnchorView(viewHolder.vv_post_video);
-
-
+        final Uri uri=Uri.parse(homeListDataEnt.getProfile_post_pic_path());
         viewHolder.vv_post_video.setKeepScreenOn(true);
-        Uri uri=Uri.parse(homeListDataEnt.getProfile_post_pic_path());
-        viewHolder.vv_post_video.setVideoURI(uri);
-        viewHolder.vv_post_video.setMediaController(mediaController);
-        viewHolder.vv_post_video.requestFocus();
-        viewHolder.vv_post_video.start();
-     //   mediaController.hide();
-
-     /*   viewHolder.iv_playBtn.setOnClickListener(new View.OnClickListener() {
+        viewHolder.iv_playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                viewHolder.vv_post_video.setVideoURI(uri);
+                viewHolder.vv_post_video.setMediaController(mediaController);
                 viewHolder.vv_post_video.start();
+                viewHolder.iv_playBtn.setVisibility(View.GONE);
+
             }
-        });*/
+        });
 
     }
     else

@@ -208,12 +208,14 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_profile, container, false);
+
+
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        scrollView.setVisibility(View.INVISIBLE);
         setListener();
        showProfiles();
 
@@ -229,6 +231,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                    scrollView.setVisibility(View.VISIBLE);
 
                     if (response.body().getResult().getUser_type().equalsIgnoreCase(AppConstants.trainer)) {
 
@@ -385,12 +388,13 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         adapter.addAll(dataCollection);
         gv_pics.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-
+/*
         scrollView.post(new Runnable() {
             public void run() {
                 scrollView.fullScroll(View.FOCUS_UP);
             }
-        });
+        });*/
+
 
     }
 
