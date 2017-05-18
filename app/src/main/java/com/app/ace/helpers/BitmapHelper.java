@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
@@ -106,6 +107,8 @@ public class BitmapHelper {
 
 	
 	public static Bitmap getRoundedCornerImage( Bitmap bitmap ) {
+		//Bitmap output = Bitmap.createBitmap( bitmap.getWidth(),
+				//bitmap.getHeight(), Config.ARGB_8888 );
 		Bitmap output = Bitmap.createBitmap( bitmap.getWidth(),
 				bitmap.getHeight(), Config.ARGB_8888 );
 		Canvas canvas = new Canvas( output );
@@ -126,6 +129,37 @@ public class BitmapHelper {
 		
 		return output;
 		
+	}
+	public static Bitmap getRoundCircleImage( Bitmap bitmap ) {
+	//	int w = bitmap.getWidth();
+	//	int h = bitmap.getHeight();
+
+		int w=200;
+		int h=200;
+
+		int radius = Math.min(h / 2, w / 2);
+		Bitmap output = Bitmap.createBitmap(w + 8, h + 8, Config.ARGB_8888);
+
+		Paint p = new Paint();
+		p.setAntiAlias(true);
+
+		Canvas c = new Canvas(output);
+		c.drawARGB(0, 0, 0, 0);
+		p.setStyle(Paint.Style.FILL);
+
+		c.drawCircle((w / 2) + 4, (h / 2) + 4, radius, p);
+
+		p.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+
+		c.drawBitmap(bitmap, 4, 4, p);
+		p.setXfermode(null);
+		p.setStyle(Paint.Style.STROKE);
+		p.setColor(Color.WHITE);
+		p.setStrokeWidth(3);
+		c.drawCircle((w / 2) + 4, (h / 2) + 4, radius, p);
+
+		return output;
+
 	}
 	
 	public static Bitmap getImageOrientation( Bitmap bitmap, int rotate ) {

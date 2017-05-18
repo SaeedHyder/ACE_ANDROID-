@@ -310,7 +310,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             @Override
             public void onFailure(Call<ResponseWrapper<CreatePostEnt>> call, Throwable t) {
                 loadingFinished();
-                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+                UIHelper.showLongToastInCenter(getDockActivity(), "Connection Problem");
             }
         });
 

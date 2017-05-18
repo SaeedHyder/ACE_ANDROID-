@@ -52,6 +52,8 @@ public class SpinerAdapter extends ArrayAdapter<SpinnerDataItem> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
+
         return getCustomView(position, convertView, parent);
     }
 
@@ -66,14 +68,6 @@ public class SpinerAdapter extends ArrayAdapter<SpinnerDataItem> {
             holder.mTextView = (AnyTextView) convertView.findViewById(R.id.text);
             holder.mCheckBox = (CheckBox) convertView.findViewById(R.id.cb_text);
 
-            holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean ischeck) {
-                    int getPosition = (Integer) buttonView.getTag();
-
-                    listState.get(getPosition).setSelected(buttonView.isChecked());
-                }
-            });
             convertView.setTag(holder);
             convertView.setTag(R.id.text, holder.mTextView);
             convertView.setTag(R.id.cb_text, holder.mCheckBox);
@@ -89,11 +83,12 @@ public class SpinerAdapter extends ArrayAdapter<SpinnerDataItem> {
         holder.mTextView.setText(listState.get(position).getTitle());
        holder.mCheckBox.setChecked(listState.get(position).isSelected());
 
-
-        holder.mCheckBox.setOnClickListener(new View.OnClickListener() {
+        holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean ischeck) {
+                int getPosition = (Integer) buttonView.getTag();
 
+                listState.get(getPosition).setSelected(buttonView.isChecked());
 
                 if (listState.get(0).getTitle().contains("Select Certification")) {
                     education = listState;
@@ -103,7 +98,6 @@ public class SpinerAdapter extends ArrayAdapter<SpinnerDataItem> {
                     specialty = listState;
                     editTrainerData.updateSpecialtyData(specialty);
                 }
-
             }
         });
 

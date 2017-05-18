@@ -298,6 +298,13 @@ Call<ResponseWrapper> deleteSchedule(
             @Part("private_account") RequestBody private_account
     );
 
+    @Multipart
+    @POST("user/update")
+    Call<ResponseWrapper<RegistrationResult>> MuteConversation(
+            @Part("user_id") RequestBody user_id,
+            @Part("mute_conversation") RequestBody mute_conversation
+    );
+
     @FormUrlEncoded
     @POST("user/rating/add")
     Call<ResponseWrapper<User>> rating(
@@ -359,7 +366,7 @@ Call<ResponseWrapper> deleteSchedule(
 
     @FormUrlEncoded
     @POST("message/block")
-    Call<ResponseWrapper> muteConversation(
+    Call<ResponseWrapper> BlockConversation(
             @Field("conversation_id") String conversation_id,
             @Field("sender_block") int sender_block,
             @Field("receiver_block") int receiver_block);

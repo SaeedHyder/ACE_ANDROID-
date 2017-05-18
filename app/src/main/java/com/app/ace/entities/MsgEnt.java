@@ -13,6 +13,7 @@ public class MsgEnt {
     int sender_id;
     int receiver_id;
     String message_text;
+
     String status;
     String created_at;
     String updated_at;

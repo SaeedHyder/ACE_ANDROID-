@@ -1,18 +1,23 @@
 package com.app.ace.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import com.app.ace.R;
-import com.app.ace.entities.DetailedScreenItem;
-import com.app.ace.entities.HomeListDataEnt;
 import com.app.ace.entities.MapScreenItem;
-import com.app.ace.entities.TraineeScheduleItem;
+import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.UserProfile;
 import com.app.ace.fragments.abstracts.BaseFragment;
+import com.app.ace.global.AppConstants;
 import com.app.ace.map.abstracts.GoogleMapOptions;
 import com.app.ace.map.abstracts.MapMarkerItemBinder;
+import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.TitleBar;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,15 +27,32 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import roboguice.inject.InjectView;
+
+import static com.app.ace.R.id.txt_noresult;
 
 
 public class MapScreenFragment extends BaseFragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private ArrayList<MapScreenItem> CoordinatesCollection = new ArrayList<>();
+    private AnyEditTextView edtsearch;
+
+    @InjectView(R.id.txt_noresult)
+    private TextView txt_noresult;
+
+    private ArrayList<MapScreenItem> userCollection = new ArrayList<>();
     public static MapScreenFragment newInstance() {
         return new MapScreenFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -44,20 +66,60 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        txt_noresult.setVisibility(View.GONE);
+
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        getMapData();
+
     }
 
-    private void getMapData() {
+    private void getSearchUserData() {
+        if (edtsearch.getText().toString() != null) {
+            Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edtsearch.getText().toString(), AppConstants.trainer);
 
-        CoordinatesCollection= new ArrayList<>();
-        CoordinatesCollection.add(new MapScreenItem("24.829428","67.073822","drawable://" + R.drawable.profile_pic));
-        CoordinatesCollection.add(new MapScreenItem("24.861443","67.010025","drawable://" + R.drawable.profile_pic_trainer));
-        CoordinatesCollection.add(new MapScreenItem("24.856844","67.264647","drawable://" + R.drawable.profile_pic));
+            callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
+                @Override
+                public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
+
+                    if (response.body()!= null)
+                        if (response.body().getResult().size() <= 0) {
+                            txt_noresult.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            txt_noresult.setVisibility(View.GONE);
+                        bindview(response.body().getResult());
+                    addMarker();
+                }}
+
+                @Override
+                public void onFailure(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Throwable t) {
+                    Log.e("Search", t.toString());
+                }
+            });
+
+        }
     }
+
+    private void bindview(ArrayList<UserProfile> resultuser) {
+        userCollection = new ArrayList<>();
+        try {
+        for (UserProfile user : resultuser) {
+            if(!user.getGym_latitude().isEmpty()) {
+
+                    userCollection.add(new MapScreenItem(user.getGym_latitude(), user.getGym_longitude(), user.getProfile_image()));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error " + e.getMessage());
+        }
+
+    }
+
+
 
     @Override
     public void setTitleBar(TitleBar titleBar) {
@@ -70,15 +132,25 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
                 getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
             }
         });
-        titleBar.showSearchBar();
+        edtsearch = titleBar.showSearchBar();
+        edtsearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    getSearchUserData();
+                }
+                return false;
+            }
+        });
 
     }
 
     void addMarker()
     {
+
         GoogleMapOptions<MapScreenItem> googleMapOptions = new GoogleMapOptions<>(getDockActivity(),
                 mMap,
-                CoordinatesCollection,
+                userCollection,
                 null,
                 new MapMarkerItemBinder(getMainActivity())
         );

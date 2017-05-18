@@ -4,10 +4,17 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.CalendarContract;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
+import android.support.annotation.RequiresApi;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.View;
 
 import com.app.ace.R;
@@ -17,6 +24,7 @@ import com.app.ace.activities.MapsActivity;
 import com.app.ace.entities.MapScreenItem;
 import com.app.ace.fragments.MapScreenFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.BitmapHelper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -56,14 +64,21 @@ public class MapMarkerItemBinder extends MapMarkerBinder<MapScreenItem> {
 //        return cursor.getString(idx);
 //    }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void addMarker(GoogleMap googleMap, MapScreenItem entity, int position) {
 
-        // imageLoader = ImageLoader.getInstance();
-        // imageLoader.displayImage(entity.getImage(), viewHolder.userImage);
+
         Bitmap bitmap = ImageLoader.getInstance().loadImageSync(entity.getImage());
-        bitmap = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
-        //Uri tempUri = getImageUri(activity, bitmap);
+      //  image=BitmapHelper.scaleCenterCrop(bitmap,150,150);
+
+
+
+       // bitmap = Bitmap.createScaledBitmap(bitmap,150, 150, true);
+       // BitmapHelper.getRoundedCornerImage(bitmap)
+       // RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(res, bitmap);
+      //  dr.setCornerRadius(Math.max(bitmap.getWidth(), bitmap.getHeight()) / 2.0f);
+
 
 
         if (entity.getLat() != null && entity.getLng() != null) {
@@ -74,7 +89,8 @@ public class MapMarkerItemBinder extends MapMarkerBinder<MapScreenItem> {
                         googleMap.addMarker(new MarkerOptions()
                                 .title(String.valueOf(position))
                                 .position(new LatLng(Double.valueOf(entity.getLat()), Double.valueOf(entity.getLng())))
-                                .icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
+                                //.icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
+                                .icon(BitmapDescriptorFactory.fromBitmap( BitmapHelper.getRoundCircleImage(bitmap))));
                         //.icon(BitmapDescriptorFactory.fromResource(R.drawable.profile_container1)));
                         //.fromPath(tempUri.toString())));
                     }catch (Exception e){
@@ -83,8 +99,7 @@ public class MapMarkerItemBinder extends MapMarkerBinder<MapScreenItem> {
 
 
                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(entity.getLat()), Double.valueOf(entity.getLng())), AppConstants.zoomIn));
-                    googleMap.animateCamera(CameraUpdateFactory.zoomIn());
-                    googleMap.animateCamera(CameraUpdateFactory.zoomTo(AppConstants.zoomIn), 2000, null);
+                    googleMap.animateCamera(CameraUpdateFactory.zoomOut());
                 }
         }
     }

@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.app.ace.fragments.MapScreenFragment">
 
     <LinearLayout
@@ -9,6 +10,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <com.app.ace.ui.views.AnyTextView
+            android:id="@+id/txt_noresult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:paddingBottom="@dimen/x5"
+            android:paddingLeft="@dimen/x8"
+            android:paddingTop="@dimen/x2"
+            android:text="@string/no_result_found"
+            android:textColor="@color/black"
+            android:textSize="@dimen/x20"
+            android:textStyle="normal"
+            android:visibility="gone"
+            app:typeface="Roboto-Regular.ttf" />
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"

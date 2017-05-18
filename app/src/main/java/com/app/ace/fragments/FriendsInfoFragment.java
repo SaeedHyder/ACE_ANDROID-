@@ -15,6 +15,7 @@ import android.widget.ToggleButton;
 import com.app.ace.R;
 import com.app.ace.entities.FollowUser;
 import com.app.ace.entities.MsgEnt;
+import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
@@ -26,6 +27,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,6 +36,7 @@ import roboguice.inject.InjectView;
 
 
 import static com.app.ace.R.id.riv_profile_pic;
+import static com.app.ace.R.id.toggle_notifications;
 import static com.app.ace.fragments.ChatFragment.CONVERSATION_ID;
 import static com.app.ace.fragments.ChatFragment.FULLNAME;
 import static com.app.ace.fragments.ChatFragment.ISFOLLOWING;
@@ -45,8 +49,8 @@ import static com.app.ace.global.AppConstants.user_id;
 
 public class FriendsInfoFragment extends BaseFragment implements View.OnClickListener {
 
-    @InjectView(R.id.toggle_private_or_public)
-    ToggleButton toggle_private_or_public;
+    @InjectView(R.id.muteConversation)
+    ToggleButton muteConversation;
 
     @InjectView(R.id.btn_block)
     Button btn_block;
@@ -152,6 +156,7 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
         btn_follow.setOnClickListener(this);
         btn_Unfollow.setOnClickListener(this);
         btn_Unblock.setOnClickListener(this);
+        muteConversation.setOnClickListener(this);
     }
 
     private void setData() {
@@ -197,25 +202,10 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
             btn_Unfollow.setVisibility(View.VISIBLE);
         }
 
-
-        toggle_private_or_public.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(toggle_private_or_public.isChecked())
-                {
-
-                    Toast.makeText(getDockActivity(),"checked",Toast.LENGTH_LONG).show();
-                }
-                else
-
-                    Toast.makeText(getDockActivity(),"Unchecked",Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
 
-    private void setMuteService(int x, int y) {
+    private void setBlockService(int x, int y) {
 
         sender_block=x;
         receiver_block=y;
@@ -227,7 +217,7 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
             sender_block=0;
             receiver_block=1;
         }*/
-        Call<ResponseWrapper> callBack = webService.muteConversation(ConversationId,sender_block,receiver_block);
+        Call<ResponseWrapper> callBack = webService.BlockConversation(ConversationId,sender_block,receiver_block);
         callBack.enqueue(new Callback<ResponseWrapper>() {
             @Override
             public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
@@ -319,6 +309,38 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
         });
     }
 
+    void muteConversation()
+    {
+        String mutecheck;
+
+        if(muteConversation.isChecked())
+        {mutecheck="1";}
+        else {mutecheck="0";}
+
+        Call<ResponseWrapper<RegistrationResult>> callBack = webService.MuteConversation(
+                RequestBody.create(MediaType.parse("text/plain"),prefHelper.getUserId()),
+                RequestBody.create(MediaType.parse("text/plain"),mutecheck));
+
+        callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
+
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                } else {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseWrapper<RegistrationResult>> call, Throwable t) {
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+
+            }
+        });
+
+    }
+
     @Override
     public void setTitleBar(TitleBar titleBar) {
         super.setTitleBar(titleBar);
@@ -339,11 +361,11 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
                 btn_block.setVisibility(View.GONE);
 
                 if(prefHelper.getUserId().equals(receiverId)) {
-                    setMuteService(1, 0);
+                    setBlockService(1, 0);
                 }
                 else
                 {
-                    setMuteService(0,1);
+                    setBlockService(0,1);
                 }
                 break;
 
@@ -353,11 +375,11 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
                 btn_block.setVisibility(View.VISIBLE);
 
                 if(prefHelper.getUserId().equals(receiverId)) {
-                    setMuteService(0, 0);
+                    setBlockService(0, 0);
                 }
                 else
                 {
-                    setMuteService(0,0);
+                    setBlockService(0,0);
                 }
                 break;
 
@@ -379,6 +401,11 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
 
                 unfollowUser();
 
+                break;
+
+            case R.id.muteConversation:
+
+                muteConversation();
                 break;
 
 

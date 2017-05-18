@@ -383,7 +383,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         ArrayList<MsgEnt> msg = response.body().getResult();
                         msg.get(0);
 
-                        collection.add(new ChatDataItem(msg.get(0).getSender().getProfile_image(), msg.get(0).getMessage_text(), msg.get(0).getCreated_at(), msg.get(0).getReceiver().getProfile_image(), msg.get(0).getMessage_text(), msg.get(0).getCreated_at(), false, msg.get(0).getSender_id()));
+                        collection.add(new ChatDataItem(msg.get(0).getSender().getProfile_image(), msg.get(0).getMessage().getMessage_text(), msg.get(0).getCreated_at(), msg.get(0).getReceiver().getProfile_image(), msg.get(0).getMessage().getMessage_text(), msg.get(0).getCreated_at(), false, msg.get(0).getSender_id()));
                         bindData(collection);
                     }
                 }
