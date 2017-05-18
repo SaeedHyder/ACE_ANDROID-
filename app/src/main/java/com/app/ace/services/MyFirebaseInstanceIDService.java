@@ -40,7 +40,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private void sendRegistrationToServer(final String token) {
         // sending gcm token to server
         Log.e(TAG, "sendRegistrationToServer: " + token);
-        TokenUpdater.getInstance().UpdateToken(getApplicationContext(),preferenceHelper.getUserId(),"Android",token);
+        TokenUpdater.getInstance().UpdateToken(getApplicationContext(),preferenceHelper.getUserId(),"android",token);
     }
 
     private void storeRegIdInPref(String token) {

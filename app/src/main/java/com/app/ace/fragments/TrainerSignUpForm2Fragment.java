@@ -421,7 +421,7 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
                 if(validateOtherData() && validateEditText()){
                     if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()))
-                        TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"Android",prefHelper.getFirebase_TOKEN());
+                        TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"android",prefHelper.getFirebase_TOKEN());
                         signupTrainer();
                     //getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(), "VarificationCodeFragment");
                 }

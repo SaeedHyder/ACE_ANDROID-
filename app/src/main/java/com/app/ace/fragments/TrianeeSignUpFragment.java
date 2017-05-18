@@ -206,7 +206,7 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
                             UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.password_length_alert));
                         } else {
                             if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()))
-                                TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"Android",prefHelper.getFirebase_TOKEN());
+                                TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"android",prefHelper.getFirebase_TOKEN());
                                 signupTrainee();
                         }
                     }
