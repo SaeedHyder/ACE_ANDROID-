@@ -25,6 +25,16 @@ public class Booking {
 
     private String deletedAt;
 
+    public UserProfile getUser() {
+        return user;
+    }
+
+    public void setUser(UserProfile user) {
+        this.user = user;
+    }
+
+    private UserProfile user;
+
     public Integer getId() {
         return id;
     }

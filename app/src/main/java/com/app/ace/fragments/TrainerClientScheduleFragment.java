@@ -9,11 +9,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.app.ace.R;
+import com.app.ace.entities.Booking;
 import com.app.ace.entities.GetTraineeBookings;
-import com.app.ace.entities.InboxDataItem;
-import com.app.ace.entities.MsgEnt;
 import com.app.ace.entities.ResponseWrapper;
-import com.app.ace.entities.ShowComments;
+import com.app.ace.entities.Slot;
+import com.app.ace.entities.TrainerBooking;
 import com.app.ace.entities.TrainerClientScheduleItem;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
@@ -27,7 +27,9 @@ import com.github.jhonnyx2012.horizontalpicker.HorizontalPicker;
 
 import org.joda.time.DateTime;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -35,32 +37,24 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
-import static com.app.ace.global.AppConstants.trainee;
-
 
 public class TrainerClientScheduleFragment extends BaseFragment implements DatePickerListener, View.OnClickListener {
 
+    ArrayList<Slot> slots = new ArrayList<>();
     @InjectView(R.id.showdate)
     private AnyTextView showdate;
-
     @InjectView(R.id.datePicker)
     private HorizontalPicker datePicker;
-
     @InjectView(R.id.lv_trainer_srceen)
     private ListView lv_trainer_srceen;
-
     @InjectView(R.id.iv_Home)
     private ImageView iv_Home;
-
     @InjectView(R.id.iv_Calander)
     private ImageView iv_Calander;
-
     @InjectView(R.id.iv_profile)
     private ImageView iv_profile;
-
-    private ArrayListAdapter<TrainerClientScheduleItem> adapter;
-
-    private ArrayList<TrainerClientScheduleItem> userCollection = new ArrayList<>();
+    private ArrayListAdapter<Slot> adapter;
+    private ArrayList<Slot> userCollection = new ArrayList<>();
 
     public TrainerClientScheduleFragment() {
     }
@@ -74,7 +68,7 @@ public class TrainerClientScheduleFragment extends BaseFragment implements DateP
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new ArrayListAdapter<TrainerClientScheduleItem>(getDockActivity(), new TrainerClientScheduleListItemBinder(getDockActivity()));
+        adapter = new ArrayListAdapter<Slot>(getDockActivity(), new TrainerClientScheduleListItemBinder(getDockActivity()));
     }
 
     @Override
@@ -82,7 +76,8 @@ public class TrainerClientScheduleFragment extends BaseFragment implements DateP
 
         return inflater.inflate(R.layout.fragment_trainer_client_schedule, container, false);
     }
-@Nullable
+
+    @Nullable
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -94,14 +89,38 @@ public class TrainerClientScheduleFragment extends BaseFragment implements DateP
                 .setOffset(7)
                 .init();
         datePicker.setDate(new DateTime());
-      //  getSearchUserData();
-        setTraineeBookings();
+        //  getSearchUserData();
+        setTraineeBookings(new DateTime());
         setListener();
     }
 
-    private void setTraineeBookings() {
+    private void setTraineeBookings(DateTime dateTime) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String date = format.format(dateTime.toDate());
 
-        Call<ResponseWrapper<ArrayList<GetTraineeBookings>>> callBack = webService.ShowTraineeBookings(prefHelper.getUserId());
+        Call<ResponseWrapper<TrainerBooking>> callBack = webService.getScheduleTrainee(prefHelper.getUserId(), date, date);
+        loadingStarted();
+
+        callBack.enqueue(new Callback<ResponseWrapper<TrainerBooking>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<TrainerBooking>> call, Response<ResponseWrapper<TrainerBooking>> response) {
+                loadingFinished();
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                    setTraineeData(response.body().getResult());
+                } else {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<TrainerBooking>> call, Throwable t) {
+
+                loadingFinished();
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+
+            }
+        });
+       /* Call<ResponseWrapper<ArrayList<GetTraineeBookings>>> callBack = webService.ShowTraineeBookings(prefHelper.getUserId());
 
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<GetTraineeBookings>>>() {
             @Override
@@ -122,16 +141,19 @@ public class TrainerClientScheduleFragment extends BaseFragment implements DateP
 
                 UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
             }
-        });
+        });*/
 
     }
 
-    private void setTraineeData(ArrayList<GetTraineeBookings> result) {
+    private void setTraineeData(TrainerBooking result) {
 
         userCollection = new ArrayList<>();
-
-        for(GetTraineeBookings item : result){
-            userCollection.add(new TrainerClientScheduleItem(item.getStart_time()+"-"+item.getEnd_time(),item.getTrainer().getFirst_name()+" "+item.getTrainer().getLast_name()));
+        slots = result.getSlots();
+        for (Slot item : slots) {
+            if (item.getBookings() !=null){
+                userCollection.add(item);
+            }
+            //userCollection.add(new TrainerClientScheduleItem(item.getStart_time() + "-" + item.getEnd_time(), item.getTrainer().getFirst_name() + " " + item.getTrainer().getLast_name()));
         }
         bindData(userCollection);
     }
@@ -155,7 +177,7 @@ public class TrainerClientScheduleFragment extends BaseFragment implements DateP
         bindData(userCollection);
     }*/
 
-    private void bindData(ArrayList<TrainerClientScheduleItem> userCollection) {
+    private void bindData(ArrayList<Slot> userCollection) {
         adapter.clearList();
         lv_trainer_srceen.setAdapter(adapter);
         adapter.addAll(userCollection);
@@ -172,8 +194,9 @@ public class TrainerClientScheduleFragment extends BaseFragment implements DateP
         titleBar.setSubHeading("My Schdedule");
 
     }
-/*    @InjectView(R.id.showdate)
-    private AnyTextView showdate;*/
+
+    /*    @InjectView(R.id.showdate)
+        private AnyTextView showdate;*/
     @Override
     public void onDateSelected(DateTime dateSelected) {
 //String week= dateSelected.dayOfWeek();
@@ -183,7 +206,8 @@ public class TrainerClientScheduleFragment extends BaseFragment implements DateP
         String month = dateSelected.toString("MMMM", Locale.getDefault());
         String date = String.valueOf(dateSelected.getDayOfMonth());
 
-        showdate.setText(week +" , "+month+"  "+date);
+        showdate.setText(week + " , " + month + "  " + date);
+        setTraineeBookings(dateSelected);
     }
 
     @Override

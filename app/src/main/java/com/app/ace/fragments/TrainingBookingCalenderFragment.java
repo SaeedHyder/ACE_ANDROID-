@@ -28,6 +28,7 @@ import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.Datedialoghelper;
 import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
+import com.app.ace.interfaces.OndeleteListener;
 import com.app.ace.interfaces.SetTimeDataOnTextView;
 import com.app.ace.retrofit.GsonFactory;
 import com.app.ace.ui.ArrayListExpandableAdapter;
@@ -59,7 +60,7 @@ import static java.lang.Integer.parseInt;
  * Created by saeedHyder on 4/7/2017.
  */
 
-public class TrainingBookingCalenderFragment extends BaseFragment implements View.OnClickListener, SetTimeDataOnTextView {
+public class TrainingBookingCalenderFragment extends BaseFragment implements View.OnClickListener, SetTimeDataOnTextView,OndeleteListener {
 
 
     public String StxtTo, StxtFrom, txtSecTo, txtSecFrom, txtThirdFrom, txtThirdTo, selectedDay;
@@ -212,7 +213,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     }
 
     private void bindView() {
-        listItemBinder = new ScheduleExpendableList();
+        listItemBinder = new ScheduleExpendableList(getDockActivity(),this);
         adapter = new ArrayListExpandableAdapter<>(getDockActivity(),
                 listDataHeader,
                 listDataChild,
@@ -962,6 +963,10 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     }
 
 
+    @Override
+    public void Ondelete() {
+        getDockActivity().addDockableFragment(TrainingBookingCalenderFragment.newInstance(), "TrainingBookingCalenderFragment");
+    }
 }
 
 

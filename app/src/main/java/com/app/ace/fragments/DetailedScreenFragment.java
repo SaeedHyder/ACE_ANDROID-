@@ -12,12 +12,15 @@ import android.widget.ListView;
 import com.app.ace.R;
 import com.app.ace.entities.DetailedScreenItem;
 import com.app.ace.entities.SearchPeopleDataItem;
+import com.app.ace.entities.Slot;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.retrofit.GsonFactory;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.DetailedScreenListItemBinder;
 import com.app.ace.ui.viewbinders.SearchPeopleListItemBinder;
 import com.app.ace.ui.views.TitleBar;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -47,7 +50,8 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
 
     @InjectView(R.id.iv_Home)
     private ImageView iv_Home;
-
+    private Slot currentSlot;
+    private static String SLOT = "SLOT";
     private ArrayListAdapter<DetailedScreenItem> adapter;
 
     private ArrayList<DetailedScreenItem> userCollection = new ArrayList<>();
@@ -56,11 +60,25 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
 
         return new DetailedScreenFragment();
     }
+    public static DetailedScreenFragment newInstance(String slotJson) {
+        Bundle args = new Bundle();
+        args.putString(SLOT, slotJson);
+        DetailedScreenFragment fragment = new DetailedScreenFragment();
+        fragment.setArguments(args);
+        return fragment;
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if (getArguments() != null) {
+            SLOT = getArguments().getString(SLOT);
+            // Toast.makeText(getDockActivity(), ConversationId, Toast.LENGTH_LONG).show();
+        }
+        if (!SLOT.isEmpty()){
+            currentSlot =  GsonFactory.getConfiguredGson().fromJson(SLOT,Slot.class);
+        }
         adapter = new ArrayListAdapter<DetailedScreenItem>(getDockActivity(), new DetailedScreenListItemBinder());
     }
 
