@@ -200,9 +200,8 @@
                 android:id="@+id/sp_Certification"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:layout_centerVertical="true"
-                android:hint="Male"
+                android:hint="@string/Male"
                 android:drawableLeft="@drawable/gender_icon"
                 android:textColorHint="@color/edittext_hint_color"
                 android:textColor="@color/dark_grey"
@@ -249,9 +248,7 @@
                 android:id="@+id/sp_speciality"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:layout_centerVertical="true"
-                android:hint="Male"
                 android:drawableLeft="@drawable/gender_icon"
                 android:textColorHint="@color/edittext_hint_color"
                 android:textColor="@color/dark_grey"
@@ -316,24 +313,6 @@
             android:background="@drawable/text"/>
 
 
-       <!-- <com.app.ace.ui.views.AnyEditTextView
-            android:id="@+id/edtGender"
-            style="@style/form_edttext_fields_style"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Male"
-            android:drawableLeft="@drawable/gender_icon"
-            android:layout_margin="@dimen/x15"
-            android:inputType="textNoSuggestions"
-            android:singleLine="true"
-            android:maxLength="50"
-            app:emptyAllowed="false"
-            android:drawablePadding="@dimen/x15"
-            android:textColorHint="@color/edittext_hint_color"
-            android:textColor="@color/dark_grey"
-            android:textSize="@dimen/x14"
-            app:typeface="Roboto-Regular.ttf" />-->
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -354,13 +333,12 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/iv_Gender"
                 android:layout_centerVertical="true"
-                android:hint="Male"
+                android:hint="@string/Male"
                 android:drawableLeft="@drawable/gender_icon"
                 android:textColorHint="@color/edittext_hint_color"
                 android:textColor="@color/dark_grey"
                 android:textSize="@dimen/x15"
                 android:alpha="0.6"/>
-
 
         </RelativeLayout>
 

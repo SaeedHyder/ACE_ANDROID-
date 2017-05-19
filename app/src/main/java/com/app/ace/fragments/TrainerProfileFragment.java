@@ -17,6 +17,7 @@ import android.widget.ScrollView;
 import com.app.ace.BaseApplication;
 import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
+import com.app.ace.entities.Booking;
 import com.app.ace.entities.FollowUser;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.User;
@@ -163,7 +164,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     AnyTextView txt_TrainingProfileFrag;
     AnyTextView txt_LocationProfileFrag;
     private ImageLoader imageLoader;
-
+    private boolean isTrainer = false;
     String Trainer,Trainee;
 
     public static String USER_ID = "User_Id";
@@ -233,9 +234,9 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
                     scrollView.setVisibility(View.VISIBLE);
 
-                    if (response.body().getResult().getUser_type().equalsIgnoreCase(AppConstants.trainer)) {
+                    if (response.body().getResult().getUser_type().equals(AppConstants.trainer)) {
 
-
+                        isTrainer = true;
                         Trainer=AppConstants.trainer;
 
                         if (response.body().getResult().getId() == Integer.parseInt(prefHelper.getUserId())) {
@@ -607,7 +608,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
             case R.id.iv_Calander:
 
-                if (Trainer.contains("trainer")) {
+                if (isTrainer) {
                     getDockActivity().addDockableFragment(TrainingBookingCalenderFragment.newInstance(), "TrainingBookingCalenderFragment");
 
                 } else {

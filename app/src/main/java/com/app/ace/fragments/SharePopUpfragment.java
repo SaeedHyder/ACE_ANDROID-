@@ -129,7 +129,8 @@ public class SharePopUpfragment extends BaseFragment implements View.OnClickList
 
             callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
                 @Override
-                public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
+                public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call,
+                                       Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
                     bindview(response.body().getResult());
                     setDataInAdapter(view, userCollection);
                 }

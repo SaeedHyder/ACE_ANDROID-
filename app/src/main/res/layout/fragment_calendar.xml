@@ -61,8 +61,8 @@
                     android:id="@+id/sp_trainerTime"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    />
+                    android:layout_weight="1" />
+
                 <Spinner
                     android:id="@+id/sp_weeks"
                     android:layout_width="0dp"
@@ -95,7 +95,7 @@
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="@dimen/x16"
-                    android:text="Check Availability"
+                    android:text="@string/Check_Availability"
                     android:visibility="visible"
                     />
 
@@ -195,7 +195,7 @@
                     android:id="@+id/txt_avaliable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Avaliable"
+                    android:text="@string/Avaliable"
                     android:layout_marginLeft="@dimen/x4"
                     android:textColor="@color/textcolor_lightgray"
                     android:textSize="@dimen/x11"
@@ -221,7 +221,7 @@
                     android:id="@+id/txt_booked"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Booked"
+                    android:text="@string/Booked"
                     android:layout_marginLeft="@dimen/x4"
                     android:textColor="@color/textcolor_lightgray"
                     android:textSize="@dimen/x11"

@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/x10"
                 android:layout_weight="0.85"
-                android:hint="Write a message here..."
+                android:hint="@string/Write_a_message_here"
                 app:typeface="Roboto-Regular.ttf" />
 
             <ImageView

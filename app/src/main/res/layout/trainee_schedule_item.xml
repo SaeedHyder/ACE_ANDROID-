@@ -18,7 +18,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:padding="@dimen/x16"
-            android:text="Dates Schedule"
+            android:text="@string/Dates_Schedule"
             android:gravity="center|center_vertical|center_horizontal"
             app:typeface="Roboto-Regular.ttf"/>
 
@@ -53,7 +53,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:padding="@dimen/x16"
-            android:text="Dates Schedule"
+            android:text="@string/Dates_Schedule"
             android:gravity="center|center_vertical|center_horizontal"
             app:typeface="Roboto-Regular.ttf"/>
 
@@ -87,7 +87,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:padding="@dimen/x16"
-            android:text="Dates Schedule"
+            android:text="@string/Dates_Schedule"
             android:gravity="center|center_vertical|center_horizontal"
             app:typeface="Roboto-Regular.ttf"/>
 

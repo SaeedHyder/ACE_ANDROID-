@@ -10,7 +10,7 @@
         android:gravity="center"
         android:layout_centerVertical="true"
         android:textColor="@color/white"
-        android:hint="Male"
+        android:hint="@string/Male"
         android:textColorHint="@color/red"
         android:textSize="@dimen/x15" />
 

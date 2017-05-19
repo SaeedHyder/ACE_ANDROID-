@@ -33,6 +33,7 @@ import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -73,13 +74,13 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     Spinner sp_category;
     @InjectView(R.id.btn_training_Search_Submit)
     Button btn_training_Search_Submit;
-    String buildingTypes = "Types of Training";
+    String buildingTypes ="";// getString(R.string.Flexiblity_training);
     Map<Date, Drawable> dateDrawableMap = new TreeMap<>();
     Map<Date, Integer> dateTextDrawableMap = new TreeMap<>();
     BookingSchedule bookingSchedule;
     private CaldroidFragment caldroidFragment;
     private CaldroidFragment dialogCaldroidFragment;
-    private String duration = "2 Week";
+    private String duration = "";//getString(R.string.two_Week);
     private int days = 14;
     private List<String> timings = new ArrayList<String>();
     private Date EndDate;
@@ -114,7 +115,8 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        buildingTypes = getString(R.string.Flexiblity_training);
+        duration = getString(R.string.two_Week);
         View parentView = inflater.inflate(R.layout.fragment_calendar, container, false);
 
         return parentView;
@@ -217,11 +219,11 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     private void initDurationSpinner() {
         //Spinner Weeks
         List<String> timeDuration = new ArrayList<String>();
-        timeDuration.add("Select time duration");
-        timeDuration.add("2 Week");
-        timeDuration.add("1 Month");
-        timeDuration.add("3 Months");
-        timeDuration.add("6 Months");
+        timeDuration.add(getString(R.string.Select_time_duration));
+        timeDuration.add(getString(R.string.two_Week));
+        timeDuration.add(getString(R.string.one_Month));
+        timeDuration.add(getString(R.string.three_Months));
+        timeDuration.add(getString(R.string.Six_Months));
 
         ArrayAdapter<String> TimeDurationAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, timeDuration);
         TimeDurationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -272,13 +274,13 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         //Spinner Category
 
         final List<String> category = new ArrayList<String>();
-        category.add("Flexiblity training");
-        category.add("Dynamic Strength training");
-        category.add("Static strength training");
-        category.add("Circuit training");
-        category.add("Aerobic training");
-        category.add("Body Building");
-        category.add("Lose Weight");
+        category.add(getString(R.string.Flexiblity_training));
+        category.add(getString(R.string.dynamic_strenght_taining));
+        category.add(getString(R.string.Static_strength_training));
+        category.add(getString(R.string.Circuit_training));
+        category.add(getString(R.string.Aerobic_training));
+        category.add(getString(R.string.Body_Building));
+        category.add(getString(R.string.Lose_Weight));
 
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, category);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -299,26 +301,26 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     public Date getEndDate(Date date,String days) {
 
 
-        if (days.contains("2 Week")) {
+        if (days.contains(getString(R.string.two_Week))) {
             Calendar enddate = Calendar.getInstance();
             enddate.setTime(date);
             enddate.add(Calendar.DAY_OF_MONTH, 13);
             EndDate = enddate.getTime();
         }
 
-        if (days.contains("1 Month")) {
+        if (days.contains(getString(R.string.one_Month))) {
             Calendar enddate = Calendar.getInstance();
             enddate.setTime(date);
             enddate.add(Calendar.MONTH, 1);
             EndDate = enddate.getTime();
         }
-        if (days.contains("3 Months")) {
+        if (days.contains(getString(R.string.three_Months))) {
             Calendar enddate = Calendar.getInstance();
             enddate.setTime(date);
             enddate.add(Calendar.MONTH, 3);
             EndDate = enddate.getTime();
         }
-        if (days.contains("6 Months")) {
+        if (days.contains(getString(R.string.Six_Months))) {
             Calendar enddate = Calendar.getInstance();
             enddate.setTime(date);
             enddate.add(Calendar.MONTH, 6);
@@ -331,23 +333,23 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     public Date getEndDate(String days) {
 
 
-        if (days.contains("2 Week")) {
+        if (days.contains(getString(R.string.two_Week))) {
             Calendar enddate = Calendar.getInstance();
             enddate.add(Calendar.DAY_OF_MONTH, 13);
             EndDate = enddate.getTime();
         }
 
-        if (days.contains("1 Month")) {
+        if (days.contains(getString(R.string.one_Month))) {
             Calendar enddate = Calendar.getInstance();
             enddate.add(Calendar.MONTH, 1);
             EndDate = enddate.getTime();
         }
-        if (days.contains("3 Months")) {
+        if (days.contains(getString(R.string.three_Months))) {
             Calendar enddate = Calendar.getInstance();
             enddate.add(Calendar.MONTH, 3);
             EndDate = enddate.getTime();
         }
-        if (days.contains("6 Months")) {
+        if (days.contains(getString(R.string.Six_Months))) {
             Calendar enddate = Calendar.getInstance();
             enddate.add(Calendar.MONTH, 6);
             EndDate = enddate.getTime();
@@ -395,7 +397,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void getTrainerTimingSlots(TrainerBooking result) {
-        UIHelper.showShortToastInCenter(getDockActivity(), "asd" + USER_ID);
+        //UIHelper.showShortToastInCenter(getDockActivity(), "asd" + USER_ID);
         //timings.add("Slots Avaliable");
         slots.clear();
         slots = result.getSlots();
@@ -516,6 +518,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
                    numadd = 1;
                    date2 = calender.getTime();
                    startdateString = f.format(date2);
+
                    dateDrawableMap.put(calender.getTime(), red);
                    dateTextDrawableMap.put(calender.getTime(), R.color.white);
                  //  calender.add(Calendar.DAY_OF_MONTH, 1);
@@ -634,7 +637,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     private void setupDialog() {
         final DialogHelper dialog = new DialogHelper(getDockActivity(), true);
         dialog.initDialog(R.layout.calendar_popup);
-        dialog.initPositiveBtn(R.id.btndialogCalendar_1, "CONFIRM", new View.OnClickListener() {
+        dialog.initPositiveBtn(R.id.btndialogCalendar_1, getString(R.string.CONFIRM), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadingStarted();
@@ -642,7 +645,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
                 dialog.dismisspoptuDialog();
             }
         });
-        dialog.initNegativeBtn(R.id.btndialogCalendar_2, "CANCEL", new View.OnClickListener() {
+        dialog.initNegativeBtn(R.id.btndialogCalendar_2, getString(R.string.CANCEL), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismisspoptuDialog();

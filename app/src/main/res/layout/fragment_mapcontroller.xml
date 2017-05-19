@@ -71,7 +71,7 @@
                     android:layout_marginRight="@dimen/x5"
                     android:background="@null"
                     android:gravity="center_vertical"
-                    android:hint="Search Location"
+                    android:hint="@string/Search_Location"
                     android:imeOptions="actionSearch"
                     android:inputType="textNoSuggestions"
                     android:textColor="@color/black"

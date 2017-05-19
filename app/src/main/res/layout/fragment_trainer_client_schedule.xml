@@ -37,7 +37,7 @@
                 android:layout_width="180dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Dates Schedule"
+                android:text="@string/Dates_Schedule"
                 app:typeface="Roboto-Regular.ttf"
                 android:layout_marginLeft="@dimen/x25"
                 android:layout_marginRight="@dimen/x25"

@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/x16"
 
-            android:text="Dates Schedule"
+            android:text="@string/dates_schedule"
             android:gravity="center|center_vertical|center_horizontal"
             app:typeface="Roboto-Regular.ttf"/>
 
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="@dimen/x16"
-            android:text="10 May - 23 May"
+            android:text="@string/detailedScreenItemDate"
             android:gravity="center|center_vertical|center_horizontal"
             app:typeface="Roboto-Regular.ttf"/>
 

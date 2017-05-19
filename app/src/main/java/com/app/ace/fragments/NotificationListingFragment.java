@@ -17,6 +17,7 @@ import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.NotificationListItemBinder;
@@ -153,13 +154,13 @@ public class NotificationListingFragment  extends BaseFragment implements View.O
                 break;
 
             case R.id.iv_Fav:
-
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                getDockActivity().addDockableFragment(FollowingFragment.newInstance(),"F0llowinf");
+              //  UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
 
                 break;
 
             case R.id.iv_Camera:
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                CameraHelper.uploadMedia(getMainActivity());
 
                 break;
 

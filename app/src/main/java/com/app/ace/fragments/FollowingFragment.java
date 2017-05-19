@@ -80,8 +80,8 @@ public class FollowingFragment extends BaseFragment{
 
     private void getUserData() {
 
-adapter.addFragment(new FollowListFragment(),"Follow");
-        adapter.addFragment(new YouListFragment(),"You");
+adapter.addFragment(new FollowListFragment(),getString(R.string.Follow));
+        adapter.addFragment(new YouListFragment(),getString(R.string.You));
 
         pager.setAdapter(adapter);
         tabLayout.setupWithViewPager(pager);
@@ -96,7 +96,7 @@ adapter.addFragment(new FollowListFragment(),"Follow");
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
-        titleBar.setSubHeading("Follow");
+        titleBar.setSubHeading(getString(R.string.Follow));
 
        /* titleBar.showAddButton(new View.OnClickListener() {
             @Override

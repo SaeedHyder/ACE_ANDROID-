@@ -81,7 +81,6 @@
                         android:gravity="left"
                         android:paddingBottom="@dimen/x5"
                         android:paddingLeft="@dimen/x8"
-
                         android:text="@string/time_deailed_screen"
                         android:textColor="@color/darkGray"
                         android:textSize="@dimen/x14"

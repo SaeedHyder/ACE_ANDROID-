@@ -191,7 +191,7 @@ public class TrainerClientScheduleFragment extends BaseFragment implements DateP
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
-        titleBar.setSubHeading("My Schdedule");
+        titleBar.setSubHeading(getString(R.string.My_Schedule));
 
     }
 

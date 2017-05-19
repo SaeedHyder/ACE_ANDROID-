@@ -22,7 +22,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.8"
-            android:text="Mute Conversation"
+            android:text="@string/Mute_Conversation"
             android:textColor="@color/black"
             android:textSize="@dimen/x18"
             android:gravity="start"
@@ -101,9 +101,9 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/x35"
             android:layout_marginRight="@dimen/x5"
+            android:layout_marginTop="@dimen/x8"
             android:layout_weight="0.3"
             android:background="@drawable/rectangle_buton"
-            android:layout_marginTop="@dimen/x8"
             android:gravity="center"
             android:text="@string/follow"
             android:textColor="@color/txtview_title_color" />
@@ -135,16 +135,17 @@
             android:layout_height="@dimen/x35"
             android:layout_weight="0.2"
             android:background="@drawable/ok_btn"
-            android:text="Block"
+            android:text="@string/Block"
             android:textColor="@color/white"
-            android:textSize="@dimen/x14"/>
+            android:textSize="@dimen/x14" />
+
         <Button
             android:id="@+id/btn_Unblock"
             android:layout_width="0dp"
             android:layout_height="@dimen/x35"
             android:layout_weight="0.2"
             android:background="@drawable/ok_btn"
-            android:text="UnBlock"
+            android:text="@string/UnBlock"
             android:visibility="gone"
             android:textColor="@color/white"
             android:textSize="@dimen/x14"/>

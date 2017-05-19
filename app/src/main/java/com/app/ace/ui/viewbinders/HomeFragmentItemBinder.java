@@ -161,7 +161,8 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
 
         viewHolder.txt_profileName.setText(homeListDataEnt.getProfile_name());
         viewHolder.txt_likes_count.setText(homeListDataEnt.getTotoal_likes()+" likes");
-        viewHolder.txt_view_all_comments.setText("View all "+ homeListDataEnt.getTotal_comments()+" comments");
+        viewHolder.txt_view_all_comments.setText(viewHolder.txt_view_all_comments.getContext().getString(R.string.view_all)+ homeListDataEnt.getTotal_comments()
+                +" "+viewHolder.txt_view_all_comments.getContext().getString(R.string.comments));
 
         if(homeListDataEnt.getIs_liked().contains("1"))
         {
@@ -226,7 +227,8 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
                 if(homeListDataEnt.getIs_liked().contains("0"))
                 {
                     IOnLike.setLikeHit(homeListDataEnt.getId());
-                    setHomeUpdatedData.setUpdatedData(position,"1",homeListDataEnt.getTotoal_likes()+1,homeListDataEnt.getTotal_comments());
+                    setHomeUpdatedData.setUpdatedData(position,"1",homeListDataEnt.getTotoal_likes()+1
+                            ,homeListDataEnt.getTotal_comments());
 
                 }
                 else

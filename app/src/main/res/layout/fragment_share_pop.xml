@@ -45,7 +45,7 @@
                 android:layout_marginLeft="@dimen/x20"
                 android:layout_marginRight="@dimen/x20"
                 android:gravity="center"
-                android:text="Send to"
+                android:text="@string/Send_to"
                 android:textColor="@color/dark_grey"
                 android:textSize="@dimen/x23"
                 android:textStyle="normal"

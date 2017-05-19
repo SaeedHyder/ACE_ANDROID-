@@ -159,7 +159,7 @@ ImageView img_DetailedProfile;
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
-        titleBar.setSubHeading("My Schedule");
+        titleBar.setSubHeading(getString(R.string.My_Schedule));
 
     }
 

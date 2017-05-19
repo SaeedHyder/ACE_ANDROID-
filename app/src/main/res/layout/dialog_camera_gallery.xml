@@ -16,7 +16,7 @@
             android:id="@+id/btn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="camera"
+            android:text="@string/Camera"
             android:gravity="center"
             android:background="@drawable/ok_btn"
             app:typeface="Roboto-Bold.ttf"/>

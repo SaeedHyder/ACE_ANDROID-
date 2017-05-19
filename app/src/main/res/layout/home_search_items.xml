@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/x5"
         android:paddingLeft="@dimen/x15"
-        android:text="Trainer"
+        android:text="@string/Trainer"
         android:gravity="left"
         app:typeface="Roboto-Regular.ttf"/>
 
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/x5"
         android:paddingLeft="@dimen/x15"
-        android:text="Training"
+        android:text="@string/Training"
         android:gravity="left"
         app:typeface="Roboto-Regular.ttf"/>
 
@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/x5"
         android:paddingLeft="@dimen/x15"
-        android:text="Location"
+        android:text="@string/Location"
         android:gravity="left"
         app:typeface="Roboto-Regular.ttf"/>
 

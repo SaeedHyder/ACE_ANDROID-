@@ -45,7 +45,7 @@ android:orientation="vertical">
             android:layout_marginLeft="@dimen/x20"
             android:layout_marginRight="@dimen/x20"
             android:gravity="center"
-            android:text="Select"
+            android:text="@string/Select"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/x23"
             android:textStyle="normal"
@@ -135,7 +135,7 @@ android:orientation="vertical">
             android:layout_marginBottom="20dp"
             android:background="@drawable/cancel_btn"
             android:clickable="true"
-            android:text="Show" />
+            android:text="@string/Show" />
 
         <Button
             android:id="@+id/btn_show1"
@@ -147,7 +147,7 @@ android:orientation="vertical">
             android:layout_marginBottom="20dp"
             android:background="@drawable/cancel_btn"
             android:clickable="true"
-            android:text="Show"
+            android:text="@string/Show"
             android:visibility="gone"/>
     </RelativeLayout>
 </RelativeLayout>

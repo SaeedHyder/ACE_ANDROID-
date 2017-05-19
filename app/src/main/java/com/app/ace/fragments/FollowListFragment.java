@@ -153,7 +153,7 @@ public class FollowListFragment extends BaseFragment {
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
-        titleBar.setSubHeading("Follow");
+        titleBar.setSubHeading(getString(R.string.Follow));
 
        /* titleBar.showAddButton(new View.OnClickListener() {
             @Override

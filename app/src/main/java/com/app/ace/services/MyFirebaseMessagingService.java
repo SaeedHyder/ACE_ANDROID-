@@ -90,7 +90,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     try {
 
 
-                        String title = "ACE";
+                        String title = getString(R.string.App_Name);
                         String message = messageBody.getData().get("message");
 
 

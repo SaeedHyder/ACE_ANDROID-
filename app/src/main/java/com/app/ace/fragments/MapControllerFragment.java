@@ -199,7 +199,7 @@ public class MapControllerFragment extends BaseFragment {
             }
         } else {
 
-            btnUseLocation.setText("Use This Location");
+            btnUseLocation.setText(R.string.Use_This_Location);
 
         }
 
@@ -210,7 +210,7 @@ public class MapControllerFragment extends BaseFragment {
         getMainActivity().onLoadingStarted();
         btnUseLocation.setEnabled(false);
         if (delegate != null) {
-            btnUseLocation.setText("Loading Location...");
+            btnUseLocation.setText(R.string.Loading_Location);
         }
         Call<GoogleServiceResponse<List<GoogleGeoCodeResponse>>> request = googleWebService.getLatLongInfo(
                 searchEditText.getText().toString(),
