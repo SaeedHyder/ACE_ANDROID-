@@ -90,11 +90,11 @@ public class SpinerAdapter extends ArrayAdapter<SpinnerDataItem> {
 
                 listState.get(getPosition).setSelected(buttonView.isChecked());
 
-                if (listState.get(0).getTitle().contains("Select Certification")) {
+                if (listState.get(0).getTitle().contains(buttonView.getContext().getString(R.string.Select_Certification))) {
                     education = listState;
                     editTrainerData.updateEducationData(education);
                 }
-                if (listState.get(0).getTitle().contains("Select Speciality")) {
+                if (listState.get(0).getTitle().contains(buttonView.getContext().getString(R.string.Select_Speciality))) {
                     specialty = listState;
                     editTrainerData.updateSpecialtyData(specialty);
                 }

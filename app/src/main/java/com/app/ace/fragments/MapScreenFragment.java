@@ -81,7 +81,8 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
 
             callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
                 @Override
-                public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
+                public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call,
+                                       Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
 
                     if (response.body()!= null)
                         if (response.body().getResult().size() <= 0) {
@@ -108,7 +109,8 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
         for (UserProfile user : resultuser) {
             if(!user.getGym_latitude().isEmpty()) {
 
-                    userCollection.add(new MapScreenItem(user.getGym_latitude(), user.getGym_longitude(), user.getProfile_image()));
+                    userCollection.add(new MapScreenItem(user.getGym_latitude(),
+                            user.getGym_longitude(), user.getProfile_image()));
                 }
             }
         }
@@ -165,7 +167,7 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.addMarker(new MarkerOptions().position(sydney).title(getString(R.string.Marker_in)));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         mMap.animateCamera( CameraUpdateFactory.zoomTo( 17.0f ) );
 

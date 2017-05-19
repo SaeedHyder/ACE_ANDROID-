@@ -52,10 +52,10 @@ public class TraineeScheduleListItemBinder extends ViewBinder<Slot> {
     public void bindView(final Slot entity, final int position, int grpPosition, View view, Activity activity) {
 
         TraineeScheduleListItemBinder.ViewHolder viewHolder = (TraineeScheduleListItemBinder.ViewHolder) view.getTag();
-
-        viewHolder.txt_traineeSchedule_1stColumn.setText("Dates Schedule");
-        viewHolder.txt_traineeSchedule_timeslot.setText("Time Slot");
-        viewHolder.txt_traineeSchedule_training.setText("Training");
+        Context context =  viewHolder.txt_traineeSchedule_1stColumn.getContext();
+        viewHolder.txt_traineeSchedule_1stColumn.setText(context.getString(R.string.date_schedule));
+        viewHolder.txt_traineeSchedule_timeslot.setText(context.getString(R.string.time_slot));
+        viewHolder.txt_traineeSchedule_training.setText(context.getString(R.string.training));
 
         viewHolder.txt_traineeSchedule_2stColumn.setText(entity.getDate());
         viewHolder.txt_traineeSchedule_timeslot2stColumn.setText(entity.getStartTime()+"-"+entity.getEndTime());

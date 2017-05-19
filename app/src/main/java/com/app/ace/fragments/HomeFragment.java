@@ -88,7 +88,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new ArrayListAdapter<HomeListDataEnt>(getDockActivity(), new HomeFragmentItemBinder(getDockActivity(), this, this));
+        adapter = new ArrayListAdapter<HomeListDataEnt>(getDockActivity(),
+                new HomeFragmentItemBinder(getDockActivity(), this, this));
 
 
         BaseApplication.getBus().register(this);
@@ -194,7 +195,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
             for (PostsEnt postsEnt : postsEntArrayList) {
 
-                dataCollection.add(new HomeListDataEnt(Integer.parseInt(postsEnt.getLike_count()), Integer.parseInt(postsEnt.getComment_count()), postsEnt.getCreator().getProfile_image(), postsEnt.getCreator().getFirst_name() + " " + postsEnt.getCreator().getLast_name(), postsEnt.getPost_image(), "Time Joe", "Hi nice", postsEnt.getUser_id(), postsEnt.getId(), postsEnt.getComment(), postsEnt.getIs_liked()));
+                dataCollection.add(new HomeListDataEnt(Integer.parseInt(postsEnt.getLike_count()),
+                        Integer.parseInt(postsEnt.getComment_count()), postsEnt.getCreator().getProfile_image(),
+                        postsEnt.getCreator().getFirst_name() + " " + postsEnt.getCreator().getLast_name(), postsEnt.getPost_image(), "Time Joe", "Hi nice", postsEnt.getUser_id(), postsEnt.getId(), postsEnt.getComment(), postsEnt.getIs_liked()));
 
             }
 

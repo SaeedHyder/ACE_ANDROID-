@@ -150,7 +150,7 @@ public class NewMessageFragment extends BaseFragment implements TextWatcher {
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
-        titleBar.setSubHeading("New Message");
+        titleBar.setSubHeading(getString(R.string.New_Message));
 
     }
 

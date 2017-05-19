@@ -84,7 +84,8 @@ public class SearchTraineeFragment extends BaseFragment {
 
             callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
                 @Override
-                public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
+                public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call,
+                                       Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
                     //  resultuser = response.body().getResult();
                     bindview(response.body().getResult());
                     // System.out.println(response.body().getResult().get(0).getId());

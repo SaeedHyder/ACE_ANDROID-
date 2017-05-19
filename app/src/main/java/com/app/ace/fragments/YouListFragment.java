@@ -144,7 +144,7 @@ public class YouListFragment extends BaseFragment implements FollowService {
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
-        titleBar.setSubHeading("Follow");
+        titleBar.setSubHeading(getString(R.string.follow));
 
        /* titleBar.showAddButton(new View.OnClickListener() {
             @Override

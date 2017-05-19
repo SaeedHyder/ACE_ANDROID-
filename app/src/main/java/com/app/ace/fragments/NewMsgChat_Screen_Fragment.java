@@ -162,7 +162,7 @@ public class NewMsgChat_Screen_Fragment extends BaseFragment implements View.OnC
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
-        titleBar.setSubHeading("New Message");
+        titleBar.setSubHeading(getString(R.string.New_Message));
 
     }
 

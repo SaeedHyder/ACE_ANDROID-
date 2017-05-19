@@ -75,7 +75,8 @@ public class TrainerAvailListFragment extends BaseFragment {
         Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getTrainingSearch("null", body_building_type);
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
             @Override
-            public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
+            public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call,
+                                   Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
 
                 getUserData(response.body().getResult());
             }
@@ -131,7 +132,7 @@ public class TrainerAvailListFragment extends BaseFragment {
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
-        titleBar.setSubHeading("Trainers Available");
+        titleBar.setSubHeading(getString(R.string.Trainers_Available));
 
        /* titleBar.showAddButton(new View.OnClickListener() {
             @Override

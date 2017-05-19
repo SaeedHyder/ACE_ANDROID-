@@ -88,7 +88,8 @@ public class FollowersCountListFragment  extends BaseFragment {
 
         for(FollowersCountListEnt msg : followersCountListEntArrayList){
 
-            FollowersuserCollection.add(new FollowersCountDataItem(msg.getProfile_image(),msg.getFirst_name()+" "+msg.getLast_name(),msg.getId()));
+            FollowersuserCollection.add(new FollowersCountDataItem(msg.getProfile_image(),msg.getFirst_name()
+                    +" "+msg.getLast_name(),msg.getId()));
 
             //  userCollection.add(new InboxDataItem(msg.getReceiver().getProfile_image(),msg.getReceiver().getFirst_name()+" "+msg.getReceiver().getLast_name(),msg.getMessage().getMessage_text(),msg.getMessage().getConversation_id()));
 
@@ -128,7 +129,7 @@ public class FollowersCountListFragment  extends BaseFragment {
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
-        titleBar.setSubHeading("Followers");
+        titleBar.setSubHeading(getString(R.string.Followers));
 
 
        /* titleBar.showAddButton(new View.OnClickListener() {
@@ -149,7 +150,8 @@ public class FollowersCountListFragment  extends BaseFragment {
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<FollowersCountListEnt>>>() {
 
             @Override
-            public void onResponse(Call<ResponseWrapper<ArrayList<FollowersCountListEnt>>> call, Response<ResponseWrapper<ArrayList<FollowersCountListEnt>>> response) {
+            public void onResponse(Call<ResponseWrapper<ArrayList<FollowersCountListEnt>>> call,
+                                   Response<ResponseWrapper<ArrayList<FollowersCountListEnt>>> response) {
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 

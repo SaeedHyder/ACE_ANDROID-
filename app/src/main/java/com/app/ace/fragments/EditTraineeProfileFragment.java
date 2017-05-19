@@ -129,7 +129,8 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
         }
         MultipartBody.Part profile_picture = null;
         if(profilePic != null) {
-            profile_picture = MultipartBody.Part.createFormData("profile_picture", profilePath, RequestBody.create(MediaType.parse("image/*"), profilePic));
+            profile_picture = MultipartBody.Part.createFormData("profile_picture", profilePath,
+                    RequestBody.create(MediaType.parse("image/*"), profilePic));
         }
         Call<ResponseWrapper<RegistrationResult>> callBack = webService.UpdateTrainee(
                 RequestBody.create(MediaType.parse("text/plain"),prefHelper.getUserId()),
@@ -142,7 +143,8 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
 
         callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
             @Override
-            public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
+            public void onResponse(Call<ResponseWrapper<RegistrationResult>> call,
+                                   Response<ResponseWrapper<RegistrationResult>> response) {
 
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {

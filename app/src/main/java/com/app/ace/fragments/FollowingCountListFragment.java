@@ -91,7 +91,8 @@ public class FollowingCountListFragment extends BaseFragment {
 
         for(FollowingCountListEnt msg : followingCountListEntArrayList){
 
-            FollowingsuserCollection.add(new FollowingCountDataItem(msg.getProfile_image(),msg.getFirst_name()+" "+msg.getLast_name(),msg.getId()));
+            FollowingsuserCollection.add(new FollowingCountDataItem(msg.getProfile_image()
+                    ,msg.getFirst_name()+" "+msg.getLast_name(),msg.getId()));
 
 
 
@@ -131,7 +132,7 @@ public class FollowingCountListFragment extends BaseFragment {
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
-        titleBar.setSubHeading("Followings");
+        titleBar.setSubHeading(getString(R.string.Followings));
 
 
        /* titleBar.showAddButton(new View.OnClickListener() {
@@ -151,7 +152,8 @@ public class FollowingCountListFragment extends BaseFragment {
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<FollowingCountListEnt>>>() {
 
             @Override
-            public void onResponse(Call<ResponseWrapper<ArrayList<FollowingCountListEnt>>> call, Response<ResponseWrapper<ArrayList<FollowingCountListEnt>>> response) {
+            public void onResponse(Call<ResponseWrapper<ArrayList<FollowingCountListEnt>>> call,
+                                   Response<ResponseWrapper<ArrayList<FollowingCountListEnt>>> response) {
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 

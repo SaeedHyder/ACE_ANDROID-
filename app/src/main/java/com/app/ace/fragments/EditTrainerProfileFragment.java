@@ -185,7 +185,8 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
 
         MultipartBody.Part profile_picture = null;
         if(profilePic != null) {
-           profile_picture = MultipartBody.Part.createFormData("profile_picture", profilePath, RequestBody.create(MediaType.parse("image/*"), profilePic));
+           profile_picture = MultipartBody.Part.createFormData("profile_picture", profilePath,
+                   RequestBody.create(MediaType.parse("image/*"), profilePic));
         }
 
         Call<ResponseWrapper<RegistrationResult>> callBack = webService.UpdateTrainer(
@@ -206,7 +207,8 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
 
         callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
             @Override
-            public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
+            public void onResponse(Call<ResponseWrapper<RegistrationResult>> call,
+                                   Response<ResponseWrapper<RegistrationResult>> response) {
                     loadingFinished();
 
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
@@ -350,13 +352,13 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
 
         ArrayList<String> Certification= new ArrayList<String>();
 
-        Certification.add("Select Certification");
-        Certification.add("Degree ");
-        Certification.add("NASM");
-        Certification.add("NCSA");
-        Certification.add("ACSM");
-        Certification.add("CHECK");
-        Certification.add("ACE");
+        Certification.add(getString(R.string.Select_Certification));
+        Certification.add(getString(R.string.Degree));
+        Certification.add(getString(R.string.NASM));
+        Certification.add(getString(R.string.NCSA));
+        Certification.add(getString(R.string.ACSM));
+        Certification.add(getString(R.string.CHECK));
+        Certification.add(getString(R.string.ACE));
 
 
      ArrayList<SpinnerDataItem> listVOs = new ArrayList<>();
@@ -377,14 +379,15 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
     private void setSpSpeciality() {
         ArrayList<String> Speciality= new ArrayList<String>();
 
-        Speciality.add("Select Speciality");
-        Speciality.add("Flexibility training ");
-        Speciality.add("Dynamic strength training");
-        Speciality.add("Static strength training");
-        Speciality.add("Circuit training");
-        Speciality.add("Aerobic training");
-        Speciality.add("Body Building");
-        Speciality.add("Loose Weight");
+        Speciality.add(getString(R.string.Select_Speciality));
+        Speciality.add(getString(R.string.Flexiblity_training));
+        Speciality.add(getString(R.string.dynamic_strenght_taining));
+        Speciality.add(getString(R.string.Static_strength_training));
+        Speciality.add(getString(R.string.Circuit_training));
+        Speciality.add(getString(R.string.Aerobic_training));
+        Speciality.add(getString(R.string.Body_Building));
+        Speciality.add(getString(R.string.Lose_Weight));
+
 
         ArrayList<SpinnerDataItem> listVOs = new ArrayList<>();
 

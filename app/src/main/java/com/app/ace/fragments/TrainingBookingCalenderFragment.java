@@ -127,7 +127,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     private ImageView iv_Calander;
     @InjectView(R.id.iv_profile)
     private ImageView iv_profile;
-    private String spinerValue = "2 Week";
+    private String spinerValue = "";//getString(R.string.two_Week);
 
     public static TrainingBookingCalenderFragment newInstance() {
 
@@ -149,6 +149,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        spinerValue = getString(R.string.two_Week);
         expandablelistview = (ExpandableListView) view.findViewById(R.id.expandablelistview);
         loadingStarted();
         getSavedSchedule(prefHelper.getUserId());
@@ -245,19 +246,20 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
         final DialogBox successPopUp = DialogBox.newInstance();
         successPopUp.setDocActivityContext(getDockActivity());
         successPopUp.SetTimeDataOnTextViewContext(this);
-        successPopUp.setPopupData("select", true);
+        successPopUp.setPopupData(getString(R.string.select), true);
         successPopUp.show(getDockActivity().getSupportFragmentManager(), "listDilog");
 
     }
 
     private void setEndTimeSpinner() {
         final List<String> timeDuration = new ArrayList<String>();
-        timeDuration.add("2 Week");
-        timeDuration.add("1 Month");
-        timeDuration.add("3 Months");
-        timeDuration.add("6 Months");
+        timeDuration.add(getString(R.string.two_Week));
+        timeDuration.add(getString(R.string.one_Month));
+        timeDuration.add(getString(R.string.three_Months));
+        timeDuration.add(getString(R.string.Six_Months));
         EndDate = getEndDate(timeDuration.get(0));
-        ArrayAdapter<String> TimeDurationAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, timeDuration);
+        ArrayAdapter<String> TimeDurationAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item,
+                timeDuration);
         TimeDurationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_weeks.setAdapter(TimeDurationAdapter);
         sp_weeks.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -308,7 +310,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                         mDay = dayOfMonth;
                         mYear = year;
                         if (dateSpecified.before(todayDate)) {
-                            Toast.makeText(getDockActivity(), "Date Should Not Be Less Than Current Date", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getDockActivity(), R.string.Date_Should_Not_Be_Less_Than_Current_Date, Toast.LENGTH_LONG).show();
                         } else {
                             if (txtView.getText().toString().equals(dayOfMonth + "/" + month + "/" + year)) {
 
@@ -405,7 +407,8 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     private void showBookingDialog() {
 
         final DialogFragment successPopUp = DialogFragment.newInstance();
-        successPopUp.setPopupData("Booking Slots", "", prefHelper.getUserName().toUpperCase(), "Your Booking Slot are Updated", true, false);
+        successPopUp.setPopupData(getString(R.string.Booking_Slots), "", prefHelper.getUserName().toUpperCase(),
+                getString(R.string.BookingMessage), true, false);
 
         successPopUp.setbtndialog_1_Listener(new View.OnClickListener() {
             @Override
@@ -440,7 +443,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                 //createTrainerSchedule(trainerBookingCalendarJsonCollection);
             }
         });
-        titleBar.setSubHeading("Trainer Calendar");
+        titleBar.setSubHeading(getString(R.string.Trainer_Calendar));
 
     }
 
@@ -769,26 +772,26 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
     public Date getEndDate(String days) {
         if (dateSpecified != null) {
-            if (days.contains("2 Week")) {
+            if (days.contains(getString(R.string.two_Week))) {
                 Calendar enddate = Calendar.getInstance();
                 enddate.setTime(dateSpecified);
                 enddate.add(Calendar.DAY_OF_MONTH, 14);
                 EndDate = enddate.getTime();
             }
 
-            if (days.contains("1 Month")) {
+            if (days.contains(getString(R.string.one_Month))) {
                 Calendar enddate = Calendar.getInstance();
                 enddate.setTime(dateSpecified);
                 enddate.add(Calendar.MONTH, 1);
                 EndDate = enddate.getTime();
             }
-            if (days.contains("3 Months")) {
+            if (days.contains(getString(R.string.three_Months))) {
                 Calendar enddate = Calendar.getInstance();
                 enddate.setTime(dateSpecified);
                 enddate.add(Calendar.MONTH, 3);
                 EndDate = enddate.getTime();
             }
-            if (days.contains("6 Months")) {
+            if (days.contains(getString(R.string.Six_Months))) {
                 Calendar enddate = Calendar.getInstance();
                 enddate.setTime(dateSpecified);
                 enddate.add(Calendar.MONTH, 6);
@@ -931,7 +934,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                     String[] time = itemPosition.split(":00");
                     int hour = Integer.parseInt(time[0]);
                     if (hour < LastSelectHour) {
-                        UIHelper.showShortToastInCenter(getDockActivity(), "Selected Time is Lesser then Previous Selected Time");
+                        UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.lesserTIme));
                     } else {
                         AnyTextView textView = (AnyTextView) this.textView;
                         textView.setText(itemPosition);
@@ -942,12 +945,12 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                     }
                 }
             } else if (!arrayLastItem.contains(itemPosition) && alreadySelectedTime.contains(itemPosition)) {
-                UIHelper.showShortToastInCenter(getDockActivity(), "Time Already Selected Please select a Differnet time");
+                UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.differentTime));
             } else {
                 String[] time = itemPosition.split(":00");
                 int hour = Integer.parseInt(time[0]);
                 if (hour < LastSelectHour) {
-                    UIHelper.showShortToastInCenter(getDockActivity(), "Selected Time is Lesser then Previous Selected Time");
+                    UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.lesser_then_previous));
                 } else {
                     AnyTextView textView = (AnyTextView) this.textView;
                     textView.setText(itemPosition);

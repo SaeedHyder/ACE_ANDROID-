@@ -53,7 +53,8 @@ public class NewMessageListItemBinder extends ViewBinder<UserProfile> {
             public void onClick(View v) {
                 AppConstants.is_show_trainer = false;
                 String UserName=entity.getFirst_name()+" "+entity.getLast_name();
-                context.addDockableFragment(NewMsgChat_Screen_Fragment.newInstance(entity.getId(),UserName), "NewMsgChat_Screen_Fragment");
+                context.addDockableFragment(NewMsgChat_Screen_Fragment.newInstance(entity.getId(),UserName),
+                        "NewMsgChat_Screen_Fragment");
             }
         });
 

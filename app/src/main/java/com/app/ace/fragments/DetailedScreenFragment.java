@@ -120,7 +120,7 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
                 Date date = format.parse(currentSlot.getDate());
                 String dayOfWeek = new SimpleDateFormat("EEEE", Locale.getDefault()).format(date);
                 txt_day.setText(dayOfWeek);
-                txt_time.setText(currentSlot.getStartTime()+"-"+currentSlot.getEndTime()+" "+"1hr");
+                txt_time.setText(currentSlot.getStartTime()+"-"+currentSlot.getEndTime()+" "+getString(R.string.one_hour));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -143,9 +143,9 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
     private void getSearchUserData() {
         userCollection= new ArrayList<>();
         if (currentSlot!=null) {
-            userCollection.add(new DetailedScreenItem("Dates Schedule", currentSlot.getDate()));
-            userCollection.add(new DetailedScreenItem("Time Slot", currentSlot.getStartTime()+"-"+currentSlot.getEndTime()));
-            userCollection.add(new DetailedScreenItem("Training", currentSlot.getBookings().getTrainingType()));
+            userCollection.add(new DetailedScreenItem(getString(R.string.date_schedule), currentSlot.getDate()));
+            userCollection.add(new DetailedScreenItem(getString(R.string.time_slot), currentSlot.getStartTime()+"-"+currentSlot.getEndTime()));
+            userCollection.add(new DetailedScreenItem(getString(R.string.training), currentSlot.getBookings().getTrainingType()));
 
         }
         bindData(userCollection);
@@ -165,7 +165,7 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
-        titleBar.setSubHeading("My Schedule");
+        titleBar.setSubHeading(getString(R.string.My_Schedule));
 
     }
 
@@ -181,7 +181,8 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
                     @Override
                     public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
 
-                            getDockActivity().addDockableFragment(NotificationListingFragment.newInstance(),"NotificationListingFragment");
+                            getDockActivity().addDockableFragment(NotificationListingFragment.newInstance()
+                                    ,"NotificationListingFragment");
 
                     }
 
@@ -208,7 +209,8 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
 
             case R.id.iv_CalanderDetailedScreen:
 
-                getDockActivity().addDockableFragment(TrainingBookingCalenderFragment.newInstance(),"TrainerBookingCalendarFragment");
+                getDockActivity().addDockableFragment(TrainingBookingCalenderFragment.newInstance(),
+                        "TrainerBookingCalendarFragment");
 
               /*  if(AppConstants.is_show_trainer){
 
