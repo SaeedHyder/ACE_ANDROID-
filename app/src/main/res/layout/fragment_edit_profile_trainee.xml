@@ -216,7 +216,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/iv_Gender"
             android:layout_centerVertical="true"
-            android:hint="Male"
+            android:hint="@string/Male"
             android:drawableLeft="@drawable/gender_icon"
             android:textColorHint="@color/edittext_hint_color"
             android:textColor="@color/dark_grey"

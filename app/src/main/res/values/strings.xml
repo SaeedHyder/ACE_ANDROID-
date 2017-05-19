@@ -322,6 +322,36 @@
     <string name="went_wrong">Some Thing Went Wrong</string>
     <string name="Unable_location">unable_location</string>
     <string name="no_result_found">No Result Found</string>
+    <string name="booking_confirmation">Booking Confirmation</string>
+    <string name="dates_schedule">Dates Schedule</string>
+    <string name="detailedScreenItemDate">10 May - 23 May</string>
+    <string name="Camera">camera</string>
+    <string name="dialog_title">Dialog Title</string>
+    <string name="Check_Availability">Check Availability</string>
+    <string name="Avaliable">Avaliable</string>
+    <string name="Booked">Booked</string>
+    <string name="Write_a_message_here">Write a message here...</string>
+    <string name="Add_a_comment">Add a comment</string>
+    <string name="Male">Male</string>
+    <string name="Mute_Conversation">Mute Conversation</string>
+    <string name="Block">Block</string>
+    <string name="UnBlock">UnBlock</string>
+    <string name="Search_Location">Search Location</string>
+    <string name="UnFollow">UnFollow</string>
+    <string name="posts">posts</string>
+    <string name="followers">followers</string>
+    <string name="followings">followings</string>
+    <string name="Trainer">Trainer</string>
+    <string name="Send_to">Send to</string>
+    <string name="Dates_Schedule">Dates Schedule</string>
+    <string name="Training">Training</string>
+    <string name="Location">Location</string>
+    <string name="Select">Select</string>
+    <string name="Show">Show</string>
+    <string name="Start_Date">Start Date</string>
+    <string name="End_Date">End Date</string>
+    <string name="Start_Time">Start Time</string>
+    <string name="End_Time">End Time</string>
 
     //Detailed Screen
 

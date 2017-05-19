@@ -29,19 +29,18 @@
             android:layout_alignParentStart="true">
 
             <com.app.ace.ui.views.AnyTextView
+                android:id="@+id/anyTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/x3"
                 android:layout_marginLeft="@dimen/x20"
                 android:layout_marginRight="@dimen/x10"
                 android:layout_marginTop="@dimen/x25"
-                android:layout_marginBottom="@dimen/x3"
+                android:gravity="left"
                 android:text="@string/a_verification_has_been_sent"
                 android:textColor="@color/light_grey"
                 android:textSize="@dimen/x14"
-                android:gravity="left"
-                app:typeface="Roboto-Regular.ttf"
-                />
-
+                app:typeface="Roboto-Regular.ttf" />
 
 
             <LinearLayout

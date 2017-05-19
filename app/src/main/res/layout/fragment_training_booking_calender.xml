@@ -80,7 +80,7 @@
                             android:id="@+id/txt_startDate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Start Date"
+                            android:text="@string/Start_Date"
                             android:textColor="@color/darkbrown"
                             app:typeface="Roboto-Regular.ttf" />
 
@@ -129,7 +129,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/x8"
-                            android:text="End Date"
+                            android:text="@string/End_Date"
                             android:textColor="@color/darkbrown"
                             app:typeface="Roboto-Regular.ttf" />
 
@@ -182,7 +182,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/background_day_hover"
                         android:gravity="center"
-                        android:hint="Start Time"
+                        android:hint="@string/Start_Time"
                         android:text=""
                         app:typeface="Roboto-Regular.ttf"
 
@@ -208,7 +208,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/background_day_hover"
                         android:gravity="center"
-                        android:hint="End Time"
+                        android:hint="@string/End_Time"
                         android:text=""
                         app:typeface="Roboto-Regular.ttf"
 
@@ -271,7 +271,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/background_day_hover"
                         android:gravity="center"
-                        android:hint="Start Time"
+                        android:hint="@string/Start_Time"
                         android:text=""
                         app:typeface="Roboto-Regular.ttf"
 
@@ -297,7 +297,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/background_day_hover"
                         android:gravity="center"
-                        android:hint="End Time"
+                        android:hint="@string/End_Time"
                         android:text=""
                         app:typeface="Roboto-Regular.ttf"
 
@@ -360,7 +360,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/background_day_hover"
                         android:gravity="center"
-                        android:hint="Start Time"
+                        android:hint="@string/Start_Time"
                         android:text=""
                         app:typeface="Roboto-Regular.ttf"
 
@@ -386,7 +386,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/background_day_hover"
                         android:gravity="center"
-                        android:hint="End Time"
+                        android:hint="@string/End_Time"
                         android:text=""
                         app:typeface="Roboto-Regular.ttf"
 
