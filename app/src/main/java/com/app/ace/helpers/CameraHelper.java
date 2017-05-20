@@ -395,7 +395,7 @@ public class CameraHelper {
 										 MainActivity activity) {
 		AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(activity);
 		myAlertDialog.setTitle("Select Photo / Video");
-		myAlertDialog.setMessage("How do you want to set your photo?");
+		myAlertDialog.setMessage("How do you want to set your post?");
 
 		myAlertDialog.setPositiveButton("Video",
 				new DialogInterface.OnClickListener() {
@@ -403,7 +403,7 @@ public class CameraHelper {
 
 						AlertDialog.Builder videoDialog=new AlertDialog.Builder(activity);
 						videoDialog.setTitle("Select Video");
-						videoDialog.setMessage("How do you want to set your photo?");
+						videoDialog.setMessage("How do you want to set your video?");
 						videoDialog.setPositiveButton("Camera", new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
