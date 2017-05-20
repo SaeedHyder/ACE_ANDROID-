@@ -161,7 +161,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
 
         viewHolder.txt_profileName.setText(homeListDataEnt.getProfile_name());
         viewHolder.txt_likes_count.setText(homeListDataEnt.getTotoal_likes()+" likes");
-        viewHolder.txt_view_all_comments.setText(viewHolder.txt_view_all_comments.getContext().getString(R.string.view_all)+ homeListDataEnt.getTotal_comments()
+        viewHolder.txt_view_all_comments.setText(viewHolder.txt_view_all_comments.getContext().getString(R.string.view_all)+" "+ homeListDataEnt.getTotal_comments()
                 +" "+viewHolder.txt_view_all_comments.getContext().getString(R.string.comments));
 
         if(homeListDataEnt.getIs_liked().contains("1"))
