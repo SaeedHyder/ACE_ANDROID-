@@ -43,6 +43,25 @@ public class UserProfile {
     String social_media_id;
     String social_media_platform;
     String notification_status;
+
+    public String getPrivate_account() {
+        return private_account;
+    }
+
+    public void setPrivate_account(String private_account) {
+        this.private_account = private_account;
+    }
+
+    public String getMute_conversation() {
+        return mute_conversation;
+    }
+
+    public void setMute_conversation(String mute_conversation) {
+        this.mute_conversation = mute_conversation;
+    }
+
+    String private_account;
+    String mute_conversation;
     String device_type;
     String device_token;
     String profile_image;

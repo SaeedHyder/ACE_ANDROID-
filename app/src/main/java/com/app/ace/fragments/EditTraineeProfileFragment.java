@@ -57,8 +57,6 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
     private Spinner sp_Gender;
 
 
-
-
     @InjectView(R.id.edtUserName)
     AnyEditTextView edtUserName;
 
@@ -132,6 +130,9 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
             profile_picture = MultipartBody.Part.createFormData("profile_picture", profilePath,
                     RequestBody.create(MediaType.parse("image/*"), profilePic));
         }
+        RegistrationResult result = prefHelper.getUser();
+        result.setUser_status(edtTagLine.getText().toString());
+        prefHelper.putUser(result);
         Call<ResponseWrapper<RegistrationResult>> callBack = webService.UpdateTrainee(
                 RequestBody.create(MediaType.parse("text/plain"),prefHelper.getUserId()),
                 RequestBody.create(MediaType.parse("text/plain"),firstName),

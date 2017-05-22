@@ -7,6 +7,7 @@ package com.app.ace.entities;
 public class Booking {
 
 
+
     private Integer id;
 
     private Integer calendarId;

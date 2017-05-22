@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -214,6 +215,8 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
             mainFrameLayout.setVisibility(View.VISIBLE);
             if (progressBar != null) {
                 progressBar.setVisibility(View.VISIBLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
             loading = true;
         }
@@ -224,6 +227,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         mainFrameLayout.setVisibility(View.VISIBLE);
 
         if (progressBar != null) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             progressBar.setVisibility(View.INVISIBLE);
         }
         loading = false;

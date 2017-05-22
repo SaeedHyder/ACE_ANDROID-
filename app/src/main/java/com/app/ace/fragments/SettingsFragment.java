@@ -29,32 +29,27 @@ import roboguice.inject.InjectView;
  * Created by khan_muhammad on 3/18/2017.
  */
 
-public class SettingsFragment extends BaseFragment implements View.OnClickListener{
-
-    @InjectView(R.id.txt_logout)
-    private AnyTextView txt_logout;
-
-    @InjectView(R.id.txt_CurrentPassword)
-    private AnyEditTextView txt_CurrentPassword;
-
-    @InjectView(R.id.edit_newPassword)
-    private AnyEditTextView edit_newPassword;
-
-    @InjectView(R.id.edit_conNewPassword)
-    private AnyEditTextView edit_conNewPassword;
-
-    @InjectView(R.id.txt_contact_us_disc)
-    private AnyEditTextView txt_contact_us_disc;
-
-    @InjectView(R.id.toggle_notifications)
-    private ToggleButton toggle_notifications;
-
-    @InjectView(R.id.toggle_private_or_public)
-    private ToggleButton toggle_private_or_public;
-
+public class SettingsFragment extends BaseFragment implements View.OnClickListener {
+    private static String NOTIFICATION_ON = "NOTIFICATION_ON";
+    private static String PRIVATE_ACCOUNT = "PRIVATE_ACCOUNT";
     @InjectView(R.id.cb_english)
     CheckBox cb_english;
-
+    @InjectView(R.id.txt_logout)
+    private AnyTextView txt_logout;
+    @InjectView(R.id.txt_CurrentPassword)
+    private AnyEditTextView txt_CurrentPassword;
+    @InjectView(R.id.edit_newPassword)
+    private AnyEditTextView edit_newPassword;
+    @InjectView(R.id.edit_conNewPassword)
+    private AnyEditTextView edit_conNewPassword;
+    @InjectView(R.id.txt_contact_us_disc)
+    private AnyEditTextView txt_contact_us_disc;
+    @InjectView(R.id.toggle_notifications)
+    private ToggleButton toggle_notifications;
+    @InjectView(R.id.toggle_private_or_public)
+    private ToggleButton toggle_private_or_public;
+    private boolean notification_on = true;
+    private boolean private_account = true;
 
 
     public static SettingsFragment newInstance() {
@@ -62,15 +57,34 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         return new SettingsFragment();
     }
 
+    public static SettingsFragment newInstance(boolean isNotificationOn, boolean isPrivateaccount) {
+        Bundle args = new Bundle();
+        args.putBoolean(NOTIFICATION_ON, isNotificationOn);
+        args.putBoolean(PRIVATE_ACCOUNT, isPrivateaccount);
+
+        SettingsFragment fragment = new SettingsFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (getArguments() != null) {
+            notification_on = getArguments().getBoolean(NOTIFICATION_ON);
+            private_account = getArguments().getBoolean(PRIVATE_ACCOUNT);
+        } else {
+            //user_id = prefHelper.getUserId();
+        }
         return inflater.inflate(R.layout.fragments_settings, container, false);
     }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        toggle_notifications.setChecked(notification_on);
+        toggle_private_or_public.setChecked(private_account);
         setListeners();
 
     }
@@ -96,8 +110,8 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         titleBar.showSaveButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-               updateSetting();
+loadingStarted();
+                updateSetting();
 
             }
         });
@@ -113,45 +127,44 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
     }
 
-    void UpdatePassword(){
+    void UpdatePassword() {
 
-        if(!edit_newPassword.getText().toString().equals("")){
-            if(txt_CurrentPassword.getText().toString().equals(""))
-            {
+        if (!edit_newPassword.getText().toString().equals("")) {
+            if (txt_CurrentPassword.getText().toString().equals("")) {
                 UIHelper.showLongToastInCenter(getDockActivity(), "Enter Current Password");
             }
-        if(!edit_newPassword.getText().toString().equals(edit_conNewPassword.getText().toString()))
-        {
-            UIHelper.showLongToastInCenter(getDockActivity(), "Password Not Matched");
-        }
-        else {
+            if (!edit_newPassword.getText().toString().equals(edit_conNewPassword.getText().toString())) {
+                UIHelper.showLongToastInCenter(getDockActivity(), "Password Not Matched");
+            } else {
 
-            Call<ResponseWrapper> callBack = webService.ChangePassword(prefHelper.getUserId(), edit_conNewPassword.getText().toString(), txt_CurrentPassword.getText().toString());
+                Call<ResponseWrapper> callBack = webService.ChangePassword(prefHelper.getUserId(), edit_conNewPassword.getText().toString(), txt_CurrentPassword.getText().toString());
 
-            callBack.enqueue(new Callback<ResponseWrapper>() {
-                @Override
-                public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
-                    if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                callBack.enqueue(new Callback<ResponseWrapper>() {
+                    @Override
+                    public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
+                        if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                            UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                            loadingFinished();
 
-                    } else {
-                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                        } else {
+                            UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<ResponseWrapper> call, Throwable t) {
-                    UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
-                }
-            });
+                    @Override
+                    public void onFailure(Call<ResponseWrapper> call, Throwable t) {
+                        loadingFinished();
+                        UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+                    }
+                });
+            }
+
         }
+    }
 
-    }}
-
-    void contactUs()
-    {
-        if(!txt_contact_us_disc.getText().toString().equals("")) {
+    void contactUs() {
+        if (!txt_contact_us_disc.getText().toString().equals("")) {
             Call<ResponseWrapper> callBack = webService.ContactUs(prefHelper.getUserId(), txt_contact_us_disc.getText().toString());
 
             callBack.enqueue(new Callback<ResponseWrapper>() {
@@ -172,23 +185,22 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 }
             });
         }
-}
+    }
 
-    void NotificationStatus()
-    {
+    void NotificationStatus() {
         String notification;
         String account;
 
-        if(toggle_notifications.isChecked()) notification="1";
-        else notification="0";
+        if (toggle_notifications.isChecked()) notification = "1";
+        else notification = "0";
 
-        if(toggle_private_or_public.isChecked()) account="1";
-        else account="0";
+        if (toggle_private_or_public.isChecked()) account = "1";
+        else account = "0";
 
         Call<ResponseWrapper<RegistrationResult>> callBack = webService.NotificationStatus(
-                RequestBody.create(MediaType.parse("text/plain"),prefHelper.getUserId()),
-                RequestBody.create(MediaType.parse("text/plain"),notification),
-                RequestBody.create(MediaType.parse("text/plain"),account));
+                RequestBody.create(MediaType.parse("text/plain"), prefHelper.getUserId()),
+                RequestBody.create(MediaType.parse("text/plain"), notification),
+                RequestBody.create(MediaType.parse("text/plain"), account));
         callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
@@ -215,9 +227,9 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
 
     @Override
-    public void onClick( View v ) {
+    public void onClick(View v) {
         // TODO Auto-generated method stub
-        switch (v.getId()){
+        switch (v.getId()) {
 
             case R.id.txt_logout:
                 prefHelper.setLoginStatus(false);

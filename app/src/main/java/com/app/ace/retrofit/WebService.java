@@ -2,6 +2,7 @@ package com.app.ace.retrofit;
 
 
 import com.app.ace.entities.BookingSchedule;
+import com.app.ace.entities.ConversationEnt;
 import com.app.ace.entities.CreatePostEnt;
 import com.app.ace.entities.CreaterEnt;
 import com.app.ace.entities.FollowUser;
@@ -223,8 +224,9 @@ public interface WebService {
             @Path("user_id") String user_id);
 
     @GET("message/get/{conversation_id}")
-    Call<ResponseWrapper<ArrayList<MsgEnt>>> GetConversation(
-            @Path("conversation_id") String conversation_id);
+    Call<ResponseWrapper<ArrayList<ConversationEnt>>> GetConversation(
+            @Path("conversation_id") String conversation_id,
+            @Query("user_id")String user_id);
 
     @FormUrlEncoded
     @POST("message/send")
@@ -267,7 +269,7 @@ public interface WebService {
             @Field("user_id") String user_id,
             @Field("post_id") String post_id,
             @Field("comment_text") String comment_text,
-            @Field("tag_ids") int tag_ids
+            @Field("tag_ids") String tag_ids
             //@Field("parent_comment_id") String parent_comment_id
     );
 
@@ -320,7 +322,18 @@ public interface WebService {
             @Part("user_id") RequestBody user_id,
             @Part("mute_conversation") RequestBody mute_conversation
     );
-
+    @FormUrlEncoded
+    @POST("mute/conversation")
+    Call<ResponseWrapper<ArrayList<RegistrationResult>>> MuteReciverConversation(
+            @Field("conversation_id") String conversation_id,
+            @Field("user_id") String user_id,
+            @Field("mute") String mute_conversation
+    );
+    @FormUrlEncoded
+    @POST("user/forgotpassword")
+    Call<ResponseWrapper>forgetPassword(
+            @Field("email")String email
+    );
     @FormUrlEncoded
     @POST("user/rating/add")
     Call<ResponseWrapper<User>> rating(

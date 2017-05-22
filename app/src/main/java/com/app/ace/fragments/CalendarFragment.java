@@ -28,6 +28,7 @@ import com.app.ace.helpers.DateHelper;
 import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.retrofit.GsonFactory;
+import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
@@ -59,6 +60,7 @@ import roboguice.inject.InjectView;
 
 public class CalendarFragment extends BaseFragment implements View.OnClickListener {
     public static String USER_ID = "USER_ID";
+    public static String ADDRESS = "gymaddress";
     final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
     @InjectView(R.id.btn_avaliablity)
     Button btn_avaliablity;
@@ -74,6 +76,8 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     Spinner sp_category;
     @InjectView(R.id.btn_training_Search_Submit)
     Button btn_training_Search_Submit;
+    @InjectView(R.id.txt_headerText)
+    AnyTextView txt_headerText;
     String buildingTypes ="";// getString(R.string.Flexiblity_training);
     Map<Date, Drawable> dateDrawableMap = new TreeMap<>();
     Map<Date, Integer> dateTextDrawableMap = new TreeMap<>();
@@ -89,9 +93,12 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     private ArrayList<CalenderEnt> calenderids = new ArrayList<>();
     private ArrayList<Date> totaldate = new ArrayList<>();
     private Date startDate;
-    public static CalendarFragment newInstance(String startDate) {
+    private String GymAddress;
+
+    public static CalendarFragment newInstance(String startDate,String trainerGymAddress) {
         Bundle args = new Bundle();
         args.putString(USER_ID, startDate);
+        args.putString(ADDRESS, trainerGymAddress);
         CalendarFragment fragment = new CalendarFragment();
         fragment.setArguments(args);
         return fragment;
@@ -107,6 +114,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             USER_ID = getArguments().getString(USER_ID);
+            GymAddress=getArguments().getString(ADDRESS);
             // Toast.makeText(getDockActivity(), ConversationId, Toast.LENGTH_LONG).show();
         }
 
@@ -130,7 +138,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
 
 
         // Attach to the activity
-
+        txt_headerText.setText(GymAddress);
         setCalenderListener();
         initCategorySpinner();
         initDurationSpinner();
