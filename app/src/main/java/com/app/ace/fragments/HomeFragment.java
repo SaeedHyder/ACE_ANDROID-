@@ -184,12 +184,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
     private void setHomePostsData(ArrayList<PostsEnt> postsEntArrayList) {
 
-        if (postsEntArrayList.size() == 0) {
 
-            gridView.setVisibility(View.INVISIBLE);
-            txt_no_data.setVisibility(View.VISIBLE);
-
-        } else {
 
             dataCollection = new ArrayList<HomeListDataEnt>();
 
@@ -204,7 +199,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             bindData(dataCollection);
         }
 
-    }
+    
 
     private void bindData(List<HomeListDataEnt> dataCollection) {
         adapter.clearList();
