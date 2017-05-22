@@ -124,6 +124,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         // Spinner Drop down elements
         List<String> categories = new ArrayList<>();
         categories.add(getString(R.string.male));
@@ -163,6 +164,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         imageLoader.displayImage(prefHelper.getUser().getProfile_image(), civ_profile_pic);
 
 
+
     }
 
     private void EditProfile() {
@@ -189,6 +191,12 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
                    RequestBody.create(MediaType.parse("image/*"), profilePic));
         }
 
+        if (Education.isEmpty()){
+            Education = prefHelper.getUser().getEducation();
+        }
+        if (Speciality.isEmpty()){
+            Speciality = prefHelper.getUser().getSpeciality();
+        }
         Call<ResponseWrapper<RegistrationResult>> callBack = webService.UpdateTrainer(
 
                 RequestBody.create(MediaType.parse("text/plain"),prefHelper.getUserId()),
@@ -200,7 +208,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
                 profile_picture,
                 RequestBody.create(MediaType.parse("text/plain"),Education),
                 RequestBody.create(MediaType.parse("text/plain"),Speciality),
-                RequestBody.create(MediaType.parse("text/plain"),gymLocation),
+                RequestBody.create(MediaType.parse("text/plain"),txtGymLocatoin.getText().toString()),
                 RequestBody.create(MediaType.parse("text/plain"),lat),
                 RequestBody.create(MediaType.parse("text/plain"),log)
                  );

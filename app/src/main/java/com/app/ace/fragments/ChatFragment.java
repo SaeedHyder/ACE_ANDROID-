@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.app.ace.R;
 import com.app.ace.entities.ChatDataItem;
+import com.app.ace.entities.ConversationEnt;
 import com.app.ace.entities.MsgEnt;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
@@ -78,7 +79,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private TextView txt_noresult;
     private ArrayListAdapter<ChatDataItem> adapter;
     private ArrayList<ChatDataItem> collection = new ArrayList<>();
-
+    private Integer isReceiver_mute = 0;
     public static ChatFragment newInstance() {
         return new ChatFragment();
     }
@@ -221,24 +222,36 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
         loadingStarted();
 
-        Call<ResponseWrapper<ArrayList<MsgEnt>>> callBack = webService.GetConversation(
-                ConversationId);
-        callBack.enqueue(new Callback<ResponseWrapper<ArrayList<MsgEnt>>>() {
+        Call<ResponseWrapper<ArrayList<ConversationEnt>>> callBack = webService.GetConversation(
+                ConversationId,prefHelper.getUserId());
+        callBack.enqueue(new Callback<ResponseWrapper<ArrayList<ConversationEnt>>>() {
             @Override
-            public void onResponse(Call<ResponseWrapper<ArrayList<MsgEnt>>> call, Response<ResponseWrapper<ArrayList<MsgEnt>>> response) {
+            public void onResponse(Call<ResponseWrapper<ArrayList<ConversationEnt>>> call,
+                                   Response<ResponseWrapper<ArrayList<ConversationEnt>>>response) {
                 loadingFinished();
+                if (response.body().getResult().size()>0){
+                    if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                        if (String.valueOf(response.body().getResult().get(0).getConversation().getSenderId()).equals(prefHelper.getUserId())){
+                            isReceiver_mute = response.body().getResult().get(0).getConversation().getSenderMute();
+                        }
+                        else if (String.valueOf(response.body().getResult().get(0).getConversation().getReceiverId()).equals(prefHelper.getUserId())){
+                            isReceiver_mute = response.body().getResult().get(0).getConversation().getReceiverMute();
+                        }
+                        sender_block = String.valueOf(response.body().getResult().get(0).getConversation().getSenderBlock());
+                        receiver_block = String.valueOf(response.body().getResult().get(0).getConversation().getReceiverBlock());
+                        IsFollowing = String.valueOf(response.body().getResult().get(0).getConversation().getIsFollowing());
 
-                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                         setConversation(response.body().getResult().get(0).getMessages());
 
-                    setConversation(response.body().getResult());
-
-                } else {
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    } else {
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    }
                 }
+
             }
 
             @Override
-            public void onFailure(Call<ResponseWrapper<ArrayList<MsgEnt>>> call, Throwable t) {
+            public void onFailure(Call<ResponseWrapper<ArrayList<ConversationEnt>>> call, Throwable t) {
 
                 loadingFinished();
                 UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
@@ -268,8 +281,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
             if (msgEnt.getSender().getId() == Integer.parseInt(prefHelper.getUserId())) {
                 isSender = false;
+                USERNAME = msgArrayList.get(0).getReceiver().getFirst_name()
+                        +" "+msgArrayList.get(0).getReceiver().getLast_name();
+                ProfileImage = msgArrayList.get(0).getReceiver().getProfile_image();
             } else {
                 isSender = true;
+                USERNAME = msgArrayList.get(0).getSender().getFirst_name()
+                        +" "+msgArrayList.get(0).getSender().getLast_name();
+                ProfileImage = msgArrayList.get(0).getSender().getProfile_image();
             }
             if(PostPath!=null)
             {
@@ -295,12 +314,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }
         if (msgArrayList.size()>0){
             if (isSender){
-                USERNAME = msgArrayList.get(0).getReceiver().getFirst_name()
-                        +" "+msgArrayList.get(0).getReceiver().getLast_name();
+
             }
             else{
-                USERNAME = msgArrayList.get(0).getSender().getFirst_name()
-                        +" "+msgArrayList.get(0).getSender().getLast_name();
 
             }
         }
@@ -353,7 +369,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 // UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
-                getDockActivity().addDockableFragment(FriendsInfoFragment.newInstance(ConversationId,receiverId,IsFollowing,ProfileImage,FullName,sender_block,receiver_block), "FriendsInfoFragment");
+                getDockActivity().addDockableFragment(FriendsInfoFragment.newInstance(
+                        ConversationId,
+                        receiverId,
+                        IsFollowing,
+                        ProfileImage,
+                        USERNAME,
+                        sender_block,
+                        receiver_block
+                         ,String.valueOf(isReceiver_mute)), "FriendsInfoFragment");
             }
         });
 

@@ -193,7 +193,7 @@
 
     //Forgot Password
     <string name="reset">Reset</string>
-    <string name="an_email_has_been">An email has been sent to your account \n with password reser link</string>
+    <string name="an_email_has_been">An email has been sent to your account \n with password reset link</string>
 
     //Profile
     <string name="avaliability">Avaliability</string>

@@ -2,17 +2,22 @@ package com.app.ace.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.app.ace.R;
+import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.TitleBar;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import roboguice.inject.InjectView;
 
 /**
@@ -75,7 +80,7 @@ public class ForgotPasswordFragment extends BaseFragment implements View.OnClick
             }
         });
 
-        successPopUp.show(getDockActivity().getSupportFragmentManager(), "forgotPasswordPopUp");
+        successPopUp.show(getMainActivity().getSupportFragmentManager(), "forgotPasswordPopUp");
 
 
 
@@ -86,7 +91,22 @@ public class ForgotPasswordFragment extends BaseFragment implements View.OnClick
         switch (v.getId()){
             case R.id.btnSubmit:
                 if(validate()) {
-                    showForgotPasswordDialog();
+                    loadingStarted();
+                    Call<ResponseWrapper> call = webService.forgetPassword(edtEmail.getText().toString());
+                    call.enqueue(new Callback<ResponseWrapper>() {
+                        @Override
+                        public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
+                            loadingFinished();
+                            showForgotPasswordDialog();
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseWrapper> call, Throwable t) {
+                            loadingFinished();
+                            Log.e("ForgotPasswordFragment",t.toString());
+                        }
+                    });
+
                 }
                 break;
         }

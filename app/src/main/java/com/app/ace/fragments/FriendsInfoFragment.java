@@ -1,20 +1,15 @@
 package com.app.ace.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.app.ace.R;
 import com.app.ace.entities.FollowUser;
-import com.app.ace.entities.MsgEnt;
 import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
@@ -27,24 +22,10 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
-
-
-import static com.app.ace.R.id.riv_profile_pic;
-import static com.app.ace.R.id.toggle_notifications;
-import static com.app.ace.fragments.ChatFragment.CONVERSATION_ID;
-import static com.app.ace.fragments.ChatFragment.FULLNAME;
-import static com.app.ace.fragments.ChatFragment.ISFOLLOWING;
-import static com.app.ace.fragments.ChatFragment.PROFILEIMAGE;
-import static com.app.ace.fragments.ChatFragment.RECEIVERBLOCK;
-import static com.app.ace.fragments.ChatFragment.Receiver_ID;
-import static com.app.ace.fragments.ChatFragment.SENDERBLOCK;
-import static com.app.ace.global.AppConstants.user_id;
 
 
 public class FriendsInfoFragment extends BaseFragment implements View.OnClickListener {
@@ -81,7 +62,7 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
     public static String FULLNAME = "fullname";
     public static String SENDERBLOCK = "senderblock";
     public static String RECEIVERBLOCK = "receiverblock";
-
+    public static String IS_RECEIVER_MUTE = "IS_RECEIVER_MUTE";
     public String SenderBlock;
     public String ReceiverBlock;
     String IsFollowing;
@@ -98,7 +79,14 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
         return new FriendsInfoFragment();
     }
 
-    public static FriendsInfoFragment newInstance(String conversationId, String receiver_ID, String isFollowing, String profileImage, String fullName, String senderblock, String receiverblock) {
+    public static FriendsInfoFragment newInstance(String conversationId,
+                                                  String receiver_ID,
+                                                  String isFollowing,
+                                                  String profileImage,
+                                                  String fullName,
+                                                  String senderblock,
+                                                  String receiverblock,
+                                                  String isReceiverMute) {
 
         Bundle args = new Bundle();
         args.putString(CONVERSATION_ID, conversationId);
@@ -108,7 +96,7 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
         args.putString(FULLNAME,fullName);
         args.putString(SENDERBLOCK, String.valueOf(senderblock));
         args.putString(RECEIVERBLOCK, String.valueOf(receiverblock));
-
+        args.putString(IS_RECEIVER_MUTE, String.valueOf(isReceiverMute));
         FriendsInfoFragment fragment = new FriendsInfoFragment();
         fragment.setArguments(args);
 
@@ -129,7 +117,7 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
             FullName=getArguments().getString(FULLNAME);
             SenderBlock=getArguments().getString(SENDERBLOCK);
             ReceiverBlock=getArguments().getString(RECEIVERBLOCK);
-
+            IS_RECEIVER_MUTE=getArguments().getString(IS_RECEIVER_MUTE);
         }
         imageLoader = ImageLoader.getInstance();
 
@@ -147,7 +135,13 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        if (IS_RECEIVER_MUTE.equals("0"))
+        {
+            muteConversation.setChecked(false);
+        }
+        else {
+            muteConversation.setChecked(true);
+        }
         Listners();
         setData();
     }
@@ -237,7 +231,8 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
             public void onFailure(Call<ResponseWrapper> call, Throwable t) {
 
                 loadingFinished();
-                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+                Log.e("FriendsInfo",t.toString());
+               // UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
             }
         });
     }
@@ -270,7 +265,8 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
             public void onFailure(Call<ResponseWrapper<FollowUser>> call, Throwable t) {
 
                 loadingFinished();
-                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+                Log.e("FriendsInfo",t.toString());
+             //   UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
 
             }
         });
@@ -309,22 +305,28 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
             }
         });
     }
-
+    String mutecheck = "0";
     void muteConversation()
     {
-        String mutecheck;
+
 
         if(muteConversation.isChecked())
-        {mutecheck="1";}
-        else {mutecheck="0";}
+        {
+            mutecheck="1";
+        }
+        else {
+            mutecheck="0";
+        }
 
-        Call<ResponseWrapper<RegistrationResult>> callBack = webService.MuteConversation(
-                RequestBody.create(MediaType.parse("text/plain"),prefHelper.getUserId()),
-                RequestBody.create(MediaType.parse("text/plain"),mutecheck));
+        Call<ResponseWrapper<ArrayList<RegistrationResult>>>callBack = webService.MuteReciverConversation(
+                ConversationId,
+               prefHelper.getUserId(),
+                mutecheck);
 
-        callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
+        callBack.enqueue(new Callback<ResponseWrapper<ArrayList<RegistrationResult>>>() {
             @Override
-            public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
+            public void onResponse(Call<ResponseWrapper<ArrayList<RegistrationResult>>> call,
+                                   Response<ResponseWrapper<ArrayList<RegistrationResult>>> response) {
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
@@ -334,7 +336,7 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
                 }
             }
             @Override
-            public void onFailure(Call<ResponseWrapper<RegistrationResult>> call, Throwable t) {
+            public void onFailure(Call<ResponseWrapper<ArrayList<RegistrationResult>>> call, Throwable t) {
                 UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
 
             }

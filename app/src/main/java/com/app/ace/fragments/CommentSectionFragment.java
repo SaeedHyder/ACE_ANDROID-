@@ -137,7 +137,9 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
 
         for(ShowComments item : result){
 
-            userCollection.add(new CommentsSectionItemsEnt(item.getUser().getProfile_image(),item.getUser().getFirst_name()+" "+item.getUser().getLast_name(),item.getComment_text(),item.getCreated_at()));
+            userCollection.add(new CommentsSectionItemsEnt(item.getUser().getProfile_image(),
+                    item.getUser().getFirst_name()+" "+item.getUser().getLast_name(),item.getComment_text(),
+                    item.getCreated_at(),String.valueOf(item.getUser_id())));
 
 
 
@@ -191,6 +193,7 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
 
         String name = ShowName.getNameCommentor().toLowerCase();
         et_CommentBar.setText("@"+name);
+        et_CommentBar.setTag(ShowName.getUser_id());
     }
 
 
@@ -211,14 +214,20 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
                 break;
         }
     }
-
+    String user_id = "0";
     private void SendComment() {
 
+        if ( et_CommentBar.getTag()!=null){
+            user_id =  (String) et_CommentBar.getTag();
+        }
+        else{
+            user_id = "0";
+        }
         Call<ResponseWrapper<ShowComments>> callBack = webService.CreateComment(
                 prefHelper.getUserId(),
                 post_id,
                 et_CommentBar.getText().toString(),
-                0);
+                user_id);
 
         callBack.enqueue(new Callback<ResponseWrapper<ShowComments>>() {
             @Override
@@ -226,7 +235,8 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    userCollection.add(new CommentsSectionItemsEnt(prefHelper.getUser().getProfile_image(),prefHelper.getUserName(),response.body().getResult().getComment_text(),response.body().getResult().getCreated_at()));
+                    userCollection.add(new CommentsSectionItemsEnt(prefHelper.getUser().getProfile_image(),prefHelper.getUserName(),response.body().getResult().getComment_text(),response.body().getResult().
+                            getCreated_at(),String.valueOf(response.body().getResult().getUser_id())));
                     bindData(userCollection);
                     et_CommentBar.setText("");
                 }

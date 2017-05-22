@@ -10,6 +10,24 @@ public class CommentsSectionItemsEnt {
     public String comment;
     public String time;
 
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public CommentsSectionItemsEnt(String imageCommentor, String nameCommentor, String comment, String time, String user_id) {
+        this.imageCommentor = imageCommentor;
+        this.nameCommentor = nameCommentor;
+        this.comment = comment;
+        this.time = time;
+        this.user_id = user_id;
+    }
+
+    private String user_id;
+
 
     public String getImageCommentor() {
         return imageCommentor;
@@ -43,12 +61,5 @@ public class CommentsSectionItemsEnt {
         this.time = time;
     }
 
-    public CommentsSectionItemsEnt(String imageCommentor, String nameCommentor, String comment, String time) {
-        this.imageCommentor = imageCommentor;
-        this.nameCommentor = nameCommentor;
-        this.comment = comment;
-        this.time = time;
 
-
-    }
 }
