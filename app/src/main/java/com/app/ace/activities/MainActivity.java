@@ -603,7 +603,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         text.append("File extn: " + file.getExtension() + "\n\n");
         text.append("File size: " + file.getFileSize() / 1024 + "KB");
 
-        Toast.makeText(this, text.toString(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, text.toString(), Toast.LENGTH_LONG).show();
     }
 
 

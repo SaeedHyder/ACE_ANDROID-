@@ -80,10 +80,10 @@ public class FollowingFragment extends BaseFragment{
 
     private void getUserData() {
 
-adapter.addFragment(new FollowListFragment(),getString(R.string.Follow));
+        adapter.addFragment(new FollowListFragment(),getString(R.string.Follow));
         adapter.addFragment(new YouListFragment(),getString(R.string.You));
-
         pager.setAdapter(adapter);
+
         tabLayout.setupWithViewPager(pager);
 
 

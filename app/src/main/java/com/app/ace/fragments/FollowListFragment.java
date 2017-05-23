@@ -102,15 +102,18 @@ public class FollowListFragment extends BaseFragment {
 
         for(UserNotificatoin item : result) {
 
+            try{
             if(item.getAction_type().contains("post")) {
                 arrChildCollection = new ArrayList<>();
                 arrChildCollection.add(item.getPost().getPost_image());
             }
 
-
                 userCollection.add(new FollowDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(),arrChildCollection ,item.getCreated_at(),item.getSender_id()));
 
-
+        }catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
         bindData(userCollection);
     }

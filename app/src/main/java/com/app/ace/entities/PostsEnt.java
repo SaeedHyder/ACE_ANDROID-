@@ -11,7 +11,7 @@ public class PostsEnt {
     int user_id;
     int totoal_likes;
     int total_comments;
-    String post_image;
+    String post_image = "";
     String friend_name;
     String friend_comment;;
     CreaterEnt creator;

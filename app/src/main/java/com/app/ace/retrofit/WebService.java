@@ -155,6 +155,11 @@ public interface WebService {
 
     @FormUrlEncoded
     @POST("user/search")
+    Call<ResponseWrapper<ArrayList<UserProfile>>> getSearchAllUsers(
+            @Field("keyword") String username);
+
+    @FormUrlEncoded
+    @POST("user/search")
     Call<ResponseWrapper<ArrayList<UserProfile>>> getTrainingSearch(
             @Field("keyword") String username,
             @Field("body_building_type") String body_building_type
@@ -229,7 +234,7 @@ public interface WebService {
             @Query("user_id")String user_id);
 
     @FormUrlEncoded
-    @POST("message/send")
+    @POST("message/send-message")
     Call<ResponseWrapper<ArrayList<MsgEnt>>> SendMsg(
             @Field("sender_id") String sender_id,
             @Field("receiver_id") String receiver_id,

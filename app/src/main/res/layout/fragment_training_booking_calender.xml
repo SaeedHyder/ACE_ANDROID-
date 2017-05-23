@@ -25,19 +25,18 @@
         <LinearLayout
             android:id="@+id/expandablecontainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:visibility="gone"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <ExpandableListView
                 android:id="@+id/expandablelistview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:divider="@android:color/darker_gray"
                 android:dividerHeight="0.7dp"
-                android:groupIndicator="@null"
-                >
+                android:groupIndicator="@null">
                 <!--  android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"-->
             </ExpandableListView>
         </LinearLayout>
@@ -45,8 +44,8 @@
         <LinearLayout
             android:id="@+id/ll_TrainerTimeAvaliablity"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.4"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
             android:orientation="vertical">
 
             <LinearLayout
@@ -81,7 +80,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/Start_Date"
-                            android:textColor="@color/darkbrown"
+                            android:textColor="#8C1422"
                             app:typeface="Roboto-Regular.ttf" />
 
                         <LinearLayout
@@ -102,7 +101,6 @@
                                 android:id="@+id/SelectDatecalendar"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-
                                 android:src="@drawable/calendar" />
 
                         </LinearLayout>
@@ -130,7 +128,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/x8"
                             android:text="@string/End_Date"
-                            android:textColor="@color/darkbrown"
+                            android:textColor="#8C1422"
                             app:typeface="Roboto-Regular.ttf" />
 
                         <Spinner
@@ -228,12 +226,6 @@
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="0.5dp"
-                    android:layout_below="@+id/firstAvailchild"
-                    android:alpha="0.6"
-                    android:background="@drawable/text" />
 
             </LinearLayout>
 
@@ -244,11 +236,6 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="0.5dp"
-                    android:alpha="0.6"
-                    android:background="@drawable/text" />
 
                 <LinearLayout
                     android:id="@+id/SecondAvailchild"
@@ -317,12 +304,6 @@
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="0.5dp"
-                    android:layout_below="@+id/firstAvailchild"
-                    android:alpha="0.6"
-                    android:background="@drawable/text" />
 
             </LinearLayout>
 
@@ -333,11 +314,6 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="0.5dp"
-                    android:alpha="0.6"
-                    android:background="@drawable/text" />
 
                 <LinearLayout
                     android:id="@+id/ThirdAvailchild"
@@ -406,20 +382,9 @@
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="0.5dp"
-                    android:layout_below="@+id/firstAvailchild"
-                    android:alpha="0.6"
-                    android:background="@drawable/text" />
-
             </LinearLayout>
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/x1"
-                android:alpha="0.2"
-                android:background="@drawable/text" />
+
         </LinearLayout>
 
 

@@ -25,6 +25,7 @@ import com.app.ace.entities.ScheduleTime;
 import com.app.ace.entities.TrainerBookingCalendarJson;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DateHelper;
 import com.app.ace.helpers.Datedialoghelper;
 import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
@@ -128,6 +129,8 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     @InjectView(R.id.iv_profile)
     private ImageView iv_profile;
     private String spinerValue = "";//getString(R.string.two_Week);
+    String textFrom;
+    String check;
 
     public static TrainingBookingCalenderFragment newInstance() {
 
@@ -151,7 +154,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
         super.onViewCreated(view, savedInstanceState);
         spinerValue = getString(R.string.two_Week);
         expandablelistview = (ExpandableListView) view.findViewById(R.id.expandablelistview);
-        loadingStarted();
+
         getSavedSchedule(prefHelper.getUserId());
         days = DaysOfMonth(monthValue);
         setDatePickerVariables();
@@ -162,6 +165,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     }
 
     private void getSavedSchedule(String userId) {
+        loadingStarted();
         //  UIHelper.showShortToastInCenter(getDockActivity(), "asda" + prefHelper.getUserId());
         Call<ResponseWrapper<ArrayList<ScheduleEnt>>> callback = webService.getSchedule(userId);
         callback.enqueue(new Callback<ResponseWrapper<ArrayList<ScheduleEnt>>>() {
@@ -376,6 +380,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
 
     private void createTrainerSchedule(ArrayList<TrainerBookingCalendarJson> jsonObject) {
+        loadingStarted();
         Call<ResponseWrapper> callBack = webService.createSchedule(
                 jsonObject);
         callBack.enqueue(new Callback<ResponseWrapper>() {
@@ -388,6 +393,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                     showBookingDialog();
 
                 } else {
+                    loadingFinished();
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
             }
@@ -433,12 +439,13 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
         titleBar.showTickButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingStarted();
+
                 //  trainingBookingListItemBinder.getTimeArray();
                 // setDataInJson(trainingBookingListItemBinder.getTimeArray());
 
                 Map<Integer, String> map = new TreeMap<Integer, String>(ScheduleHashMap);
                 if (!map.isEmpty())
+
                     setDataInJson(map);
                 //createTrainerSchedule(trainerBookingCalendarJsonCollection);
             }
@@ -500,6 +507,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
             case R.id.iv_Home:
 
+                getDockActivity().popBackStackTillEntry(0);
                 getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
 
                 break;
@@ -538,7 +546,9 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
             case R.id.txtFrom:
                 if (checkorder(null, txtTo, 2)) {
                     ShowRadioListDialog();
+                    txtFrom.setTag(txtTo);
                     textView = txtFrom;
+                    textFrom= txtFrom.toString();
 
                     txtFrom.addTextChangedListener(new TextWatcher() {
 
@@ -556,11 +566,10 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                         @Override
                         public void afterTextChanged(Editable s) {
 
+                                checkorder(s, txtTo, 2);
+                                ShowRepeatButton();
 
-                            checkorder(s, txtTo, 2);
-                            ShowRepeatButton();
-
-                        }
+                            }
 
                     });
                 }
@@ -604,6 +613,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                 if (checkprevious(txtTo, txtFrom)) {
                     if (checkorder(null, SecondtxtTo, 4)) {
                         ShowRadioListDialog();
+                        SecondtxtFrom.setTag(SecondtxtTo);
                         textView = SecondtxtFrom;
 
                         SecondtxtFrom.addTextChangedListener(new TextWatcher() {
@@ -674,6 +684,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                 if (checkprevious(SecondtxtTo, SecondtxtFrom)) {
                     if (checkorder(null, ThirdtxtTo, 6)) {
                         ShowRadioListDialog();
+                        ThirdtxtFrom.setTag(ThirdtxtTo);
                         textView = ThirdtxtFrom;
 
                         ThirdtxtFrom.addTextChangedListener(new TextWatcher() {
@@ -729,11 +740,15 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
     private Boolean checkorder(Editable s, TextView txtview, Integer key) {
 
+
+
         if (txtview.getText().toString().isEmpty()) {
             UIHelper.showShortToastInCenter(getDockActivity(), "Please Fill in Start First");
             return false;
-        } else {
-            if (s != null) {
+        }
+
+        else {
+            if (s != null ) {
                 String[] time = txtview.getText().toString().split(":00");
                 int hour = Integer.parseInt(time[0]);
                 String[] time1 = s.toString().split(":00");
@@ -929,37 +944,74 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
         }
 
         if (!itemPosition.isEmpty()) {
-            if (!arrayLastItem.equals("") && arrayLastItem.contains(itemPosition)) {
+            Calendar c= Calendar.getInstance();
+            Date date = c.getTime();
+            String[] time = itemPosition.split(":00");
+            int hour = Integer.parseInt(time[0]);
+
+
+            if(dateSpecified!=null) {
+                if (DateHelper.isSameDay(dateSpecified, c.getTime()) && hour < date.getHours()) {
+                    UIHelper.showShortToastInCenter(getDockActivity(), "Time is less then Current Time");
+                }
+
+            else if (!arrayLastItem.equals("") && arrayLastItem.contains(itemPosition)) {
                 if (alreadySelectedTime.contains(itemPosition)) {
-                    String[] time = itemPosition.split(":00");
-                    int hour = Integer.parseInt(time[0]);
+                    /*String[] time = itemPosition.split(":00");
+                    int hour = Integer.parseInt(time[0]);*/
+
                     if (hour < LastSelectHour) {
                         UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.lesserTIme));
                     } else {
                         AnyTextView textView = (AnyTextView) this.textView;
-                        textView.setText(itemPosition);
-                        alreadySelectedTime.add(itemPosition);
-                        String[] thistime = itemPosition.split(":00");
-                        LastSelectHour = Integer.parseInt(time[0]);
+                        AnyTextView pretextView = (AnyTextView)textView.getTag();
+                        if (pretextView!=null){
+                            if (pretextView.getText().toString().equals(itemPosition)){
+                                UIHelper.showShortToastInCenter(getDockActivity(),"You Canot Add this");
+                            }
+                            else {
+                                textView.setText(itemPosition);
+                                alreadySelectedTime.add(itemPosition);
+                                String[] thistime = itemPosition.split(":00");
+                                LastSelectHour = Integer.parseInt(time[0]);
+                            }
+                        }else {
+                            textView.setText(itemPosition);
+                            alreadySelectedTime.add(itemPosition);
+                            String[] thistime = itemPosition.split(":00");
+                            LastSelectHour = Integer.parseInt(time[0]);
+                        }
 
                     }
                 }
             } else if (!arrayLastItem.contains(itemPosition) && alreadySelectedTime.contains(itemPosition)) {
                 UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.differentTime));
             } else {
-                String[] time = itemPosition.split(":00");
-                int hour = Integer.parseInt(time[0]);
+              /*  String[] time = itemPosition.split(":00");
+                int hour = Integer.parseInt(time[0]);*/
                 if (hour < LastSelectHour) {
                     UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.lesser_then_previous));
                 } else {
                     AnyTextView textView = (AnyTextView) this.textView;
-                    textView.setText(itemPosition);
-                    alreadySelectedTime.add(itemPosition);
-                    String[] thistime = itemPosition.split(":00");
-                    LastSelectHour = Integer.parseInt(time[0]);
-
+                    AnyTextView pretextView = (AnyTextView) textView.getTag();
+                    if (pretextView!=null){
+                        if (pretextView.getText().toString().equals(itemPosition)){
+                            UIHelper.showShortToastInCenter(getDockActivity(),"You Canot Add this");
+                        }
+                        else {
+                            textView.setText(itemPosition);
+                            alreadySelectedTime.add(itemPosition);
+                            String[] thistime = itemPosition.split(":00");
+                            LastSelectHour = Integer.parseInt(time[0]);
+                        }
+                    }else {
+                        textView.setText(itemPosition);
+                        alreadySelectedTime.add(itemPosition);
+                        String[] thistime = itemPosition.split(":00");
+                        LastSelectHour = Integer.parseInt(time[0]);
+                    }
                 }
-            }
+            }}
         }
     }
 

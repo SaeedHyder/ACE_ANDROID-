@@ -64,6 +64,7 @@ public class InboxListItemBinder extends ViewBinder<MsgEnt> {
 
         }
         else {
+            try{
             if(entity.getSender().getId()==Integer.parseInt(preferenceHelper.getUserId()))
            {
                    imageLoader.displayImage(entity.getReceiver().getProfile_image(), viewHolder.userImage);
@@ -74,10 +75,13 @@ public class InboxListItemBinder extends ViewBinder<MsgEnt> {
                 imageLoader.displayImage(entity.getSender().getProfile_image(), viewHolder.userImage);
                 viewHolder.txtUserName.setText(entity.getSender().getFirst_name() + " " + entity.getSender().getLast_name());
                 viewHolder.txtUserMessage.setText(entity.getMessage().getMessage_text());
+            }}catch (Exception e)
+            {
+                e.printStackTrace();
             }
 
 
-            viewHolder.userImage.setOnClickListener(new View.OnClickListener() {
+          /*  viewHolder.userImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(entity.getSender().getId()==Integer.parseInt(preferenceHelper.getUserId()))
@@ -91,8 +95,8 @@ public class InboxListItemBinder extends ViewBinder<MsgEnt> {
                     }
                 }
             });
-
-            viewHolder.txtUserName.setOnClickListener(new View.OnClickListener() {
+*/
+           /* viewHolder.txtUserName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(entity.getMessage().getSender_id()==Integer.parseInt(preferenceHelper.getUserId()))
@@ -108,17 +112,14 @@ public class InboxListItemBinder extends ViewBinder<MsgEnt> {
 
 
                     }
-
-
-
                 }
-            });
+            });*/
 
 
         }
     }
 
-    private void receivebyReceiver(MsgEnt entity) {
+ /*   private void receivebyReceiver(MsgEnt entity) {
         context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getMessage().getConversation_id())
                 ,String.valueOf(entity.getMessage().getReceiver_id())
                 ,String.valueOf(entity.getMessage().getSender_id())
@@ -138,7 +139,7 @@ public class InboxListItemBinder extends ViewBinder<MsgEnt> {
                 ,entity.getReceiver().getFirst_name()+" "+entity.getReceiver().getLast_name()
                 ,entity.getSender_block(),entity.getReceiver_block()
                 ,entity.getSender_mute(),entity.getReceiver_mute()), "ChatFragment");
-    }
+    }*/
 
     public static class ViewHolder extends BaseViewHolder {
 

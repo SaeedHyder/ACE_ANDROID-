@@ -172,6 +172,7 @@ ImageView img_DetailedProfile;
                 break;
 
             case R.id.iv_Home:
+                getDockActivity().popBackStackTillEntry(0);
                 getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
                 break;
 

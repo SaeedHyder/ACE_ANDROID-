@@ -149,6 +149,7 @@ loadingStarted();
 
                         } else {
                             UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                            loadingFinished();
                         }
                     }
 
@@ -171,16 +172,18 @@ loadingStarted();
                 @Override
                 public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-
+                        loadingFinished();
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
 
                     } else {
+                        loadingFinished();
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ResponseWrapper> call, Throwable t) {
+                    loadingFinished();
                     UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
                 }
             });
@@ -206,17 +209,19 @@ loadingStarted();
             public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                    loadingFinished();
 
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
 
                 } else {
+                    loadingFinished();
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseWrapper<RegistrationResult>> call, Throwable t) {
-
+                loadingFinished();
                 UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
 
             }

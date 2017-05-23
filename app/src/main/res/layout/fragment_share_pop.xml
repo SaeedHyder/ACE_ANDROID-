@@ -86,10 +86,13 @@
                     android:id="@+id/tv_Search"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:imeOptions="actionSearch"
                     android:hint="@string/search"
+                    android:singleLine="true"
                     app:typeface="Roboto-Regular.ttf"
                     android:maxLines="1"
-                    android:background="@null"/>
+                    android:background="@null"
+                    />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/LL_ListView"

@@ -30,6 +30,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+import static com.app.ace.R.id.SearchTrainer_ListView;
 import static com.app.ace.global.AppConstants.user_id;
 
 /**
@@ -43,6 +44,7 @@ public class InboxListFragment extends BaseFragment {
     @InjectView(R.id.txt_noresult)
     private TextView txt_noresult;
     private ArrayListAdapter<MsgEnt> adapter;
+    String UserName;
 
     private ArrayList<MsgEnt> userCollection = new ArrayList<>();
 
@@ -68,93 +70,108 @@ public class InboxListFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+        setInboxData();
+        ListViewItemListner();
+       // getUserData();
+    }
+
+    private void setInboxData() {
+
         Call<ResponseWrapper<ArrayList<MsgEnt>>> callBack = webService.userinbox(prefHelper.getUserId());
         loadingStarted();
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<MsgEnt>>>() {
 
-                             @Override
-                             public void onResponse(Call<ResponseWrapper<ArrayList<MsgEnt>>> call, Response<ResponseWrapper<ArrayList<MsgEnt>>> response) {
-                                 loadingFinished();
-                                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+            @Override
+            public void onResponse(Call<ResponseWrapper<ArrayList<MsgEnt>>> call, Response<ResponseWrapper<ArrayList<MsgEnt>>> response) {
+                loadingFinished();
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                                AddInboxData(response.body().getResult());
+                    AddInboxData(response.body().getResult());
 
-                                 }
+                }
 
-                                 else {
-                                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                                 }
+                else {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
 
-                             }
+            }
 
-                             @Override
-                             public void onFailure(Call<ResponseWrapper<ArrayList<MsgEnt>>> call, Throwable t) {
+            @Override
+            public void onFailure(Call<ResponseWrapper<ArrayList<MsgEnt>>> call, Throwable t) {
 
-                                 loadingFinished();
-                                 System.out.println(t.getMessage());
-                                 System.out.println(t.getCause());
-                                 UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+                loadingFinished();
+                System.out.println(t.getMessage());
+                System.out.println(t.getCause());
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
 
-                             }
-                         });
-
-        setListener();
-       // getUserData();
+            }
+        });
     }
 
     private void AddInboxData(ArrayList<MsgEnt> result) {
 
-        userCollection = new ArrayList<>();
-       /* if (result.size() <= 0) {
+        if (result.size() <= 0) {
             txt_noresult.setVisibility(View.VISIBLE);
             listView.setVisibility(View.GONE);
         }
         else {
             txt_noresult.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
-        }*/
+        }
 
+        userCollection = new ArrayList<>();
 
             userCollection.addAll(result);
             bindData(userCollection);
 
 
-
-
-        /*for(MsgEnt msg : result){
-
-
-           //    userCollection.add(new InboxDataItem(msg.getSender().getProfile_image(),msg.getSender().getFirst_name()+" "+msg.getSender().getLast_name(),msg.getMessage().getMessage_text(),msg.getMessage().getConversation_id()));
-            userCollection.add(new InboxDataItem(msg.getSender().getProfile_image(),msg.getSender().getFirst_name()+" "+msg.getSender().getLast_name(),msg.getMessage().getMessage_text(),msg.getMessage().getConversation_id()));
-
-            //  userCollection.add(new InboxDataItem(msg.getReceiver().getProfile_image(),msg.getReceiver().getFirst_name()+" "+msg.getReceiver().getLast_name(),msg.getMessage().getMessage_text(),msg.getMessage().getConversation_id()));
-
-        }*/
-
     }
 
 
 
 
-  /*  private void getUserData() {
+    private void ListViewItemListner() {
 
-        userCollection= new ArrayList<>();
-        userCollection.add(new InboxDataItem("drawable://" + R.drawable.profile_pic, getString(R.string.james_blunt), getString(R.string.i_wont_be) ));
-        userCollection.add(new InboxDataItem("drawable://" + R.drawable.profile_pic_trainer, "Tori Smith", getString(R.string.what_other_training)));
-        userCollection.add(new InboxDataItem("drawable://" + R.drawable.profile_pic, getString(R.string.charlie_hunnam), getString(R.string.please_reply)));
-
-
-        bindData(userCollection);
-    }*/
-
-    private void setListener() {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //getDockActivity().addDockableFragment(ChatFragment.newInstance(), "ChatFragment");
+            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+                if(userCollection.get(i).getSender().getId()==Integer.parseInt(prefHelper.getUserId()))
+                {
+                    UserName=userCollection.get(i).getReceiver().getFirst_name()+" "+userCollection.get(i).getReceiver().getLast_name();
+                    receivebyReceiver(userCollection.get(i));
+                }
+                else if(userCollection.get(i).getReceiver().getId()==Integer.parseInt(prefHelper.getUserId())) {
+                    UserName=userCollection.get(i).getSender().getFirst_name()+" "+userCollection.get(i).getSender().getLast_name();
+                    receivebySender(userCollection.get(i));
+                }
+              //  getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(userCollection.get(i).));
             }
         });
     }
+
+    private void receivebyReceiver(MsgEnt entity) {
+        getDockActivity().addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getMessage().getConversation_id())
+                ,String.valueOf(entity.getMessage().getReceiver_id())
+                ,String.valueOf(entity.getMessage().getSender_id())
+                ,UserName, String.valueOf(entity.getIs_following())
+                ,entity.getReceiver().getProfile_image()
+                ,entity.getReceiver().getFirst_name()+" "+entity.getReceiver().getLast_name()
+                ,entity.getSender_block(),entity.getReceiver_block()
+                ,entity.getSender_mute(),entity.getReceiver_mute()), "ChatFragment");
+    }
+
+    private void receivebySender(MsgEnt entity) {
+        getDockActivity().addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getMessage().getConversation_id())
+                ,String.valueOf(entity.getMessage().getSender_id())
+                ,String.valueOf(entity.getMessage().getSender_id())
+                ,UserName, String.valueOf(entity.getIs_following())
+                ,entity.getReceiver().getProfile_image()
+                ,entity.getReceiver().getFirst_name()+" "+entity.getReceiver().getLast_name()
+                ,entity.getSender_block(),entity.getReceiver_block()
+                ,entity.getSender_mute(),entity.getReceiver_mute()), "ChatFragment");
+    }
+
 
     private void bindData(ArrayList<MsgEnt> userCollection) {
         adapter.clearList();

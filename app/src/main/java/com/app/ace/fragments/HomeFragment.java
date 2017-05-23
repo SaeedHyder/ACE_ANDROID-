@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
@@ -88,6 +89,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loadingStarted();
         adapter = new ArrayListAdapter<HomeListDataEnt>(getDockActivity(),
                 new HomeFragmentItemBinder(getDockActivity(), this, this));
 
@@ -105,6 +107,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        loadingFinished();
 
         System.out.println(prefHelper.getBadgeCount());
         getAllHomePosts();
@@ -189,17 +192,22 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             dataCollection = new ArrayList<HomeListDataEnt>();
 
             for (PostsEnt postsEnt : postsEntArrayList) {
-
-                dataCollection.add(new HomeListDataEnt(Integer.parseInt(postsEnt.getLike_count()),
-                        Integer.parseInt(postsEnt.getComment_count()), postsEnt.getCreator().getProfile_image(),
-                        postsEnt.getCreator().getFirst_name() + " " + postsEnt.getCreator().getLast_name(), postsEnt.getPost_image(), "Time Joe", "Hi nice", postsEnt.getUser_id(), postsEnt.getId(), postsEnt.getComment(), postsEnt.getIs_liked()));
+                try {
+                    dataCollection.add(new HomeListDataEnt(Integer.parseInt(postsEnt.getLike_count()),
+                            Integer.parseInt(postsEnt.getComment_count()), postsEnt.getCreator().getProfile_image(),
+                            postsEnt.getCreator().getFirst_name() + " " + postsEnt.getCreator().getLast_name(), postsEnt.getPost_image(), "Time Joe", "Hi nice", postsEnt.getUser_id(), postsEnt.getId(), postsEnt.getComment(), postsEnt.getIs_liked()));
+                }
+                catch (Exception e){
+                    bindData(dataCollection);
+                    e.printStackTrace();
+                }
 
             }
 
             bindData(dataCollection);
         }
 
-    
+
 
     private void bindData(List<HomeListDataEnt> dataCollection) {
         adapter.clearList();
@@ -253,6 +261,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
             }
         });
+
 
     }
 
@@ -323,7 +332,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         callBack.enqueue(new Callback<ResponseWrapper<HomeResultEnt>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<HomeResultEnt>> call, Response<ResponseWrapper<HomeResultEnt>> response) {
-                try {
+
                     loadingFinished();
 
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
@@ -335,9 +344,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
                         txt_no_data.setVisibility(View.VISIBLE);
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
             }
 
             @Override
@@ -361,7 +368,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             case R.id.iv_profile:
 
                 AppConstants.is_show_trainer = false;
-                getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(prefHelper.getUserId())), "TrainerProfileFragment");
+                    getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(prefHelper.getUserId())), "TrainerProfileFragment");
 
                 break;
 
@@ -423,6 +430,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
             case R.id.iv_Home:
 
+                getDockActivity().popBackStackTillEntry(0);
                 getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
 
                 break;
