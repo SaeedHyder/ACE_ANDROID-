@@ -45,7 +45,7 @@
                 android:text="@string/name"
                 android:textColor="#393939"
                 android:layout_weight="3"
-                android:textSize="@dimen/x15"
+                android:textSize="@dimen/x16"
                 android:layout_marginTop="@dimen/x5"
                 app:typeface="Roboto-Regular.ttf"/>
 
@@ -55,8 +55,9 @@
                 android:layout_height="wrap_content"
                 android:text="@string/comments"
                 android:layout_marginTop="@dimen/x4"
-                android:textSize="@dimen/x10"
-                android:textColor="#938B8B"
+                android:textSize="@dimen/x14"
+                android:textColor="@color/black"
+                android:alpha="0.6"
                 app:typeface="Roboto-Regular.ttf"/>
 
             <LinearLayout

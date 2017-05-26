@@ -224,6 +224,7 @@ public class MapControllerFragment extends BaseFragment {
 
                         btnUseLocation.setEnabled(true);
                         hideKeyboard();
+                        googleMap.getUiSettings().setAllGesturesEnabled(true);
                         moveGoogleMapToLocation(Double.valueOf(listGoogleServiceResponse.body().getResults().get(0).getGeometry().getLocation().getLat()), Double.valueOf(listGoogleServiceResponse.body().getResults().get(0).getGeometry().getLocation().getLng()));
                         SearchedAddress = listGoogleServiceResponse.body().getResults().get(0).getFormatted_address();
                     } else {

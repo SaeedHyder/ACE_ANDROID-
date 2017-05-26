@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.app.ace.R;
 import com.app.ace.entities.ResponseWrapper;
@@ -58,6 +59,8 @@ ImageView img_DetailedProfile;
     private AnyTextView txt_day;
     @InjectView(R.id.txt_time)
     private AnyTextView txt_time;
+    @InjectView(R.id.txt_noresult)
+    private TextView txt_noresult;
 
     @InjectView(R.id.txt_detailedS_ProfileName)
     private AnyTextView txt_detailedS_ProfileName;
@@ -125,6 +128,15 @@ ImageView img_DetailedProfile;
     }
 
     private void setTraineeScheduleData(TraineeScheduleEnt result) {
+
+        if (result.getSlots().size() <= 0) {
+            txt_noresult.setVisibility(View.VISIBLE);
+            lv_trauneeScheduleScreen.setVisibility(View.GONE);
+        }
+        else {
+            txt_noresult.setVisibility(View.GONE);
+            lv_trauneeScheduleScreen.setVisibility(View.VISIBLE);
+        }
         ImageLoader.getInstance().displayImage(result.getUser().getProfile_image(),img_DetailedProfile);
         txt_detailedS_ProfileName.setText(result.getUser().getFirst_name()
                 +" "+result.getUser().getLast_name());

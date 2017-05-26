@@ -2,10 +2,14 @@ package com.app.ace.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.app.ace.R;
@@ -25,15 +29,20 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+import static com.app.ace.global.AppConstants.trainer;
+
 /**
  * Created by khan_muhammad on 3/18/2017.
  */
 
-public class SettingsFragment extends BaseFragment implements View.OnClickListener {
+public class SettingsFragment extends BaseFragment implements View.OnClickListener{
     private static String NOTIFICATION_ON = "NOTIFICATION_ON";
     private static String PRIVATE_ACCOUNT = "PRIVATE_ACCOUNT";
     @InjectView(R.id.cb_english)
-    CheckBox cb_english;
+    private RadioButton cb_english;
+    @InjectView(R.id.cb_arabic)
+    private RadioButton cb_arabic;
+
     @InjectView(R.id.txt_logout)
     private AnyTextView txt_logout;
     @InjectView(R.id.txt_CurrentPassword)
@@ -73,8 +82,6 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         if (getArguments() != null) {
             notification_on = getArguments().getBoolean(NOTIFICATION_ON);
             private_account = getArguments().getBoolean(PRIVATE_ACCOUNT);
-        } else {
-            //user_id = prefHelper.getUserId();
         }
         return inflater.inflate(R.layout.fragments_settings, container, false);
     }
@@ -85,6 +92,8 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
         toggle_notifications.setChecked(notification_on);
         toggle_private_or_public.setChecked(private_account);
+        cb_english.setChecked(true);
+
         setListeners();
 
     }
@@ -94,7 +103,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         txt_logout.setOnClickListener(this);
         toggle_private_or_public.setOnClickListener(this);
         toggle_notifications.setOnClickListener(this);
-        cb_english.setOnClickListener(this);
+
     }
 
 
@@ -110,7 +119,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         titleBar.showSaveButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-loadingStarted();
+                loadingStarted();
                 updateSetting();
 
             }
@@ -123,7 +132,6 @@ loadingStarted();
         UpdatePassword();
         contactUs();
         NotificationStatus();
-        cb_english.setChecked(true);
 
     }
 
@@ -173,6 +181,7 @@ loadingStarted();
                 public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
                         loadingFinished();
+                        txt_contact_us_disc.setText("");
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
 
                     } else {
@@ -245,4 +254,6 @@ loadingStarted();
                 break;
         }
     }
+
+
 }

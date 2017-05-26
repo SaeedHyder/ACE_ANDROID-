@@ -380,7 +380,12 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 		super.onActivityResult(requestCode, resultCode, data);
 
 		try {
-			twitterLogin.onActivityResult(requestCode, resultCode, data);
+			if(resultCode != 1) {
+				twitterLogin.onActivityResult(requestCode, resultCode, data);
+			}
+			else{
+				UIHelper.showShortToastInCenter(getDockActivity(), "Twitter App not found");
+			}
 		}catch (Exception e){
 
 		}

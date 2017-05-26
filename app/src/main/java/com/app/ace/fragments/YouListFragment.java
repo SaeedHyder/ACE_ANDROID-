@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.app.ace.R;
 import com.app.ace.entities.FollowUser;
@@ -27,8 +28,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
-import static com.app.ace.R.string.comments;
-
 /**
  * Created by muniyemiftikhar on 4/4/2017.
  */
@@ -37,6 +36,8 @@ public class YouListFragment extends BaseFragment implements FollowService {
 
     @InjectView(R.id.listViewFollow)
     private ListView listView;
+    @InjectView(R.id.txt_noresult)
+    private TextView txt_noresult;
 
     private ArrayListAdapter<YouDataItem> adapter;
 
@@ -51,7 +52,7 @@ public class YouListFragment extends BaseFragment implements FollowService {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new ArrayListAdapter<YouDataItem>(getDockActivity(), new YouListItemBinder(this,getDockActivity()));
+        adapter = new ArrayListAdapter<YouDataItem>(getDockActivity(), new YouListItemBinder(this, getDockActivity()));
     }
 
     @Nullable
@@ -66,7 +67,7 @@ public class YouListFragment extends BaseFragment implements FollowService {
 
         //setListener();
         setData();
-       // getUserData();
+        // getUserData();
     }
 
     private void setData() {
@@ -80,9 +81,7 @@ public class YouListFragment extends BaseFragment implements FollowService {
 
                     setDataInNOtificationList(response.body().getResult());
 
-                }
-                else
-                {
+                } else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
 
@@ -99,23 +98,31 @@ public class YouListFragment extends BaseFragment implements FollowService {
 
         userCollection = new ArrayList<>();
 
-        for(UserNotificatoin item : result) {
+        if (result.size() <= 0) {
+            txt_noresult.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+        } else {
+            txt_noresult.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+        }
+
+        for (UserNotificatoin item : result) {
             try {
 
                 if (item.getAction_type().contains("post")) {
-                    userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), item.getPost().getPost_image(), item.getCreated_at(), item.getSender_id(), null));
+                    userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), item.getPost().getPost_image(), getDockActivity().getDate(item.getCreated_at()), item.getSender_id(), null));
 
                 } else {
-                    userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), null, item.getCreated_at(), item.getSender_id(), item.getIs_following()));
+                    userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), null, getDockActivity().getDate(item.getCreated_at()), item.getSender_id(), item.getIs_following()));
 
                 }
-            }catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
-        bindData(userCollection);
-    }}
+            bindData(userCollection);
+        }
+    }
 
    /* private void getUserData() {
 
@@ -162,37 +169,49 @@ public class YouListFragment extends BaseFragment implements FollowService {
     @Override
     public void followUser(String senderId, int position, int i) {
 
-            Call<ResponseWrapper<FollowUser>> callBack = webService.follow(
-                    prefHelper.getUserId(),
-                    senderId
-            );
+        Call<ResponseWrapper<FollowUser>> callBack = webService.follow(
+                prefHelper.getUserId(),
+                senderId
+        );
 
-            callBack.enqueue(new Callback<ResponseWrapper<FollowUser>>() {
-                @Override
-                public void onResponse(Call<ResponseWrapper<FollowUser>> call, Response<ResponseWrapper<FollowUser>> response) {
+        callBack.enqueue(new Callback<ResponseWrapper<FollowUser>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<FollowUser>> call, Response<ResponseWrapper<FollowUser>> response) {
 
-                    if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
 
-                    } else {
-                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                    }
-
+                } else {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
 
-                @Override
-                public void onFailure(Call<ResponseWrapper<FollowUser>> call, Throwable t) {
+            }
 
-                    UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+            @Override
+            public void onFailure(Call<ResponseWrapper<FollowUser>> call, Throwable t) {
 
-                }
-            });
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+
+            }
+        });
 
         YouDataItem updatedItem = (YouDataItem) adapter.getItem(position);
         updatedItem.setIsfollowing(String.valueOf(i));
-        adapter.add(updatedItem);
+        userCollection.remove(position);
+        userCollection.add(position, updatedItem);
+        adapter.clearList();
+        adapter.addAll(userCollection);
         adapter.notifyDataSetChanged();
+       /* YouDataItem updatedItem = (YouDataItem) adapter.getItem(position);
+        updatedItem.setIsfollowing(String.valueOf(i));
+        userCollection.remove(position);
+        userCollection.add(position,updatedItem);
+        adapter.clearList();
+        listView.setAdapter(adapter);
+        adapter.addAll(userCollection);
+        //   adapter.add(updatedItem);
+        adapter.notifyDataSetChanged();*/
     }
 
     @Override
@@ -229,8 +248,21 @@ public class YouListFragment extends BaseFragment implements FollowService {
 
         YouDataItem updatedItem = (YouDataItem) adapter.getItem(position);
         updatedItem.setIsfollowing(String.valueOf(i));
-        adapter.add(updatedItem);
+        userCollection.remove(position);
+        userCollection.add(position, updatedItem);
+        adapter.clearList();
+        adapter.addAll(userCollection);
         adapter.notifyDataSetChanged();
+
+      /*  YouDataItem updatedItem = (YouDataItem) adapter.getItem(position);
+        updatedItem.setIsfollowing(String.valueOf(i));
+        userCollection.remove(position);
+        userCollection.add(position,updatedItem);
+        adapter.clearList();
+        listView.setAdapter(adapter);
+        adapter.addAll(userCollection);
+     //   adapter.add(updatedItem);
+        adapter.notifyDataSetChanged();*/
 
     }
 }

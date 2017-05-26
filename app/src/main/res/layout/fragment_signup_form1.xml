@@ -28,7 +28,7 @@
                 android:id="@+id/iv_profile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 android:background="@drawable/upload_photo"/>
 
 
@@ -213,6 +213,7 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:maxLength="50"
+                
                 android:inputType="number|textNoSuggestions"
                 app:emptyAllowed="false"
                 android:textColorHint="@color/edittext_hint_color"

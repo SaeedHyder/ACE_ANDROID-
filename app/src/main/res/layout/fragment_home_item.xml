@@ -47,7 +47,7 @@
             android:id="@+id/iv_post_pic"
             android:layout_width="match_parent"
             android:layout_height="@dimen/x200"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:visibility="visible"
             android:src="@drawable/pic1" />
 

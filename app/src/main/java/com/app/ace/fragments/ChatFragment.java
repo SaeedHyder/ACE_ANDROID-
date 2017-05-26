@@ -25,7 +25,11 @@ import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.TitleBar;
 import com.google.gson.Gson;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -293,21 +297,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             if(PostPath!=null)
             {
 
+
                 if (msgEnt.getSender()!=null && msgEnt.getReceiver() != null && msgEnt.getMessage() !=null) {
                     collection.add(new ChatDataItem(msgEnt.getSender().getProfile_image(),
-                            PostPath, msgEnt.getMessage().getCreated_at(),
+                            PostPath, getDockActivity().getDate(msgEnt.getMessage().getCreated_at()),
                             msgEnt.getReceiver().getProfile_image(), msgEnt.getMessage().getMessage_text(),
-                            msgEnt.getMessage().getCreated_at(), isSender, msgEnt.getSender().getId()));
+                            getDockActivity().getDate(msgEnt.getMessage().getCreated_at()), isSender, msgEnt.getSender().getId()));
                 }
 
             }
             else {
+
                 if (msgEnt.getSender() != null && msgEnt.getReceiver() != null && msgEnt.getMessage() != null) {
 
                     collection.add(new ChatDataItem(msgEnt.getSender().getProfile_image(),
-                            msgEnt.getMessage().getMessage_text(), msgEnt.getMessage().getCreated_at(),
+                            msgEnt.getMessage().getMessage_text(),getDockActivity().getDate(msgEnt.getMessage().getCreated_at()),
                             msgEnt.getReceiver().getProfile_image(), msgEnt.getMessage().getMessage_text(),
-                            msgEnt.getMessage().getCreated_at(), isSender, msgEnt.getSender().getId()));
+                            getDockActivity().getDate(msgEnt.getMessage().getCreated_at()), isSender, msgEnt.getSender().getId()));
                 }
             }
 
@@ -364,7 +370,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
-
+        if(!receiverId.equals(prefHelper.getUserId())){
         titleBar.showHelpButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -379,7 +385,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         receiver_block
                          ,String.valueOf(isReceiver_mute)), "FriendsInfoFragment");
             }
-        });
+        });}
 
         //titleBar.setSubHeading(UserName);
     }
@@ -420,9 +426,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     }
                     else {
                         ArrayList<MsgEnt> msg = response.body().getResult();
-                        msg.get(0);
+                        msg.get(msg.size()-1);
 
-                        collection.add(new ChatDataItem(msg.get(0).getSender().getProfile_image(), msg.get(0).getMessage().getMessage_text(), msg.get(0).getCreated_at(), msg.get(0).getReceiver().getProfile_image(), msg.get(0).getMessage().getMessage_text(), msg.get(0).getCreated_at(), false, msg.get(0).getSender_id()));
+
+
+                        collection.add(new ChatDataItem(msg.get(msg.size()-1).getSender().getProfile_image(), msg.get(msg.size()-1).getMessage().getMessage_text(),getDockActivity().getDate(msg.get(msg.size()-1).getMessage().getCreated_at()), msg.get(msg.size()-1).getReceiver().getProfile_image(), msg.get(msg.size()-1).getMessage().getMessage_text(), getDockActivity().getDate(msg.get(msg.size()-1).getMessage().getCreated_at()), false, msg.get(msg.size()-1).getSender_id()));
                         bindData(collection);
                     }
                 }
@@ -443,4 +451,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
 
     }
+
+
 }

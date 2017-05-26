@@ -47,6 +47,11 @@ import com.kbeanie.imagechooser.api.IntentUtils;
 import com.kbeanie.imagechooser.api.VideoChooserListener;
 import com.kbeanie.imagechooser.api.VideoChooserManager;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 import roboguice.inject.InjectView;
 
 //import com.kbeanie.imagechooser.api.ChosenImages;
@@ -506,8 +511,8 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
                             } else {
                                 originalFilePath = video.getVideoFilePath().toString();
                                 thumbnailSmallFilePath = video.getThumbnailSmallPath().toString();
-                                Toast.makeText(getApplicationContext(), originalFilePath, Toast.LENGTH_LONG).show();
-                                Toast.makeText(getApplicationContext(), thumbnailSmallFilePath, Toast.LENGTH_LONG).show();
+                            //    Toast.makeText(getApplicationContext(), originalFilePath, Toast.LENGTH_LONG).show();
+                             //   Toast.makeText(getApplicationContext(), thumbnailSmallFilePath, Toast.LENGTH_LONG).show();
 
                                 imageSetter.setVideo(originalFilePath);
                             }
