@@ -43,6 +43,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+import static com.app.ace.R.id.edtTagLine;
 import static com.app.ace.R.id.txt_pref_training_gym;
 
 /**
@@ -197,6 +198,23 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         if (Speciality.isEmpty()){
             Speciality = prefHelper.getUser().getSpeciality();
         }
+        if(edtMobileNumber.getText().toString().length() < 13){
+            UIHelper.showShortToastInCenter(getDockActivity(), "Mobile Number should be 13 or more characters long");
+        }
+        else{
+
+            RegistrationResult result = prefHelper.getUser();
+            result.setFirst_name(firstName);
+            result.setLast_name(lastName);
+            result.setPhone_number(edtMobileNumber.getText().toString());
+            result.setUniversity(edtUniversity.getText().toString());
+            result.setEducation(Education);
+            result.setSpeciality(Speciality);
+            result.setGym_latitude(lat);
+            result.setGym_longitude(log);
+            result.setGym_address(txtGymLocatoin.getText().toString());
+            prefHelper.putUser(result);
+
         Call<ResponseWrapper<RegistrationResult>> callBack = webService.UpdateTrainer(
 
                 RequestBody.create(MediaType.parse("text/plain"),prefHelper.getUserId()),
@@ -221,7 +239,8 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
 
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                      //  UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                        getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(), "TrainerProfileFragment");
                     }
                     else {
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
@@ -240,7 +259,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
 
 
 
-    }
+    }}
 
     private void setListener() {
         btnChangeProfilePhoto.setOnClickListener(this);

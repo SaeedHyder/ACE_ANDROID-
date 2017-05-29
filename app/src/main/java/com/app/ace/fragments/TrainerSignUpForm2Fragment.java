@@ -900,7 +900,10 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
     public void onLocationSet(LatLng location, String formattedAddress) {
 
         txt_pref_training_gym.setText(formattedAddress);
+        if (formattedAddress !=null)
         gymLocation = formattedAddress;
+        else
+            gymLocation = "";
         lat = String.valueOf(location.latitude);
         log = String.valueOf(location.longitude);
         // Toast.makeText(getDockActivity(),location.toString(),Toast.LENGTH_LONG).show();

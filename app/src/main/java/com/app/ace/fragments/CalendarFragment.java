@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.app.ace.R;
+import com.app.ace.entities.AvailableSlot;
 import com.app.ace.entities.BookingSchedule;
 import com.app.ace.entities.CalenderEnt;
 import com.app.ace.entities.ResponseWrapper;
@@ -135,7 +136,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         super.onViewCreated(view, savedInstanceState);
         caldroidFragment = new CaldroidFragment();
         InitCalenderFragment(savedInstanceState);
-
+        btn_training_Search_Submit.setVisibility(View.GONE);
 
         // Attach to the activity
         txt_headerText.setText(GymAddress);
@@ -409,12 +410,13 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         //timings.add("Slots Avaliable");
         slots.clear();
         slots = result.getSlots();
+        ArrayList<AvailableSlot> availableSlots = result.getAvailable_slots();
      /*   ColorDrawable red = new ColorDrawable(getResources().getColor(R.color.red));
         ColorDrawable green = new ColorDrawable(Color.GREEN);
         ColorDrawable white = new ColorDrawable(Color.WHITE);*/
         timings.clear();
 
-        for (Slot item : slots) {
+        for (AvailableSlot item : availableSlots) {
             timings.add(item.getStartTime() + " to " + item.getEndTime());
 
         }
@@ -490,6 +492,8 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         });*/
 
 
+
+
         Calendar calender = Calendar.getInstance();
         if (!totaldate.isEmpty()) {
 
@@ -504,12 +508,14 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
            String currentDatestring = f.format(currentDate);
            String startdateString = f.format(date1);
            while (!currentDatestring.equals(startdateString)) {
-               calender.add(Calendar.DAY_OF_MONTH, numadd);
+
                numadd = 1;
-               currentDate = calender.getTime();
-               currentDatestring = f.format(currentDate);
+
                dateDrawableMap.put(calender.getTime(), red);
                dateTextDrawableMap.put(calender.getTime(), R.color.white);
+               calender.add(Calendar.DAY_OF_MONTH, 1);
+               currentDate = calender.getTime();
+               currentDatestring = f.format(currentDate);
                //calender.add(Calendar.DAY_OF_MONTH, 1);
            }
        }
@@ -522,19 +528,22 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
                String enddatestring = f.format(EndDate);
                String startdateString = f.format(date2);
                while (!startdateString.equals(enddatestring)) {
-                   calender.add(Calendar.DAY_OF_MONTH, numadd);
-                   numadd = 1;
+
                    date2 = calender.getTime();
                    startdateString = f.format(date2);
 
+
                    dateDrawableMap.put(calender.getTime(), red);
                    dateTextDrawableMap.put(calender.getTime(), R.color.white);
-                 //  calender.add(Calendar.DAY_OF_MONTH, 1);
+                   calender.add(Calendar.DAY_OF_MONTH, numadd);
+                   numadd = 1;
+                   //  calender.add(Calendar.DAY_OF_MONTH, 1);
                }
            }
         }
         setCustomResourceForDates();
         caldroidFragment.refreshView();
+
       /*  // Attach to the activity
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction t = fragmentManager.beginTransaction();
@@ -626,7 +635,11 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
             case R.id.btn_training_Search_Submit:
                 if (TotalArray == (calenderids.size()-1)) {
                     if (buildingTypes!=null && !buildingTypes.isEmpty()) {
+                        if (!calenderids.isEmpty())
                         setupDialog();
+                        else {
+                            UIHelper.showShortToastInCenter(getDockActivity(),"Trainer is not available ");
+                        }
                     }else{
                         UIHelper.showShortToastInCenter(getDockActivity(),"Select Training Type First");
                     }
@@ -637,6 +650,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
                 //getDockActivity().addDockableFragment(CalenderPopupDialogFragment.newInstance(), "CalenderPopupDialogFragment");
                 break;
             case R.id.btn_avaliablity:
+                btn_training_Search_Submit.setVisibility(View.VISIBLE);
                 trainerTimeSlots();
                 break;
         }

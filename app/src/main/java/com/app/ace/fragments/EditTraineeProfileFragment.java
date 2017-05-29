@@ -130,8 +130,15 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
             profile_picture = MultipartBody.Part.createFormData("profile_picture", profilePath,
                     RequestBody.create(MediaType.parse("image/*"), profilePic));
         }
+        if(edtMobileNumber.getText().toString().length() < 13){
+            UIHelper.showShortToastInCenter(getDockActivity(), "Mobile Number should be 13 or more characters long");
+        }
+        else{
         RegistrationResult result = prefHelper.getUser();
         result.setUser_status(edtTagLine.getText().toString());
+            result.setPhone_number(edtMobileNumber.getText().toString());
+            result.setFirst_name(firstName);
+            result.setLast_name(lastName);
         prefHelper.putUser(result);
         Call<ResponseWrapper<RegistrationResult>> callBack = webService.UpdateTrainee(
                 RequestBody.create(MediaType.parse("text/plain"),prefHelper.getUserId()),
@@ -150,7 +157,8 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                   // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(), "TrainerProfileFragment");
                 }
                 else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
@@ -167,7 +175,7 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
             }
         });
 
-}
+}}
 
     private void sp_Gender() {
         // Spinner Drop down elements

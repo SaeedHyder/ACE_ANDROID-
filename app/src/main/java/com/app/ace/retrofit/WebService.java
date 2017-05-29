@@ -365,7 +365,7 @@ public interface WebService {
 
     @GET("schedule/getTrainer/{trainer_id}")
     Call<ResponseWrapper<ArrayList<ScheduleEnt>>> getSchedule(
-            @Path("trainer_id") String user_id);
+            @Path("trainer_id") String trainer_id);
 
     @FormUrlEncoded
     @POST("schedule/get")

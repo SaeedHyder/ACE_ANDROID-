@@ -16,7 +16,7 @@ public class Booking {
 
     private Integer trainerId;
 
-    private String trainingType;
+    private String training_type;
 
     private String bookingStatus;
 
@@ -68,13 +68,6 @@ public class Booking {
         this.trainerId = trainerId;
     }
 
-    public String getTrainingType() {
-        return trainingType;
-    }
-
-    public void setTrainingType(String trainingType) {
-        this.trainingType = trainingType;
-    }
 
     public String getBookingStatus() {
         return bookingStatus;
@@ -102,6 +95,14 @@ public class Booking {
 
     public String getDeletedAt() {
         return deletedAt;
+    }
+
+    public String getTraining_type() {
+        return training_type;
+    }
+
+    public void setTraining_type(String training_type) {
+        this.training_type = training_type;
     }
 
     public void setDeletedAt(String deletedAt) {

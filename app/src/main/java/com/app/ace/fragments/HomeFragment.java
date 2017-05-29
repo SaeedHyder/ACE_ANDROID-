@@ -26,6 +26,7 @@ import com.app.ace.entities.HomeListDataEnt;
 import com.app.ace.entities.HomeResultEnt;
 import com.app.ace.entities.PostsEnt;
 import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.YouDataItem;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.CameraHelper;
@@ -50,6 +51,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
+
+import static com.app.ace.R.id.SearchTrainer_ListView;
+import static com.app.ace.R.id.txt_noresult;
 
 public class HomeFragment extends BaseFragment implements View.OnClickListener,
         MainActivity.ImageSetter, IOnLike, SetHomeUpdatedData {
@@ -190,6 +194,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
 
         dataCollection = new ArrayList<HomeListDataEnt>();
+
+        if (postsEntArrayList.size() <= 0) {
+            txt_no_data.setVisibility(View.VISIBLE);
+            gridView.setVisibility(View.GONE);
+        }
+        else {
+            txt_no_data.setVisibility(View.GONE);
+            gridView.setVisibility(View.VISIBLE);
+        }
 
         for (PostsEnt postsEnt : postsEntArrayList) {
             try {
@@ -649,13 +662,25 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     public void setUpdatedData(int position, String data, int likes, int comments) {
 
 
-        HomeListDataEnt updatedItem = (HomeListDataEnt) adapter.getItem(position);
+     /*   HomeListDataEnt updatedItem = (HomeListDataEnt) adapter.getItem(position);
         updatedItem.setIs_liked(data);
         updatedItem.setTotoal_likes(likes);
         updatedItem.setTotal_comments(comments);
 
         adapter.add(updatedItem);
 
+        adapter.notifyDataSetChanged();
+*/
+
+        HomeListDataEnt updatedItem = (HomeListDataEnt) adapter.getItem(position);
+        updatedItem.setIs_liked(data);
+        updatedItem.setTotoal_likes(likes);
+        updatedItem.setTotal_comments(comments);
+
+        dataCollection.remove(position);
+        dataCollection.add(position, updatedItem);
+        adapter.clearList();
+        adapter.addAll(dataCollection);
         adapter.notifyDataSetChanged();
 
 

@@ -54,6 +54,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+import static com.app.ace.R.id.map;
 import static java.lang.Integer.parseInt;
 
 
@@ -157,6 +158,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
         getSavedSchedule(prefHelper.getUserId());
         days = DaysOfMonth(monthValue);
+
         setDatePickerVariables();
 
         setEndTimeSpinner();
@@ -442,12 +444,17 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
                 //  trainingBookingListItemBinder.getTimeArray();
                 // setDataInJson(trainingBookingListItemBinder.getTimeArray());
-
+                if (dateSpecified == null){
+                    UIHelper.showShortToastInCenter(getDockActivity(),"Please Select a Starting Date");
+                }
+                else{
                 Map<Integer, String> map = new TreeMap<Integer, String>(ScheduleHashMap);
-                if (!map.isEmpty())
-
+                if (!map.isEmpty()&&map.size()>1)
                     setDataInJson(map);
+                else
+                    UIHelper.showShortToastInCenter(getDockActivity(),"Please Enter Proper Schedule before adding it ");
                 //createTrainerSchedule(trainerBookingCalendarJsonCollection);
+                }
             }
         });
         titleBar.setSubHeading(getString(R.string.Trainer_Calendar));
@@ -790,7 +797,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
             if (days.contains(getString(R.string.two_Week))) {
                 Calendar enddate = Calendar.getInstance();
                 enddate.setTime(dateSpecified);
-                enddate.add(Calendar.DAY_OF_MONTH, 14);
+                enddate.add(Calendar.DAY_OF_MONTH, 13);
                 EndDate = enddate.getTime();
             }
 
@@ -967,7 +974,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                         AnyTextView pretextView = (AnyTextView)textView.getTag();
                         if (pretextView!=null){
                             if (pretextView.getText().toString().equals(itemPosition)){
-                                UIHelper.showShortToastInCenter(getDockActivity(),"You Canot Add this");
+                                UIHelper.showShortToastInCenter(getDockActivity(),"End Time not be same as Start Time");
                             }
                             else {
                                 textView.setText(itemPosition);
@@ -996,7 +1003,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                     AnyTextView pretextView = (AnyTextView) textView.getTag();
                     if (pretextView!=null){
                         if (pretextView.getText().toString().equals(itemPosition)){
-                            UIHelper.showShortToastInCenter(getDockActivity(),"You Canot Add this");
+                            UIHelper.showShortToastInCenter(getDockActivity(),"End Time not be same as Start Time");
                         }
                         else {
                             textView.setText(itemPosition);
