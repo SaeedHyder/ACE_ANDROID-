@@ -8,10 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.app.ace.R;
 import com.app.ace.entities.ResponseWrapper;
@@ -31,6 +34,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+import static com.app.ace.R.id.edit_sendTo;
 import static com.app.ace.fragments.CommentSectionFragment.POSTID;
 
 
@@ -83,9 +87,9 @@ public class SharePopUpfragment extends BaseFragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_share_pop, container, false);
+        final View view = inflater.inflate(R.layout.fragment_share_pop, container, false);
         SharePopup=view;
-        getNewMsgUserData(view);
+
        // getUserData();
 
         // getUserData();
@@ -108,7 +112,17 @@ public class SharePopUpfragment extends BaseFragment implements View.OnClickList
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setListener();
-        tv_Search.addTextChangedListener(this);
+
+
+        tv_Search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    getNewMsgUserData(SharePopup);
+                }
+                return false;
+            }
+        });
 
     }
 
@@ -117,15 +131,12 @@ public class SharePopUpfragment extends BaseFragment implements View.OnClickList
     private void setListener() {
 
         btn_Cancel.setOnClickListener(this);
+        tv_Search.addTextChangedListener(this);
     }
 
     private void getNewMsgUserData(final View view) {
-        String search;
-        if(tv_Search!=null) search = tv_Search.getText().toString();
-        else search="";
 
-
-            Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(search, AppConstants.trainer);
+            Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchAllUsers(tv_Search.getText().toString());
 
             callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
                 @Override

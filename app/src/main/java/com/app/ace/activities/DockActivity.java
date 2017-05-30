@@ -204,6 +204,7 @@ public abstract class DockActivity extends RoboFragmentActivity implements
         if (getSupportFragmentManager() == null)
             return;
         getSupportFragmentManager().popBackStack();
+
     }
 
     public abstract void onMenuItemActionCalled(int actionId, String data);

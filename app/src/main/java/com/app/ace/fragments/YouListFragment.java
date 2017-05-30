@@ -100,17 +100,22 @@ public class YouListFragment extends BaseFragment implements FollowService {
         userCollection = new ArrayList<>();
 
         for(UserNotificatoin item : result) {
-            if(item.getAction_type().contains("post")) {
+            try {
 
-                userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), item.getPost().getPost_image(),item.getCreated_at(),item.getSender_id(),null));
-            }
-            else
+                if (item.getAction_type().contains("post")) {
+                    userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), item.getPost().getPost_image(), item.getCreated_at(), item.getSender_id(), null));
+
+                } else {
+                    userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), null, item.getCreated_at(), item.getSender_id(), item.getIs_following()));
+
+                }
+            }catch (Exception e)
             {
-                userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(),null,item.getCreated_at(), item.getSender_id(),item.getIs_following()));
+                e.printStackTrace();
             }
-            }
+
         bindData(userCollection);
-    }
+    }}
 
    /* private void getUserData() {
 

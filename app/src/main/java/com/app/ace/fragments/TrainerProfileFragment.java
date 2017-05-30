@@ -154,7 +154,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        loadingStarted();
         if (getArguments() != null) {
             user_id = getArguments().getString(USER_ID);
         } else {
@@ -182,6 +182,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         scrollView.setVisibility(View.INVISIBLE);
+        loadingFinished();
         setListener();
         showProfiles();
 
@@ -228,6 +229,15 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             btn_follow.setVisibility(View.GONE);
                             btn_Unfollow.setVisibility(View.GONE);
                             btn_request.setVisibility(View.GONE);
+                            rbAddRating.setOnTouchListener(new View.OnTouchListener() {
+                                @Override
+                                public boolean onTouch(View view, MotionEvent motionEvent) {
+                                    rbAddRating.setFocusable(false);
+                                    return true;
+                                }
+                            });
+
+
 
                         }
                         if (response.body().getResult().getUser_type().equalsIgnoreCase(prefHelper.getUser().getUser_type())) {
@@ -597,7 +607,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 break;
 
             case R.id.iv_Home:
-
+                getDockActivity().popBackStackTillEntry(0);
                 getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
                 // rating();
                 break;

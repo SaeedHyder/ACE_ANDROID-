@@ -105,7 +105,6 @@ public class DialogBox extends RoboDialogFragment implements View.OnClickListene
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-      //  setStyle(STYLE_NO_FRAME, android.R.style.Theme_Holo_Light);
     }
 
     @Nullable

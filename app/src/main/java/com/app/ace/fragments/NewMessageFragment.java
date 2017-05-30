@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,6 +39,7 @@ import roboguice.inject.InjectView;
 
 import static android.R.attr.filter;
 import static android.R.attr.key;
+import static com.app.ace.R.id.listView;
 import static com.app.ace.R.id.txt_noresult;
 
 /**
@@ -93,12 +95,14 @@ public class NewMessageFragment extends BaseFragment implements TextWatcher {
             }
         });
 
+        ListViewItemListner();
+
        // getNewMsgUserData();
     }
 
     private void getNewMsgUserData() {
         if (edit_sendTo != null) {
-            Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edit_sendTo.getText().toString(), AppConstants.trainer);
+            Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchAllUsers(edit_sendTo.getText().toString());
 
             callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
                 @Override
@@ -141,6 +145,18 @@ public class NewMessageFragment extends BaseFragment implements TextWatcher {
         adapter.addAll(userCollection);
         adapter.notifyDataSetChanged();
 
+    }
+
+    private void ListViewItemListner() {
+
+        lv_newMessage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+                String UserName=userCollection.get(i).getFirst_name()+" "+userCollection.get(i).getLast_name();
+                getDockActivity().addDockableFragment(NewMsgChat_Screen_Fragment.newInstance(userCollection.get(i).getId(),UserName), "NewMsgChat_Screen_Fragment");
+                //  getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(userCollection.get(i).));
+            }
+        });
     }
 
 

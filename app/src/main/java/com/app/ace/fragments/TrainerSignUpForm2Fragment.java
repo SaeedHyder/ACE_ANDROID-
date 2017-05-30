@@ -866,6 +866,7 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
         if(filePath != null){
             resume = new File(filePath);
             resumePath=filePath;
+            txt_browse_cv.setText(filePath);
             //Toast.makeText(getDockActivity(),cvFile.toString(),Toast.LENGTH_LONG).show();
            // txt_browse_cv.setText(cvFile.toString());
 

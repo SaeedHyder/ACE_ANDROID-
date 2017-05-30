@@ -96,8 +96,18 @@ public class ForgotPasswordFragment extends BaseFragment implements View.OnClick
                     call.enqueue(new Callback<ResponseWrapper>() {
                         @Override
                         public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
-                            loadingFinished();
-                            showForgotPasswordDialog();
+
+                            if(response.body().getMessage().contains("new password"))
+                            {
+                                loadingFinished();
+                                showForgotPasswordDialog();
+                            }
+                            else
+                            {
+                                loadingFinished();
+                                UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                            }
+
                         }
 
                         @Override

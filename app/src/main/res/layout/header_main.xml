@@ -54,8 +54,8 @@
 
     <ImageView
         android:id="@+id/btnLeft"
-        android:layout_width="@dimen/x20"
-        android:layout_height="@dimen/x20"
+        android:layout_width="@dimen/x30"
+        android:layout_height="@dimen/x30"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/x10"
@@ -76,16 +76,16 @@
 
         <ImageView
             android:id="@+id/btnRight"
-            android:layout_width="@dimen/x20"
-            android:layout_height="@dimen/x20"
+            android:layout_width="@dimen/x30"
+            android:layout_height="@dimen/x30"
             android:scaleType="centerInside"
             android:src="@drawable/ic_launcher"
             android:visibility="gone" />
 
         <ImageView
             android:id="@+id/btnRight2"
-            android:layout_width="@dimen/x20"
-            android:layout_height="@dimen/x20"
+            android:layout_width="@dimen/x30"
+            android:layout_height="@dimen/x30"
             android:layout_marginLeft="@dimen/x20"
             android:layout_toRightOf="@id/btnRight"
             android:scaleType="centerInside"
@@ -94,8 +94,8 @@
 
         <ImageView
             android:id="@+id/btnRight3"
-            android:layout_width="@dimen/x20"
-            android:layout_height="@dimen/x20"
+            android:layout_width="@dimen/x30"
+            android:layout_height="@dimen/x30"
             android:layout_marginLeft="@dimen/x20"
             android:layout_toRightOf="@id/btnRight2"
             android:scaleType="centerInside"
@@ -117,8 +117,8 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="@dimen/x20"
-        android:layout_height="@dimen/x20"
+        android:layout_width="@dimen/x30"
+        android:layout_height="@dimen/x30"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/rel"
         android:layout_marginRight="@dimen/x5"
