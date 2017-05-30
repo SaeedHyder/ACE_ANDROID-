@@ -119,7 +119,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
             public void onClick(View v) {
 
                 viewHolder.vv_post_video.setVideoURI(uri);
-                viewHolder.vv_post_video.setMediaController(mediaController);
+               // viewHolder.vv_post_video.setMediaController(mediaController);
                 viewHolder.vv_post_video.start();
                 viewHolder.iv_playBtn.setVisibility(View.GONE);
 

@@ -315,14 +315,14 @@
 
         <com.app.ace.ui.views.AnyTextView
             android:id="@+id/txt_logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x25"
             android:layout_below="@+id/txt_logout"
             android:layout_marginBottom="@dimen/x20"
             android:layout_marginLeft="@dimen/x15"
             android:layout_marginTop="@dimen/x15"
             android:alpha="0.8"
-            android:gravity="center"
+            android:gravity="left"
             android:text="@string/log_out"
             android:textColor="@color/black"
             android:textSize="@dimen/x15"

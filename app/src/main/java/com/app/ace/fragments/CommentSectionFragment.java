@@ -1,6 +1,12 @@
 package com.app.ace.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +33,8 @@ import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -190,8 +198,25 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
     @Override
     public void onReplyClicked(CommentsSectionItemsEnt ShowName) {
 
+
         String name = ShowName.getNameCommentor().toLowerCase();
-        et_CommentBar.setText("@"+name);
+        SpannableString spString = new SpannableString(name);
+        //spString.setSpan(new ForegroundColorSpan(Color.MAGENTA),0,name.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ForegroundColorSpan fcs = new ForegroundColorSpan( Color.GREEN);
+        String s1 = spString.toString();
+
+        Pattern pattern = Pattern.compile("\\b"+name+"\\b");
+        Matcher matcher = pattern.matcher(s1);
+
+// keeps on searching unless there is no more function string found
+        while (matcher.find()) {
+            spString.setSpan(
+                    fcs,
+                    matcher.start(),
+                    matcher.end(),
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        et_CommentBar.setText("@"+spString+": ");
         et_CommentBar.setTag(ShowName.getUser_id());
     }
 

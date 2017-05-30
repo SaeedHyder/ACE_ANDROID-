@@ -314,6 +314,8 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
             Calendar enddate = Calendar.getInstance();
             enddate.setTime(date);
             enddate.add(Calendar.DAY_OF_MONTH, 13);
+
+
             EndDate = enddate.getTime();
         }
 
@@ -321,18 +323,21 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
             Calendar enddate = Calendar.getInstance();
             enddate.setTime(date);
             enddate.add(Calendar.MONTH, 1);
+
             EndDate = enddate.getTime();
         }
         if (days.contains(getString(R.string.three_Months))) {
             Calendar enddate = Calendar.getInstance();
             enddate.setTime(date);
             enddate.add(Calendar.MONTH, 3);
+
             EndDate = enddate.getTime();
         }
         if (days.contains(getString(R.string.Six_Months))) {
             Calendar enddate = Calendar.getInstance();
             enddate.setTime(date);
             enddate.add(Calendar.MONTH, 6);
+
             EndDate = enddate.getTime();
         }
 
@@ -410,6 +415,14 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         //timings.add("Slots Avaliable");
         slots.clear();
         slots = result.getSlots();
+        if (slots.isEmpty()){
+            UIHelper.showShortToastInCenter(getDockActivity(),"Trainer is not Available during this Period");
+            calenderids.clear();
+            caldroidFragment.clearSelectedDates();
+            caldroidFragment.clearDisableDates();
+            caldroidFragment.refreshView();
+
+        }
         ArrayList<AvailableSlot> availableSlots = result.getAvailable_slots();
      /*   ColorDrawable red = new ColorDrawable(getResources().getColor(R.color.red));
         ColorDrawable green = new ColorDrawable(Color.GREEN);
@@ -445,6 +458,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void showDateinCalender(String timeSlot) {
+
         Drawable green = getResources().getDrawable(R.drawable.booked);
         Drawable white = getResources().getDrawable(R.drawable.available);
         Drawable red = getResources().getDrawable(R.drawable.not_available);
@@ -471,9 +485,15 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
                         dateDrawableMap.put(date, green);
                         dateTextDrawableMap.put(date, R.color.white);
                     } else {
-                        calenderids.add(new CalenderEnt(item.getId()));
-                        dateDrawableMap.put(date, white);
-                        dateTextDrawableMap.put(date, R.color.black);
+
+                        if (dateDrawableMap.containsKey(date)){
+
+                        }else{
+                            calenderids.add(new CalenderEnt(item.getId()));
+                            dateDrawableMap.put(date, white);
+                            dateTextDrawableMap.put(date, R.color.black);
+                        }
+
 
                     }
                 }
@@ -502,7 +522,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
             Map.Entry<Date,Drawable> entry=dateDrawableMap.entrySet().iterator().next();
        if (entry.getKey() !=null){
            Date date1 =entry.getKey();
-           Date currentDate = new Date();
+           Date currentDate = startDate;
            int numadd =0;
            SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
            String currentDatestring = f.format(currentDate);
@@ -521,8 +541,9 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
        }
             Map.Entry<Date,Drawable> lastentry = entries.get(entries.size()-1);
            if (lastentry.getKey()!=null){
-               Date date2 = lastentry.getKey(); //totaldate.get(totaldate.size() - 1);
+               Date date2 = lastentry.getKey();//totaldate.get(totaldate.size() - 1);
                calender.setTime(date2);
+               calender.add(Calendar.DAY_OF_MONTH, 1);
                int numadd =0;
                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
                String enddatestring = f.format(EndDate);
@@ -633,7 +654,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         // TODO Auto-generated method stub
         switch (v.getId()) {
             case R.id.btn_training_Search_Submit:
-                if (TotalArray == (calenderids.size()-1)) {
+                if (dateDrawableMap.size() == (calenderids.size())) {
                     if (buildingTypes!=null && !buildingTypes.isEmpty()) {
                         if (!calenderids.isEmpty())
                         setupDialog();

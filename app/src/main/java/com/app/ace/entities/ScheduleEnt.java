@@ -3,8 +3,6 @@ package com.app.ace.entities;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-
 /**
  * Created on 5/15/2017.
  */
@@ -70,7 +68,7 @@ public class ScheduleEnt {
     private UserProfile trainer;
     @SerializedName("bookings")
     @Expose
-    private ArrayList<Booking> bookings = null;
+    private Booking bookings = null;
 
     public Integer getId() {
         return id;
@@ -224,11 +222,11 @@ public class ScheduleEnt {
         this.trainer = trainer;
     }
 
-    public ArrayList<Booking> getBookings() {
+    public Booking getBookings() {
         return bookings;
     }
 
-    public void setBookings(ArrayList<Booking> bookings) {
+    public void setBookings(Booking bookings) {
         this.bookings = bookings;
     }
 

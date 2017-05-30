@@ -2,16 +2,25 @@ package com.app.ace.helpers;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.MediaController;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.app.ace.R;
+import com.app.ace.fragments.abstracts.BaseFragment;
+import com.github.chrisbanes.photoview.PhotoView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.squareup.timessquare.CalendarCellDecorator;
 import com.squareup.timessquare.CalendarPickerView;
 import com.squareup.timessquare.DefaultDayViewAdapter;
@@ -28,18 +37,23 @@ import java.util.List;
  * Created on 4/27/2017.
  */
 
-public class DialogHelper {
+public class DialogHelper  {
     Dialog dialog;
+
+    private ImageLoader imageLoader;
 int days = 1;
     CalendarPickerView calendarView;
     Date StartDate;
     public DialogHelper(Context context) {
         this.dialog = new Dialog(context);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
        /* */
     }
     public DialogHelper(Context context,boolean title) {
         this.dialog = new Dialog(context);
+
         if (title){
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         }
 
@@ -57,6 +71,63 @@ int days = 1;
     public Dialog initDialog(int layoutID) {
 
         this.dialog.setContentView(layoutID);
+
+        return this.dialog;
+    }
+
+    public Dialog playVideo(int layoutID, final Context context, String picpath)
+    {
+        this.dialog.setContentView(layoutID);
+       // loadingStarted();
+        final VideoView videoView =(VideoView) dialog.findViewById(R.id.vv_post_video);
+        final MediaController mediaController= new MediaController(context);
+        mediaController.setAnchorView(videoView);
+
+        final Uri uri=Uri.parse(picpath);
+        videoView.setKeepScreenOn(true);
+        videoView.setVideoURI(uri);
+        videoView.setBackgroundColor(R.color.black);
+      // videoView.setMediaController(mediaController);
+        videoView.start();
+
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                // TODO Auto-generated method stub
+                mp.start();
+                mp.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+                    @Override
+                    public void onVideoSizeChanged(MediaPlayer mp, int arg1,
+                                                   int arg2) {
+                        // TODO Auto-generated method stub
+
+                        videoView.setBackgroundColor(Color.TRANSPARENT);
+                      //  loadingFinished();
+                        UIHelper.showShortToastInCenter(context,"saeed");
+                        mp.start();
+                    }
+                });
+            }
+        });
+       /* videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+            public void onPrepared(MediaPlayer mp) {
+                // TODO Auto-generated method stub
+              UIHelper.showShortToastInCenter(context,"saeed");
+            }
+        });
+*/
+
+
+        return this.dialog;
+    }
+
+    public Dialog postImage(int layoutID, Context context, String picpath)
+    {
+        this.dialog.setContentView(layoutID);
+        imageLoader = ImageLoader.getInstance();
+        PhotoView photoView = (PhotoView) dialog.findViewById(R.id.photo_view);
+        imageLoader.displayImage(picpath, photoView);
 
         return this.dialog;
     }

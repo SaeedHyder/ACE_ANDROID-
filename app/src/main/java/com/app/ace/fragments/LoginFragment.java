@@ -2,6 +2,7 @@ package com.app.ace.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -367,7 +368,12 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 			case R.id.btnSignin_Twitter:
 
 				if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()))
-					twitterLogin.performClick();
+
+
+
+
+
+				twitterLogin.performClick();
 
 				//getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
 
@@ -379,15 +385,27 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		try {
+		/*try {
 			if(resultCode != 1) {
 				twitterLogin.onActivityResult(requestCode, resultCode, data);
 			}
 			else{
+
 				UIHelper.showShortToastInCenter(getDockActivity(), "Twitter App not found");
 			}
 		}catch (Exception e){
 
+		}*/
+
+		try{
+			if(resultCode == 1) {
+				UIHelper.showShortToastInCenter(getDockActivity(), "Twitter App not found");
+			}
+
+			twitterLogin.onActivityResult(requestCode, resultCode, data);
+		}
+		catch (Exception e){
+			e.printStackTrace();
 		}
 
 	}
