@@ -11,7 +11,7 @@ import com.app.ace.ui.views.AnyTextView;
 
 public interface SetTimeDataOnTextView {
 
-    void setData(String itemPosition);
+    void setData(String itemPosition,int tag);
 
 
 }

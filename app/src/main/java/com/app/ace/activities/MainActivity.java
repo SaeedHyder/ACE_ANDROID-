@@ -510,11 +510,11 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
                                 // UIHelper.showAlertDialog("Video duration exceed its limit","UnSupportable Video",getApplicationContext());
                             } else {
                                 originalFilePath = video.getVideoFilePath().toString();
-                                thumbnailSmallFilePath = video.getThumbnailSmallPath().toString();
+                                thumbnailSmallFilePath = video.getVideoPreviewImage().toString();
                             //    Toast.makeText(getApplicationContext(), originalFilePath, Toast.LENGTH_LONG).show();
-                             //   Toast.makeText(getApplicationContext(), thumbnailSmallFilePath, Toast.LENGTH_LONG).show();
+                               // Toast.makeText(getApplicationContext(), thumbnailSmallFilePath, Toast.LENGTH_LONG).show();
 
-                                imageSetter.setVideo(originalFilePath);
+                                imageSetter.setVideo(originalFilePath,thumbnailSmallFilePath);
                             }
                         }
                     } catch (Exception e) {
@@ -683,7 +683,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
 
         public void setFilePath(String filePath);
 
-        public void setVideo(String videoPath);
+        public void setVideo(String videoPath,String VideoThumbail);
 
     }
 }

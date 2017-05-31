@@ -31,16 +31,19 @@ public class VideoViewFragment extends BaseFragment {
     VideoView vv_post_video;
     public static String PICPATH = "pic_path";
     String picPath;
+    public static String VIDEOTHUMBPATH = "video_thumb";
+    String videoThumb;
 
     public static VideoViewFragment newInstance() {
 
         return new VideoViewFragment();
     }
 
-    public static VideoViewFragment newInstance(String picpath) {
+    public static VideoViewFragment newInstance(String picpath, String post_thumb_image) {
 
         Bundle args = new Bundle();
         args.putString(PICPATH, String.valueOf(picpath));
+        args.putString(VIDEOTHUMBPATH,post_thumb_image);
         VideoViewFragment fragment = new VideoViewFragment();
         fragment.setArguments(args);
 
@@ -53,6 +56,7 @@ public class VideoViewFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             picPath = getArguments().getString(PICPATH);
+            videoThumb=getArguments().getString(VIDEOTHUMBPATH);
         }
     }
 

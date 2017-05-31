@@ -343,7 +343,7 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
     }
 
     @Override
-    public void setVideo(String videoPath) {
+    public void setVideo(String videoPath,String videothumb) {
 
     }
 }

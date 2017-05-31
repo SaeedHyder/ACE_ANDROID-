@@ -7,6 +7,7 @@ import android.widget.RelativeLayout;
 
 import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
+import com.app.ace.entities.profilePostEnt;
 import com.app.ace.fragments.HomeFragment;
 import com.app.ace.fragments.VideoViewFragment;
 import com.app.ace.helpers.DialogHelper;
@@ -18,7 +19,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * Created by khan_muhammad on 3/17/2017.
  */
 
-public class UserPicItemBinder extends ViewBinder<String> {
+public class UserPicItemBinder extends ViewBinder<profilePostEnt> {
     ImageClickListener clickListener;
     DockActivity dockActivity;
     private ImageLoader imageLoader;
@@ -38,16 +39,17 @@ public class UserPicItemBinder extends ViewBinder<String> {
     }
 
     @Override
-    public void bindView(final String picpath, int position, int grpPosition,
+    public void bindView(final profilePostEnt picpath, int position, int grpPosition,
                          View view, Activity activity) {
 
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        if (picpath.contains(".mp4"))
+        if (picpath.getPost_image().contains(".mp4"))
         {
             viewHolder.rl_video.setVisibility(View.VISIBLE);
             viewHolder.iv_pic.setVisibility(View.GONE);
+            imageLoader.displayImage(picpath.getPost_thumb_image(), viewHolder.iv_video);
 
             viewHolder.iv_video.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -55,7 +57,7 @@ public class UserPicItemBinder extends ViewBinder<String> {
                   /*  DialogHelper videoDialog=new DialogHelper(dockActivity);
                     videoDialog.playVideo(R.layout.videoplayer_fragment,dockActivity,picpath);
                     videoDialog.showDialog();*/
-                    dockActivity.addDockableFragment(VideoViewFragment.newInstance(picpath), "VideoViewFragment");
+                    dockActivity.addDockableFragment(VideoViewFragment.newInstance(picpath.getPost_image(),picpath.getPost_thumb_image()), "VideoViewFragment");
 
                 }
             });
@@ -64,14 +66,14 @@ public class UserPicItemBinder extends ViewBinder<String> {
         {
             viewHolder.rl_video.setVisibility(View.GONE);
             viewHolder.iv_pic.setVisibility(View.VISIBLE);
-            imageLoader.displayImage(picpath, viewHolder.iv_pic);
+            imageLoader.displayImage(picpath.getPost_image(), viewHolder.iv_pic);
 
             viewHolder.iv_pic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     DialogHelper postImage=new DialogHelper(dockActivity);
-                    postImage.postImage(R.layout.postimage_dialog,dockActivity,picpath);
+                    postImage.postImage(R.layout.postimage_dialog,dockActivity,picpath.getPost_image());
                     postImage.showDialog();
 
                 }

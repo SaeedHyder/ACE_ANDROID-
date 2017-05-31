@@ -56,22 +56,58 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/x200"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
 
         <VideoView
             android:id="@+id/vv_post_video"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/x200"
+            android:layout_height="match_parent"
             android:src="@drawable/pic1"
             android:visibility="visible"
-            android:gravity="center"
+            android:layout_gravity="center"
             android:scaleType="fitXY"
-            android:layout_gravity="center_horizontal"
+
             />
 
 
         </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_videoThumb"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x200"
+            >
+            <ImageView
+                android:id="@+id/iv_videoThumb"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x200"
+                android:scaleType="centerCrop"
+              />
+
+            <ImageView
+                android:id="@+id/iv_loading"
+                android:layout_width="@dimen/x60"
+                android:layout_height="@dimen/x60"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:indeterminate="true"
+                android:visibility="gone"
+                android:src="@drawable/loadingvideo"/>
+
+            <com.app.ace.ui.views.AnyTextView
+                android:id="@+id/txt_loading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Loading....."
+                android:textColor="@color/white"
+                android:textSize="@dimen/x18"
+             android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:textAlignment="center"
+                android:visibility="gone"
+                app:typeface="Roboto-Bold.ttf"/>
 
         <ImageView
             android:id="@+id/iv_playBtn"
@@ -80,8 +116,10 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:indeterminate="true"
-            android:visibility="visible"
+            android:visibility="gone"
             android:src="@drawable/playbutton"/>
+
+        </RelativeLayout>
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -92,7 +130,7 @@
             android:layout_centerVertical="true"
             android:indeterminate="true"
 
-            android:visibility="invisible" />
+            android:visibility="gone" />
 
     </RelativeLayout>
 

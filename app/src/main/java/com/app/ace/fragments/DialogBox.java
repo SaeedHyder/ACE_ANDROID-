@@ -18,6 +18,7 @@ import com.app.ace.activities.DockActivity;
 import com.app.ace.interfaces.SetTimeDataOnTextView;
 import com.app.ace.ui.adapters.GridListAdapter;
 import com.app.ace.ui.views.AnyTextView;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -58,11 +59,24 @@ public class DialogBox extends RoboDialogFragment implements View.OnClickListene
 
     SetTimeDataOnTextView setTimeDataOnTextView;
 
+    public static String TAG = "tag";
+    int tag=-1;
+
 
     public static DialogBox newInstance() {
         return new DialogBox();
     }
 
+    public static DialogBox newInstance(int tag)
+    {
+        Bundle args = new Bundle();
+        args.putInt(TAG,tag);
+        DialogBox fragment = new DialogBox();
+        fragment.setArguments(args);
+
+        return fragment;
+
+    }
     public void setDocActivityContext(DockActivity dockActivity)
     {
         this.dockActivity=dockActivity;
@@ -72,6 +86,7 @@ public class DialogBox extends RoboDialogFragment implements View.OnClickListene
     {
         this.setTimeDataOnTextView=setTimeDataOnTextView;
     }
+
 
 
     public void setbtndialog_1_Listener(View.OnClickListener ShowDialoButton) {
@@ -104,6 +119,11 @@ public class DialogBox extends RoboDialogFragment implements View.OnClickListene
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(getArguments()!=null)
+        {
+            tag=getArguments().getInt(TAG);
+        }
 
 
     }
@@ -165,7 +185,7 @@ public class DialogBox extends RoboDialogFragment implements View.OnClickListene
             case R.id.btn_show:
                 itemPosition=  adapter.getSelectedItem();
                 //dockActivity.addDockableFragment(TrainingBookingCalenderFragment.newInstance(itemPosition), "TrainingBookingCalenderFragment");
-                setTimeDataOnTextView.setData(itemPosition);
+                setTimeDataOnTextView.setData(itemPosition,tag);
                 DialogBox.this.dismiss();
                 // /Get the selected position
                 break;

@@ -23,6 +23,7 @@ import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.User;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.entities.post;
+import com.app.ace.entities.profilePostEnt;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.CameraHelper;
@@ -46,6 +47,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
+
+import static com.googlecode.mp4parser.authoring.tracks.H264TrackImpl.SliceHeader.SliceType.P;
 
 /**
  * Created by khan_muhammad on 3/17/2017.
@@ -132,8 +135,9 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     private AnyTextView txt_preffered_training_loc_dis;
     @InjectView(R.id.txt_avaliability_dis)
     private AnyTextView txt_avaliability_dis;
-    private ArrayListAdapter<String> adapter;
-    private List<String> dataCollection;
+    private ArrayListAdapter<profilePostEnt> adapter;
+    private List<profilePostEnt> dataCollection;
+
     private List<String> ImageCollection;
     private DockActivity activity;
     private ImageLoader imageLoader;
@@ -166,7 +170,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
 
         imageLoader = ImageLoader.getInstance();
-        adapter = new ArrayListAdapter<String>(getDockActivity(), new UserPicItemBinder(getDockActivity(),this));
+        adapter = new ArrayListAdapter<profilePostEnt>(getDockActivity(), new UserPicItemBinder(getDockActivity(),this));
 
         BaseApplication.getBus().register(this);
 
@@ -366,22 +370,26 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
     private void ShowUserPosts(ArrayList<post> userPost) {
 
-        dataCollection = new ArrayList<String>();
+        dataCollection = new ArrayList<profilePostEnt>();
         ImageCollection = new ArrayList<>();
-        for (post postsEnt : userPost) {
+        try {
+            for (post postsEnt : userPost) {
 
-
-            dataCollection.add(new String(postsEnt.getPost_image()));
-            if (!postsEnt.getPost_image().contains(".mp4"))
-            {
-                ImageCollection.add(new String(postsEnt.getPost_image()));
+                dataCollection.add(new profilePostEnt(postsEnt.getPost_image(), postsEnt.getPost_thumb_image()));
+                if (!postsEnt.getPost_image().contains(".mp4")) {
+                    ImageCollection.add(new String(postsEnt.getPost_image()));
+                }
             }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
         }
+
 
         bindData(dataCollection, 3);
     }
 
-    private void bindData(List<String> dataCollection, int noOfColumns) {
+    private void bindData(List<profilePostEnt> dataCollection, int noOfColumns) {
         adapter.clearList();
         gv_pics.setNumColumns(noOfColumns);
         adapter.addAll(dataCollection);

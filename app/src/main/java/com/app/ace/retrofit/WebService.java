@@ -203,7 +203,9 @@ public interface WebService {
     Call<ResponseWrapper<CreatePostEnt>> createPost(
             @Part("caption") RequestBody caption,
             @Part MultipartBody.Part image,
-            @Part("user_id") RequestBody user_id);
+            @Part("user_id") RequestBody user_id,
+            @Part MultipartBody.Part thumb_image
+            );
 
 
     @GET("user/{user_id}")
