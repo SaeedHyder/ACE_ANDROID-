@@ -148,7 +148,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/cancel_btn"
                     android:text="@string/cancel"
-                    android:layout_marginBottom="@dimen/x20"
+                    android:layout_marginBottom="@dimen/x28"
                     android:layout_marginLeft="@dimen/x35"
                     android:layout_marginRight="@dimen/x35"
                     android:clickable="true"/>

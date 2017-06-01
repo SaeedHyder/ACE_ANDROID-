@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.app.ace.R;
 import com.app.ace.entities.FollowingCountDataItem;
@@ -33,6 +34,8 @@ public class FollowingCountListFragment extends BaseFragment {
 
     @InjectView(R.id.listViewFollowingCount)
     private ListView listView;
+    @InjectView(R.id.txt_noresult)
+    private TextView txt_noresult;
 
     private ArrayListAdapter<FollowingCountDataItem> adapter;
 
@@ -88,6 +91,14 @@ public class FollowingCountListFragment extends BaseFragment {
     private void getFollowing(ArrayList<FollowingCountListEnt> followingCountListEntArrayList) {
 
         FollowingsuserCollection = new ArrayList<>();
+
+        if (followingCountListEntArrayList.size() <= 0) {
+            txt_noresult.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+        } else {
+            txt_noresult.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+        }
 
         for(FollowingCountListEnt msg : followingCountListEntArrayList){
 

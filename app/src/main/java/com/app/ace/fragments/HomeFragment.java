@@ -30,6 +30,7 @@ import com.app.ace.entities.YouDataItem;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.CameraHelper;
+import com.app.ace.helpers.TokenUpdater;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.IOnLike;
 import com.app.ace.interfaces.SetHomeUpdatedData;
@@ -59,6 +60,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         MainActivity.ImageSetter, IOnLike, SetHomeUpdatedData {
 
     public File postImage;
+    public File videoThumb;
     public boolean isNotificationTap = false;
     protected BroadcastReceiver broadcastReceiver;
     AnyTextView txt_Trainer;
@@ -180,6 +182,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         if (titleBar.isBadgeVisible()) {
             titleBar.addtoBadge(prefHelper.getBadgeCount());
         }
+        TokenUpdater.getInstance().UpdateToken(getDockActivity(), prefHelper.getUserId(), "android", prefHelper.getFirebase_TOKEN());
+
         // register GCM registration complete receiver
         LocalBroadcastManager.getInstance(getDockActivity()).registerReceiver(broadcastReceiver,
                 new IntentFilter(AppConstants.REGISTRATION_COMPLETE));
@@ -208,7 +212,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             try {
                 dataCollection.add(new HomeListDataEnt(Integer.parseInt(postsEnt.getLike_count()),
                         Integer.parseInt(postsEnt.getComment_count()), postsEnt.getCreator().getProfile_image(),
-                        postsEnt.getCreator().getFirst_name() + " " + postsEnt.getCreator().getLast_name(), postsEnt.getPost_image(), "Time Joe", "Hi nice", postsEnt.getUser_id(), postsEnt.getId(), postsEnt.getComment(), postsEnt.getIs_liked()));
+                        postsEnt.getCreator().getFirst_name() + " " + postsEnt.getCreator().getLast_name(), postsEnt.getPost_image(), "Time Joe", "Hi nice", postsEnt.getUser_id(), postsEnt.getId(), postsEnt.getComment(), postsEnt.getIs_liked(),postsEnt.getPost_thumb_image()));
             } catch (Exception e) {
                 bindData(dataCollection);
                 e.printStackTrace();
@@ -290,7 +294,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         } else {
             UserName = "";
         }
-
+        MultipartBody.Part thumbnail = null;
+        if(videoThumb!=null&&!videoThumb.toString().equals("")) {
+            thumbnail= MultipartBody.Part.createFormData("thumb_image", videoThumb.getName(), RequestBody.create(MediaType.parse("image/*"), videoThumb));
+        }
         MultipartBody.Part filePart;
 
         if (isImage) {
@@ -304,7 +311,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         Call<ResponseWrapper<CreatePostEnt>> callBack = webService.createPost(
                 RequestBody.create(MediaType.parse("text/plain"), UserName),
                 filePart,
-                RequestBody.create(MediaType.parse("text/plain"), UserId));
+                RequestBody.create(MediaType.parse("text/plain"), UserId),
+                thumbnail)
+                ;
 
         callBack.enqueue(new Callback<ResponseWrapper<CreatePostEnt>>() {
             @Override
@@ -421,7 +430,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
 
                 //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
-                if (prefHelper.getUser().getUser_type().equalsIgnoreCase("trainer")) {
+               if (prefHelper.getUser().getUser_type().equalsIgnoreCase("trainer")) {
                     getDockActivity().addDockableFragment(TrainingBookingCalenderFragment.newInstance(), "TrainingBookingCalenderFragment");
                 } else {
                     getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(), "TraineeScheduleFragment");
@@ -563,8 +572,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     }
 
     @Override
-    public void setVideo(String videoPath) {
+    public void setVideo(String videoPath,String videoThumbnail) {
 
+        if(videoThumbnail !=null)
+        {
+            videoThumb=new File(videoThumbnail);
+        }
         if (videoPath != null) {
             postImage = new File(videoPath);
             loadingStarted();

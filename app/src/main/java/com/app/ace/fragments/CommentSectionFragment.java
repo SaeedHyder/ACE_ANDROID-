@@ -1,9 +1,19 @@
 package com.app.ace.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextWatcher;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -27,6 +37,8 @@ import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,6 +63,8 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
 
     public static String POSTID = "post_id";
     String post_id;
+
+    Spannable tagName;
 
 
     private ArrayListAdapter<CommentsSectionItemsEnt> adapter;
@@ -95,6 +109,7 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
 
         ShowComments();
         setListener();
+
         //getUserData();
     }
 
@@ -190,12 +205,24 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
     @Override
     public void onReplyClicked(CommentsSectionItemsEnt ShowName) {
 
-        String name = ShowName.getNameCommentor().toLowerCase();
-        et_CommentBar.setText("@"+name);
+
+       final String name ="@"+ShowName.getNameCommentor().toLowerCase()+" " ;
+
+        et_CommentBar.setText(parseActiveReply(name,et_CommentBar.getText().toString()));
         et_CommentBar.setTag(ShowName.getUser_id());
+
+
     }
 
-
+    public SpannableString parseActiveReply(String name, String body) {
+        SpannableString sp = new SpannableString(name + " " + body);
+        sp.setSpan(new ForegroundColorSpan(Color.parseColor("#656565")), 0,
+                name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        // sp.setSpan(new ForegroundColorSpan(Color.parseColor("#5FADC7")), 0,
+        // 0,
+        // Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return sp;
+    }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {

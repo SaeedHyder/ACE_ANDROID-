@@ -109,6 +109,7 @@ dependencies {
     compile 'com.roomorama:caldroid:3.0.1'
     compile project(':aspectjrt-1.7.3')
     compile project(':isoparser-1.0.6')
+    compile 'com.github.chrisbanes:PhotoView:2.0.0'
 }
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'

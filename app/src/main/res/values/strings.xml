@@ -116,7 +116,7 @@
     <string name="cb_acsm">ACSM</string>
     <string name="cb_check">CHECK</string>
     <string name="cb_ace">ACE</string>
-    <string name="cb_aother_cirtifications">Other Cirtifications (Massege, Yoga, Pilates stc)</string>
+    <string name="cb_aother_cirtifications">Other Certifications (Massage, Yoga, Pilates stc)</string>
     <string name="cb_cpr">CPR/AED</string>
     <string name="university">University</string>
     <string name="pref_training_gym">Preferred Training Gym</string>
@@ -402,6 +402,7 @@
     <string name="Start_Time">Start Time</string>
     <string name="End_Time">End Time</string>
     <string name="Following">Following</string>
+    <string name="No_Trainer_Found">No Trainer Found</string>
 
     //Detailed Screen
 

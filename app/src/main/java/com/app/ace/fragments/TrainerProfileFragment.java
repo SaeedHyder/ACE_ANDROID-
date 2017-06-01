@@ -23,11 +23,13 @@ import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.User;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.entities.post;
+import com.app.ace.entities.profilePostEnt;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.UIHelper;
+import com.app.ace.interfaces.ImageClickListener;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.UserPicItemBinder;
 import com.app.ace.ui.views.AnyTextView;
@@ -35,6 +37,7 @@ import com.app.ace.ui.views.CustomRatingBar;
 import com.app.ace.ui.views.ExpandableGridView;
 import com.app.ace.ui.views.TitleBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,11 +48,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+import static com.googlecode.mp4parser.authoring.tracks.H264TrackImpl.SliceHeader.SliceType.P;
+
 /**
  * Created by khan_muhammad on 3/17/2017.
  */
 
-public class TrainerProfileFragment extends BaseFragment implements View.OnClickListener {
+public class TrainerProfileFragment extends BaseFragment implements View.OnClickListener ,ImageClickListener{
 
     public static String USER_ID = "User_Id";
     @InjectView(R.id.txt_tagline)
@@ -130,8 +135,10 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     private AnyTextView txt_preffered_training_loc_dis;
     @InjectView(R.id.txt_avaliability_dis)
     private AnyTextView txt_avaliability_dis;
-    private ArrayListAdapter<String> adapter;
-    private List<String> dataCollection;
+    private ArrayListAdapter<profilePostEnt> adapter;
+    private List<profilePostEnt> dataCollection;
+
+    private List<String> ImageCollection;
     private DockActivity activity;
     private ImageLoader imageLoader;
     private boolean isTrainer = false;
@@ -163,7 +170,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
 
         imageLoader = ImageLoader.getInstance();
-        adapter = new ArrayListAdapter<String>(getDockActivity(), new UserPicItemBinder());
+        adapter = new ArrayListAdapter<profilePostEnt>(getDockActivity(), new UserPicItemBinder(getDockActivity(),this));
 
         BaseApplication.getBus().register(this);
 
@@ -298,7 +305,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             imageLoader.displayImage(response.body().getResult().getProfile_image(), riv_profile_pic);
                             txt_education_cirtification_dis.setText(response.body().getResult().getEducation() + " " + response.body().getResult().getUniversity());
                             txt_preffered_training_loc_dis.setText(response.body().getResult().getGym_address());
-                            txt_avaliability_dis.setText(response.body().getResult().getGym_days() + " " + response.body().getResult().getGym_timing_from() + "-" + response.body().getResult().getGym_timing_to());
+                            txt_avaliability_dis.setText(response.body().getResult().getGym_days() + " " + response.body().getResult().getGym_timing_from() + " " + response.body().getResult().getGym_timing_to());
                             txt_postCount.setText(response.body().getResult().getPosts_count());
                             txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
                             txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
@@ -363,18 +370,26 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
     private void ShowUserPosts(ArrayList<post> userPost) {
 
-        dataCollection = new ArrayList<String>();
+        dataCollection = new ArrayList<profilePostEnt>();
+        ImageCollection = new ArrayList<>();
+        try {
+            for (post postsEnt : userPost) {
 
-        for (post postsEnt : userPost) {
-
-            dataCollection.add(new String(postsEnt.getPost_image()));
-
+                dataCollection.add(new profilePostEnt(postsEnt.getPost_image(), postsEnt.getPost_thumb_image()));
+                if (!postsEnt.getPost_image().contains(".mp4")) {
+                    ImageCollection.add(new String(postsEnt.getPost_image()));
+                }
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
         }
+
 
         bindData(dataCollection, 3);
     }
 
-    private void bindData(List<String> dataCollection, int noOfColumns) {
+    private void bindData(List<profilePostEnt> dataCollection, int noOfColumns) {
         adapter.clearList();
         gv_pics.setNumColumns(noOfColumns);
         adapter.addAll(dataCollection);
@@ -765,4 +780,8 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     }
 
 
+    @Override
+    public void OnImageListener(int position) {
+
+    }
 }

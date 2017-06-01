@@ -153,6 +153,7 @@ public class NewMessageFragment extends BaseFragment implements TextWatcher {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 String UserName=userCollection.get(i).getFirst_name()+" "+userCollection.get(i).getLast_name();
+                getDockActivity().popBackStackTillEntry(1);
                 getDockActivity().addDockableFragment(NewMsgChat_Screen_Fragment.newInstance(userCollection.get(i).getId(),UserName), "NewMsgChat_Screen_Fragment");
                 //  getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(userCollection.get(i).));
             }

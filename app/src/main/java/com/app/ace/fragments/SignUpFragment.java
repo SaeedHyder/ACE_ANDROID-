@@ -215,12 +215,17 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode != 1) {
+        try{
+            if(resultCode == 1) {
+                UIHelper.showShortToastInCenter(getDockActivity(), "Twitter App not found");
+            }
+
             twitterLogin.onActivityResult(requestCode, resultCode, data);
         }
-        else{
-            UIHelper.showShortToastInCenter(getDockActivity(), "Twitter App not found");
+        catch (Exception e){
+            e.printStackTrace();
         }
+
 
     }
 

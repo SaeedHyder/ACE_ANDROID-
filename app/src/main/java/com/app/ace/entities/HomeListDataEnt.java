@@ -25,10 +25,11 @@ public class HomeListDataEnt {
 
     int id;
     String is_liked;
+    String videoThumbnail;
     ArrayList<PostComment> commentsArray;
 
 
-    public HomeListDataEnt(int totoal_likes, int total_comments, String profile_pic_path, String profile_name, String profile_post_pic_path, String friend_name, String friend_comment, int user_id,int id, ArrayList<PostComment> commentsArray,String is_liked){
+    public HomeListDataEnt(int totoal_likes, int total_comments, String profile_pic_path, String profile_name, String profile_post_pic_path, String friend_name, String friend_comment, int user_id,int id, ArrayList<PostComment> commentsArray,String is_liked,String videoThumb){
 
         setTotoal_likes(totoal_likes);
         setTotal_comments(total_comments);
@@ -41,6 +42,7 @@ public class HomeListDataEnt {
         setId(id);
         setCommentsArray(commentsArray);
         setIs_liked(is_liked);
+        setVideoThumbnail(videoThumb);
 
 
 
@@ -76,6 +78,14 @@ public class HomeListDataEnt {
 
     public void setProfile_pic_path(String profile_pic_path) {
         this.profile_pic_path = profile_pic_path;
+    }
+
+    public String getVideoThumbnail() {
+        return videoThumbnail;
+    }
+
+    public void setVideoThumbnail(String videoThumbnail) {
+        this.videoThumbnail = videoThumbnail;
     }
 
     public String getProfile_name() {

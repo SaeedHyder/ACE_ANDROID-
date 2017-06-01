@@ -10,14 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center"
+
         android:layout_weight="1">
 
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
+           >
 
             <com.app.ace.ui.views.AnyTextView
                 android:id="@+id/txt_no_data"
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/off_white"
                 android:numColumns="1"
-                android:visibility="visible"></GridView>
+                android:visibility="visible"/>
 
         </FrameLayout>
 

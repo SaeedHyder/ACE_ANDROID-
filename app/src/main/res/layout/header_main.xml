@@ -16,8 +16,9 @@
             android:id="@+id/txt_subHead"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Template"
-            android:maxLength="18"
+            android:text="@string/education_and_cirtification"
+            android:maxLength="28"
+
             android:maxLines="1"
             android:textColor="@color/white"
             android:textSize="@dimen/x17"

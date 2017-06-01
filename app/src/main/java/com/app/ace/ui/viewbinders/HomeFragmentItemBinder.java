@@ -2,6 +2,8 @@ package com.app.ace.ui.viewbinders;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
@@ -51,6 +53,7 @@ import retrofit2.Response;
 
 import static com.app.ace.R.id.gridView;
 import static com.app.ace.R.id.txt_no_data;
+import static com.app.ace.R.id.vv_post_video;
 import static com.app.ace.global.AppConstants.user_id;
 
 /**
@@ -109,22 +112,28 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
         viewHolder.vv_post_video.setVisibility(View.VISIBLE);
         viewHolder.iv_post_pic.setVisibility(View.GONE);
         viewHolder.iv_playBtn.setVisibility(View.VISIBLE);
+        viewHolder.rl_videoThumb.setVisibility(View.VISIBLE);
 
         final MediaController mediaController= new MediaController(context);
         mediaController.setAnchorView(viewHolder.vv_post_video);
         final Uri uri=Uri.parse(homeListDataEnt.getProfile_post_pic_path());
         viewHolder.vv_post_video.setKeepScreenOn(true);
+        imageLoader.displayImage(homeListDataEnt.getVideoThumbnail(), viewHolder.iv_videoThumb);
+
         viewHolder.iv_playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                viewHolder.vv_post_video.setVideoURI(uri);
-                viewHolder.vv_post_video.setMediaController(mediaController);
-                viewHolder.vv_post_video.start();
+               // viewHolder.vv_post_video.setMediaController(mediaController);
+                //viewHolder.vv_post_video.start();
                 viewHolder.iv_playBtn.setVisibility(View.GONE);
+                viewHolder.iv_videoThumb.setVisibility(View.GONE);
+                viewHolder.vv_post_video.setVideoURI(uri);
+                viewHolder.vv_post_video.start();
 
             }
         });
+
 
     }
     else
@@ -277,7 +286,14 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
             @Override
             public void onClick(View v) {
                // UIHelper.showShortToastInCenter(context,context.getString(R.string.will_be_implemented));
-                context.addDockableFragment(SharePopUpfragment.newInstance(homeListDataEnt.getProfile_post_pic_path()), "SharePopUpfragment");
+                if(homeListDataEnt.getProfile_post_pic_path().contains(".mp4"))
+                {
+                    UIHelper.showShortToastInCenter(context,"Video Cant be Shared");
+                }
+                else{
+                    context.addDockableFragment(SharePopUpfragment.newInstance(homeListDataEnt.getProfile_post_pic_path()), "SharePopUpfragment");
+                }
+
             }
         });
 
@@ -307,6 +323,8 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
         private VideoView vv_post_video;
         AnyTextView txt_profileName,txt_likes_count,txt_commenter_Name,txt_comment,txt_view_all_comments;
         private ImageView iv_playBtn;
+        RelativeLayout rl_videoThumb;
+        ImageView iv_videoThumb;
 
         public ViewHolder(View view) {
 
@@ -327,6 +345,10 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
             txt_comment = (AnyTextView) view.findViewById(R.id.txt_comment);
 
             iv_playBtn=(ImageView)view.findViewById(R.id.iv_playBtn);
+            rl_videoThumb=(RelativeLayout)view.findViewById(R.id.rl_videoThumb);
+            iv_videoThumb=(ImageView)view.findViewById(R.id.iv_videoThumb);
+
+
 
 
         }

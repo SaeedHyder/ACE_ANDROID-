@@ -38,6 +38,8 @@ import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import org.apache.commons.lang3.Range;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,7 +56,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
-import static com.app.ace.R.id.map;
 import static java.lang.Integer.parseInt;
 
 
@@ -132,6 +133,11 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     private String spinerValue = "";//getString(R.string.two_Week);
     String textFrom;
     String check;
+    Boolean isclear = false;
+    Boolean slot2toedit = false;
+    Boolean slot2fromedit = false;
+    Boolean slot3toedit = false;
+    Boolean slot3fromedit = false;
 
     public static TrainingBookingCalenderFragment newInstance() {
 
@@ -247,9 +253,9 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
         return (int) (dp * scale + 0.5f);
     }
 
-    private void ShowRadioListDialog() {
+    private void ShowRadioListDialog(int id) {
 
-        final DialogBox successPopUp = DialogBox.newInstance();
+        final DialogBox successPopUp = DialogBox.newInstance(id);
         successPopUp.setDocActivityContext(getDockActivity());
         successPopUp.SetTimeDataOnTextViewContext(this);
         successPopUp.setPopupData(getString(R.string.select), true);
@@ -391,7 +397,6 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
                     loadingFinished();
-                    //UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                     showBookingDialog();
 
                 } else {
@@ -422,7 +427,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
             @Override
             public void onClick(View v) {
                 successPopUp.dismissDialog();
-                getDockActivity().popBackStackTillEntry(0);
+                getDockActivity().popBackStackTillEntry(1);
                 getDockActivity().addDockableFragment(TrainingBookingCalenderFragment.newInstance(), "TrainingBookingCalenderFragment");
             }
         });
@@ -444,16 +449,15 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
                 //  trainingBookingListItemBinder.getTimeArray();
                 // setDataInJson(trainingBookingListItemBinder.getTimeArray());
-                if (dateSpecified == null){
-                    UIHelper.showShortToastInCenter(getDockActivity(),"Please Select a Starting Date");
-                }
-                else{
-                Map<Integer, String> map = new TreeMap<Integer, String>(ScheduleHashMap);
-                if (!map.isEmpty()&&map.size()>1)
-                    setDataInJson(map);
-                else
-                    UIHelper.showShortToastInCenter(getDockActivity(),"Please Enter Proper Schedule before adding it ");
-                //createTrainerSchedule(trainerBookingCalendarJsonCollection);
+                if (dateSpecified == null) {
+                    UIHelper.showShortToastInCenter(getDockActivity(), "Please Select a Starting Date");
+                } else {
+                    Map<Integer, String> map = new TreeMap<Integer, String>(ScheduleHashMap);
+                    if (!map.isEmpty() && map.size() > 1)
+                        setDataInJson(map);
+                    else
+                        UIHelper.showShortToastInCenter(getDockActivity(), "Please Enter Proper Schedule before adding it ");
+                    //createTrainerSchedule(trainerBookingCalendarJsonCollection);
                 }
             }
         });
@@ -521,7 +525,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
             case R.id.txtTo:
                 if (dateSpecified != null) {
-                    ShowRadioListDialog();
+                    ShowRadioListDialog(R.id.txtTo);
                     textView = txtTo;
 
                     txtTo.addTextChangedListener(new TextWatcher() {
@@ -552,10 +556,10 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
             case R.id.txtFrom:
                 if (checkorder(null, txtTo, 2)) {
-                    ShowRadioListDialog();
+                    ShowRadioListDialog(R.id.txtFrom);
                     txtFrom.setTag(txtTo);
                     textView = txtFrom;
-                    textFrom= txtFrom.toString();
+                    textFrom = txtFrom.toString();
 
                     txtFrom.addTextChangedListener(new TextWatcher() {
 
@@ -573,62 +577,27 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                         @Override
                         public void afterTextChanged(Editable s) {
 
-                                checkorder(s, txtTo, 2);
-                                ShowRepeatButton();
+                            checkorder(s, txtTo, 2);
+                            ShowRepeatButton();
 
-                            }
+                        }
 
                     });
                 }
                 break;
 
             case R.id.SecondtxtTo:
-                if (checkprevious(txtTo, txtFrom)) {
+                if (!slot2toedit) {
+                    if (checkprevious(txtTo, txtFrom)) {
 
-                    ShowRadioListDialog();
-                    textView = SecondtxtTo;
+                        ShowRadioListDialog(R.id.SecondtxtTo);
+                        textView = SecondtxtTo;
 
-                    SecondtxtTo.addTextChangedListener(new TextWatcher() {
-
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                            alreadySelectedTime.remove(SecondtxtTo.getText().toString());
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-
-                            if (checkprevious(txtTo, txtFrom)) {
-
-
-                                addtoArray(s, 3);
-
-                            }
-                        }
-                    });
-                } else {
-                    UIHelper.showShortToastInCenter(getDockActivity(), "Please Fill in Order");
-                }
-
-                break;
-
-            case R.id.SecondtxtFrom:
-                if (checkprevious(txtTo, txtFrom)) {
-                    if (checkorder(null, SecondtxtTo, 4)) {
-                        ShowRadioListDialog();
-                        SecondtxtFrom.setTag(SecondtxtTo);
-                        textView = SecondtxtFrom;
-
-                        SecondtxtFrom.addTextChangedListener(new TextWatcher() {
-
+                        SecondtxtTo.addTextChangedListener(new TextWatcher() {
 
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                                alreadySelectedTime.remove(SecondtxtFrom.getText().toString());
+                                alreadySelectedTime.remove(SecondtxtTo.getText().toString());
                             }
 
                             @Override
@@ -641,12 +610,54 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                                 if (checkprevious(txtTo, txtFrom)) {
 
 
-                                    checkorder(s, SecondtxtTo, 4);
+                                    addtoArray(s, 3);
 
                                 }
                             }
                         });
+                    } else {
+                        UIHelper.showShortToastInCenter(getDockActivity(), "Please Fill in Order");
                     }
+                } else {
+                    UIHelper.showShortToastInCenter(getDockActivity(), "Select Start time from Slot 1 to edit");
+                }
+
+                break;
+
+            case R.id.SecondtxtFrom:
+                if (!slot2fromedit) {
+                    if (checkprevious(txtTo, txtFrom)) {
+                        if (checkorder(null, SecondtxtTo, 4)) {
+                            ShowRadioListDialog(R.id.SecondtxtFrom);
+                            SecondtxtFrom.setTag(SecondtxtTo);
+                            textView = SecondtxtFrom;
+
+                            SecondtxtFrom.addTextChangedListener(new TextWatcher() {
+
+
+                                @Override
+                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                    alreadySelectedTime.remove(SecondtxtFrom.getText().toString());
+                                }
+
+                                @Override
+                                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                }
+
+                                @Override
+                                public void afterTextChanged(Editable s) {
+
+                                    if (checkprevious(txtTo, txtFrom)) {
+                                    if (!slot2fromedit)
+                                        checkorder(s, SecondtxtTo, 4);
+
+                                    }
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    UIHelper.showShortToastInCenter(getDockActivity(), "Select Start time from Slot 1 to edit");
                 }
 
 
@@ -654,53 +665,19 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
 
             case R.id.ThirdtxtTo:
-                if (checkprevious(SecondtxtTo, SecondtxtFrom)) {
-                    ShowRadioListDialog();
-                    textView = ThirdtxtTo;
+                if (!slot3toedit) {
+                    if (checkprevious(SecondtxtTo, SecondtxtFrom)) {
+                        ShowRadioListDialog(R.id.ThirdtxtTo);
+                        textView = ThirdtxtTo;
 
-                    ThirdtxtTo.addTextChangedListener(new TextWatcher() {
-
-
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                            alreadySelectedTime.remove(ThirdtxtTo.getText().toString());
-                        }
-
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-
-                            if (checkprevious(SecondtxtTo, SecondtxtFrom)) {
-
-
-                                addtoArray(s, 5);
-
-                            }
-                        }
-                    });
-                } else {
-                    UIHelper.showShortToastInCenter(getDockActivity(), "Please Fill in Order");
-                }
-                break;
-
-            case R.id.ThirdtxtFrom:
-                if (checkprevious(SecondtxtTo, SecondtxtFrom)) {
-                    if (checkorder(null, ThirdtxtTo, 6)) {
-                        ShowRadioListDialog();
-                        ThirdtxtFrom.setTag(ThirdtxtTo);
-                        textView = ThirdtxtFrom;
-
-                        ThirdtxtFrom.addTextChangedListener(new TextWatcher() {
+                        ThirdtxtTo.addTextChangedListener(new TextWatcher() {
 
 
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                                alreadySelectedTime.remove(ThirdtxtFrom.getText().toString());
+                                alreadySelectedTime.remove(ThirdtxtTo.getText().toString());
                             }
+
 
                             @Override
                             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -710,13 +687,55 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                             public void afterTextChanged(Editable s) {
 
                                 if (checkprevious(SecondtxtTo, SecondtxtFrom)) {
-                                    checkorder(s, ThirdtxtTo, 6);
+
+
+                                    addtoArray(s, 5);
 
                                 }
                             }
-
                         });
+                    } else {
+                        UIHelper.showShortToastInCenter(getDockActivity(), "Please Fill in Order");
                     }
+                } else {
+                    UIHelper.showShortToastInCenter(getDockActivity(), "Select Start time from Slot 1 to edit");
+                }
+                break;
+
+            case R.id.ThirdtxtFrom:
+                if (!slot3fromedit) {
+                    if (checkprevious(SecondtxtTo, SecondtxtFrom)) {
+                        if (checkorder(null, ThirdtxtTo, 6)) {
+                            ShowRadioListDialog(R.id.ThirdtxtFrom);
+                            ThirdtxtFrom.setTag(ThirdtxtTo);
+                            textView = ThirdtxtFrom;
+
+                            ThirdtxtFrom.addTextChangedListener(new TextWatcher() {
+
+
+                                @Override
+                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                    alreadySelectedTime.remove(ThirdtxtFrom.getText().toString());
+                                }
+
+                                @Override
+                                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                }
+
+                                @Override
+                                public void afterTextChanged(Editable s) {
+
+                                    if (checkprevious(SecondtxtTo, SecondtxtFrom)) {
+                                        checkorder(s, ThirdtxtTo, 6);
+
+                                    }
+                                }
+
+                            });
+                        }
+                    }
+                } else {
+                    UIHelper.showShortToastInCenter(getDockActivity(), "Select Start time from Slot 1 to edit");
                 }
 
 
@@ -748,25 +767,24 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     private Boolean checkorder(Editable s, TextView txtview, Integer key) {
 
 
-
         if (txtview.getText().toString().isEmpty()) {
             UIHelper.showShortToastInCenter(getDockActivity(), "Please Fill in Start First");
             return false;
-        }
-
-        else {
-            if (s != null ) {
-                String[] time = txtview.getText().toString().split(":00");
-                int hour = Integer.parseInt(time[0]);
-                String[] time1 = s.toString().split(":00");
-                int hour1 = Integer.parseInt(time1[0]);
-                if (hour > hour1) {
-                    UIHelper.showShortToastInCenter(getDockActivity(), "End Time is Lesser then Start Time");
-                } else {
-                    addtoArray(s, key);
+        } else {
+            if (!isclear) {
+                if (s != null) {
+                    String[] time = txtview.getText().toString().split(":00");
+                    int hour = Integer.parseInt(time[0]);
+                    String[] time1 = s.toString().split(":00");
+                    int hour1 = Integer.parseInt(time1[0]);
+                    if (hour > hour1) {
+                        UIHelper.showShortToastInCenter(getDockActivity(), "End Time is Lesser then Start Time");
+                    } else {
+                        addtoArray(s, key);
+                    }
                 }
-            }
 
+            }
         }
         return true;
     }
@@ -942,30 +960,226 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
         return hours;
     }
 
+    private void cleartimeBoxfortxtfrom() {
+        isclear = true;
+        slot2toedit = true;
+        slot3toedit = true;
+        slot3fromedit = true;
+        slot2fromedit = true;
+
+        SecondtxtTo.setText(null);
+        SecondtxtFrom.setText(null);
+        ThirdtxtTo.setText(null);
+        ThirdtxtFrom.setText(null);
+        removefromhashmap(3);
+        removefromhashmap(4);
+        removefromhashmap(5);
+        removefromhashmap(6);
+        isclear = false;
+        slot2toedit = false;
+        slot3toedit = false;
+        slot3fromedit = false;
+        slot2fromedit = false;
+    }
+    private void removefromhashmap(Integer key){
+        if (ScheduleHashMap.containsKey(key)){
+            ScheduleHashMap.remove(key);
+        }
+    }
+
+    private void cleartimeBoxforall() {
+        isclear = true;
+        slot2toedit = true;
+        slot2fromedit = true;
+        slot3toedit = true;
+        slot3fromedit = true;
+        txtFrom.setText(null);
+        SecondtxtTo.setText(null);
+        SecondtxtFrom.setText(null);
+        ThirdtxtTo.setText(null);
+        ThirdtxtFrom.setText(null);
+        removefromhashmap(2);
+        removefromhashmap(3);
+        removefromhashmap(4);
+        removefromhashmap(5);
+        removefromhashmap(6);
+        isclear = false;
+        slot2toedit = false;
+        slot2fromedit = false;
+        slot3toedit = false;
+        slot3fromedit = false;
+
+    }
 
     @Override
-    public void setData(String itemPosition) {
+    public void setData(String itemPosition, int tag) {
 
         if (alreadySelectedTime.size() > 0) {
             arrayLastItem = alreadySelectedTime.get(alreadySelectedTime.size() - 1);
         }
 
         if (!itemPosition.isEmpty()) {
-            Calendar c= Calendar.getInstance();
+            Calendar c = Calendar.getInstance();
             Date date = c.getTime();
             String[] time = itemPosition.split(":00");
             int hour = Integer.parseInt(time[0]);
+            AnyTextView textView;
 
-
-            if(dateSpecified!=null) {
+            if (dateSpecified != null) {
                 if (DateHelper.isSameDay(dateSpecified, c.getTime()) && hour < date.getHours()) {
                     UIHelper.showShortToastInCenter(getDockActivity(), "Time is less then Current Time");
+                } else {
+
+                    int s1hour = txtTo.getText().toString().isEmpty() ? 0 : getHour(txtTo.getText().toString());
+                    int s2hour = txtFrom.getText().toString().isEmpty() ? 0 : getHour(txtFrom.getText().toString());
+                    int s3hour = SecondtxtTo.getText().toString().isEmpty() ? 0 : getHour(SecondtxtTo.getText().toString());
+                    int s4hour = SecondtxtFrom.getText().toString().isEmpty() ? 0 : getHour(SecondtxtFrom.getText().toString());
+                    int s5hour = ThirdtxtTo.getText().toString().isEmpty() ? 0 : getHour(ThirdtxtTo.getText().toString());
+                    int s6hour = ThirdtxtFrom.getText().toString().isEmpty() ? 0 : getHour(ThirdtxtFrom.getText().toString());
+                    switch (tag) {
+                        case R.id.txtTo:
+
+                            textView = (AnyTextView) this.textView;
+                            textView.setText(itemPosition);
+                            cleartimeBoxforall();
+
+                            break;
+                        case R.id.txtFrom:
+                            if (hour <= s1hour) {
+                                UIHelper.showShortToastInCenter(getDockActivity(), "End time is less then Start time");
+                            } else {
+                                textView = (AnyTextView) this.textView;
+                                textView.setText(itemPosition);
+                                cleartimeBoxfortxtfrom();
+                            }
+                            break;
+                        case R.id.SecondtxtTo:
+                            if (hour > s1hour && hour < s2hour) {
+                                UIHelper.showShortToastInCenter(getDockActivity(), "You already have that slot");
+                            } else {
+                                textView = (AnyTextView) this.textView;
+                                textView.setText(itemPosition);
+                                slot2toedit = true;
+                            }
+                            break;
+                        case R.id.SecondtxtFrom:
+                            if (!(hour > s1hour && hour < s2hour)) {
+                                if (hour <= s3hour)
+                                    UIHelper.showShortToastInCenter(getDockActivity(), "End time is less then Start time");
+                                else if (s3hour <= s1hour) {
+                                    if (hour > s1hour) {
+                                        UIHelper.showShortToastInCenter(getDockActivity(), "You already have that slot");
+                                    } else {
+                                        slot2fromedit = true;
+                                        textView = (AnyTextView) this.textView;
+                                        textView.setText(itemPosition);
+
+                                    }
+                                } else {
+                                    textView = (AnyTextView) this.textView;
+                                    textView.setText(itemPosition);
+                                    slot2fromedit = true;
+                                }
+                            } else {
+                                UIHelper.showShortToastInCenter(getDockActivity(), "You already have slot inbetween this time");
+                            }
+                            break;
+                        case R.id.ThirdtxtTo:
+                            if (hour > s1hour && hour < s2hour || hour > s3hour && hour < s4hour) {
+                                UIHelper.showShortToastInCenter(getDockActivity(), "You already have that slot");
+                            } else {
+                                textView = (AnyTextView) this.textView;
+                                textView.setText(itemPosition);
+                                slot3toedit = true;
+                            }
+
+                            break;
+                        case R.id.ThirdtxtFrom:
+                           /* if (!(hour > s1hour && hour < s2hour || hour > s3hour && hour < s4hour)) {
+                                if (hour <= s5hour)
+                                    UIHelper.showShortToastInCenter(getDockActivity(), "End time is less then Start time");
+                                else {
+                                    textView = (AnyTextView) this.textView;
+                                    textView.setText(itemPosition);
+                                }
+                            } else {
+                                UIHelper.showShortToastInCenter(getDockActivity(), "You already have slot inbetween this time");
+                            }*/
+                            if (!(hour > s1hour && hour < s2hour || hour > s3hour && hour < s4hour)) {
+                                if (hour <= s5hour)
+                                    UIHelper.showShortToastInCenter(getDockActivity(), "End time is less then Start time");
+                                else if (s5hour <= s3hour && s5hour <= s1hour) {
+                                    if (hour > s3hour || hour > s1hour) {
+                                        UIHelper.showShortToastInCenter(getDockActivity(), "You already have that slot");
+                                    } else {
+                                        textView = (AnyTextView) this.textView;
+                                        textView.setText(itemPosition);
+                                        slot3fromedit = true;
+                                    }
+
+                                } else if (s5hour <= s3hour) {
+                                    if (hour > s3hour) {
+                                        UIHelper.showShortToastInCenter(getDockActivity(), "You already have that slot");
+                                    } else {
+                                        textView = (AnyTextView) this.textView;
+                                        textView.setText(itemPosition);
+                                        slot3fromedit = true;
+                                    }
+                                } else {
+                                    textView = (AnyTextView) this.textView;
+                                    textView.setText(itemPosition);
+                                    slot3fromedit = true;
+                                }
+
+                            } else {
+                                UIHelper.showShortToastInCenter(getDockActivity(), "You already have slot inbetween this time");
+                            }
+                            break;
+
+                    }
                 }
 
-            else if (!arrayLastItem.equals("") && arrayLastItem.contains(itemPosition)) {
+            }
+        }
+    }
+
+    private boolean getslotrange(int start, int end, int hour) {
+        Range<Integer> myRange = Range.between(start, end);
+        return myRange.contains(hour);
+
+    }
+
+    private int getHour(String item) {
+        String[] time = item.split(":00");
+        int hour = Integer.parseInt(time[0]);
+        return hour;
+    }
+
+    @Override
+    public void Ondelete() {
+        getDockActivity().addDockableFragment(TrainingBookingCalenderFragment.newInstance(), "TrainingBookingCalenderFragment");
+    }
+
+    @Override
+    public void OndeleteTrainee(int position) {
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* else if (!arrayLastItem.equals("") && arrayLastItem.contains(itemPosition)) {
                 if (alreadySelectedTime.contains(itemPosition)) {
-                    /*String[] time = itemPosition.split(":00");
-                    int hour = Integer.parseInt(time[0]);*/
+                    String[] time = itemPosition.split(":00");
+                    int hour = Integer.parseInt(time[0]);
 
                     if (hour < LastSelectHour) {
                         UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.lesserTIme));
@@ -994,8 +1208,8 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
             } else if (!arrayLastItem.contains(itemPosition) && alreadySelectedTime.contains(itemPosition)) {
                 UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.differentTime));
             } else {
-              /*  String[] time = itemPosition.split(":00");
-                int hour = Integer.parseInt(time[0]);*/
+                String[] time = itemPosition.split(":00");
+                int hour = Integer.parseInt(time[0]);
                 if (hour < LastSelectHour) {
                     UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.lesser_then_previous));
                 } else {
@@ -1018,23 +1232,10 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                         LastSelectHour = Integer.parseInt(time[0]);
                     }
                 }
-            }}
-        }
-    }
+            }*/
 
 
-    @Override
-    public void Ondelete() {
-        getDockActivity().addDockableFragment(TrainingBookingCalenderFragment.newInstance(), "TrainingBookingCalenderFragment");
-    }
-
-    @Override
-    public void OndeleteTrainee(int position) {
-
-    }
-}
-
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
               /*  String[] days = Selecteddate.split(" ");

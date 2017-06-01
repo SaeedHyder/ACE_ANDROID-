@@ -27,6 +27,7 @@ public class PostsEnt {
     String like_count;
     String comment_count;
     String is_liked;
+    String post_thumb_image;
 
 
     ArrayList<PostComment> comment;
@@ -166,6 +167,14 @@ public class PostsEnt {
 
     public String getIs_liked() {
         return is_liked;
+    }
+
+    public String getPost_thumb_image() {
+        return post_thumb_image;
+    }
+
+    public void setPost_thumb_image(String post_thumb_image) {
+        this.post_thumb_image = post_thumb_image;
     }
 
     public void setIs_liked(String is_liked) {

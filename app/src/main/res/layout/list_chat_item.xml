@@ -104,6 +104,62 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/leftLayoutVideoChild"
+            android:layout_width="@dimen/x280"
+            android:layout_height="@dimen/x200"
+            android:background="@drawable/img_chat_sender"
+            android:paddingLeft="@dimen/x10"
+            android:paddingRight="@dimen/x10"
+            android:paddingTop="@dimen/x10"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_toRightOf="@id/userImage">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <VideoView
+                android:id="@+id/iv_postVideoLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/x160"
+
+                />
+
+            <ImageView
+                android:id="@+id/iv_playBtn"
+                android:layout_width="@dimen/x50"
+                android:layout_height="@dimen/x50"
+                android:indeterminate="true"
+                android:visibility="visible"
+                android:src="@drawable/playbutton"
+                android:layout_marginTop="@dimen/x53"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+
+                <com.app.ace.ui.views.AnyTextView
+                    android:id="@+id/txtSenderDateVideo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/iv_postVideoLeft"
+                    android:layout_marginTop="@dimen/x5"
+                    android:layout_gravity="right"
+                    android:layout_alignRight="@id/iv_postVideoLeft"
+                    android:paddingLeft="@dimen/x10"
+                    android:paddingRight="@dimen/x10"
+                    android:text="3 mins ago"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="@dimen/x12"
+                    android:layout_marginBottom="@dimen/x5"
+                    app:typeface="Roboto-Regular.ttf" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
 
     </RelativeLayout>
 
@@ -199,6 +255,62 @@
 
 
         </LinearLayout>
+
+   <LinearLayout
+    android:id="@+id/rightLayoutVideoChild"
+    android:layout_width="@dimen/x280"
+    android:layout_height="@dimen/x200"
+    android:background="@drawable/img_chat_sender"
+    android:paddingLeft="@dimen/x10"
+    android:paddingRight="@dimen/x10"
+    android:paddingTop="@dimen/x10"
+    android:gravity="right"
+    android:orientation="vertical"
+    android:visibility="gone"
+       android:layout_toLeftOf="@id/userImage2">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <VideoView
+            android:id="@+id/iv_postVideoRight"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/x160"
+
+            />
+
+        <ImageView
+            android:id="@+id/iv_playBtnRight"
+            android:layout_width="@dimen/x50"
+            android:layout_height="@dimen/x50"
+            android:indeterminate="true"
+            android:visibility="visible"
+            android:src="@drawable/playbutton"
+            android:layout_marginTop="@dimen/x53"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <com.app.ace.ui.views.AnyTextView
+            android:id="@+id/txtSenderDateVideoRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_postVideoRight"
+            android:layout_marginTop="@dimen/x5"
+            android:layout_gravity="right"
+            android:layout_alignRight="@id/iv_postVideoRight"
+            android:paddingLeft="@dimen/x10"
+            android:paddingRight="@dimen/x10"
+            android:text="3 mins ago"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x12"
+            android:layout_marginBottom="@dimen/x5"
+            app:typeface="Roboto-Regular.ttf" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>
 
     </RelativeLayout>
 

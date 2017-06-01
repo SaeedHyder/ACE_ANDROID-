@@ -283,7 +283,7 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
     }
 
     @Override
-    public void setVideo(String videoPath) {
+    public void setVideo(String videoPath,String videothumb) {
 
     }
 

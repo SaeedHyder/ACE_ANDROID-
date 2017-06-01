@@ -136,19 +136,17 @@ public class VarificationCodeFragment extends BaseFragment implements View.OnCli
         callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
-                try {
+
                     loadingFinished();
 
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-
+                        prefHelper.putUser(response.body().getResult());
                         showSignUpDialog();
 
                     } else {
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
             }
 
             @Override

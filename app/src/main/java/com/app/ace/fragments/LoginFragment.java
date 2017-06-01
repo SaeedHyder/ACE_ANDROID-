@@ -2,6 +2,7 @@ package com.app.ace.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -175,13 +176,13 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 				user.getUserId(),
 				AppConstants.twitter,
 				user.getUserPic(),
-				"132456",
+				prefHelper.getFirebase_TOKEN(),
 				"android");
 
 		callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
 			@Override
 			public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
-				try {
+
 					loadingFinished();
 					TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"android",prefHelper.getFirebase_TOKEN());
 					if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
@@ -215,9 +216,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 						showTwitterSignUpDialog(user);
 
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 			}
 
 			@Override
@@ -267,7 +265,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 		Call<ResponseWrapper<RegistrationResult>> callBack = webService.loginUser(
 				edtEmail.getText().toString(),
 				edtPassword.getText().toString(),
-				"132456",
+				prefHelper.getFirebase_TOKEN(),
 				"android");
 
 
@@ -276,7 +274,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 		callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
 			@Override
 			public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
-				try {
+
 					TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"android",prefHelper.getFirebase_TOKEN());
 					loadingFinished();
 
@@ -315,6 +313,10 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 						{
 							prefHelper.setUsrId(response.body().getResult().getId());
 							AppConstants.user_id = prefHelper.getUserId();
+							prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
+							prefHelper.setUsrId(response.body().getResult().getId());
+							prefHelper.setToken(response.body().getResult().get_token());
+							prefHelper.putUser(response.body().getResult());
 							getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name() ,response.body().getResult().getEmail()), "VarificationCodeFragment");
 
 						}else{
@@ -323,9 +325,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 
 
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+
 			}
 
 			@Override
@@ -367,7 +367,10 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 			case R.id.btnSignin_Twitter:
 
 				if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()))
-					twitterLogin.performClick();
+
+
+
+				twitterLogin.performClick();
 
 				//getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
 
@@ -379,16 +382,30 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		try {
+		try{
+			if(resultCode == 1) {
+				UIHelper.showShortToastInCenter(getDockActivity(), "Twitter App not found");
+			}
+
+			twitterLogin.onActivityResult(requestCode, resultCode, data);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+
+		/*try {
 			if(resultCode != 1) {
 				twitterLogin.onActivityResult(requestCode, resultCode, data);
 			}
 			else{
+
 				UIHelper.showShortToastInCenter(getDockActivity(), "Twitter App not found");
 			}
 		}catch (Exception e){
 
-		}
+		}*/
+
+
 
 	}
 }
