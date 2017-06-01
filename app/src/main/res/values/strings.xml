@@ -302,7 +302,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="to">To</string>
+    <string name="to">to</string>
     <string name="booking_summary_details">Booking Summary Details</string>
     <string name="title_activity_maps">Map</string>
 
