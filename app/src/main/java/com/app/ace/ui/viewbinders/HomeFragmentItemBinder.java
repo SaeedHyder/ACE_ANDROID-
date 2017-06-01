@@ -113,6 +113,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
         viewHolder.iv_post_pic.setVisibility(View.GONE);
         viewHolder.iv_playBtn.setVisibility(View.VISIBLE);
         viewHolder.rl_videoThumb.setVisibility(View.VISIBLE);
+        viewHolder.vv_post_video.stopPlayback();
 
         final MediaController mediaController= new MediaController(context);
         mediaController.setAnchorView(viewHolder.vv_post_video);

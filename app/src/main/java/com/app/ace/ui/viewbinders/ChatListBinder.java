@@ -20,6 +20,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.app.ace.R.id.txtSenderDateImage;
+
 /**
  * Created by khan_muhammad on 3/20/2017.
  */
@@ -52,6 +54,14 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
 
         ChatListBinder.ViewHolder viewHolder = (ChatListBinder.ViewHolder) view.getTag();
 
+        String[] senderTimeArray=entity.getSenderMessageTime().split(" ");
+        String senderTime=senderTimeArray[1];
+
+        String[] receiverTimeArray=  entity.getReceiverMessageTime().split(" ");
+        String receiverTime=receiverTimeArray[1];
+
+
+
         if(entity.isSender()){
             if(entity.getSenderMessage().contains("http"))
             {
@@ -62,7 +72,7 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
 
                 imageLoader.displayImage(entity.getSenderMessage(),viewHolder.iv_postPicLeft);
                 imageLoader.displayImage(entity.getSenderImage(), viewHolder.userImage);
-                viewHolder.txtSenderDate.setText(entity.getSenderMessageTime());
+                viewHolder.txtSenderDateImage.setText(senderTime);
 
             }
             else
@@ -75,7 +85,7 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
                 imageLoader.displayImage(entity.getSenderImage(), viewHolder.userImage);
 
                 viewHolder.txtSenderChat.setText(entity.getSenderMessage());
-                viewHolder.txtSenderDate.setText(entity.getSenderMessageTime());
+                viewHolder.txtSenderDate.setText(senderTime);
             }
 
         }
@@ -90,7 +100,7 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
                 imageLoader.displayImage(entity.getReceiverMessage(),viewHolder.iv_postPic);
                 imageLoader.displayImage(entity.getSenderImage(), viewHolder.userImage2);
                // viewHolder.txtReceiverChat.setText(entity.getReceiverMessage());
-                viewHolder.txtReceiverDate.setText(entity.getReceiverMessageTime());
+                viewHolder.txtReceiverDateImage.setText(receiverTime);
 
             }
             else {
@@ -101,7 +111,7 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
 
                 imageLoader.displayImage(entity.getSenderImage(), viewHolder.userImage2);
                 viewHolder.txtReceiverChat.setText(entity.getReceiverMessage());
-                viewHolder.txtReceiverDate.setText(entity.getReceiverMessageTime());
+                viewHolder.txtReceiverDate.setText(receiverTime);
             }
         }
 
@@ -142,6 +152,11 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
         private LinearLayout leftLayoutImageChild;
         private ImageView iv_postPicLeft;
 
+        private AnyTextView txtSenderDateImage;
+        private AnyTextView txtReceiverDateImage;
+
+
+
 
 
         public ViewHolder(View view) {
@@ -163,6 +178,11 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
             iv_postPicLeft=(ImageView) view.findViewById(R.id.iv_postPicLeft);
             leftLayoutChild=(LinearLayout) view.findViewById(R.id.leftLayoutChild);
             leftLayoutImageChild=(LinearLayout) view.findViewById(R.id.leftLayoutImageChild);
+
+            txtSenderDateImage = (AnyTextView) view.findViewById(R.id.txtSenderDateImage);
+            txtReceiverDateImage = (AnyTextView) view.findViewById(R.id.txtReceiverDateImage);
+
+
 
 
 
