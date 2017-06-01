@@ -80,7 +80,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/Start_Date"
-                            android:textColor="#8C1422"
+                            android:textColor="@color/scheduleHeader"
                             app:typeface="Roboto-Regular.ttf" />
 
                         <LinearLayout
@@ -101,7 +101,8 @@
                                 android:id="@+id/SelectDatecalendar"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/calendar" />
+                                android:src="@drawable/calendar"
+                                android:padding="@dimen/x6"/>
 
                         </LinearLayout>
 
@@ -126,14 +127,13 @@
                             android:id="@+id/txt_EndDate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/x8"
+                            android:layout_marginTop="@dimen/x6"
                             android:text="@string/End_Date"
-                            android:textColor="#8C1422"
+                            android:textColor="@color/scheduleHeader"
                             app:typeface="Roboto-Regular.ttf" />
 
                         <Spinner
                             android:id="@+id/sp_weeks"
-
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1" />
