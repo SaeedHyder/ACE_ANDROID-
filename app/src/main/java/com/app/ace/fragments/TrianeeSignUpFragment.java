@@ -41,6 +41,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+import static android.os.Build.VERSION_CODES.N;
+
 /**
  * Created by khan_muhammad on 3/13/2017.
  */
@@ -204,7 +206,10 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
 
                         if (edtPassword.getText().toString().length() < 6) {
                             UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.password_length_alert));
-                        } else {
+                        }
+                        else if(edtMobileNumber.getText().toString().length() < 13){
+                            UIHelper.showShortToastInCenter(getDockActivity(), "Mobile Number should be 13 or more characters long");
+                        }else {
                             if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()))
                                 TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"android",prefHelper.getFirebase_TOKEN());
                                 signupTrainee();

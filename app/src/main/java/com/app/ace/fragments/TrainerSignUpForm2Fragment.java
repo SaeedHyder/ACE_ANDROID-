@@ -1,6 +1,7 @@
 package com.app.ace.fragments;
 
 import android.app.TimePickerDialog;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -20,7 +21,6 @@ import com.app.ace.global.AppConstants;
 import com.app.ace.global.SignupFormConstants;
 import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.DateHelper;
-import com.app.ace.helpers.Datedialoghelper;
 import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.TokenUpdater;
 import com.app.ace.helpers.UIHelper;
@@ -29,6 +29,7 @@ import com.app.ace.ui.dialogs.DialogFactory;
 import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
@@ -50,7 +51,7 @@ import roboguice.inject.InjectView;
  * Created by khan_muhammad on 3/13/2017.
  */
 
-public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnClickListener,CompoundButton.OnCheckedChangeListener,MainActivity.ImageSetter,IGetLocation {
+public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, MainActivity.ImageSetter, IGetLocation {
 
 
     @InjectView(R.id.btnSignUp)
@@ -161,12 +162,12 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
     public File resume;
     public String resumePath;
-    String gymLocation="";
+    String gymLocation = "";
     String lat;
     String log;
 
 
-    public String Education = "",Speciality= "",Years_of_Exp= "",Gym_days= "",gym_time_from= "",gym_time_to= "";
+    public String Education = "", Speciality = "", Years_of_Exp = "", Gym_days = "", gym_time_from = "", gym_time_to = "";
 
     ArrayList<String> EducationArray = new ArrayList<>();
     ArrayList<String> SpecialityArray = new ArrayList<>();
@@ -195,24 +196,24 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
         super.onCreate(savedInstanceState);
 
         String jsonString = getArguments().getString(SIGNUP_MODEL);
-        if(jsonString != null)
+        if (jsonString != null)
             signupFormConstants = new Gson().fromJson(jsonString, SignupFormConstants.class);
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState ) {
+                             Bundle savedInstanceState) {
         // TODO Auto-generated method stub
 
-        return inflater.inflate( R.layout.fragment_signup_form2, container, false );
+        return inflater.inflate(R.layout.fragment_signup_form2, container, false);
 
     }
 
     @Override
-    public void onViewCreated( View view, Bundle savedInstanceState ) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         // TODO Auto-generated method stub
-        super.onViewCreated( view, savedInstanceState );
+        super.onViewCreated(view, savedInstanceState);
 
         btnSignUp.setText(getString(R.string.signup));
 
@@ -263,14 +264,14 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
     }
 
     @Override
-    public void setTitleBar( TitleBar titleBar ) {
+    public void setTitleBar(TitleBar titleBar) {
         // TODO Auto-generated method stub
-        super.setTitleBar( titleBar);
+        super.setTitleBar(titleBar);
 
         titleBar.showTitleBar();
         titleBar.hideButtons();
         titleBar.showBackButton();
-        titleBar.setSubHeadingWithDiscription(getDockActivity().getResources().getString(R.string.education_and_cirtification),getDockActivity().getResources().getString(R.string.please_select),getDockActivity());
+        titleBar.setSubHeadingWithDiscription(getDockActivity().getResources().getString(R.string.education_and_cirtification), getDockActivity().getResources().getString(R.string.please_select), getDockActivity());
 
     }
 
@@ -284,14 +285,14 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
 
-                String finaltime  = "";
+                String finaltime = "";
                 txtview.setText(selectedHour + ":" + selectedMinute);
 
                 finaltime = selectedHour + ":" + selectedMinute;
-                if(finaltime != null) {
+                if (finaltime != null) {
                     gym_time_from = finaltime;
 
-                    if(gym_time_to != null && gym_time_from != null && gym_time_to.length() > 0 && gym_time_from.length() > 0) {
+                    if (gym_time_to != null && gym_time_from != null && gym_time_to.length() > 0 && gym_time_from.length() > 0) {
 
                         try {
                             String[] time_from = gym_time_from.split(":");
@@ -306,7 +307,7 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
                                 txtview.setText("");
                                 UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.end_time_should));
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
@@ -329,17 +330,17 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
 
-                String finaltime  = "";
+                String finaltime = "";
                 txtview.setText(selectedHour + ":" + selectedMinute);
 
                 finaltime = selectedHour + ":" + selectedMinute;
 
-                if(finaltime != null) {
+                if (finaltime != null) {
                     gym_time_to = finaltime;
 
-                    if(gym_time_to != null && gym_time_from != null && gym_time_to.length() > 0 && gym_time_from.length() > 0) {
+                    if (gym_time_to != null && gym_time_from != null && gym_time_to.length() > 0 && gym_time_from.length() > 0) {
 
-                        try{
+                        try {
                             String[] time_from = gym_time_from.split(":");
                             String[] time_to = gym_time_to.split(":");
 
@@ -352,7 +353,7 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
                                 txtview.setText("");
                                 UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.end_time_should));
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
@@ -368,64 +369,58 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
     }
 
-   private boolean validateOtherData() {
+    private boolean validateOtherData() {
 
-        if(Education.isEmpty()){
-            UIHelper.showLongToastInCenter(getDockActivity(),  getString(R.string.toast_education_empty));
+        if (Education.equals("")) {
+            UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.toast_education_empty));
             return false;
-        }
-       else if(Speciality.isEmpty()){
-            UIHelper.showLongToastInCenter(getDockActivity(),  getString(R.string.toast_speciality_empty));
+        } else if (Speciality.equals("")) {
+            UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.toast_speciality_empty));
             return false;
-        }
-        else if(Years_of_Exp.isEmpty()){
-            UIHelper.showLongToastInCenter(getDockActivity(),  getString(R.string.toast_experience_empty));
+        } else if (Years_of_Exp.equals("")) {
+            UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.toast_experience_empty));
             return false;
-        }
-        else if(Gym_days.isEmpty()){
+        } else if (Gym_days.equals("")) {
             UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.toast_gym_days_empty));
             return false;
-        }
-        else if(txt_from.getText().toString().isEmpty()){
+        } else if (txt_from.getText().toString().equals("")) {
             UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.toast_time_from_empty));
             return false;
-        }
-        else if(txt_to.getText().toString().isEmpty()){
+        } else if (txt_to.getText().toString().equals("")) {
             UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.toast_time_to_empty));
             return false;
-        }else if (gymLocation.isEmpty()){
+        } else if (gymLocation.equals("")) {
             UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.toast_location_to_empty));
             return false;
-        } else{
+        } else {
             return true;
-            }
+        }
 
 
+    }
 
-   }
-
-    public boolean validateEditText(){
+    public boolean validateEditText() {
         return edtUniversity.testValidity() && edtPrimaryReason.testValidity();
+
     }
 
 
     @Override
-    public void onClick( View v ) {
+    public void onClick(View v) {
         // TODO Auto-generated method stub
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btnSignUp:
 
-                Education = StringUtils.join(EducationArray,",");
-                Speciality = StringUtils.join(SpecialityArray,",");
-                Gym_days = StringUtils.join(GymDaysArray,",");
+                Education = StringUtils.join(EducationArray, ",");
+                Speciality = StringUtils.join(SpecialityArray, ",");
+                Gym_days = StringUtils.join(GymDaysArray, ",");
 
-                if(validateOtherData() && validateEditText()){
-                    if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()))
-                        TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"android",prefHelper.getFirebase_TOKEN());
-                        signupTrainer();
+                if (validateOtherData() && validateEditText()) {
+                    if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()))
+                        TokenUpdater.getInstance().UpdateToken(getDockActivity(), prefHelper.getUserId(), "android", prefHelper.getFirebase_TOKEN());
+                    signupTrainer();
                     //getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(), "VarificationCodeFragment");
                 }
-
 
 
                 break;
@@ -454,7 +449,7 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
             case R.id.txt_browse_cv:
 
                 CameraHelper.uploadFile(getMainActivity());
-              //  Toast.makeText(getDockActivity(),cvFile.toString(),Toast.LENGTH_LONG).show();
+                //  Toast.makeText(getDockActivity(),cvFile.toString(),Toast.LENGTH_LONG).show();
 
               /*  //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
                 Intent intent = new Intent();
@@ -487,48 +482,47 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
         loadingStarted();
         MultipartBody.Part cvFile;
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData("profile_picture",  signupFormConstants.getProfilePic().getName(), RequestBody.create(MediaType.parse("image/*"),  signupFormConstants.getProfilePic()));
-        if (resumePath!=null && resume !=null) {
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData("profile_picture", signupFormConstants.getProfilePic().getName(), RequestBody.create(MediaType.parse("image/*"), signupFormConstants.getProfilePic()));
+        if (resumePath != null && resume != null) {
             cvFile = MultipartBody.Part.createFormData("resume", resumePath,
                     RequestBody.create(MediaType.parse("*/*"), resume));
 
-        }
-        else{
+        } else {
             cvFile = MultipartBody.Part.createFormData("resume", "",
                     RequestBody.create(MediaType.parse("*/*"), ""));
         }
 
 
         String SocialMediaName = "";
-        if(!signupFormConstants.getSocial_user_id().equalsIgnoreCase("")){
+        if (!signupFormConstants.getSocial_user_id().equalsIgnoreCase("")) {
             SocialMediaName = AppConstants.twitter;
-        }else{
+        } else {
             SocialMediaName = "";
         }
 
         Call<ResponseWrapper<RegistrationResult>> callBack = webService.resgiterTrainer(
                 RequestBody.create(MediaType.parse("text/plain"), signupFormConstants.getSocial_user_id()),
-                RequestBody.create(MediaType.parse("text/plain"),SocialMediaName),
-                RequestBody.create(MediaType.parse("text/plain"),signupFormConstants.getfName()),
-                RequestBody.create(MediaType.parse("text/plain"),signupFormConstants.getlName()),
-                RequestBody.create(MediaType.parse("text/plain"),signupFormConstants.getMobileNumber()),
-                RequestBody.create(MediaType.parse("text/plain"),signupFormConstants.getEmail()),
-                RequestBody.create(MediaType.parse("text/plain"),signupFormConstants.getPassword()),
+                RequestBody.create(MediaType.parse("text/plain"), SocialMediaName),
+                RequestBody.create(MediaType.parse("text/plain"), signupFormConstants.getfName()),
+                RequestBody.create(MediaType.parse("text/plain"), signupFormConstants.getlName()),
+                RequestBody.create(MediaType.parse("text/plain"), signupFormConstants.getMobileNumber()),
+                RequestBody.create(MediaType.parse("text/plain"), signupFormConstants.getEmail()),
+                RequestBody.create(MediaType.parse("text/plain"), signupFormConstants.getPassword()),
                 filePart,
                 cvFile,
-                RequestBody.create(MediaType.parse("text/plain"),AppConstants.trainer),
-                RequestBody.create(MediaType.parse("text/plain"),Education),
-                RequestBody.create(MediaType.parse("text/plain"),edtUniversity.getText().toString()),
-                RequestBody.create(MediaType.parse("text/plain"),""),
-                RequestBody.create(MediaType.parse("text/plain"),gymLocation),
-                RequestBody.create(MediaType.parse("text/plain"),lat),
-                RequestBody.create(MediaType.parse("text/plain"),log),
-                RequestBody.create(MediaType.parse("text/plain"),Speciality),
-                RequestBody.create(MediaType.parse("text/plain"),Years_of_Exp),
-                RequestBody.create(MediaType.parse("text/plain"),edtPrimaryReason.getText().toString()),
-                RequestBody.create(MediaType.parse("text/plain"),Gym_days),
-                RequestBody.create(MediaType.parse("text/plain"),""),
-                RequestBody.create(MediaType.parse("text/plain"),""),
+                RequestBody.create(MediaType.parse("text/plain"), AppConstants.trainer),
+                RequestBody.create(MediaType.parse("text/plain"), Education),
+                RequestBody.create(MediaType.parse("text/plain"), edtUniversity.getText().toString()),
+                RequestBody.create(MediaType.parse("text/plain"), ""),
+                RequestBody.create(MediaType.parse("text/plain"), gymLocation),
+                RequestBody.create(MediaType.parse("text/plain"), lat),
+                RequestBody.create(MediaType.parse("text/plain"), log),
+                RequestBody.create(MediaType.parse("text/plain"), Speciality),
+                RequestBody.create(MediaType.parse("text/plain"), Years_of_Exp),
+                RequestBody.create(MediaType.parse("text/plain"), edtPrimaryReason.getText().toString()),
+                RequestBody.create(MediaType.parse("text/plain"), Gym_days),
+                RequestBody.create(MediaType.parse("text/plain"), ""),
+                RequestBody.create(MediaType.parse("text/plain"), ""),
                 RequestBody.create(MediaType.parse("text/plain"), "android"));
 
         callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
@@ -541,20 +535,20 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
                         AppConstants.user_id = response.body().getResult().getId();
                         AppConstants._token = response.body().getResult().get_token();
-                        prefHelper.setToken( AppConstants._token);
+                        prefHelper.setToken(AppConstants._token);
                         prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
                         prefHelper.setUsrId(response.body().getResult().getId());
                         prefHelper.putUser(response.body().getResult());
 
-                        if(response.body().getResult().getUser_type().equals(AppConstants.trainee)){
+                        if (response.body().getResult().getUser_type().equals(AppConstants.trainee)) {
 
                             //AppConstants.is_show_trainer = false;
 
-                        }else{
+                        } else {
                             //AppConstants.is_show_trainer = true;
                         }
 
-                        getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(signupFormConstants.getUserName(),signupFormConstants.getEmail()), "VarificationCodeFragment");
+                        getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(signupFormConstants.getUserName(), signupFormConstants.getEmail()), "VarificationCodeFragment");
                         /*showSuccessDialog();
                         getDockActivity().showHome();*/
                     } else {
@@ -574,19 +568,25 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
     }
 
+    private void unselectSelectAll() {
+        cb_select_all.setOnCheckedChangeListener(null);
+        cb_select_all.setChecked(false);
+        cb_select_all.setOnCheckedChangeListener(this);
+    }
+
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-        switch (buttonView.getId()){
+        switch (buttonView.getId()) {
 
             //Education
             case R.id.cb_degree:
 
-                if(isChecked){
+                if (isChecked) {
 
                     EducationArray.add(getString(R.string.cb_degree));
 
-                }else{
+                } else {
                     EducationArray.remove(getString(R.string.cb_degree));
                 }
 
@@ -594,9 +594,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_nasm:
 
-                if(isChecked){
+                if (isChecked) {
                     EducationArray.add(getString(R.string.cb_nasm));
-                }else{
+                } else {
                     EducationArray.remove(getString(R.string.cb_nasm));
                 }
 
@@ -604,9 +604,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_ncsa:
 
-                if(isChecked){
+                if (isChecked) {
                     EducationArray.add(getString(R.string.cb_ncsa));
-                }else{
+                } else {
                     EducationArray.remove(getString(R.string.cb_ncsa));
                 }
 
@@ -614,9 +614,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_acsm:
 
-                if(isChecked){
+                if (isChecked) {
                     EducationArray.add(getString(R.string.cb_acsm));
-                }else{
+                } else {
                     EducationArray.remove(getString(R.string.cb_acsm));
                 }
 
@@ -624,9 +624,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_check:
 
-                if(isChecked){
+                if (isChecked) {
                     EducationArray.add(getString(R.string.cb_check));
-                }else{
+                } else {
                     EducationArray.remove(getString(R.string.cb_check));
                 }
 
@@ -635,9 +635,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_ace:
 
-                if(isChecked){
+                if (isChecked) {
                     EducationArray.add(getString(R.string.cb_ace));
-                }else{
+                } else {
                     EducationArray.remove(getString(R.string.cb_ace));
                 }
 
@@ -645,9 +645,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_aother_cirtifications:
 
-                if(isChecked){
+                if (isChecked) {
                     EducationArray.add(getString(R.string.cb_aother_cirtifications));
-                }else{
+                } else {
                     EducationArray.remove(getString(R.string.cb_aother_cirtifications));
                 }
 
@@ -655,9 +655,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_cpr:
 
-                if(isChecked){
+                if (isChecked) {
                     EducationArray.add(getString(R.string.cb_cpr));
-                }else{
+                } else {
                     EducationArray.remove(getString(R.string.cb_cpr));
                 }
 
@@ -668,21 +668,26 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_select_all:
 
-                cb_flexibility.setChecked(isChecked);
-                cb_dunamic_strength.setChecked(isChecked);
-                cb_static_strength.setChecked(isChecked);
-                cb_circuit.setChecked(isChecked);
-                cb_aerobic.setChecked(isChecked);
-                cb_body_building.setChecked(isChecked);
-                cb_loose_weight.setChecked(isChecked);
+                    cb_flexibility.setChecked(isChecked);
+                    cb_dunamic_strength.setChecked(isChecked);
+                    cb_static_strength.setChecked(isChecked);
+                    cb_circuit.setChecked(isChecked);
+                    cb_aerobic.setChecked(isChecked);
+                    cb_body_building.setChecked(isChecked);
+                    cb_loose_weight.setChecked(isChecked);
+
+
 
                 break;
 
             case R.id.cb_flexibility:
 
-                if(isChecked){
+                if (isChecked) {
                     SpecialityArray.add(getString(R.string.cb_flexibility));
-                }else{
+
+
+                } else {
+                    unselectSelectAll();
                     SpecialityArray.remove(getString(R.string.cb_flexibility));
                 }
 
@@ -690,60 +695,72 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_dunamic_strength:
 
-                if(isChecked){
+                if (isChecked) {
                     SpecialityArray.add(getString(R.string.cb_dunamic_strength));
-                }else{
+                } else {
+                    unselectSelectAll();
                     SpecialityArray.remove(getString(R.string.cb_dunamic_strength));
+
                 }
 
                 break;
 
             case R.id.cb_static_strength:
 
-                if(isChecked){
+                if (isChecked) {
                     SpecialityArray.add(getString(R.string.cb_static_strength));
-                }else{
+                } else {
+                    unselectSelectAll();
                     SpecialityArray.remove(getString(R.string.cb_static_strength));
+
                 }
 
                 break;
 
             case R.id.cb_circuit:
 
-                if(isChecked){
+                if (isChecked) {
                     SpecialityArray.add(getString(R.string.cb_circuit));
-                }else{
+                } else {
+                    unselectSelectAll();
                     SpecialityArray.remove(getString(R.string.cb_circuit));
+
                 }
 
                 break;
 
             case R.id.cb_aerobic:
 
-                if(isChecked){
+                if (isChecked) {
                     SpecialityArray.add(getString(R.string.cb_aerobic));
-                }else{
+                } else {
+                    unselectSelectAll();
                     SpecialityArray.remove(getString(R.string.cb_aerobic));
+
                 }
 
                 break;
 
             case R.id.cb_body_building:
 
-                if(isChecked){
+                if (isChecked) {
                     SpecialityArray.add(getString(R.string.cb_body_building));
-                }else{
+                } else {
+                    unselectSelectAll();
                     SpecialityArray.remove(getString(R.string.cb_body_building));
+
                 }
 
                 break;
 
             case R.id.cb_loose_weight:
 
-                if(isChecked){
+                if (isChecked) {
                     SpecialityArray.add(getString(R.string.cb_loose_weight));
-                }else{
+                } else {
+                    unselectSelectAll();
                     SpecialityArray.remove(getString(R.string.cb_loose_weight));
+
                 }
 
                 break;
@@ -752,7 +769,7 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_less_then_1:
 
-                if(isChecked){
+                if (isChecked) {
                     Years_of_Exp = getString(R.string.cb_less_then_1);
                     cb_1_to_5_years.setChecked(false);
                     cb_5_years_or_more.setChecked(false);
@@ -762,7 +779,7 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_1_to_5_years:
 
-                if(isChecked){
+                if (isChecked) {
                     Years_of_Exp = getString(R.string.cb_1_to_5_years);
                     cb_less_then_1.setChecked(false);
                     cb_5_years_or_more.setChecked(false);
@@ -772,7 +789,7 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_5_years_or_more:
 
-                if(isChecked){
+                if (isChecked) {
                     Years_of_Exp = getString(R.string.cb_5_years_or_more);
                     cb_1_to_5_years.setChecked(false);
                     cb_less_then_1.setChecked(false);
@@ -784,9 +801,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_sun:
 
-                if(isChecked){
+                if (isChecked) {
                     GymDaysArray.add("sun");
-                }else{
+                } else {
                     GymDaysArray.remove("sun");
                 }
 
@@ -794,9 +811,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_mon:
 
-                if(isChecked){
+                if (isChecked) {
                     GymDaysArray.add("mon");
-                }else{
+                } else {
                     GymDaysArray.remove("mon");
                 }
 
@@ -804,9 +821,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_tue:
 
-                if(isChecked){
+                if (isChecked) {
                     GymDaysArray.add("tue");
-                }else{
+                } else {
                     GymDaysArray.remove("tue");
                 }
 
@@ -814,9 +831,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_wed:
 
-                if(isChecked){
+                if (isChecked) {
                     GymDaysArray.add("wed");
-                }else{
+                } else {
                     GymDaysArray.remove("wed");
                 }
 
@@ -824,9 +841,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_thur:
 
-                if(isChecked){
+                if (isChecked) {
                     GymDaysArray.add("thur");
-                }else{
+                } else {
                     GymDaysArray.remove("thur");
                 }
 
@@ -834,9 +851,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_fri:
 
-                if(isChecked){
+                if (isChecked) {
                     GymDaysArray.add("fri");
-                }else{
+                } else {
                     GymDaysArray.remove("fri");
                 }
 
@@ -844,9 +861,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.cb_sat:
 
-                if(isChecked){
+                if (isChecked) {
                     GymDaysArray.add("Sat");
-                }else{
+                } else {
                     GymDaysArray.remove("Sat");
                 }
 
@@ -863,12 +880,12 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
     @Override
     public void setFilePath(String filePath) {
-        if(filePath != null){
+        if (filePath != null) {
             resume = new File(filePath);
-            resumePath=filePath;
+            resumePath = filePath;
             txt_browse_cv.setText(filePath);
             //Toast.makeText(getDockActivity(),cvFile.toString(),Toast.LENGTH_LONG).show();
-           // txt_browse_cv.setText(cvFile.toString());
+            // txt_browse_cv.setText(cvFile.toString());
 
         }
 
@@ -883,13 +900,14 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
     public void onLocationSet(LatLng location, String formattedAddress) {
 
         txt_pref_training_gym.setText(formattedAddress);
-        gymLocation=formattedAddress;
-        lat=String.valueOf(location.latitude);
-        log=String.valueOf(location.longitude);
-       // Toast.makeText(getDockActivity(),location.toString(),Toast.LENGTH_LONG).show();
-       // Toast.makeText(getDockActivity(),formattedAddress,Toast.LENGTH_LONG).show();
-
-
+        if (formattedAddress !=null)
+        gymLocation = formattedAddress;
+        else
+            gymLocation = "";
+        lat = String.valueOf(location.latitude);
+        log = String.valueOf(location.longitude);
+        // Toast.makeText(getDockActivity(),location.toString(),Toast.LENGTH_LONG).show();
+        // Toast.makeText(getDockActivity(),formattedAddress,Toast.LENGTH_LONG).show();
 
 
     }

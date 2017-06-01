@@ -145,7 +145,7 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
         if (currentSlot!=null) {
             userCollection.add(new DetailedScreenItem(getString(R.string.date_schedule), currentSlot.getDate()));
             userCollection.add(new DetailedScreenItem(getString(R.string.time_slot), currentSlot.getStartTime()+"-"+currentSlot.getEndTime()));
-            userCollection.add(new DetailedScreenItem(getString(R.string.training), currentSlot.getBookings().getTrainingType()));
+            userCollection.add(new DetailedScreenItem(getString(R.string.training), currentSlot.getBookings().getTraining_type()));
 
         }
         bindData(userCollection);

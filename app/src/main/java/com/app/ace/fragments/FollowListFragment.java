@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.app.ace.R;
 
@@ -35,6 +36,8 @@ public class FollowListFragment extends BaseFragment {
 
     @InjectView(R.id.listViewFollow)
     private ListView listView;
+    @InjectView(R.id.txt_noresult)
+    private TextView txt_noresult;
 
     private ArrayListAdapter<FollowDataItem> adapter;
 
@@ -100,6 +103,15 @@ public class FollowListFragment extends BaseFragment {
 
         userCollection = new ArrayList<>();
 
+        if (result.size() <= 0) {
+            txt_noresult.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+        }
+        else {
+            txt_noresult.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+        }
+
         for(UserNotificatoin item : result) {
 
             try{
@@ -108,7 +120,7 @@ public class FollowListFragment extends BaseFragment {
                 arrChildCollection.add(item.getPost().getPost_image());
             }
 
-                userCollection.add(new FollowDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(),arrChildCollection ,item.getCreated_at(),item.getSender_id()));
+                userCollection.add(new FollowDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(),arrChildCollection ,getDockActivity().getDate(item.getCreated_at()),item.getSender_id()));
 
         }catch (Exception e)
             {

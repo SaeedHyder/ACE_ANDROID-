@@ -596,9 +596,8 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
             case R.id.iv_Calander:
 
-                if (isTrainer) {
+                if (prefHelper.getUser().getUser_type().equals(AppConstants.trainer)) {
                     getDockActivity().addDockableFragment(TrainingBookingCalenderFragment.newInstance(), "TrainingBookingCalenderFragment");
-
                 } else {
                     getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(), "TraineeScheduleFragment");
 

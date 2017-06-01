@@ -30,6 +30,10 @@ import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.TitleBar;
 import com.google.inject.Inject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 import roboguice.fragment.RoboFragment;
 
 public abstract class BaseFragment extends RoboFragment {
@@ -113,6 +117,27 @@ public abstract class BaseFragment extends RoboFragment {
 		isLoading = false;
 		// else
 		// ( (LoadingListener) super.getParentFragment() ).onLoadingFinished();
+	}
+
+	private String getDate(String OurDate)
+	{
+		try
+		{
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+			Date value = formatter.parse(OurDate);
+
+			SimpleDateFormat dateFormatter = new SimpleDateFormat("MM-dd-yyyy HH:mm"); //this format changeable
+			dateFormatter.setTimeZone(TimeZone.getDefault());
+			OurDate = dateFormatter.format(value);
+
+			//Log.d("OurDate", OurDate);
+		}
+		catch (Exception e)
+		{
+			OurDate = "00-00-0000 00:00";
+		}
+		return OurDate;
 	}
 	
 	protected DockActivity getDockActivity() {

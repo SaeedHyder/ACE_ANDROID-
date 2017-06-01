@@ -42,7 +42,7 @@ public class NotificationListItemBinder extends ViewBinder<NotificationEnt> impl
         viewHolder.container.setTag(entity);
         viewHolder.container.setOnClickListener(this);
         viewHolder.txtNotificationText.setText(entity.getMessage());
-        viewHolder.txtNotificationDate.setText(entity.getCreated_at());
+        viewHolder.txtNotificationDate.setText(context.getDate(entity.getCreated_at()));
     }
 
     @Override

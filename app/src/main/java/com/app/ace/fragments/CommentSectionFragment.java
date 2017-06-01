@@ -138,8 +138,7 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
         for(ShowComments item : result){
 
             userCollection.add(new CommentsSectionItemsEnt(item.getUser().getProfile_image(),
-                    item.getUser().getFirst_name()+" "+item.getUser().getLast_name(),item.getComment_text(),
-                    item.getCreated_at(),String.valueOf(item.getUser_id())));
+                    item.getUser().getFirst_name()+" "+item.getUser().getLast_name(),item.getComment_text(),getDockActivity().getDate(item.getCreated_at()),String.valueOf(item.getUser_id())));
 
 
 
@@ -202,7 +201,6 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
         switch (view.getId()) {
             case R.id.iv_pointer:
 
-            Toast.makeText(getDockActivity(),"Comment",Toast.LENGTH_LONG).show();
                 SendComment();
 
               //  CommentToChatMsgConstants commentToChatMsgConstants = new CommentToChatMsgConstants();
@@ -235,14 +233,13 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    userCollection.add(new CommentsSectionItemsEnt(prefHelper.getUser().getProfile_image(),prefHelper.getUserName(),response.body().getResult().getComment_text(),response.body().getResult().
-                            getCreated_at(),String.valueOf(response.body().getResult().getUser_id())));
+                    userCollection.add(new CommentsSectionItemsEnt(prefHelper.getUser().getProfile_image(),prefHelper.getUserName(),response.body().getResult().getComment_text(),getDockActivity().getDate(response.body().getResult().getCreated_at()),String.valueOf(response.body().getResult().getUser_id())));
                     bindData(userCollection);
                     et_CommentBar.setText("");
                 }
                 else
                 {
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    UIHelper.showLongToastInCenter(getDockActivity(),"Please Enter Comment");
                 }
 
             }

@@ -10,6 +10,8 @@ public class TraineeScheduleEnt {
     UserProfile user;
     ArrayList<Slot> slots;
 
+
+
     public UserProfile getUser() {
         return user;
     }

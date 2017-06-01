@@ -6,200 +6,179 @@
     android:fillViewport="true">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg">
+        android:background="@drawable/bg"
+        android:orientation="vertical">
 
-    <com.app.ace.ui.views.AnyTextView
-        android:layout_below="@+id/txt_personal_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/x15"
-        android:layout_marginBottom="@dimen/x3"
-        android:layout_marginTop="@dimen/x25"
-        android:text="@string/change_password"
-        android:textColor="@color/black"
-        android:textSize="@dimen/x15"
-        android:gravity="center"
-        android:alpha="0.8"
-        app:typeface="Roboto-Bold.ttf"
-        />
+        <com.app.ace.ui.views.AnyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_personal_info"
+            android:layout_marginBottom="@dimen/x3"
+            android:layout_marginLeft="@dimen/x15"
+            android:layout_marginTop="@dimen/x25"
+            android:alpha="0.8"
+            android:gravity="center"
+            android:text="@string/change_password"
+            android:textColor="@color/black"
+            android:textSize="@dimen/x15"
+            app:typeface="Roboto-Bold.ttf" />
 
-    <com.app.ace.ui.views.AnyEditTextView
-        android:id="@+id/txt_CurrentPassword"
-        style="@style/form_edttext_fields_style"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/current_password"
-        android:layout_margin="@dimen/x15"
-        android:inputType="textNoSuggestions"
-        android:singleLine="true"
-        android:maxLength="50"
-        app:emptyAllowed="false"
-        android:textColorHint="@color/edittext_hint_color"
-        android:textColor="@color/dark_grey"
-        android:textSize="@dimen/x14"
-        app:typeface="Roboto-Regular.ttf" />
+        <com.app.ace.ui.views.AnyEditTextView
+            android:id="@+id/txt_CurrentPassword"
+            style="@style/form_edttext_fields_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/x15"
+            android:hint="@string/current_password"
+            android:inputType="textNoSuggestions"
+            android:maxLength="50"
+            android:singleLine="true"
+            android:textColor="@color/dark_grey"
+            android:textColorHint="@color/edittext_hint_color"
+            android:textSize="@dimen/x14"
+            app:emptyAllowed="false"
+            app:typeface="Roboto-Regular.ttf" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x1"
-        android:layout_marginLeft="@dimen/x20"
-        android:layout_marginRight="@dimen/x20"
-        android:alpha="0.6"
-        android:background="@drawable/text"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginRight="@dimen/x20"
+            android:alpha="0.6"
+            android:background="@drawable/text" />
 
-    <com.app.ace.ui.views.AnyEditTextView
-        android:id="@+id/edit_newPassword"
-        style="@style/form_edttext_fields_style"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/new_password"
-        android:layout_margin="@dimen/x15"
-        android:inputType="textNoSuggestions"
-        android:singleLine="false"
-        android:maxLines="2"
-        android:text=""
-        android:maxLength="100"
-        app:emptyAllowed="false"
-        android:textColorHint="@color/edittext_hint_color"
-        android:textColor="@color/dark_grey"
-        android:textSize="@dimen/x14"
-        app:typeface="Roboto-Regular.ttf" />
+        <com.app.ace.ui.views.AnyEditTextView
+            android:id="@+id/edit_newPassword"
+            style="@style/form_edttext_fields_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/x15"
+            android:hint="@string/new_password"
+            android:inputType="textNoSuggestions"
+            android:maxLength="100"
+            android:maxLines="2"
+            android:singleLine="false"
+            android:text=""
+            android:textColor="@color/dark_grey"
+            android:textColorHint="@color/edittext_hint_color"
+            android:textSize="@dimen/x14"
+            app:emptyAllowed="false"
+            app:typeface="Roboto-Regular.ttf" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x1"
-        android:layout_marginLeft="@dimen/x20"
-        android:layout_marginRight="@dimen/x20"
-        android:alpha="0.6"
-        android:background="@drawable/text"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginRight="@dimen/x20"
+            android:alpha="0.6"
+            android:background="@drawable/text" />
 
-    <com.app.ace.ui.views.AnyEditTextView
-        android:id="@+id/edit_conNewPassword"
-        style="@style/form_edttext_fields_style"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/confirm_pass"
-        android:layout_margin="@dimen/x15"
-        android:inputType="textNoSuggestions"
-        android:singleLine="false"
-        android:maxLines="2"
-        android:text=""
-        android:maxLength="100"
-        app:emptyAllowed="false"
-        android:textColorHint="@color/edittext_hint_color"
-        android:textColor="@color/dark_grey"
-        android:textSize="@dimen/x14"
-        app:typeface="Roboto-Regular.ttf" />
+        <com.app.ace.ui.views.AnyEditTextView
+            android:id="@+id/edit_conNewPassword"
+            style="@style/form_edttext_fields_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/x15"
+            android:hint="@string/confirm_pass"
+            android:inputType="textNoSuggestions"
+            android:maxLength="100"
+            android:maxLines="2"
+            android:singleLine="false"
+            android:text=""
+            android:textColor="@color/dark_grey"
+            android:textColorHint="@color/edittext_hint_color"
+            android:textSize="@dimen/x14"
+            app:emptyAllowed="false"
+            app:typeface="Roboto-Regular.ttf" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x1"
-        android:layout_marginLeft="@dimen/x20"
-        android:layout_marginRight="@dimen/x20"
-        android:layout_marginBottom="@dimen/x25"
-        android:alpha="0.6"
-        android:background="@drawable/text"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginBottom="@dimen/x25"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginRight="@dimen/x20"
+            android:alpha="0.6"
+            android:background="@drawable/text" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
             android:layout_marginBottom="@dimen/x20"
             android:alpha="0.6"
-            android:background="@drawable/text"/>
+            android:background="@drawable/text" />
 
         <com.app.ace.ui.views.AnyTextView
-            android:layout_below="@+id/txt_language"
+            android:id="@+id/anyTextView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_language"
             android:layout_marginLeft="@dimen/x15"
             android:layout_marginTop="@dimen/x5"
+            android:alpha="0.8"
+            android:gravity="center"
             android:text="@string/language"
             android:textColor="@color/black"
             android:textSize="@dimen/x15"
-            android:gravity="center"
-            android:alpha="0.8"
-            app:typeface="Roboto-Bold.ttf"
-            android:id="@+id/anyTextView2" />
+            app:typeface="Roboto-Bold.ttf" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            android:layout_marginTop="@dimen/x10"
+            android:layout_marginBottom="@dimen/x20"
             android:layout_marginLeft="@dimen/x20"
             android:layout_marginRight="@dimen/x20"
-            android:layout_marginBottom="@dimen/x20"
-            >
+            android:layout_marginTop="@dimen/x10"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-            <LinearLayout
-                android:layout_width="0dp"
+
+            <RadioGroup
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
+                android:orientation="horizontal"
+                >
 
-                <CheckBox
+                <RadioButton
                     android:id="@+id/cb_english"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:button="@drawable/selector_chkbox"
+                    android:drawablePadding="@dimen/x10"
+                    android:drawableBottom="@drawable/text"
                     android:checked="false"
-                    android:paddingTop="@dimen/x7"
+                    android:paddingBottom="@dimen/x2"
                     android:paddingLeft="@dimen/x7"
                     android:paddingRight="@dimen/x7"
-                    android:paddingBottom="@dimen/x2"
+                    android:paddingTop="@dimen/x7"
                     android:text="@string/english"
                     android:textColor="@color/dark_grey"
                     android:textSize="@dimen/x14" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/x1"
-                    android:alpha="0.6"
-                    android:layout_marginRight="@dimen/x10"
-                    android:layout_marginTop="@dimen/x10"
-                    android:background="@drawable/text"/>
-
-            </LinearLayout>
 
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
 
-                <CheckBox
+                <RadioButton
                     android:id="@+id/cb_arabic"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:button="@drawable/selector_chkbox"
+                    android:drawablePadding="@dimen/x10"
+                    android:layout_marginLeft="@dimen/x15"
+                    android:drawableBottom="@drawable/text"
                     android:checked="false"
-                    android:paddingTop="@dimen/x7"
+                    android:paddingBottom="@dimen/x2"
                     android:paddingLeft="@dimen/x7"
                     android:paddingRight="@dimen/x7"
-                    android:paddingBottom="@dimen/x2"
+                    android:paddingTop="@dimen/x7"
                     android:text="@string/arabic"
                     android:textColor="@color/dark_grey"
                     android:textSize="@dimen/x14" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/x1"
-                    android:alpha="0.6"
-                    android:layout_marginLeft="@dimen/x10"
-                    android:layout_marginTop="@dimen/x10"
-                    android:background="@drawable/text"/>
-
-
-
-            </LinearLayout>
-
-
-
+            </RadioGroup>
         </LinearLayout>
 
         <View
@@ -207,76 +186,70 @@
             android:layout_height="@dimen/x1"
             android:layout_marginTop="@dimen/x10"
             android:alpha="0.6"
-            android:background="@drawable/text"/>
+            android:background="@drawable/text" />
 
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="@dimen/x20"
-        >
-
-        <com.app.ace.ui.views.AnyTextView
-            android:layout_below="@+id/txt_notifications"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:text="@string/notifications"
-            android:textColor="@color/black"
-            android:textSize="@dimen/x15"
-            android:gravity="start"
-            android:alpha="0.8"
-            app:typeface="Roboto-Bold.ttf"
-            />
+            android:layout_margin="@dimen/x20"
+            android:orientation="horizontal">
+
+            <com.app.ace.ui.views.AnyTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_notifications"
+                android:layout_weight="0.8"
+                android:alpha="0.8"
+                android:gravity="start"
+                android:text="@string/notifications"
+                android:textColor="@color/black"
+                android:textSize="@dimen/x15"
+                app:typeface="Roboto-Bold.ttf" />
 
 
-        <ToggleButton
-            android:id="@+id/toggle_notifications"
-            android:layout_width="@dimen/x50"
-            android:layout_height="@dimen/x25"
-            android:layout_marginLeft="@dimen/x15"
-            android:background="@drawable/selector_toggle"
-            android:text=""
-            android:gravity="right|center_vertical"
-            android:textOff=""
-            android:textOn=""
-            android:checked="true"
-            />
+            <ToggleButton
+                android:id="@+id/toggle_notifications"
+                android:layout_width="@dimen/x50"
+                android:layout_height="@dimen/x25"
+                android:layout_marginLeft="@dimen/x15"
+                android:background="@drawable/selector_toggle"
+                android:checked="true"
+                android:gravity="right|center_vertical"
+                android:text=""
+                android:textOff=""
+                android:textOn="" />
 
 
-
-    </LinearLayout>
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
             android:alpha="0.6"
-            android:background="@drawable/text"/>
+            android:background="@drawable/text" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/x20"
+            android:layout_marginBottom="@dimen/x20"
             android:layout_marginLeft="@dimen/x20"
             android:layout_marginRight="@dimen/x20"
-            android:layout_marginBottom="@dimen/x20"
-            >
+            android:layout_marginTop="@dimen/x20"
+            android:orientation="horizontal">
 
             <com.app.ace.ui.views.AnyTextView
-                android:layout_below="@+id/txt_private_or_public"
+                android:id="@+id/anyTextView3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_private_or_public"
                 android:layout_weight="0.8"
+                android:alpha="0.8"
+                android:gravity="start"
                 android:text="@string/prvate_or_public_account"
                 android:textColor="@color/black"
                 android:textSize="@dimen/x15"
-                android:gravity="start"
-                android:alpha="0.8"
-                app:typeface="Roboto-Bold.ttf"
-                android:id="@+id/anyTextView3" />
+                app:typeface="Roboto-Bold.ttf" />
 
 
             <ToggleButton
@@ -285,13 +258,11 @@
                 android:layout_height="@dimen/x25"
                 android:layout_marginLeft="@dimen/x15"
                 android:background="@drawable/selector_toggle"
-                android:text=""
-                android:gravity="right|center_vertical"
-                android:textOff=""
-                android:textOn=""
                 android:checked="true"
-                />
-
+                android:gravity="right|center_vertical"
+                android:text=""
+                android:textOff=""
+                android:textOn="" />
 
 
         </LinearLayout>
@@ -300,64 +271,64 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
             android:alpha="0.6"
-            android:background="@drawable/text"/>
+            android:background="@drawable/text" />
 
         <com.app.ace.ui.views.AnyTextView
-            android:layout_below="@+id/txt_contact_us"
+            android:id="@+id/anyTextView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_contact_us"
             android:layout_marginLeft="@dimen/x15"
             android:layout_marginTop="@dimen/x15"
+            android:alpha="0.8"
+            android:gravity="center"
             android:text="@string/contact_us"
             android:textColor="@color/black"
             android:textSize="@dimen/x15"
-            android:gravity="center"
-            android:alpha="0.8"
-            app:typeface="Roboto-Bold.ttf"
-            android:id="@+id/anyTextView4" />
+            app:typeface="Roboto-Bold.ttf" />
 
         <com.app.ace.ui.views.AnyEditTextView
             android:id="@+id/txt_contact_us_disc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/please_feel"
             android:layout_margin="@dimen/x15"
+            android:hint="@string/please_feel"
             android:maxLines="2"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/x14"
             app:typeface="Roboto-Regular.ttf" />
 
         <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x1"
-        android:alpha="0.6"
-        android:background="@drawable/text"/>
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:alpha="0.6"
+            android:background="@drawable/text" />
 
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/x1"
-            android:alpha="0.4"
             android:layout_marginTop="@dimen/x20"
-            android:background="@drawable/text"/>
+            android:alpha="0.4"
+            android:background="@drawable/text" />
 
 
         <com.app.ace.ui.views.AnyTextView
-            android:layout_below="@+id/txt_logout"
+            android:id="@+id/txt_logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_logout"
+            android:layout_marginBottom="@dimen/x20"
             android:layout_marginLeft="@dimen/x15"
             android:layout_marginTop="@dimen/x15"
+            android:alpha="0.8"
+            android:gravity="center"
             android:text="@string/log_out"
             android:textColor="@color/black"
             android:textSize="@dimen/x15"
-            android:gravity="center"
-            android:alpha="0.8"
-            android:layout_marginBottom="@dimen/x20"
-            app:typeface="Roboto-Bold.ttf"
-            android:id="@+id/txt_logout" />
+            app:typeface="Roboto-Bold.ttf" />
 
 
-   </LinearLayout>
+    </LinearLayout>
 
 </ScrollView>

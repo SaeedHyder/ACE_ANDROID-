@@ -1,1 +1,1 @@
-include ':app', ':commons-lang3-3.1', ':library', ':horizontal-picker'
+include ':app', ':commons-lang3-3.1', ':library', ':horizontal-picker', ':aspectjrt-1.7.3', ':isoparser-1.0.6'

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -18,8 +19,25 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 
 public class BitmapHelper {
+
+	/*public static Bitmap getBitmapFromURL(String URL){
+		try {
+			URL url = new URL(src);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setDoInput(true);
+			connection.connect();
+			InputStream input = connection.getInputStream();
+			Bitmap myBitmap = BitmapFactory.decodeStream(input);
+			return myBitmap;
+		} catch (IOException e) {
+			// Log exception
+			return null;
+		}
+	}*/
 	
 	public static Bitmap getImageOrientation(String _path, Bitmap bitmap) {
 		ExifInterface exif = null;

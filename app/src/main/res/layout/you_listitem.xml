@@ -107,7 +107,7 @@
         android:textColor="@color/white"
         android:visibility="gone"
         android:textSize="@dimen/x14"
-        android:text="Follow"/>
+        android:text="@string/follow"/>
 
     <Button
         android:id="@+id/btn_Unfollow"
@@ -118,7 +118,7 @@
         android:textColor="@color/white"
         android:textSize="@dimen/x14"
         android:visibility="gone"
-        android:text="UnFollow"/>
+        android:text="@string/Following"/>
 
     </LinearLayout>
 

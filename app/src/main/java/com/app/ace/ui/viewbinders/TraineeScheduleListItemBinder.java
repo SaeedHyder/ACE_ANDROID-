@@ -59,7 +59,7 @@ public class TraineeScheduleListItemBinder extends ViewBinder<Slot> {
 
         viewHolder.txt_traineeSchedule_2stColumn.setText(entity.getDate());
         viewHolder.txt_traineeSchedule_timeslot2stColumn.setText(entity.getStartTime()+"-"+entity.getEndTime());
-        viewHolder.txt_traineeSchedule_training2stColumn.setText( entity.getBookings().getTrainingType());
+        viewHolder.txt_traineeSchedule_training2stColumn.setText( entity.getBookings().getTraining_type());
         viewHolder.cancleBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

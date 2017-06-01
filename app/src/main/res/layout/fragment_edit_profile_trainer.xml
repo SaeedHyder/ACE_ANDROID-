@@ -123,12 +123,12 @@
 
         <com.app.ace.ui.views.AnyTextView
             android:id="@+id/txtGymLocatoin"
-            style="@style/form_edttext_fields_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/edit_gym_location"
             android:drawableLeft="@drawable/location_icon"
             android:layout_margin="@dimen/x15"
+           android:paddingLeft="@dimen/x15"
             android:inputType="textNoSuggestions"
             android:singleLine="false"
             android:maxLines="2"

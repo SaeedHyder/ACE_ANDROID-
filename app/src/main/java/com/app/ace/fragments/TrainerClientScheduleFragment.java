@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.app.ace.R;
 import com.app.ace.entities.Booking;
@@ -37,6 +38,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+import static com.app.ace.R.id.listView;
+
 
 public class TrainerClientScheduleFragment extends BaseFragment implements DatePickerListener, View.OnClickListener {
 
@@ -53,6 +56,8 @@ public class TrainerClientScheduleFragment extends BaseFragment implements DateP
     private ImageView iv_Calander;
     @InjectView(R.id.iv_profile)
     private ImageView iv_profile;
+    @InjectView(R.id.txt_noresult)
+    private TextView txt_noresult;
     private ArrayListAdapter<Slot> adapter;
     private ArrayList<Slot> userCollection = new ArrayList<>();
 
@@ -148,6 +153,15 @@ public class TrainerClientScheduleFragment extends BaseFragment implements DateP
     private void setTraineeData(TrainerBooking result) {
 
         userCollection = new ArrayList<>();
+
+        if (result.getSlots().size() <= 0) {
+            txt_noresult.setVisibility(View.VISIBLE);
+            lv_trainer_srceen.setVisibility(View.GONE);
+        } else {
+            txt_noresult.setVisibility(View.GONE);
+            lv_trainer_srceen.setVisibility(View.VISIBLE);
+        }
+
         slots = result.getSlots();
         for (Slot item : slots) {
             if (item.getBookings() !=null){

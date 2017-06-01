@@ -17,6 +17,17 @@ public class TrainerBooking {
     @SerializedName("slots")
     @Expose
     private ArrayList<Slot> slots = null;
+    @SerializedName("available_slots")
+    @Expose
+    ArrayList<AvailableSlot> available_slots;
+    public ArrayList<AvailableSlot> getAvailable_slots() {
+        return available_slots;
+    }
+
+    public void setAvailable_slots(ArrayList<AvailableSlot> available_slots) {
+        this.available_slots = available_slots;
+    }
+
 
     public UserProfile getTrainer() {
         return trainer;

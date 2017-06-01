@@ -33,18 +33,18 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
-import static com.app.ace.R.id.txt_noresult;
-
 
 public class MapScreenFragment extends BaseFragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private AnyEditTextView edtsearch;
 
+
     @InjectView(R.id.txt_noresult)
     private TextView txt_noresult;
 
     private ArrayList<MapScreenItem> userCollection = new ArrayList<>();
+
     public static MapScreenFragment newInstance() {
         return new MapScreenFragment();
     }
@@ -84,15 +84,15 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
                 public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call,
                                        Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
 
-                    if (response.body()!= null)
+                    if (response.body() != null)
                         if (response.body().getResult().size() <= 0) {
                             txt_noresult.setVisibility(View.VISIBLE);
-                        }
-                        else{
+                        } else {
                             txt_noresult.setVisibility(View.GONE);
-                        bindview(response.body().getResult());
-                    addMarker();
-                }}
+                            bindview(response.body().getResult());
+                            addMarker();
+                        }
+                }
 
                 @Override
                 public void onFailure(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Throwable t) {
@@ -106,21 +106,18 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
     private void bindview(ArrayList<UserProfile> resultuser) {
         userCollection = new ArrayList<>();
         try {
-        for (UserProfile user : resultuser) {
-            if(!user.getGym_latitude().isEmpty()) {
+            for (UserProfile user : resultuser) {
+                if (!user.getGym_latitude().isEmpty()) {
 
                     userCollection.add(new MapScreenItem(user.getGym_latitude(),
                             user.getGym_longitude(), user.getProfile_image()));
                 }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("Error " + e.getMessage());
         }
 
     }
-
 
 
     @Override
@@ -147,15 +144,15 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
 
     }
 
-    void addMarker()
-    {
+    void addMarker() {
 
         GoogleMapOptions<MapScreenItem> googleMapOptions = new GoogleMapOptions<>(getDockActivity(),
                 mMap,
                 userCollection,
                 null,
-                new MapMarkerItemBinder(getMainActivity())
+                new MapMarkerItemBinder(getMainActivity(), getDockActivity())
         );
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(userCollection.get(userCollection.size() - 1).getLat()), Double.valueOf(userCollection.get(userCollection.size() - 1).getLng())), AppConstants.zoomIn));
         googleMapOptions.addMarkers();
 
     }
@@ -165,12 +162,12 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
 
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
+       /* // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title(getString(R.string.Marker_in)));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        mMap.animateCamera( CameraUpdateFactory.zoomTo( 17.0f ) );
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(17.0f));*/
 
-        addMarker();
+        //addMarker();
     }
 }

@@ -186,7 +186,7 @@
     <string name="resend_code"><u>Resend Code</u></string>
 
     //SignUp PopUp
-    <string name="you_all_sign">you\'re all signed up</string>
+    <string name="you_all_sign">you are signed up</string>
     <string name="charlie_hunnam">Charlie</string>
     <string name="we_glad_you_here">We\'re glad you\'re here</string>
     <string name="james_blunt">James Blunt</string>
@@ -214,7 +214,7 @@
     <string name="english">English</string>
     <string name="arabic">Arabic</string>
     <string name="notifications">Notifications</string>
-    <string name="prvate_or_public_account">Private Account \/ Public Account</string>
+    <string name="prvate_or_public_account">Public Account \/ Private Account</string>
     <string name="contact_us">Contact Us</string>
     <string name="please_feel">Please feel free to contact us for any quries on the option below</string>
     <string name="confirm_pass">Confirm New Password</string>
@@ -401,6 +401,7 @@
     <string name="End_Date">End Date</string>
     <string name="Start_Time">Start Time</string>
     <string name="End_Time">End Time</string>
+    <string name="Following">Following</string>
 
     //Detailed Screen
 

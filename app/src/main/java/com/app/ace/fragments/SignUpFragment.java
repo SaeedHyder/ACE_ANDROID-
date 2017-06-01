@@ -15,6 +15,7 @@ import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.TokenUpdater;
 import com.app.ace.helpers.TwitterLoginHelper;
+import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.views.TitleBar;
 import com.google.common.util.concurrent.ExecutionError;
 import com.twitter.sdk.android.Twitter;
@@ -214,10 +215,11 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        try {
+        if(resultCode != 1) {
             twitterLogin.onActivityResult(requestCode, resultCode, data);
-        }catch (Exception e){
-
+        }
+        else{
+            UIHelper.showShortToastInCenter(getDockActivity(), "Twitter App not found");
         }
 
     }

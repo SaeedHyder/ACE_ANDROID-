@@ -5,10 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 
 import com.app.ace.BaseApplication;
-
 import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
 import com.app.ace.activities.MainActivity;
@@ -26,6 +26,7 @@ import com.app.ace.entities.HomeListDataEnt;
 import com.app.ace.entities.HomeResultEnt;
 import com.app.ace.entities.PostsEnt;
 import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.YouDataItem;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.CameraHelper;
@@ -36,6 +37,7 @@ import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.HomeFragmentItemBinder;
 import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
+import com.app.ace.videocompression.MediaController;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,6 +51,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
+
+import static com.app.ace.R.id.SearchTrainer_ListView;
+import static com.app.ace.R.id.txt_noresult;
 
 public class HomeFragment extends BaseFragment implements View.OnClickListener,
         MainActivity.ImageSetter, IOnLike, SetHomeUpdatedData {
@@ -188,25 +193,31 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     private void setHomePostsData(ArrayList<PostsEnt> postsEntArrayList) {
 
 
+        dataCollection = new ArrayList<HomeListDataEnt>();
 
-            dataCollection = new ArrayList<HomeListDataEnt>();
-
-            for (PostsEnt postsEnt : postsEntArrayList) {
-                try {
-                    dataCollection.add(new HomeListDataEnt(Integer.parseInt(postsEnt.getLike_count()),
-                            Integer.parseInt(postsEnt.getComment_count()), postsEnt.getCreator().getProfile_image(),
-                            postsEnt.getCreator().getFirst_name() + " " + postsEnt.getCreator().getLast_name(), postsEnt.getPost_image(), "Time Joe", "Hi nice", postsEnt.getUser_id(), postsEnt.getId(), postsEnt.getComment(), postsEnt.getIs_liked()));
-                }
-                catch (Exception e){
-                    bindData(dataCollection);
-                    e.printStackTrace();
-                }
-
-            }
-
-            bindData(dataCollection);
+        if (postsEntArrayList.size() <= 0) {
+            txt_no_data.setVisibility(View.VISIBLE);
+            gridView.setVisibility(View.GONE);
+        }
+        else {
+            txt_no_data.setVisibility(View.GONE);
+            gridView.setVisibility(View.VISIBLE);
         }
 
+        for (PostsEnt postsEnt : postsEntArrayList) {
+            try {
+                dataCollection.add(new HomeListDataEnt(Integer.parseInt(postsEnt.getLike_count()),
+                        Integer.parseInt(postsEnt.getComment_count()), postsEnt.getCreator().getProfile_image(),
+                        postsEnt.getCreator().getFirst_name() + " " + postsEnt.getCreator().getLast_name(), postsEnt.getPost_image(), "Time Joe", "Hi nice", postsEnt.getUser_id(), postsEnt.getId(), postsEnt.getComment(), postsEnt.getIs_liked()));
+            } catch (Exception e) {
+                bindData(dataCollection);
+                e.printStackTrace();
+            }
+
+        }
+
+        bindData(dataCollection);
+    }
 
 
     private void bindData(List<HomeListDataEnt> dataCollection) {
@@ -333,17 +344,17 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             @Override
             public void onResponse(Call<ResponseWrapper<HomeResultEnt>> call, Response<ResponseWrapper<HomeResultEnt>> response) {
 
-                    loadingFinished();
+                loadingFinished();
 
-                    if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                        setHomePostsData(response.body().getResult().getPosts());
+                    setHomePostsData(response.body().getResult().getPosts());
 
-                    } else {
-                        gridView.setVisibility(View.INVISIBLE);
-                        txt_no_data.setVisibility(View.VISIBLE);
-                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                    }
+                } else {
+                    gridView.setVisibility(View.INVISIBLE);
+                    txt_no_data.setVisibility(View.VISIBLE);
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
 
             }
 
@@ -368,7 +379,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             case R.id.iv_profile:
 
                 AppConstants.is_show_trainer = false;
-                    getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(prefHelper.getUserId())), "TrainerProfileFragment");
+                getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(prefHelper.getUserId())), "TrainerProfileFragment");
 
                 break;
 
@@ -407,7 +418,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
                 break;
 
             case R.id.iv_Calander:
-
 
 
                 //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
@@ -557,10 +567,60 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
         if (videoPath != null) {
             postImage = new File(videoPath);
-            createPost(false);
+            loadingStarted();
+            VideoCompressor videoCompressor = new VideoCompressor(postImage.getPath());
+            videoCompressor.execute();
         }
 
     }
+
+    private class VideoCompressor extends AsyncTask<Void, Void, Boolean> {
+
+        String filePath;
+
+        public VideoCompressor(String filePath){
+            this.filePath = filePath;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            return MediaController.getInstance().convertVideo(filePath);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean compressed) {
+            super.onPostExecute(compressed);
+            if (compressed) {
+                Log.e("Compression", "Compression successfully!");
+                Log.e("Compressed File Path", "" + MediaController.cachedFile.getPath());
+
+                postImage = new File(MediaController.cachedFile.getPath());
+                long length = postImage.length();
+
+                int lengthMB = (int) length / (1024 * 1024);
+
+
+                if (lengthMB <= 7) {
+                    loadingFinished();
+                    createPost(false);
+                }
+
+                else {
+                    UIHelper.showShortToastInCenter(getDockActivity(), "Video size is too big");
+                }
+
+
+            }
+
+        }
+    }
+
+
 
     @Override
     public void setLikeHit(final int postId) {
@@ -602,13 +662,25 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     public void setUpdatedData(int position, String data, int likes, int comments) {
 
 
-        HomeListDataEnt updatedItem = (HomeListDataEnt) adapter.getItem(position);
+     /*   HomeListDataEnt updatedItem = (HomeListDataEnt) adapter.getItem(position);
         updatedItem.setIs_liked(data);
         updatedItem.setTotoal_likes(likes);
         updatedItem.setTotal_comments(comments);
 
         adapter.add(updatedItem);
 
+        adapter.notifyDataSetChanged();
+*/
+
+        HomeListDataEnt updatedItem = (HomeListDataEnt) adapter.getItem(position);
+        updatedItem.setIs_liked(data);
+        updatedItem.setTotoal_likes(likes);
+        updatedItem.setTotal_comments(comments);
+
+        dataCollection.remove(position);
+        dataCollection.add(position, updatedItem);
+        adapter.clearList();
+        adapter.addAll(dataCollection);
         adapter.notifyDataSetChanged();
 
 

@@ -38,6 +38,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/x10"
                 android:gravity="center"
+                android:maxLength="25"
+                android:maxLines="1"
                 android:text="@string/james_blunt"
                 android:textColor="#5d5b5b"
                 android:textSize="@dimen/x18"
