@@ -101,8 +101,8 @@
                                 android:id="@+id/SelectDatecalendar"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/calendar"
-                                android:padding="@dimen/x6"/>
+                                android:padding="@dimen/x6"
+                                android:src="@drawable/calendar" />
 
                         </LinearLayout>
 
@@ -165,7 +165,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginBottom="@dimen/x10"
-                    android:layout_marginLeft="@dimen/x50"
+                    android:layout_marginLeft="@dimen/x60"
                     android:layout_marginRight="@dimen/x10"
                     android:layout_marginTop="@dimen/x10"
                     android:gravity="center"
@@ -175,7 +175,7 @@
                     <com.app.ace.ui.views.AnyTextView
                         android:id="@+id/txtTo"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/x30"
                         android:layout_gravity="center|center_horizontal"
                         android:layout_weight="1"
                         android:background="@drawable/background_day_hover"
@@ -191,7 +191,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
+                        android:layout_weight="0.5"
                         android:gravity="center"
                         android:text="to"
                         app:typeface="Roboto-Regular.ttf"
@@ -201,7 +201,7 @@
                     <com.app.ace.ui.views.AnyTextView
                         android:id="@+id/txtFrom"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/x30"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:background="@drawable/background_day_hover"
@@ -217,7 +217,7 @@
                     <ImageView
                         android:id="@+id/txtIncre"
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="@dimen/x26"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -253,7 +253,7 @@
                     <com.app.ace.ui.views.AnyTextView
                         android:id="@+id/SecondtxtTo"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/x30"
                         android:layout_gravity="center|center_horizontal"
                         android:layout_weight="1"
                         android:background="@drawable/background_day_hover"
@@ -279,7 +279,7 @@
                     <com.app.ace.ui.views.AnyTextView
                         android:id="@+id/SecondtxtFrom"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/x30"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:background="@drawable/background_day_hover"
@@ -331,7 +331,7 @@
                     <com.app.ace.ui.views.AnyTextView
                         android:id="@+id/ThirdtxtTo"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/x30"
                         android:layout_gravity="center|center_horizontal"
                         android:layout_weight="1"
                         android:background="@drawable/background_day_hover"
@@ -357,7 +357,7 @@
                     <com.app.ace.ui.views.AnyTextView
                         android:id="@+id/ThirdtxtFrom"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/x30"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:background="@drawable/background_day_hover"
