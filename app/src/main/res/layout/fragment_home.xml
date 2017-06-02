@@ -5,6 +5,29 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:id="@+id/ll_UnApproved"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x32"
+        android:background="@color/darkbrown"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.app.ace.ui.views.AnyTextView
+            android:id="@+id/txt_UnApprovedAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/Unapproved_Account"
+            android:layout_marginTop="@dimen/x5"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/x16"
+            app:typeface="Roboto-Bold.ttf" />
+
+
+    </LinearLayout>
+
     <com.app.ace.ui.views.AnyTextView
         android:id="@+id/txt_no_data"
         android:layout_width="wrap_content"

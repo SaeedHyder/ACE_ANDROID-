@@ -130,8 +130,8 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
             profile_picture = MultipartBody.Part.createFormData("profile_picture", profilePath,
                     RequestBody.create(MediaType.parse("image/*"), profilePic));
         }
-        if(edtMobileNumber.getText().toString().length() < 13){
-            UIHelper.showShortToastInCenter(getDockActivity(), "Mobile Number should be 13 or more characters long");
+        if(edtMobileNumber.getText().toString().length() < 11){
+            UIHelper.showShortToastInCenter(getDockActivity(), "Mobile Number should be 11 or more characters long");
         }
         else{
         RegistrationResult result = prefHelper.getUser();

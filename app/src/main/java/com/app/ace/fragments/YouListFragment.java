@@ -183,6 +183,7 @@ public class YouListFragment extends BaseFragment implements FollowService {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
 
                 } else {
+
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
 
@@ -191,7 +192,7 @@ public class YouListFragment extends BaseFragment implements FollowService {
             @Override
             public void onFailure(Call<ResponseWrapper<FollowUser>> call, Throwable t) {
 
-                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+                UIHelper.showLongToastInCenter(getDockActivity(), "");
 
             }
         });
@@ -216,6 +217,7 @@ public class YouListFragment extends BaseFragment implements FollowService {
 
     @Override
     public void UnFollowUser(String senderId, int position, int i) {
+
         Call<ResponseWrapper<FollowUser>> callBack = webService.unfollow(
                 prefHelper.getUserId(),
                 senderId
@@ -228,10 +230,12 @@ public class YouListFragment extends BaseFragment implements FollowService {
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+
+                   // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
 
 
                 } else {
+
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
 
@@ -240,8 +244,7 @@ public class YouListFragment extends BaseFragment implements FollowService {
             @Override
             public void onFailure(Call<ResponseWrapper<FollowUser>> call, Throwable t) {
 
-
-                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+               // UIHelper.showLongToastInCenter(getDockActivity(), "");
 
             }
         });

@@ -27,9 +27,10 @@ public class HomeListDataEnt {
     String is_liked;
     String videoThumbnail;
     ArrayList<PostComment> commentsArray;
+    int is_approved_user;
 
 
-    public HomeListDataEnt(int totoal_likes, int total_comments, String profile_pic_path, String profile_name, String profile_post_pic_path, String friend_name, String friend_comment, int user_id,int id, ArrayList<PostComment> commentsArray,String is_liked,String videoThumb){
+    public HomeListDataEnt(int totoal_likes, int total_comments, String profile_pic_path, String profile_name, String profile_post_pic_path, String friend_name, String friend_comment, int user_id, int id, ArrayList<PostComment> commentsArray, String is_liked, String videoThumb, int is_approved_user){
 
         setTotoal_likes(totoal_likes);
         setTotal_comments(total_comments);
@@ -43,6 +44,7 @@ public class HomeListDataEnt {
         setCommentsArray(commentsArray);
         setIs_liked(is_liked);
         setVideoThumbnail(videoThumb);
+        setIs_approved_user(is_approved_user);
 
 
 
@@ -58,6 +60,15 @@ public class HomeListDataEnt {
 
     public int getTotoal_likes() {
         return totoal_likes;
+    }
+
+
+    public int getIs_approved_user() {
+        return is_approved_user;
+    }
+
+    public void setIs_approved_user(int is_approved_user) {
+        this.is_approved_user = is_approved_user;
     }
 
     public void setTotoal_likes(int totoal_likes) {

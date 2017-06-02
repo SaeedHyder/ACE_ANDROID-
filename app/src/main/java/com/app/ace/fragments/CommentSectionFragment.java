@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.ace.R;
@@ -45,6 +46,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+import static com.app.ace.R.id.listView;
 import static com.app.ace.R.id.lv_CommentSection;
 import static com.app.ace.fragments.TrainerProfileFragment.USER_ID;
 import static com.app.ace.global.AppConstants.user_id;
@@ -60,6 +62,9 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
 
     @InjectView(R.id.iv_pointer)
     ImageView iv_pointer;
+
+    @InjectView(R.id.txt_noresult)
+    private TextView txt_noresult;
 
     public static String POSTID = "post_id";
     String post_id;
@@ -123,12 +128,7 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                   // if(response.body().getResult().size()!=0) {
                         SetAllComments(response.body().getResult());
-                   // }
-                    if(response.body().getMessage().contains("No Comments")) {
-                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                    }
 
                 }
                 else {
@@ -150,12 +150,18 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
 
         userCollection = new ArrayList<>();
 
+        if (result.size() <= 0) {
+            txt_noresult.setVisibility(View.VISIBLE);
+            listViewCommentSection.setVisibility(View.GONE);
+        } else {
+            txt_noresult.setVisibility(View.GONE);
+            listViewCommentSection.setVisibility(View.VISIBLE);
+        }
+
         for(ShowComments item : result){
 
             userCollection.add(new CommentsSectionItemsEnt(item.getUser().getProfile_image(),
                     item.getUser().getFirst_name()+" "+item.getUser().getLast_name(),item.getComment_text(),getDockActivity().getDate(item.getCreated_at()),String.valueOf(item.getUser_id())));
-
-
 
         }
 
@@ -167,17 +173,6 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
     }
 
 
-  /*  private void getUserData() {
-
-        userCollection= new ArrayList<>();
-        userCollection.add(new CommentsSectionItemsEnt("drawable://" + R.drawable.profile_pic, getString(R.string.james_blunt),"I wont be able to make it today","13m" ));
-        userCollection.add(new CommentsSectionItemsEnt("drawable://" + R.drawable.profile_pic_trainer, "Rebecca Black","What other training expertise do you have","30m"));
-        userCollection.add(new CommentsSectionItemsEnt("drawable://" + R.drawable.profile_pic,"Steve Camb","Please reply back when you get this message","46m"));
-        userCollection.add(new CommentsSectionItemsEnt("drawable://" + R.drawable.profile_pic,"Steve Camb","Please reply back when you get this message","46m"));
-
-        bindData(userCollection);
-    }
-*/
 
 
     private void setListener() {
@@ -259,8 +254,9 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
             public void onResponse(Call<ResponseWrapper<ShowComments>> call, Response<ResponseWrapper<ShowComments>> response) {
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-
-                    userCollection.add(new CommentsSectionItemsEnt(prefHelper.getUser().getProfile_image(),prefHelper.getUserName(),response.body().getResult().getComment_text(),getDockActivity().getDate(response.body().getResult().getCreated_at()),String.valueOf(response.body().getResult().getUser_id())));
+                    txt_noresult.setVisibility(View.GONE);
+                    listViewCommentSection.setVisibility(View.VISIBLE);
+                    userCollection.add(new CommentsSectionItemsEnt(response.body().getResult().getUser().getProfile_image(),response.body().getResult().getUser().getFirst_name()+" "+response.body().getResult().getUser().getLast_name(),response.body().getResult().getComment_text(),getDockActivity().getDate(response.body().getResult().getCreated_at()),String.valueOf(response.body().getResult().getUser_id())));
                     bindData(userCollection);
                     et_CommentBar.setText("");
                 }
