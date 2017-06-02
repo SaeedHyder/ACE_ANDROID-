@@ -133,16 +133,23 @@ public class InboxListFragment extends BaseFragment {
 
     private void ListViewItemListner() {
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+       listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 if(userCollection.get(i).getSender().getId()==Integer.parseInt(prefHelper.getUserId()))
                 {
+                    if(!(prefHelper.getUser().getFirst_name().equals(userCollection.get(i).getReceiver().getFirst_name())))
                     UserName=userCollection.get(i).getReceiver().getFirst_name()+" "+userCollection.get(i).getReceiver().getLast_name();
+                    else
+                        UserName=userCollection.get(i).getSender().getFirst_name()+" "+userCollection.get(i).getSender().getLast_name();
+
                     receivebyReceiver(userCollection.get(i));
                 }
                 else if(userCollection.get(i).getReceiver().getId()==Integer.parseInt(prefHelper.getUserId())) {
-                    UserName=userCollection.get(i).getSender().getFirst_name()+" "+userCollection.get(i).getSender().getLast_name();
+                    if(!(prefHelper.getUser().getFirst_name().equals(userCollection.get(i).getSender().getFirst_name())))
+                         UserName=userCollection.get(i).getSender().getFirst_name()+" "+userCollection.get(i).getSender().getLast_name();
+                    else
+                        UserName=userCollection.get(i).getReceiver().getFirst_name()+" "+userCollection.get(i).getReceiver().getLast_name();
                     receivebySender(userCollection.get(i));
                 }
               //  getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(userCollection.get(i).));
@@ -152,8 +159,8 @@ public class InboxListFragment extends BaseFragment {
 
     private void receivebyReceiver(MsgEnt entity) {
         getDockActivity().addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getMessage().getConversation_id())
-                ,String.valueOf(entity.getMessage().getReceiver_id())
-                ,String.valueOf(entity.getMessage().getSender_id())
+                ,String.valueOf(entity.getReceiver_id())
+                ,String.valueOf(entity.getSender_id())
                 ,UserName, String.valueOf(entity.getIs_following())
                 ,entity.getReceiver().getProfile_image()
                 ,entity.getReceiver().getFirst_name()+" "+entity.getReceiver().getLast_name()
@@ -161,13 +168,24 @@ public class InboxListFragment extends BaseFragment {
                 ,entity.getSender_mute(),entity.getReceiver_mute()), "ChatFragment");
     }
 
-    private void receivebySender(MsgEnt entity) {
+   /* private void receivebySender(MsgEnt entity) {
         getDockActivity().addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getMessage().getConversation_id())
                 ,String.valueOf(entity.getMessage().getSender_id())
                 ,String.valueOf(entity.getMessage().getSender_id())
                 ,UserName, String.valueOf(entity.getIs_following())
                 ,entity.getReceiver().getProfile_image()
                 ,entity.getReceiver().getFirst_name()+" "+entity.getReceiver().getLast_name()
+                ,entity.getSender_block(),entity.getReceiver_block()
+                ,entity.getSender_mute(),entity.getReceiver_mute()), "ChatFragment");
+    }*/
+
+    private void receivebySender(MsgEnt entity) {
+        getDockActivity().addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getMessage().getConversation_id())
+                ,String.valueOf(entity.getSender_id())
+                ,String.valueOf(entity.getReceiver_id())
+                ,UserName, String.valueOf(entity.getIs_following())
+                ,entity.getSender().getProfile_image()
+                ,entity.getSender().getFirst_name()+" "+entity.getSender().getLast_name()
                 ,entity.getSender_block(),entity.getReceiver_block()
                 ,entity.getSender_mute(),entity.getReceiver_mute()), "ChatFragment");
     }

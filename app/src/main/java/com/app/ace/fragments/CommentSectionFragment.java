@@ -1,5 +1,6 @@
 package com.app.ace.fragments;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,6 +14,7 @@ import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -46,6 +48,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
 import static com.app.ace.R.id.listView;
 import static com.app.ace.R.id.lv_CommentSection;
 import static com.app.ace.fragments.TrainerProfileFragment.USER_ID;
@@ -256,6 +259,16 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
                     txt_noresult.setVisibility(View.GONE);
                     listViewCommentSection.setVisibility(View.VISIBLE);
+                    hideKeyboard();
+                    listViewCommentSection.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Select the last row so it will scroll into view...
+                            listViewCommentSection.setSelection(adapter.getCount() - 1);
+                        }
+                    });
+
+
                     userCollection.add(new CommentsSectionItemsEnt(response.body().getResult().getUser().getProfile_image(),response.body().getResult().getUser().getFirst_name()+" "+response.body().getResult().getUser().getLast_name(),response.body().getResult().getComment_text(),getDockActivity().getDate(response.body().getResult().getCreated_at()),String.valueOf(response.body().getResult().getUser_id())));
                     bindData(userCollection);
                     et_CommentBar.setText("");
