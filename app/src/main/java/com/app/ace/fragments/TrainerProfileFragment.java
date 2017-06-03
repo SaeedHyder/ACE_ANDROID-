@@ -38,7 +38,6 @@ import com.app.ace.ui.views.ExpandableGridView;
 import com.app.ace.ui.views.TitleBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,13 +47,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
-import static com.googlecode.mp4parser.authoring.tracks.H264TrackImpl.SliceHeader.SliceType.P;
-
 /**
  * Created by khan_muhammad on 3/17/2017.
  */
 
-public class TrainerProfileFragment extends BaseFragment implements View.OnClickListener ,ImageClickListener{
+public class TrainerProfileFragment extends BaseFragment implements View.OnClickListener, ImageClickListener {
 
     public static String USER_ID = "User_Id";
     @InjectView(R.id.txt_tagline)
@@ -143,6 +140,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     private ImageLoader imageLoader;
     private boolean isTrainer = false;
     String TrainerGymAddress;
+    String Speciality;
 
     public static TrainerProfileFragment newInstance() {
         return new TrainerProfileFragment();
@@ -170,7 +168,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
 
         imageLoader = ImageLoader.getInstance();
-        adapter = new ArrayListAdapter<profilePostEnt>(getDockActivity(), new UserPicItemBinder(getDockActivity(),this));
+        adapter = new ArrayListAdapter<profilePostEnt>(getDockActivity(), new UserPicItemBinder(getDockActivity(), this));
 
         BaseApplication.getBus().register(this);
 
@@ -205,75 +203,76 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             public void onResponse(Call<ResponseWrapper<UserProfile>> call, Response<ResponseWrapper<UserProfile>> response) {
 
                 loadingFinished();
-                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                    try {
-                        if (response.body().getResult().getNotification_status().equals("1")) {
-                            isNotificationOn = true;
-                        } else {
-                            isNotificationOn = false;
+                if (response.body() != null) {
+                    if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                        try {
+                            if (response.body().getResult().getNotification_status().equals("1")) {
+                                isNotificationOn = true;
+                            } else {
+                                isNotificationOn = false;
+                            }
+                            if (response.body().getResult().getPrivate_account().equals("1")) {
+                                isPrivateAccount = true;
+                            } else {
+                                isPrivateAccount = false;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        if (response.body().getResult().getPrivate_account().equals("1")) {
-                            isPrivateAccount = true;
-                        } else {
-                            isPrivateAccount = false;
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
 
-                    RegistrationResult result = prefHelper.getUser();
-                    result.setProfile_image(response.body().getResult().getProfile_image());
-                    prefHelper.putUser(result);
 
-                    scrollView.setVisibility(View.VISIBLE);
-
-                    if (response.body().getResult().getUser_type().equals(AppConstants.trainer)) {
-
-                        isTrainer = true;
-                        Trainer = AppConstants.trainer;
-                        result.setEducation(response.body().getResult().getEducation());
-                        result.setSpeciality(response.body().getResult().getSpeciality());
+                        RegistrationResult result = prefHelper.getUser();
+                        result.setProfile_image(response.body().getResult().getProfile_image());
                         prefHelper.putUser(result);
 
-                        if (response.body().getResult().getId() == Integer.parseInt(prefHelper.getUserId())) {
-                            btn_edit.setVisibility(View.VISIBLE);
-                            btn_follow.setVisibility(View.GONE);
-                            btn_Unfollow.setVisibility(View.GONE);
-                            btn_request.setVisibility(View.GONE);
-                            rbAddRating.setOnTouchListener(new View.OnTouchListener() {
-                                @Override
-                                public boolean onTouch(View view, MotionEvent motionEvent) {
-                                    rbAddRating.setFocusable(false);
-                                    return true;
+                        scrollView.setVisibility(View.VISIBLE);
+
+                        if (response.body().getResult().getUser_type().equals(AppConstants.trainer)) {
+
+                            isTrainer = true;
+                            Trainer = AppConstants.trainer;
+                            result.setEducation(response.body().getResult().getEducation());
+                            result.setSpeciality(response.body().getResult().getSpeciality());
+                            prefHelper.putUser(result);
+
+                            if (response.body().getResult().getId() == Integer.parseInt(prefHelper.getUserId())) {
+                                btn_edit.setVisibility(View.VISIBLE);
+                                btn_follow.setVisibility(View.GONE);
+                                btn_Unfollow.setVisibility(View.GONE);
+                                btn_request.setVisibility(View.GONE);
+                                rbAddRating.setOnTouchListener(new View.OnTouchListener() {
+                                    @Override
+                                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                                        rbAddRating.setFocusable(false);
+                                        return true;
+                                    }
+                                });
+
+
+                            }
+                            if (response.body().getResult().getUser_type().equalsIgnoreCase(prefHelper.getUser().getUser_type())) {
+                                if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
+                                    btn_edit.setVisibility(View.GONE);
+                                    btn_follow.setVisibility(View.VISIBLE);
+                                    btn_Unfollow.setVisibility(View.GONE);
+                                    btn_request.setVisibility(View.GONE);
+
                                 }
-                            });
-
-
-
-                        }
-                        if (response.body().getResult().getUser_type().equalsIgnoreCase(prefHelper.getUser().getUser_type())) {
-                            if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
+                            } else {
                                 btn_edit.setVisibility(View.GONE);
                                 btn_follow.setVisibility(View.VISIBLE);
                                 btn_Unfollow.setVisibility(View.GONE);
-                                btn_request.setVisibility(View.GONE);
+                                btn_request.setVisibility(View.VISIBLE);
+                            }
+
+                            if (response.body().getResult().getIs_following() == 0) {
+                                btn_follow.setVisibility(View.VISIBLE);
+                                btn_Unfollow.setVisibility(View.GONE);
+                            } else {
+                                btn_follow.setVisibility(View.GONE);
+                                btn_Unfollow.setVisibility(View.VISIBLE);
 
                             }
-                        } else {
-                            btn_edit.setVisibility(View.GONE);
-                            btn_follow.setVisibility(View.VISIBLE);
-                            btn_Unfollow.setVisibility(View.GONE);
-                            btn_request.setVisibility(View.VISIBLE);
-                        }
-
-                        if (response.body().getResult().getIs_following() == 0) {
-                            btn_follow.setVisibility(View.VISIBLE);
-                            btn_Unfollow.setVisibility(View.GONE);
-                        } else {
-                            btn_follow.setVisibility(View.GONE);
-                            btn_Unfollow.setVisibility(View.VISIBLE);
-
-                        }
                       /*  if(response.body().getResult().getUser_type().equalsIgnoreCase(AppConstants.trainer) && response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())){
                             btn_edit.setVisibility(View.GONE);
                             btn_follow.setVisibility(View.VISIBLE);
@@ -290,73 +289,77 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             }
                         }
 */
-                        ll_one_button.setVisibility(View.INVISIBLE);
-                        ll_two_buttons.setVisibility(View.VISIBLE);
+                            ll_one_button.setVisibility(View.INVISIBLE);
+                            ll_two_buttons.setVisibility(View.VISIBLE);
 
 
-                        ll_trainer.setVisibility(View.VISIBLE);
-                        ll_trainee.setVisibility(View.GONE);
+                            ll_trainer.setVisibility(View.VISIBLE);
+                            ll_trainee.setVisibility(View.GONE);
 
-                        txt_Trainer.setVisibility(View.VISIBLE);
-                        rbAddRating.setVisibility(View.VISIBLE);
+                            txt_Trainer.setVisibility(View.VISIBLE);
+                            rbAddRating.setVisibility(View.VISIBLE);
 
 
-                        ll_separator.setVisibility(View.VISIBLE);
+                            ll_separator.setVisibility(View.VISIBLE);
 
-                        if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
-                            TrainerGymAddress=response.body().getResult().getGym_address();
-                            txt_profileName.setText(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
-                            imageLoader.displayImage(response.body().getResult().getProfile_image(), riv_profile_pic);
-                            txt_education_cirtification_dis.setText(response.body().getResult().getEducation() + " " + response.body().getResult().getUniversity());
-                            txt_preffered_training_loc_dis.setText(response.body().getResult().getGym_address());
-                            txt_avaliability_dis.setText(response.body().getResult().getGym_days() + " " + response.body().getResult().getGym_timing_from() + " " + response.body().getResult().getGym_timing_to());
-                            txt_postCount.setText(response.body().getResult().getPosts_count());
-                            txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
-                            txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
-                            rbAddRating.setScore(response.body().getResult().getRating());
+                            if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
+                                Speciality = response.body().getResult().getSpeciality();
+                                TrainerGymAddress = response.body().getResult().getGym_address();
+                                txt_profileName.setText(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
+                                imageLoader.displayImage(response.body().getResult().getProfile_image(), riv_profile_pic);
+                                txt_education_cirtification_dis.setText(response.body().getResult().getEducation() + " " + response.body().getResult().getUniversity());
+                                txt_preffered_training_loc_dis.setText(response.body().getResult().getGym_address());
+                                txt_avaliability_dis.setText(response.body().getResult().getGym_days() + " " + response.body().getResult().getGym_timing_from() + " " + response.body().getResult().getGym_timing_to());
+                                txt_postCount.setText(response.body().getResult().getPosts_count());
+                                txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
+                                txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
+                                rbAddRating.setScore(response.body().getResult().getRating());
 
-                            ShowUserPosts(response.body().getResult().getPosts());
-                        }
-                    } else {
-                        if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
-                            btn_edit_or_follow.setVisibility(View.GONE);
-                            btn_followTrainee.setVisibility(View.VISIBLE);
-
-                        }
-
-                        if (response.body().getResult().getIs_following() == 0) {
-                            btn_followTrainee.setVisibility(View.VISIBLE);
-                            btn_unfollowTrainee.setVisibility(View.GONE);
+                                ShowUserPosts(response.body().getResult().getPosts());
+                            }
                         } else {
-                            btn_followTrainee.setVisibility(View.GONE);
-                            btn_unfollowTrainee.setVisibility(View.VISIBLE);
+                            if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
+                                btn_edit_or_follow.setVisibility(View.GONE);
+                                btn_followTrainee.setVisibility(View.VISIBLE);
 
-                        }
+                            }
 
-                        ll_one_button.setVisibility(View.VISIBLE);
-                        ll_two_buttons.setVisibility(View.INVISIBLE);
+                            if (response.body().getResult().getIs_following() == 0) {
+                                btn_followTrainee.setVisibility(View.VISIBLE);
+                                btn_unfollowTrainee.setVisibility(View.GONE);
+                            } else {
+                                btn_followTrainee.setVisibility(View.GONE);
+                                btn_unfollowTrainee.setVisibility(View.VISIBLE);
+
+                            }
+
+                            ll_one_button.setVisibility(View.VISIBLE);
+                            ll_two_buttons.setVisibility(View.INVISIBLE);
 
 
-                        ll_trainer.setVisibility(View.GONE);
-                        ll_trainee.setVisibility(View.VISIBLE);
+                            ll_trainer.setVisibility(View.GONE);
+                            ll_trainee.setVisibility(View.VISIBLE);
 
-                        txt_Trainer.setVisibility(View.GONE);
-                        rbAddRating.setVisibility(View.GONE);
+                            txt_Trainer.setVisibility(View.GONE);
+                            rbAddRating.setVisibility(View.GONE);
 
-                        ll_separator.setVisibility(View.GONE);
+                            ll_separator.setVisibility(View.GONE);
 
-                        if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
-                            // ShowTrianeeData();
-                            txt_profileName.setText(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
-                            imageLoader.displayImage(response.body().getResult().getProfile_image(), riv_profile_pic);
-                            txt_postCount.setText(response.body().getResult().getPosts_count());
-                            txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
-                            txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
-                            rbAddRating.setScore(response.body().getResult().getRating());
-                            txt_tagline.setText(response.body().getResult().getUser_status());
-                            ShowUserPosts(response.body().getResult().getPosts());
+                            if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
+                                // ShowTrianeeData();
+                                txt_profileName.setText(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
+                                imageLoader.displayImage(response.body().getResult().getProfile_image(), riv_profile_pic);
+                                txt_postCount.setText(response.body().getResult().getPosts_count());
+                                txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
+                                txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
+                                rbAddRating.setScore(response.body().getResult().getRating());
+                                txt_tagline.setText(response.body().getResult().getUser_status());
+                                ShowUserPosts(response.body().getResult().getPosts());
+                            }
                         }
                     }
+                } else {
+                    loadingFinished();
                 }
 
             }
@@ -365,7 +368,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             public void onFailure(Call<ResponseWrapper<UserProfile>> call, Throwable t) {
 
                 loadingFinished();
-                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+                UIHelper.showShortToastInCenter(getDockActivity(), t.getMessage());
 
             }
         });
@@ -384,8 +387,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                     ImageCollection.add(new String(postsEnt.getPost_image()));
                 }
             }
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -461,10 +463,10 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
 
                 } else {
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
                 }
 
             }
@@ -472,7 +474,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             @Override
             public void onFailure(Call<ResponseWrapper<User>> call, Throwable t) {
                 loadingFinished();
-                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+                UIHelper.showShortToastInCenter(getDockActivity(), t.getMessage());
             }
         });
     }
@@ -552,7 +554,8 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             case R.id.btn_request:
 
                 //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
-                getDockActivity().addDockableFragment(CalendarFragment.newInstance(user_id,TrainerGymAddress), "CalendarFragment");
+
+                getDockActivity().addDockableFragment(CalendarFragment.newInstance(user_id, TrainerGymAddress, Speciality), "CalendarFragment");
 
 
                 break;
@@ -673,12 +676,12 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
                    /* btn_follow.setVisibility(View.GONE);
                     btn_Unfollow.setVisibility(View.VISIBLE);*/
 
                 } else {
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
                 }
 
             }
@@ -687,7 +690,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             public void onFailure(Call<ResponseWrapper<FollowUser>> call, Throwable t) {
 
                 loadingFinished();
-                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+                UIHelper.showShortToastInCenter(getDockActivity(), t.getMessage());
 
             }
         });
@@ -707,12 +710,12 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
                    /* btn_follow.setVisibility(View.VISIBLE);
                     btn_Unfollow.setVisibility(View.GONE);*/
 
                 } else {
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
                 }
 
             }
@@ -721,7 +724,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             public void onFailure(Call<ResponseWrapper<FollowUser>> call, Throwable t) {
 
                 loadingFinished();
-                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+                UIHelper.showShortToastInCenter(getDockActivity(), t.getMessage());
 
             }
         });

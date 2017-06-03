@@ -79,7 +79,7 @@ public class SearchTrainerFragment extends BaseFragment {
 
     private void getSearchUserData() {
         if (edtsearch != null) {
-            Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edtsearch.getText().toString(), AppConstants.trainer);
+            Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchAllUsers(edtsearch.getText().toString());
 
             callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
                 @Override

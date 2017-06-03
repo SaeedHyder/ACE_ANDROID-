@@ -36,8 +36,10 @@ public class TokenUpdater {
         call.enqueue(new Callback<ResponseWrapper>() {
             @Override
             public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
+                if(response.body() !=null){
 
-                Log.i("UPDATETOKEN",response.body().getResponse()+""+userid);
+                Log.i("UPDATETOKEN",response.body().getResponse()+""+userid);}
+
             }
 
             @Override

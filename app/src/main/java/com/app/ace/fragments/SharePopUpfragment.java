@@ -142,6 +142,7 @@ public class SharePopUpfragment extends BaseFragment implements View.OnClickList
                 @Override
                 public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call,
                                        Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
+                    hideKeyboard();
                     bindview(response.body().getResult());
                     setDataInAdapter(view, userCollection);
                 }

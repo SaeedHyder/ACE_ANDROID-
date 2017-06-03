@@ -47,7 +47,6 @@ public class FollowListFragment extends BaseFragment {
 
 
     public static FollowListFragment newInstance() {
-
         return new FollowListFragment();
     }
 
@@ -74,19 +73,23 @@ public class FollowListFragment extends BaseFragment {
     }
 
     private void setData() {
+        getDockActivity().onLoadingStarted();
 
         Call<ResponseWrapper<ArrayList<UserNotificatoin>>> callBack = webService.FollowingNotification(prefHelper.getUserId());
 
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserNotificatoin>>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<ArrayList<UserNotificatoin>>> call, Response<ResponseWrapper<ArrayList<UserNotificatoin>>> response) {
+
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                    getDockActivity().onLoadingFinished();
 
                     setDataInNOtificationList(response.body().getResult());
 
                 }
                 else
                 {
+                    getDockActivity().onLoadingFinished();
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
 
@@ -94,6 +97,7 @@ public class FollowListFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<ResponseWrapper<ArrayList<UserNotificatoin>>> call, Throwable t) {
+                getDockActivity().onLoadingFinished();
                 UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
             }
         });
