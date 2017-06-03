@@ -139,6 +139,15 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
                 viewHolder.vv_post_video.setVideoURI(uri);
                 viewHolder.vv_post_video.start();
 
+                viewHolder.vv_post_video.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        viewHolder.iv_playBtn.setVisibility(View.VISIBLE);
+                        viewHolder.rl_videoThumb.setVisibility(View.VISIBLE);
+                        mp.reset();
+                    }
+                });
+
             }
         });
 
