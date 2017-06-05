@@ -75,7 +75,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     AnyTextView txt_LocationProfileFrag;
     String Trainer, Trainee;
     boolean isNotificationOn = false;
-    boolean isPrivateAccount = false;
+    boolean isPublicAccount = false;
     String user_id;
     int rating = 5;
     @InjectView(R.id.scrollView)
@@ -211,10 +211,10 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             } else {
                                 isNotificationOn = false;
                             }
-                            if (response.body().getResult().getPrivate_account().equals("1")) {
-                                isPrivateAccount = true;
+                            if (response.body().getResult().getPrivate_account().equals("0")) {
+                                isPublicAccount = true;
                             } else {
-                                isPrivateAccount = false;
+                                isPublicAccount = false;
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -503,7 +503,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             @Override
             public void onClick(View v) {
 
-                getDockActivity().addDockableFragment(SettingsFragment.newInstance(isNotificationOn, isPrivateAccount), "SettingsFragment");
+                getDockActivity().addDockableFragment(SettingsFragment.newInstance(isNotificationOn, isPublicAccount), "SettingsFragment");
 
             }
         });

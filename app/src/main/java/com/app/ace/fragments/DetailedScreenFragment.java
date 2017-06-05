@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.app.ace.R;
@@ -44,6 +45,7 @@ import roboguice.inject.InjectView;
 import static com.app.ace.R.id.iv_Camera;
 import static com.app.ace.R.id.iv_Fav;
 import static com.app.ace.R.id.iv_Home;
+import static com.app.ace.R.id.ll_profile;
 import static com.app.ace.R.id.riv_profile_pic;
 
 /**
@@ -54,6 +56,9 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
 
     @InjectView(R.id.lv_detailedScreen)
     private ListView lv_detailedScreen;
+
+    @InjectView(R.id.ll_profile)
+    LinearLayout ll_profile;
 
     @InjectView(R.id.btn_cancel_booking)
     Button btn_cancel_booking;
@@ -108,12 +113,14 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
         if (!SLOT.isEmpty()){
             currentSlot =  GsonFactory.getConfiguredGson().fromJson(SLOT,Slot.class);
         }
+
         adapter = new ArrayListAdapter<DetailedScreenItem>(getDockActivity(), new DetailedScreenListItemBinder());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_detailed_screen, container, false);
+
     }
 
     @Override

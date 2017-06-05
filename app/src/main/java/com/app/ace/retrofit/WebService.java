@@ -317,7 +317,7 @@ public interface WebService {
 
     @Multipart
     @POST("user/update")
-    Call<ResponseWrapper<RegistrationResult>> NotificationStatus(
+    Call<ResponseWrapper<RegistrationResult>>   NotificationStatus(
             @Part("user_id") RequestBody user_id,
             @Part("notification_status") RequestBody notification_status,
             @Part("private_account") RequestBody private_account

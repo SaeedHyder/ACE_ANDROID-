@@ -206,8 +206,10 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
 
        final String name ="@"+ShowName.getNameCommentor().toLowerCase()+" " ;
 
-        et_CommentBar.setText(parseActiveReply(name,et_CommentBar.getText().toString()));
-        et_CommentBar.setTag(ShowName.getUser_id());
+        if(!et_CommentBar.getText().toString().contains(ShowName.getNameCommentor())) {
+            et_CommentBar.setText(parseActiveReply(name, et_CommentBar.getText().toString()));
+            et_CommentBar.setTag(ShowName.getUser_id());
+        }
 
 
     }

@@ -56,6 +56,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public static String RECEIVERBLOCK = "receiverblock";
     public static String SENDERMUTE = "sendermute";
     public static String RECEIVERMUTE = "receivermute";
+    public static String BLOCKRECEIVER = "blockReceiver";
+    String blockReceiverId;
     public static String SENDER_ID = "0";
     public String sender_block;
     public String receiver_block;
@@ -111,7 +113,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                                            int senderblock,
                                            int receiverblock,
                                            int sendermute,
-                                           int receivermute) {
+                                           int receivermute,
+                                           String blockReceiverId) {
         Bundle args = new Bundle();
         args.putString(CONVERSATION_ID, conversationId);
         args.putString(Receiver_ID, receiver_id);
@@ -124,6 +127,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         args.putString(RECEIVERBLOCK, String.valueOf(receiverblock));
         args.putString(SENDERMUTE, String.valueOf(sendermute));
         args.putString(RECEIVERMUTE, String.valueOf(receivermute));
+        args.putString(BLOCKRECEIVER,blockReceiverId);
 
         ChatFragment fragment = new ChatFragment();
         fragment.setArguments(args);
@@ -188,6 +192,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             receiver_block=getArguments().getString(RECEIVERBLOCK);
             sender_mute=getArguments().getString(SENDERMUTE);
             receiver_mute=getArguments().getString(RECEIVERMUTE);
+            blockReceiverId=getArguments().getString(BLOCKRECEIVER);
 
             // Toast.makeText(getDockActivity(), ConversationId, Toast.LENGTH_LONG).show();
         }
@@ -247,6 +252,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
                          setConversation(response.body().getResult().get(0).getMessages());
 
+                        setUserName(response.body().getResult());
+
                     } else {
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                     }
@@ -262,6 +269,27 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
         });
     }
+
+    private void setUserName(ArrayList<ConversationEnt> result) {
+
+        if (result.get(0).getConversation().getSenderId() == Integer.parseInt(prefHelper.getUserId())) {
+            isSender = false;
+            USERNAME = result.get(0).getMessages().get(0).getReceiver().getFirst_name()
+                    +" "+result.get(0).getMessages().get(0).getReceiver().getLast_name();
+           // ProfileImage = result.get(0).getMessages().get(0).getReceiver().getProfile_image();
+        } else {
+            isSender = true;
+            USERNAME = result.get(0).getMessages().get(0).getSender().getFirst_name()
+                    +" "+result.get(0).getMessages().get(0).getSender().getLast_name();
+          //  ProfileImage = result.get(0).getMessages().get(0).getSender().getProfile_image();
+        }
+
+        getMainActivity().titleBar.setSubHeading(USERNAME);
+
+
+    }
+
+
 
 
     private void setConversation(ArrayList<MsgEnt> msgArrayList) {
@@ -285,13 +313,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
             if (msgEnt.getSender().getId() == Integer.parseInt(prefHelper.getUserId())) {
                 isSender = false;
-                USERNAME = msgArrayList.get(0).getReceiver().getFirst_name()
-                        +" "+msgArrayList.get(0).getReceiver().getLast_name();
+               /* USERNAME = msgArrayList.get(0).getReceiver().getFirst_name()
+                        +" "+msgArrayList.get(0).getReceiver().getLast_name();*/
                 ProfileImage = msgArrayList.get(0).getReceiver().getProfile_image();
             } else {
                 isSender = true;
-                USERNAME = msgArrayList.get(0).getSender().getFirst_name()
-                        +" "+msgArrayList.get(0).getSender().getLast_name();
+               /* USERNAME = msgArrayList.get(0).getSender().getFirst_name()
+                        +" "+msgArrayList.get(0).getSender().getLast_name();*/
                 ProfileImage = msgArrayList.get(0).getSender().getProfile_image();
             }
             if(PostPath!=null)
@@ -326,7 +354,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
             }
         }
-      //  getMainActivity().titleBar.setSubHeading(USERNAME);
+
+
         getMainActivity().titleBar.invalidate();
         bindData(collection);
 
@@ -377,10 +406,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 // UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
                 getDockActivity().addDockableFragment(FriendsInfoFragment.newInstance(
                         ConversationId,
-                        receiverId,
+                        blockReceiverId,
                         IsFollowing,
                         ProfileImage,
-                        USERNAME,
+                        UserName,
                         sender_block,
                         receiver_block
                          ,String.valueOf(isReceiver_mute)), "FriendsInfoFragment");
