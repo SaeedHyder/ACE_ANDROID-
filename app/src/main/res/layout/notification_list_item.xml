@@ -29,9 +29,10 @@
 
             <com.app.ace.ui.views.AnyTextView
                 android:id="@+id/txtNotificationText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="left"
                 android:maxLines="1"
                 android:text="dummy alert"
                 android:textColor="@color/black"
@@ -41,9 +42,10 @@
 
             <com.app.ace.ui.views.AnyTextView
                 android:id="@+id/txtNotificationDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="left"
                 android:text="Template"
                 android:alpha="0.7"
                 android:textColor="@color/dark_grey"

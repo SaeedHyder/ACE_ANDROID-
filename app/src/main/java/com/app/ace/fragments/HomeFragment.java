@@ -356,10 +356,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             @Override
             public void onResponse(Call<ResponseWrapper<HomeResultEnt>> call, Response<ResponseWrapper<HomeResultEnt>> response) {
 
-                loadingFinished();
+
+                if(response.body() != null){
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-
+                    loadingFinished();
                     setHomePostsData(response.body().getResult().getPosts(),response.body().getResult().getIs_approved_user());
 
                     if(response.body().getResult().getIs_approved_user()==1)
@@ -372,9 +373,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
                     }
 
                 } else {
+                    loadingFinished();
                     gridView.setVisibility(View.INVISIBLE);
                     txt_no_data.setVisibility(View.VISIBLE);
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }}
+                else {
+                    txt_no_data.setVisibility(View.VISIBLE);
+                    txt_no_data.setText(getString(R.string.no_internet));
+                    loadingFinished();
                 }
 
             }
@@ -661,6 +668,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
                 int i = 1;
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+
 
                     //UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
 

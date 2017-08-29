@@ -43,7 +43,7 @@ public class FollowingCountListBinder extends ViewBinder<FollowingCountDataItem>
         imageLoader.displayImage(entity.getUserImage(), viewHolder.userImage);
         viewHolder.txtUserName.setText(entity.getUserName());
 
-        viewHolder.userImage.setOnClickListener(new View.OnClickListener() {
+      /*  viewHolder.userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 context.addDockableFragment(TrainerProfileFragment.newInstance(entity.getId()), "TrainerProfileFragment");
@@ -56,7 +56,7 @@ public class FollowingCountListBinder extends ViewBinder<FollowingCountDataItem>
                 context.addDockableFragment(TrainerProfileFragment.newInstance(entity.getId()), "TrainerProfileFragment");
             }
         });
-
+*/
 
     }
 

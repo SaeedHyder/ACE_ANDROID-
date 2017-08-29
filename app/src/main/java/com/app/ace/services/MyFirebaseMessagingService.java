@@ -74,10 +74,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void handleDataMessage(final RemoteMessage messageBody) {
-
-
-
-
             webservice = WebServiceFactory.getWebServiceInstanceWithCustomInterceptor(getApplicationContext(),
                     WebServiceConstants.SERVICE_BASE_URL);
             preferenceHelper = new BasePreferenceHelper(getApplicationContext());

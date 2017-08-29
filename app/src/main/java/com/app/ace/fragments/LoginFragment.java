@@ -211,7 +211,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 						getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
 
 					} else {
-						UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+						//UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
 
 						showTwitterSignUpDialog(user);
 

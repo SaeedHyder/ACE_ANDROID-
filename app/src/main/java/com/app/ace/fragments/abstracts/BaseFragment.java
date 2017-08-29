@@ -46,6 +46,7 @@ public abstract class BaseFragment extends RoboFragment {
 	protected static WebService webService;
 	protected static WebService googleWebService ;
 
+	private DockActivity activity;
 
 	protected GPSTracker mGpsTracker;
 
@@ -75,12 +76,14 @@ public abstract class BaseFragment extends RoboFragment {
 		super.onResume();
 		setTitleBar( ((MainActivity) getDockActivity()).titleBar );
 	}
-	
-	@Override
-	public void onAttach( Activity activity ) {
-		super.onAttach( activity );
-	}
-	
+
+	/*@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+
+		this.activity = (DockActivity) activity;
+	}*/
+
 	protected void createClient() {
 		// webService = WebServiceFactory.getInstanceWithBasicGsonConversion();
 		
@@ -142,15 +145,15 @@ public abstract class BaseFragment extends RoboFragment {
 	
 	protected DockActivity getDockActivity() {
 		
-		DockActivity activity = (DockActivity) getActivity();
-		while ( activity == null ) {
+		/*DockActivity activity = (DockActivity) getActivity();
+		*//*while ( activity == null ) {
 			activity = (DockActivity) getActivity();
 			try {
 				Thread.sleep( 50 );
 			} catch ( InterruptedException e ) {
 				e.printStackTrace();
 			}
-		}
+		}*/
 		return activity;
 		
 	}
@@ -328,5 +331,12 @@ public abstract class BaseFragment extends RoboFragment {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+
+		activity = (DockActivity) context;
 	}
 }

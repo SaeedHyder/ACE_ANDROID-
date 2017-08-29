@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -87,7 +88,22 @@ public class FollowingCountListFragment extends BaseFragment {
         //setListener();
        // getUserData();
         getAllFollowings();
+        listViewListner();
     }
+
+    private void listViewListner() {
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+
+                getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(FollowingsuserCollection.get(i).getId()), "TrainerProfileFragment");
+
+            }
+        });
+
+    }
+
     private void getFollowing(ArrayList<FollowingCountListEnt> followingCountListEntArrayList) {
 
         FollowingsuserCollection = new ArrayList<>();
@@ -111,24 +127,7 @@ public class FollowingCountListFragment extends BaseFragment {
 
         bindData(FollowingsuserCollection);
     }
-   /* private void getUserData() {
 
-        userCollection= new ArrayList<>();
-        userCollection.add(new FollowingCountDataItem("drawable://" + R.drawable.profile_pic, getString(R.string.james_blunt) ));
-        userCollection.add(new FollowingCountDataItem("drawable://" + R.drawable.profile_pic_trainer, "Tori Smith"));
-
-
-        bindData(userCollection);
-    }*/
-
-  /*  private void setListener() {
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                getDockActivity().addDockableFragment(FollowingCountListFragment.newInstance(), "TrainersAvailabeFragment");
-            }
-        });
-    }*/
 
     private void bindData(ArrayList<FollowingCountDataItem> userCollection) {
         adapter.clearList();

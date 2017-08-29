@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -84,7 +85,23 @@ public class FollowersCountListFragment  extends BaseFragment {
         //setListener();
         //getFollowers();
         getAllFollowers();
+        listViewListner();
+
     }
+
+    private void listViewListner() {
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+
+                getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(FollowersuserCollection.get(i).getId()), "TrainerProfileFragment");
+
+            }
+        });
+
+    }
+
     private void getFollowers(ArrayList<FollowersCountListEnt> followersCountListEntArrayList) {
 
         FollowersuserCollection = new ArrayList<>();
@@ -109,24 +126,7 @@ public class FollowersCountListFragment  extends BaseFragment {
 
         bindData(FollowersuserCollection);
     }
-//    private void getFollowers() {
-//
-//        userCollection= new ArrayList<>();
-//        userCollection.add(new FollowersCountDataItem("drawable://" + R.drawable.profile_pic, getString(R.string.james_blunt) ));
-//        userCollection.add(new FollowersCountDataItem("drawable://" + R.drawable.profile_pic_trainer, "Tori Smith"));
-//        // userCollection.add(new TrainerAvailDataItem("drawable://" + R.drawable.profile_pic, getString(R.string.charlie_hunnam), getString(R.string.please_reply)));
-//
-//        bindData(userCollection);
-//    }
 
-    /*private void setListener() {
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                getDockActivity().addDockableFragment(ChatFragment.newInstance(), "TrainersAvailabeFragment");
-            }
-        });
-    }*/
 
     private void bindData(ArrayList<FollowersCountDataItem> userCollection) {
         adapter.clearList();

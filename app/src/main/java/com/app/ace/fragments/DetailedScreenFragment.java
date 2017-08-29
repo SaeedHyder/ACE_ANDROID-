@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.app.ace.R;
@@ -25,6 +26,7 @@ import com.app.ace.ui.viewbinders.SearchPeopleListItemBinder;
 import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
 import com.google.gson.Gson;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.joda.time.DateTime;
 
@@ -34,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,6 +45,8 @@ import roboguice.inject.InjectView;
 import static com.app.ace.R.id.iv_Camera;
 import static com.app.ace.R.id.iv_Fav;
 import static com.app.ace.R.id.iv_Home;
+import static com.app.ace.R.id.ll_profile;
+import static com.app.ace.R.id.riv_profile_pic;
 
 /**
  * Created by saeedhyder on 4/5/2017.
@@ -51,6 +56,9 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
 
     @InjectView(R.id.lv_detailedScreen)
     private ListView lv_detailedScreen;
+
+    @InjectView(R.id.ll_profile)
+    LinearLayout ll_profile;
 
     @InjectView(R.id.btn_cancel_booking)
     Button btn_cancel_booking;
@@ -68,9 +76,13 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
     private AnyTextView txt_day;
     @InjectView(R.id.txt_time)
     private AnyTextView txt_time;
+    private ImageLoader imageLoader;
 
     @InjectView(R.id.txt_detailedS_ProfileName)
     private AnyTextView txt_detailedS_ProfileName;
+
+    @InjectView (R.id.img_DetailedProfile)
+    CircleImageView img_DetailedProfile;
 
     private Slot currentSlot;
     private static String SLOT = "SLOT";
@@ -101,20 +113,24 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
         if (!SLOT.isEmpty()){
             currentSlot =  GsonFactory.getConfiguredGson().fromJson(SLOT,Slot.class);
         }
+
         adapter = new ArrayListAdapter<DetailedScreenItem>(getDockActivity(), new DetailedScreenListItemBinder());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_detailed_screen, container, false);
+
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        imageLoader = ImageLoader.getInstance();
         if (currentSlot!=null){
             txt_detailedS_ProfileName.setText(currentSlot.getBookings().getUser().getFirst_name()
                     +" "+currentSlot.getBookings().getUser().getLast_name());
+            imageLoader.displayImage(currentSlot.getBookings().getUser().getProfile_image(), img_DetailedProfile);
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
             try {
                 Date date = format.parse(currentSlot.getDate());

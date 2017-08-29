@@ -1,5 +1,6 @@
 package com.app.ace.fragments;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -95,11 +96,14 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     private ArrayList<Date> totaldate = new ArrayList<>();
     private Date startDate;
     private String GymAddress;
+    public static String SPECIALTY = "specialty";
+    String Specialty;
 
-    public static CalendarFragment newInstance(String startDate,String trainerGymAddress) {
+    public static CalendarFragment newInstance(String startDate,String trainerGymAddress,String specialty) {
         Bundle args = new Bundle();
         args.putString(USER_ID, startDate);
         args.putString(ADDRESS, trainerGymAddress);
+        args.putString(SPECIALTY,specialty);
         CalendarFragment fragment = new CalendarFragment();
         fragment.setArguments(args);
         return fragment;
@@ -110,12 +114,15 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
 
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             USER_ID = getArguments().getString(USER_ID);
             GymAddress=getArguments().getString(ADDRESS);
+            Specialty=getArguments().getString(SPECIALTY);
             // Toast.makeText(getDockActivity(), ConversationId, Toast.LENGTH_LONG).show();
         }
 
@@ -282,6 +289,8 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     private void initCategorySpinner() {
         //Spinner Category
 
+        String[] specialtyArray=Specialty.split(",");
+
         final List<String> category = new ArrayList<String>();
         category.add(getString(R.string.Flexiblity_training));
         category.add(getString(R.string.dynamic_strenght_taining));
@@ -291,7 +300,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         category.add(getString(R.string.Body_Building));
         category.add(getString(R.string.Lose_Weight));
 
-        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, category);
+        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(getDockActivity(), android.R.layout.simple_spinner_item, specialtyArray);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_category.setAdapter(categoryAdapter);
         sp_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -392,10 +401,15 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
                 @Override
                 public void onResponse(Call<ResponseWrapper<TrainerBooking>> call, Response<ResponseWrapper<TrainerBooking>> response) {
                     loadingFinished();
+                    if(response.body() !=null){
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
                         getTrainerTimingSlots(response.body().getResult());
                     } else {
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    }}
+                    else
+                    {
+                        loadingFinished();
                     }
                 }
 
@@ -582,6 +596,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         callback.enqueue(new Callback<ResponseWrapper>() {
             @Override
             public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
+                if(response.body() !=null){
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
                     loadingFinished();
                     //UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
@@ -589,6 +604,10 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
 
                 } else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }}
+                else
+                {
+                    loadingFinished();
                 }
 
             }
@@ -698,6 +717,8 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     }
 
 
+
+
     @Override
     public void setTitleBar(TitleBar titleBar) {
         super.setTitleBar(titleBar);
@@ -744,3 +765,5 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
                 .withSelectedDates(dates);
 
     }*/
+
+

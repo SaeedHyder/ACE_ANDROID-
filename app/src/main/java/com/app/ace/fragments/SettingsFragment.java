@@ -58,7 +58,8 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     @InjectView(R.id.toggle_private_or_public)
     private ToggleButton toggle_private_or_public;
     private boolean notification_on = true;
-    private boolean private_account = true;
+    private boolean pubicAccount = true;
+    public String account;
 
 
     public static SettingsFragment newInstance() {
@@ -81,7 +82,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (getArguments() != null) {
             notification_on = getArguments().getBoolean(NOTIFICATION_ON);
-            private_account = getArguments().getBoolean(PRIVATE_ACCOUNT);
+            pubicAccount = getArguments().getBoolean(PRIVATE_ACCOUNT);
         }
         return inflater.inflate(R.layout.fragments_settings, container, false);
     }
@@ -91,7 +92,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         super.onViewCreated(view, savedInstanceState);
 
         toggle_notifications.setChecked(notification_on);
-        toggle_private_or_public.setChecked(private_account);
+        toggle_private_or_public.setChecked(pubicAccount);
         cb_english.setChecked(true);
 
         setListeners();
@@ -201,13 +202,12 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
     void NotificationStatus() {
         String notification;
-        String account;
 
         if (toggle_notifications.isChecked()) notification = "1";
         else notification = "0";
 
-        if (toggle_private_or_public.isChecked()) account = "1";
-        else account = "0";
+        if (toggle_private_or_public.isChecked()) account = "0";
+        else account = "1";
 
         Call<ResponseWrapper<RegistrationResult>> callBack = webService.NotificationStatus(
                 RequestBody.create(MediaType.parse("text/plain"), prefHelper.getUserId()),

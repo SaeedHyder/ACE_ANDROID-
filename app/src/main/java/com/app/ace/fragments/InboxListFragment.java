@@ -165,7 +165,7 @@ public class InboxListFragment extends BaseFragment {
                 ,entity.getReceiver().getProfile_image()
                 ,entity.getReceiver().getFirst_name()+" "+entity.getReceiver().getLast_name()
                 ,entity.getSender_block(),entity.getReceiver_block()
-                ,entity.getSender_mute(),entity.getReceiver_mute()), "ChatFragment");
+                ,entity.getSender_mute(),entity.getReceiver_mute(),String.valueOf(entity.getReceiver_id())), "ChatFragment");
     }
 
    /* private void receivebySender(MsgEnt entity) {
@@ -187,7 +187,7 @@ public class InboxListFragment extends BaseFragment {
                 ,entity.getSender().getProfile_image()
                 ,entity.getSender().getFirst_name()+" "+entity.getSender().getLast_name()
                 ,entity.getSender_block(),entity.getReceiver_block()
-                ,entity.getSender_mute(),entity.getReceiver_mute()), "ChatFragment");
+                ,entity.getSender_mute(),entity.getReceiver_mute(),String.valueOf(entity.getReceiver_id())), "ChatFragment");
     }
 
 

@@ -115,18 +115,18 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
 
     if (homeListDataEnt.getProfile_post_pic_path().contains(".mp4"))
     {
-
-        viewHolder.vv_post_video.setVisibility(View.VISIBLE);
+        imageLoader.displayImage(homeListDataEnt.getVideoThumbnail(), viewHolder.iv_videoThumb);
+        viewHolder.vv_post_video.setVisibility(View.GONE);
         viewHolder.iv_post_pic.setVisibility(View.GONE);
         viewHolder.iv_playBtn.setVisibility(View.VISIBLE);
         viewHolder.rl_videoThumb.setVisibility(View.VISIBLE);
+        viewHolder.iv_videoThumb.setVisibility(View.VISIBLE);
         viewHolder.vv_post_video.stopPlayback();
-
         final MediaController mediaController= new MediaController(context);
         mediaController.setAnchorView(viewHolder.vv_post_video);
         final Uri uri=Uri.parse(homeListDataEnt.getProfile_post_pic_path());
         viewHolder.vv_post_video.setKeepScreenOn(true);
-        imageLoader.displayImage(homeListDataEnt.getVideoThumbnail(), viewHolder.iv_videoThumb);
+
 
         viewHolder.iv_playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,8 +136,22 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
                 //viewHolder.vv_post_video.start();
                 viewHolder.iv_playBtn.setVisibility(View.GONE);
                 viewHolder.iv_videoThumb.setVisibility(View.GONE);
+                viewHolder.vv_post_video.setVisibility(View.VISIBLE);
                 viewHolder.vv_post_video.setVideoURI(uri);
                 viewHolder.vv_post_video.start();
+
+                viewHolder.vv_post_video.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        viewHolder.vv_post_video.setVisibility(View.GONE);
+                        viewHolder.iv_post_pic.setVisibility(View.GONE);
+                        viewHolder.iv_playBtn.setVisibility(View.VISIBLE);
+                        viewHolder.rl_videoThumb.setVisibility(View.VISIBLE);
+                        viewHolder.iv_videoThumb.setVisibility(View.VISIBLE);
+
+//                        mp.reset();
+                    }
+                });
 
             }
         });

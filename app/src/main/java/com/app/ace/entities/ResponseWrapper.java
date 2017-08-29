@@ -2,8 +2,8 @@ package com.app.ace.entities;
 
 public class ResponseWrapper<T> {
 
-    private String Message;
-    private String Response;
+    private String Message="";
+    private String Response="";
     private T Result;
 
     public String getMessage() {

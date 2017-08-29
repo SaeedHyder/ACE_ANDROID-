@@ -96,7 +96,7 @@
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/LL_ListView"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/x160"
                 android:layout_below="@+id/RR_Search"
                 android:layout_marginTop="@dimen/x5"
@@ -110,8 +110,8 @@
                 <com.app.ace.ui.views.AnyTextView
                     android:id="@+id/txt_noresult"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
                     android:paddingBottom="@dimen/x5"
                     android:paddingLeft="@dimen/x8"
                     android:paddingTop="@dimen/x2"
