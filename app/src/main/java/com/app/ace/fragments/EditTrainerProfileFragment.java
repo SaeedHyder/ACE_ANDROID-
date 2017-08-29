@@ -88,6 +88,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
 
 
 
+
     @InjectView(R.id.sp_Gender)
     private Spinner sp_Gender;
 
@@ -124,7 +125,6 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         // Spinner Drop down elements
         List<String> categories = new ArrayList<>();
@@ -198,8 +198,8 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         if (Speciality.isEmpty()){
             Speciality = prefHelper.getUser().getSpeciality();
         }
-        if(edtMobileNumber.getText().toString().length() < 13){
-            UIHelper.showShortToastInCenter(getDockActivity(), "Mobile Number should be 13 or more characters long");
+        if(edtMobileNumber.getText().toString().length() < 11){
+            UIHelper.showShortToastInCenter(getDockActivity(), "Mobile Number should be 11 or more characters long");
         }
         else{
 
@@ -238,11 +238,13 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
                     loadingFinished();
 
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                        loadingFinished();
 
                       //  UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                         getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(), "TrainerProfileFragment");
                     }
                     else {
+                        loadingFinished();
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                     }
 
@@ -282,6 +284,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
             public void onClick(View v) {
                // setSpCertification();
                 //setSpSpeciality();
+                loadingStarted();
                 Education = StringUtils.join(EducationArray,",");
                 Speciality = StringUtils.join(SpecialityArray,",");
                 //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));

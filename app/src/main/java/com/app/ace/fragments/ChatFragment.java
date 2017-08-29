@@ -326,7 +326,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
             }
         }
-        getMainActivity().titleBar.setSubHeading(USERNAME);
+      //  getMainActivity().titleBar.setSubHeading(USERNAME);
         getMainActivity().titleBar.invalidate();
         bindData(collection);
 
@@ -387,7 +387,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
         });}
 
-        //titleBar.setSubHeading(UserName);
+        titleBar.setSubHeading(UserName);
     }
 
     @Override
@@ -413,6 +413,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 prefHelper.getUserId(),
                 receiverId,
                 edtChat.getText().toString());
+
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<MsgEnt>>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<ArrayList<MsgEnt>>> call, Response<ResponseWrapper<ArrayList<MsgEnt>>> response) {
@@ -422,11 +423,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
                     if(response.body().getResult().isEmpty())
                     {
+                        hideKeyboard();
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                     }
                     else {
                         ArrayList<MsgEnt> msg = response.body().getResult();
                         msg.get(msg.size()-1);
+                        hideKeyboard();
+                        listView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Select the last row so it will scroll into view...
+                                listView.setSelection(adapter.getCount() - 1);
+                            }
+                        });
 
 
 
@@ -436,6 +446,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 }
                 else
                 {
+                    hideKeyboard();
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
             }
@@ -444,6 +455,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             public void onFailure(Call<ResponseWrapper<ArrayList<MsgEnt>>> call, Throwable t) {
 
                 loadingFinished();
+                hideKeyboard();
                 System.out.println(t.toString());
                 UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
             }

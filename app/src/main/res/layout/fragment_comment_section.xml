@@ -6,14 +6,40 @@
     android:background="@drawable/bg"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.9"
+        android:orientation="vertical">
+
+    <com.app.ace.ui.views.AnyTextView
+        android:id="@+id/txt_noresult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:paddingBottom="@dimen/x5"
+        android:paddingLeft="@dimen/x8"
+        android:paddingTop="@dimen/x2"
+        android:text="No Comments Found"
+        android:textColor="@color/black"
+        android:textSize="@dimen/x20"
+        android:textStyle="normal"
+        android:visibility="gone"
+        app:typeface="Roboto-Regular.ttf" />
+
     <ListView
         android:id="@+id/lv_CommentSection"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.9"
+        android:layout_weight="1"
+        android:visibility="visible"
         android:divider="@null">
 
     </ListView>
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -129,10 +129,12 @@ public class NewMsgChat_Screen_Fragment extends BaseFragment implements View.OnC
 
                     if(response.body().getResult().isEmpty())
                     {
+                        hideKeyboard();
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                     }
                     else
                     {
+                        hideKeyboard();
                         ArrayList<MsgEnt> msg =response.body().getResult();
 
                         getDockActivity().addDockableFragment(ChatFragment.newInstance(String.valueOf(msg.get(0).getMessage().getConversation_id()), String.valueOf(msg.get(0).getReceiver().getId()),username,post_path, String.valueOf(msg.get(0).getIs_following()),msg.get(0).getReceiver().getProfile_image(),msg.get(0).getReceiver().getFirst_name()+" "+msg.get(0).getReceiver().getLast_name(),msg.get(0).getSender_block(),msg.get(0).getReceiver_block()),"ChatFragment");
@@ -141,6 +143,7 @@ public class NewMsgChat_Screen_Fragment extends BaseFragment implements View.OnC
                 }
                 else
                 {
+                    hideKeyboard();
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
             }
@@ -149,6 +152,7 @@ public class NewMsgChat_Screen_Fragment extends BaseFragment implements View.OnC
             public void onFailure(Call<ResponseWrapper<ArrayList<MsgEnt>>> call, Throwable t) {
 
                 loadingFinished();
+                hideKeyboard();
                 System.out.println(t.toString());
                 UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
             }

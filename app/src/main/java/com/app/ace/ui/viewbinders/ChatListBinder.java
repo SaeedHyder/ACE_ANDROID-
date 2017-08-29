@@ -13,12 +13,15 @@ import com.app.ace.fragments.HomeFragment;
 import com.app.ace.fragments.TrainerProfileFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.BasePreferenceHelper;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 import com.app.ace.ui.views.AnyTextView;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.app.ace.R.id.txtSenderDateImage;
 
 /**
  * Created by khan_muhammad on 3/20/2017.
@@ -52,6 +55,14 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
 
         ChatListBinder.ViewHolder viewHolder = (ChatListBinder.ViewHolder) view.getTag();
 
+        String[] senderTimeArray=entity.getSenderMessageTime().split(" ");
+        String senderTime=senderTimeArray[1];
+
+        String[] receiverTimeArray=  entity.getReceiverMessageTime().split(" ");
+        String receiverTime=receiverTimeArray[1];
+
+
+
         if(entity.isSender()){
             if(entity.getSenderMessage().contains("http"))
             {
@@ -62,7 +73,17 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
 
                 imageLoader.displayImage(entity.getSenderMessage(),viewHolder.iv_postPicLeft);
                 imageLoader.displayImage(entity.getSenderImage(), viewHolder.userImage);
-                viewHolder.txtSenderDate.setText(entity.getSenderMessageTime());
+                viewHolder.txtSenderDateImage.setText(senderTime);
+
+                viewHolder.leftLayoutImageChild.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DialogHelper postImage=new DialogHelper(context);
+                        postImage.postImage(R.layout.postimage_dialog,context,entity.getSenderMessage());
+                        postImage.showDialog();
+                    }
+                });
+
 
             }
             else
@@ -75,7 +96,7 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
                 imageLoader.displayImage(entity.getSenderImage(), viewHolder.userImage);
 
                 viewHolder.txtSenderChat.setText(entity.getSenderMessage());
-                viewHolder.txtSenderDate.setText(entity.getSenderMessageTime());
+                viewHolder.txtSenderDate.setText(senderTime);
             }
 
         }
@@ -90,7 +111,20 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
                 imageLoader.displayImage(entity.getReceiverMessage(),viewHolder.iv_postPic);
                 imageLoader.displayImage(entity.getSenderImage(), viewHolder.userImage2);
                // viewHolder.txtReceiverChat.setText(entity.getReceiverMessage());
-                viewHolder.txtReceiverDate.setText(entity.getReceiverMessageTime());
+                viewHolder.txtReceiverDateImage.setText(receiverTime);
+
+                viewHolder.rightLayoutImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        DialogHelper postImage=new DialogHelper(context);
+                        postImage.postImage(R.layout.postimage_dialog,context,entity.getReceiverMessage());
+                        postImage.showDialog();
+
+                    }
+                });
+
+
 
             }
             else {
@@ -101,7 +135,7 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
 
                 imageLoader.displayImage(entity.getSenderImage(), viewHolder.userImage2);
                 viewHolder.txtReceiverChat.setText(entity.getReceiverMessage());
-                viewHolder.txtReceiverDate.setText(entity.getReceiverMessageTime());
+                viewHolder.txtReceiverDate.setText(receiverTime);
             }
         }
 
@@ -131,7 +165,7 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
         private AnyTextView txtSenderDate;
 
         private RelativeLayout RightLayout;
-        private LinearLayout rightLayoutImage;
+        private RelativeLayout rightLayoutImage;
         private LinearLayout rightLayout;
 
         private AnyTextView txtReceiverChat;
@@ -139,8 +173,13 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
         private ImageView iv_postPic;
 
         private LinearLayout leftLayoutChild;
-        private LinearLayout leftLayoutImageChild;
+        private RelativeLayout leftLayoutImageChild;
         private ImageView iv_postPicLeft;
+
+        private AnyTextView txtSenderDateImage;
+        private AnyTextView txtReceiverDateImage;
+
+
 
 
 
@@ -157,12 +196,17 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
             txtReceiverDate = (AnyTextView) view.findViewById((R.id.txtReceiverDate));
 
             iv_postPic=(ImageView) view.findViewById(R.id.iv_postPic);
-            rightLayoutImage=(LinearLayout) view.findViewById(R.id.rightLayoutImage);
+            rightLayoutImage=(RelativeLayout) view.findViewById(R.id.rightLayoutImage);
             rightLayout=(LinearLayout) view.findViewById(R.id.rightLayout);
 
             iv_postPicLeft=(ImageView) view.findViewById(R.id.iv_postPicLeft);
             leftLayoutChild=(LinearLayout) view.findViewById(R.id.leftLayoutChild);
-            leftLayoutImageChild=(LinearLayout) view.findViewById(R.id.leftLayoutImageChild);
+            leftLayoutImageChild=(RelativeLayout) view.findViewById(R.id.leftLayoutImageChild);
+
+            txtSenderDateImage = (AnyTextView) view.findViewById(R.id.txtSenderDateImage);
+            txtReceiverDateImage = (AnyTextView) view.findViewById(R.id.txtReceiverDateImage);
+
+
 
 
 

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -32,6 +33,7 @@ import com.app.ace.fragments.SharePopUpfragment;
 import com.app.ace.fragments.TrainerProfileFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.BasePreferenceHelper;
+import com.app.ace.helpers.PreferenceHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.IOnLike;
 import com.app.ace.interfaces.LastPostComment;
@@ -52,6 +54,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.app.ace.R.id.gridView;
+import static com.app.ace.R.id.ll_UnApproved;
 import static com.app.ace.R.id.txt_no_data;
 import static com.app.ace.R.id.vv_post_video;
 import static com.app.ace.global.AppConstants.user_id;
@@ -72,17 +75,19 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
     int x,y=0;
     int postId;
     SetHomeUpdatedData setHomeUpdatedData;
+    BasePreferenceHelper prefHelper;
 
 
     IOnLike IOnLike;
 
-    public HomeFragmentItemBinder(DockActivity context,IOnLike IOnLike,SetHomeUpdatedData setHomeUpdatedData) {
+    public HomeFragmentItemBinder(DockActivity context,IOnLike IOnLike,SetHomeUpdatedData setHomeUpdatedData,BasePreferenceHelper prefHelper) {
         super(R.layout.fragment_home_item);
 
         this.context = context;
         this.IOnLike = IOnLike;
         imageLoader = ImageLoader.getInstance();
         this.setHomeUpdatedData=setHomeUpdatedData;
+        this.prefHelper=prefHelper;
     }
 
 
@@ -106,6 +111,8 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
         final HomeFragmentItemBinder.ViewHolder viewHolder = (HomeFragmentItemBinder.ViewHolder) view.getTag();
 
 
+
+
     if (homeListDataEnt.getProfile_post_pic_path().contains(".mp4"))
     {
 
@@ -113,6 +120,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
         viewHolder.iv_post_pic.setVisibility(View.GONE);
         viewHolder.iv_playBtn.setVisibility(View.VISIBLE);
         viewHolder.rl_videoThumb.setVisibility(View.VISIBLE);
+        viewHolder.vv_post_video.stopPlayback();
 
         final MediaController mediaController= new MediaController(context);
         mediaController.setAnchorView(viewHolder.vv_post_video);
@@ -347,6 +355,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
             iv_playBtn=(ImageView)view.findViewById(R.id.iv_playBtn);
             rl_videoThumb=(RelativeLayout)view.findViewById(R.id.rl_videoThumb);
             iv_videoThumb=(ImageView)view.findViewById(R.id.iv_videoThumb);
+
 
 
 

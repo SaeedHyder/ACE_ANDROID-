@@ -107,6 +107,7 @@ public class NewMessageFragment extends BaseFragment implements TextWatcher {
             callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
                 @Override
                 public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
+                    hideKeyboard();
                     bindview(response.body().getResult());
                 }
 

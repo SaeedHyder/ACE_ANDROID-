@@ -192,8 +192,8 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
 
                         if (edtPassword.getText().toString().length() < 6) {
                             UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.password_length_alert));
-                        }else if(edtMobileNumber.getText().toString().length() < 13){
-                            UIHelper.showShortToastInCenter(getDockActivity(), "Mobile Number should be 13 or more characters long");
+                        }else if(edtMobileNumber.getText().toString().length() < 11){
+                            UIHelper.showShortToastInCenter(getDockActivity(), "Mobile Number should be 11 or more characters long");
                         } else {
 
                             SignupFormConstants signupFormConstants = new SignupFormConstants();

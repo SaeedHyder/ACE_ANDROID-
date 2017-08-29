@@ -197,6 +197,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     }
 
     private void showProfiles() {
+        RegistrationResult result;
         Call<ResponseWrapper<UserProfile>> callBack = webService.UserProfile(user_id, prefHelper.getUserId());
 
         callBack.enqueue(new Callback<ResponseWrapper<UserProfile>>() {
@@ -220,13 +221,16 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                         e.printStackTrace();
                     }
 
+                    RegistrationResult result = prefHelper.getUser();
+                    result.setProfile_image(response.body().getResult().getProfile_image());
+                    prefHelper.putUser(result);
+
                     scrollView.setVisibility(View.VISIBLE);
 
                     if (response.body().getResult().getUser_type().equals(AppConstants.trainer)) {
 
                         isTrainer = true;
                         Trainer = AppConstants.trainer;
-                        RegistrationResult result=prefHelper.getUser();
                         result.setEducation(response.body().getResult().getEducation());
                         result.setSpeciality(response.body().getResult().getSpeciality());
                         prefHelper.putUser(result);

@@ -15,7 +15,7 @@
         <com.app.ace.ui.views.AnyTextView
             android:id="@+id/txtStart"
             android:layout_width="@dimen/x75"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/x30"
             android:layout_marginBottom="@dimen/x10"
             android:layout_marginLeft="@dimen/x15"
             android:layout_marginRight="@dimen/x15"
@@ -47,7 +47,7 @@
         <com.app.ace.ui.views.AnyTextView
             android:id="@+id/txtEnd"
             android:layout_width="@dimen/x75"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/x30"
             android:layout_marginBottom="@dimen/x10"
             android:layout_marginLeft="@dimen/x15"
             android:layout_marginRight="@dimen/x15"

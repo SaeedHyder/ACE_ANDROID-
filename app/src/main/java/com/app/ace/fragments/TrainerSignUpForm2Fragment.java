@@ -275,7 +275,68 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
     }
 
-    private void openFromTimePickerDialog(final AnyTextView txtview) {
+    private void openFromTimePickerDialog(final AnyTextView txtview,final  AnyTextView startTime) {
+
+        Calendar mcurrentTime = Calendar.getInstance();
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(getDockActivity(), new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+
+                String finaltime = "";
+                finaltime = selectedHour + ":" + selectedMinute;
+
+                String[] startHoursarray=startTime.getText().toString().split(":");
+                String startHour=startHoursarray[0];
+                String startMinutes=startHoursarray[1];
+
+
+                    if (!(selectedHour <= Integer.parseInt(startHour) && selectedMinute <= Integer.parseInt(startMinutes))) {
+                            txtview.setText(selectedHour + ":" + selectedMinute);
+
+                    } else {
+                        UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.end_time_should));
+                    }
+
+
+
+                if (finaltime != null) {
+                    gym_time_to = finaltime;
+
+                    if (gym_time_to != null && gym_time_from != null && gym_time_to.length() > 0 && gym_time_from.length() > 0) {
+
+                        try {
+                            String[] time_from = gym_time_from.split(":");
+                            String[] time_to = gym_time_to.split(":");
+
+                            int StartHour = Integer.parseInt(time_from[0]);
+                            int StartMin = Integer.parseInt(time_from[1]);
+                            int EndHour = Integer.parseInt(time_to[0]);
+                            int EndMin = Integer.parseInt(time_to[1]);
+
+                            if (!DateHelper.isTimeAfter(StartHour, StartMin, EndHour, EndMin)) {
+                                txtview.setText("");
+                                UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.end_time_should));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                }
+            }
+        }, hour, minute, true);//Yes 24 hour time
+
+
+        mTimePicker.setTitle("Select Time");
+        mTimePicker.show();
+
+    }
+
+  /*  private void openFromTimePickerDialog(final AnyTextView txtview) {
 
         Calendar mcurrentTime = Calendar.getInstance();
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
@@ -318,7 +379,7 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
 
-    }
+    }*/
 
     private void openToTimePickerDialog(final AnyTextView txtview) {
 
@@ -331,9 +392,10 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
 
                 String finaltime = "";
+                finaltime = selectedHour + ":" + selectedMinute;
+
                 txtview.setText(selectedHour + ":" + selectedMinute);
 
-                finaltime = selectedHour + ":" + selectedMinute;
 
                 if (finaltime != null) {
                     gym_time_to = finaltime;
@@ -427,7 +489,13 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.txt_from:
 
-                openFromTimePickerDialog(txt_from);
+                if(!txt_to.getText().toString().equals("")) {
+                    openFromTimePickerDialog(txt_from, txt_to);
+                }
+                else
+                {
+                    UIHelper.showShortToastInCenter(getDockActivity(),"Select Start Time First");
+                }
 
                 break;
 

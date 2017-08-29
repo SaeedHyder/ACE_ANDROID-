@@ -401,7 +401,9 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
                 } else {
                     loadingFinished();
+                    EndDate=null;
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+
                 }
             }
 

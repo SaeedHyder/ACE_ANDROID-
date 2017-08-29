@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.app.ace.BaseApplication;
@@ -83,6 +84,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     private ImageView iv_profile;
     @InjectView(R.id.txt_no_data)
     private AnyTextView txt_no_data;
+    @InjectView (R.id.ll_UnApproved)
+    LinearLayout ll_UnApproved;
     private ArrayListAdapter<HomeListDataEnt> adapter;
     private List<HomeListDataEnt> dataCollection;
     private DockActivity activity;
@@ -98,7 +101,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         super.onCreate(savedInstanceState);
         loadingStarted();
         adapter = new ArrayListAdapter<HomeListDataEnt>(getDockActivity(),
-                new HomeFragmentItemBinder(getDockActivity(), this, this));
+                new HomeFragmentItemBinder(getDockActivity(), this, this,prefHelper));
 
 
         BaseApplication.getBus().register(this);
@@ -194,7 +197,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
                 new IntentFilter(AppConstants.PUSH_NOTIFICATION));
     }
 
-    private void setHomePostsData(ArrayList<PostsEnt> postsEntArrayList) {
+    private void setHomePostsData(ArrayList<PostsEnt> postsEntArrayList, int is_approved_user) {
 
 
         dataCollection = new ArrayList<HomeListDataEnt>();
@@ -212,7 +215,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             try {
                 dataCollection.add(new HomeListDataEnt(Integer.parseInt(postsEnt.getLike_count()),
                         Integer.parseInt(postsEnt.getComment_count()), postsEnt.getCreator().getProfile_image(),
-                        postsEnt.getCreator().getFirst_name() + " " + postsEnt.getCreator().getLast_name(), postsEnt.getPost_image(), "Time Joe", "Hi nice", postsEnt.getUser_id(), postsEnt.getId(), postsEnt.getComment(), postsEnt.getIs_liked(),postsEnt.getPost_thumb_image()));
+                        postsEnt.getCreator().getFirst_name() + " " + postsEnt.getCreator().getLast_name(), postsEnt.getPost_image(), "Time Joe", "Hi nice", postsEnt.getUser_id(), postsEnt.getId(), postsEnt.getComment(), postsEnt.getIs_liked(),postsEnt.getPost_thumb_image(),is_approved_user));
             } catch (Exception e) {
                 bindData(dataCollection);
                 e.printStackTrace();
@@ -357,7 +360,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    setHomePostsData(response.body().getResult().getPosts());
+                    setHomePostsData(response.body().getResult().getPosts(),response.body().getResult().getIs_approved_user());
+
+                    if(response.body().getResult().getIs_approved_user()==1)
+                    {
+                      ll_UnApproved.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                      ll_UnApproved.setVisibility(View.VISIBLE);
+                    }
 
                 } else {
                     gridView.setVisibility(View.INVISIBLE);

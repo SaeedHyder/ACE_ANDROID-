@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/x50"
         android:paddingLeft="@dimen/x10"
-        android:visibility="visible"
-        android:paddingRight="@dimen/x10">
+        android:paddingRight="@dimen/x10"
+        android:visibility="visible">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/userImage"
@@ -21,21 +21,21 @@
             android:layout_height="@dimen/x40"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/profile_pic"
-            android:layout_marginRight="@dimen/x10" />
+            android:layout_marginRight="@dimen/x10"
+            android:src="@drawable/profile_pic" />
 
         <LinearLayout
             android:id="@+id/leftLayoutChild"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/userImage"
             android:background="@drawable/img_chat_sender"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
             android:paddingLeft="@dimen/x10"
             android:paddingRight="@dimen/x10"
             android:paddingTop="@dimen/x10"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:visibility="visible"
-            android:layout_toRightOf="@id/userImage">
+            android:visibility="gone">
 
             <com.app.ace.ui.views.AnyTextView
                 android:id="@+id/txtSenderChat"
@@ -54,35 +54,34 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtSenderChat"
-                android:layout_marginTop="@dimen/x5"
                 android:layout_gravity="right"
+                android:layout_marginBottom="@dimen/x5"
+                android:layout_marginTop="@dimen/x5"
                 android:paddingLeft="@dimen/x10"
                 android:paddingRight="@dimen/x10"
                 android:text="3 mins ago"
                 android:textColor="@color/dark_grey"
                 android:textSize="@dimen/x12"
-                android:layout_marginBottom="@dimen/x5"
                 app:typeface="Roboto-Regular.ttf" />
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/leftLayoutImageChild"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/img_chat_sender"
-            android:paddingLeft="@dimen/x10"
-            android:paddingRight="@dimen/x10"
-            android:paddingTop="@dimen/x10"
+            android:layout_toRightOf="@id/userImage"
             android:gravity="center_vertical"
             android:orientation="vertical"
-            android:visibility="gone"
-            android:layout_toRightOf="@id/userImage">
+            android:visibility="visible">
 
             <ImageView
                 android:id="@+id/iv_postPicLeft"
-                android:layout_width="@dimen/x280"
-                android:layout_height="@dimen/x200"
+                android:layout_width="@dimen/x220"
+                android:layout_height="@dimen/x150"
+                android:layout_gravity="left"
+                android:src="@drawable/nature"
+                 android:scaleType="centerCrop"
 
                 />
 
@@ -91,68 +90,69 @@
                 android:id="@+id/txtSenderDateImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txtSenderChat"
-                android:layout_marginTop="@dimen/x5"
                 android:layout_gravity="right"
+                android:layout_alignRight="@+id/iv_postPicLeft"
+                android:layout_alignBottom="@+id/iv_postPicLeft"
+                android:layout_marginBottom="@dimen/x5"
+                android:layout_marginTop="@dimen/x5"
                 android:paddingLeft="@dimen/x10"
                 android:paddingRight="@dimen/x10"
                 android:text="3 mins ago"
-                android:textColor="@color/dark_grey"
+                android:textColor="@color/white"
                 android:textSize="@dimen/x12"
-                android:layout_marginBottom="@dimen/x5"
                 app:typeface="Roboto-Regular.ttf" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/leftLayoutVideoChild"
             android:layout_width="@dimen/x280"
             android:layout_height="@dimen/x200"
+            android:layout_toRightOf="@id/userImage"
             android:background="@drawable/img_chat_sender"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
             android:paddingLeft="@dimen/x10"
             android:paddingRight="@dimen/x10"
             android:paddingTop="@dimen/x10"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:layout_toRightOf="@id/userImage">
+            android:visibility="gone">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            <VideoView
-                android:id="@+id/iv_postVideoLeft"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/x160"
+                <VideoView
+                    android:id="@+id/iv_postVideoLeft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/x160"
 
-                />
+                    />
 
-            <ImageView
-                android:id="@+id/iv_playBtn"
-                android:layout_width="@dimen/x50"
-                android:layout_height="@dimen/x50"
-                android:indeterminate="true"
-                android:visibility="visible"
-                android:src="@drawable/playbutton"
-                android:layout_marginTop="@dimen/x53"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true" />
+                <ImageView
+                    android:id="@+id/iv_playBtn"
+                    android:layout_width="@dimen/x50"
+                    android:layout_height="@dimen/x50"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/x53"
+                    android:indeterminate="true"
+                    android:src="@drawable/playbutton"
+                    android:visibility="visible" />
 
                 <com.app.ace.ui.views.AnyTextView
                     android:id="@+id/txtSenderDateVideo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/iv_postVideoLeft"
-                    android:layout_marginTop="@dimen/x5"
-                    android:layout_gravity="right"
                     android:layout_alignRight="@id/iv_postVideoLeft"
+                    android:layout_below="@id/iv_postVideoLeft"
+                    android:layout_gravity="right"
+                    android:layout_marginBottom="@dimen/x5"
+                    android:layout_marginTop="@dimen/x5"
                     android:paddingLeft="@dimen/x10"
                     android:paddingRight="@dimen/x10"
                     android:text="3 mins ago"
                     android:textColor="@color/dark_grey"
                     android:textSize="@dimen/x12"
-                    android:layout_marginBottom="@dimen/x5"
                     app:typeface="Roboto-Regular.ttf" />
 
             </RelativeLayout>
@@ -168,65 +168,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/x10"
-        android:visibility="visible"
-        android:padding="@dimen/x10">
+        android:padding="@dimen/x10"
+        android:visibility="visible">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/userImage2"
-        android:layout_width="@dimen/x40"
-        android:layout_height="@dimen/x40"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/profile_pic_trainer"
-        android:layout_marginLeft="@dimen/x10" />
-
-    <LinearLayout
-        android:id="@+id/rightLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/userImage2"
-        android:background="@drawable/img_chat_receiver"
-        android:gravity="right"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/x10"
-        android:paddingRight="@dimen/x10"
-        android:visibility="visible"
-
-        >
-
-        <com.app.ace.ui.views.AnyTextView
-            android:id="@+id/txtReceiverChat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userImage2"
+            android:layout_width="@dimen/x40"
+            android:layout_height="@dimen/x40"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/x10"
-            android:paddingLeft="@dimen/x10"
-            android:paddingRight="@dimen/x10"
-            android:paddingBottom="@dimen/x5"
-            android:text="@string/lorem_ipsum"
-            android:textColor="@color/white"
-            android:textSize="@dimen/x12"
-            app:typeface="Roboto-Regular.ttf" />
-
-        <com.app.ace.ui.views.AnyTextView
-            android:id="@+id/txtReceiverDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x10"
-            android:paddingRight="@dimen/x10"
-            android:text="3 mins ago"
-            android:textColor="@color/white"
-            android:textSize="@dimen/x12"
-            app:typeface="Roboto-Regular.ttf" />
-
-
-    </LinearLayout>
+            android:src="@drawable/profile_pic_trainer" />
 
         <LinearLayout
-            android:id="@+id/rightLayoutImage"
+            android:id="@+id/rightLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/userImage2"
-
+            android:background="@drawable/img_chat_receiver"
             android:gravity="right"
             android:orientation="vertical"
             android:paddingLeft="@dimen/x10"
@@ -235,15 +194,21 @@
 
             >
 
-         <ImageView
-             android:id="@+id/iv_postPic"
-             android:layout_width="@dimen/x280"
-             android:layout_height="@dimen/x200"
-
-             />
+            <com.app.ace.ui.views.AnyTextView
+                android:id="@+id/txtReceiverChat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x10"
+                android:paddingBottom="@dimen/x5"
+                android:paddingLeft="@dimen/x10"
+                android:paddingRight="@dimen/x10"
+                android:text="@string/lorem_ipsum"
+                android:textColor="@color/white"
+                android:textSize="@dimen/x12"
+                app:typeface="Roboto-Regular.ttf" />
 
             <com.app.ace.ui.views.AnyTextView
-                android:id="@+id/txtReceiverDateImage"
+                android:id="@+id/txtReceiverDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/x10"
@@ -256,61 +221,101 @@
 
         </LinearLayout>
 
-   <LinearLayout
-    android:id="@+id/rightLayoutVideoChild"
-    android:layout_width="@dimen/x280"
-    android:layout_height="@dimen/x200"
-    android:background="@drawable/img_chat_sender"
-    android:paddingLeft="@dimen/x10"
-    android:paddingRight="@dimen/x10"
-    android:paddingTop="@dimen/x10"
-    android:gravity="right"
-    android:orientation="vertical"
-    android:visibility="gone"
-       android:layout_toLeftOf="@id/userImage2">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <VideoView
-            android:id="@+id/iv_postVideoRight"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/x160"
-
-            />
-
-        <ImageView
-            android:id="@+id/iv_playBtnRight"
-            android:layout_width="@dimen/x50"
-            android:layout_height="@dimen/x50"
-            android:indeterminate="true"
-            android:visibility="visible"
-            android:src="@drawable/playbutton"
-            android:layout_marginTop="@dimen/x53"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-
-        <com.app.ace.ui.views.AnyTextView
-            android:id="@+id/txtSenderDateVideoRight"
+        <RelativeLayout
+            android:id="@+id/rightLayoutImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/iv_postVideoRight"
-            android:layout_marginTop="@dimen/x5"
-            android:layout_gravity="right"
-            android:layout_alignRight="@id/iv_postVideoRight"
+            android:gravity="right"
+            android:orientation="vertical"
+            android:visibility="visible"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/userImage2"
+            >
+
+            <ImageView
+                android:id="@+id/iv_postPic"
+                android:layout_width="@dimen/x220"
+                android:layout_height="@dimen/x150"
+                android:src="@drawable/sunset"
+                android:scaleType="centerCrop"
+
+
+                />
+
+            <com.app.ace.ui.views.AnyTextView
+                android:id="@+id/txtReceiverDateImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/iv_postPic"
+                android:layout_alignBottom="@+id/iv_postPic"
+                android:layout_marginBottom="@dimen/x5"
+                android:layout_marginTop="@dimen/x5"
+                android:paddingLeft="@dimen/x10"
+                android:paddingRight="@dimen/x10"
+                android:layout_marginLeft="@dimen/x10"
+                android:text="3 mins ago"
+                android:textColor="@color/white"
+                android:textSize="@dimen/x12"
+                app:typeface="Roboto-Regular.ttf" />
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/rightLayoutVideoChild"
+            android:layout_width="@dimen/x280"
+            android:layout_height="@dimen/x200"
+            android:layout_toLeftOf="@id/userImage2"
+            android:background="@drawable/img_chat_sender"
+            android:gravity="right"
+            android:orientation="vertical"
             android:paddingLeft="@dimen/x10"
             android:paddingRight="@dimen/x10"
-            android:text="3 mins ago"
-            android:textColor="@color/dark_grey"
-            android:textSize="@dimen/x12"
-            android:layout_marginBottom="@dimen/x5"
-            app:typeface="Roboto-Regular.ttf" />
+            android:paddingTop="@dimen/x10"
+            android:visibility="gone">
 
-    </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <VideoView
+                    android:id="@+id/iv_postVideoRight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/x160"
+
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_playBtnRight"
+                    android:layout_width="@dimen/x50"
+                    android:layout_height="@dimen/x50"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/x53"
+                    android:indeterminate="true"
+                    android:src="@drawable/playbutton"
+                    android:visibility="visible" />
+
+                <com.app.ace.ui.views.AnyTextView
+                    android:id="@+id/txtSenderDateVideoRight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@id/iv_postVideoRight"
+                    android:layout_below="@id/iv_postVideoRight"
+                    android:layout_gravity="right"
+                    android:layout_marginBottom="@dimen/x5"
+                    android:layout_marginTop="@dimen/x5"
+                    android:paddingLeft="@dimen/x10"
+                    android:paddingRight="@dimen/x10"
+                    android:text="3 mins ago"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="@dimen/x12"
+                    app:typeface="Roboto-Regular.ttf" />
+
+            </RelativeLayout>
 
 
-</LinearLayout>
+        </LinearLayout>
 
     </RelativeLayout>
 

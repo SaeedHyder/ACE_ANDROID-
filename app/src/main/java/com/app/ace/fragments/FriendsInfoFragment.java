@@ -220,7 +220,7 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                   // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
 
                 } else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
@@ -330,7 +330,7 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                   // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 } else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
