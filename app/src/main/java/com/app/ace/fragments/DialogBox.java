@@ -32,8 +32,6 @@ import roboguice.inject.InjectView;
 public class DialogBox extends RoboDialogFragment implements View.OnClickListener {
     private Context context;
 
-    @InjectView(R.id.rl_dialog)
-    RelativeLayout rl_dialog;
 
     @InjectView(R.id.list_view)
     private ListView list_view;

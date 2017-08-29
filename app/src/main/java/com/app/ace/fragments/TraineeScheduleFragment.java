@@ -116,7 +116,9 @@ ImageView img_DetailedProfile;
             @Override
             public void onResponse(Call<ResponseWrapper<TraineeScheduleEnt>> call, Response<ResponseWrapper<TraineeScheduleEnt>> response) {
 
+                if(response.body()!=null) {
                     setTraineeScheduleData(response.body().getResult());
+                }
             }
 
             @Override

@@ -130,6 +130,12 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
             edtPassword.setText(AppConstants.fixPassword);
         }
 
+
+        if(twitterUser != null) {
+            edtFName.setText(twitterUser.getUserName());
+            edtEmail.setText(twitterUser.getUserEmail());
+        }
+
         btnSignUp.setVisibility(View.INVISIBLE);
         btnNext.setVisibility(View.VISIBLE);
 
@@ -143,10 +149,6 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
         edtMobileNumber.addTextChangedListener(new SignupFormEditTextChangeListener(getDockActivity(),edtMobileNumber));
         edtPassword.addTextChangedListener(new SignupFormEditTextChangeListener(getDockActivity(),edtPassword));
 
-        if(twitterUser != null) {
-            edtFName.setText(twitterUser.getUserName());
-            edtEmail.setText(twitterUser.getUserEmail());
-        }
 
     }
 

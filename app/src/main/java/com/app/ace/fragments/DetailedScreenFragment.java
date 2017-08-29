@@ -57,6 +57,9 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
     @InjectView(R.id.lv_detailedScreen)
     private ListView lv_detailedScreen;
 
+    @InjectView(R.id.ll_mainFrameDetailed)
+    LinearLayout ll_mainFrameDetailed;
+
     @InjectView(R.id.ll_profile)
     LinearLayout ll_profile;
 
@@ -125,6 +128,7 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
         imageLoader = ImageLoader.getInstance();
         if (currentSlot!=null){
