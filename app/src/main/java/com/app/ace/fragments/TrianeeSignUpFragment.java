@@ -240,7 +240,8 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
             profilePic = new File("");
         }*/
 
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData("profile_picture", profilePic.getName(), RequestBody.create(MediaType.parse("image/*"), profilePic));
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData("profile_picture",
+                profilePic.getName(), RequestBody.create(MediaType.parse("image/*"), profilePic));
 
         String SocialMediaName = "";
         if(!UserId.equalsIgnoreCase("")){
