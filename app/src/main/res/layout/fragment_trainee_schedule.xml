@@ -39,7 +39,7 @@
                 android:layout_width="0dp"
                 android:layout_height="@dimen/x60"
                 android:layout_weight="0.24"
-                android:src="@drawable/profile_pic"
+
 
                 />
 
@@ -57,7 +57,7 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/x8"
-                    android:text="@string/james_blunt"
+
                     android:textColor="@color/profile_name_darkBrown"
                     android:textSize="@dimen/x17"
                     android:textStyle="normal"
@@ -77,7 +77,7 @@
                         android:layout_weight="1"
                         android:paddingBottom="@dimen/x2"
                         android:paddingLeft="@dimen/x8"
-                        android:text="Wednesday, May 16"
+
                         android:textColor="@color/darkGray"
                         android:gravity="center_vertical"
                         android:textSize="@dimen/x14"
@@ -100,7 +100,7 @@
                         android:layout_weight="1"
                         android:paddingBottom="@dimen/x2"
                         android:paddingLeft="@dimen/x8"
-                        android:text="16:00 - 17:00        1h"
+
                         android:textColor="@color/darkGray"
                         android:gravity="center_vertical"
                         android:textSize="@dimen/x14"

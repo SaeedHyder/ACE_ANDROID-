@@ -724,7 +724,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
-        titleBar.setSubHeading("May");
+        titleBar.setSubHeading("Calendar");
 
     }
 
