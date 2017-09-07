@@ -28,6 +28,7 @@ import com.github.jhonnyx2012.horizontalpicker.HorizontalPicker;
 
 import org.joda.time.DateTime;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -94,6 +95,7 @@ public class TrainerClientScheduleFragment extends BaseFragment implements DateP
                 .setOffset(7)
                 .init();
         datePicker.setDate(new DateTime());
+
         //  getSearchUserData();
         setTraineeBookings(new DateTime());
         setListener();
@@ -161,6 +163,8 @@ public class TrainerClientScheduleFragment extends BaseFragment implements DateP
             txt_noresult.setVisibility(View.GONE);
             lv_trainer_srceen.setVisibility(View.VISIBLE);
         }
+
+      ;
 
         slots = result.getSlots();
         for (Slot item : slots) {

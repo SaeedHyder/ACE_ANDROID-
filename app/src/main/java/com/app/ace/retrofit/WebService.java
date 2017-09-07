@@ -372,7 +372,7 @@ public interface WebService {
     @FormUrlEncoded
     @POST("schedule/get")
     Call<ResponseWrapper<TrainerBooking>> getScheduleTrainee(
-            @Field("trainer_id") String user_id,
+            @Field("trainer_id") String trainer_id,
             @Field("start_date") String startDate,
             @Field("end_date") String Enddate);
 
@@ -427,6 +427,28 @@ public interface WebService {
     Call<ResponseWrapper> ContactUs(
             @Field("user_id") String user_id,
             @Field("message") String message);
+
+    @FormUrlEncoded
+    @POST("booking/remove/range")
+    Call<ResponseWrapper<NotificationEnt>> rejectBooking(
+            @Field("user_id") String user_id,
+            @Field("id_range") String id_range);
+
+    @FormUrlEncoded
+    @POST("notification/remove")
+    Call<ResponseWrapper<NotificationEnt>> deleteNotification(
+            @Field("user_id") String user_id,
+            @Field("notification_id") int notification_id);
+
+
+    @FormUrlEncoded
+    @POST("booking/status/update")
+    Call<ResponseWrapper> UpdateBookingStatus(
+            @Field("user_id") int user_id,
+            @Field("start_date") String start_date,
+            @Field("end_date") String end_date,
+            @Field("status") String status,
+            @Field("slot_id") String slot_id);
 
 
 

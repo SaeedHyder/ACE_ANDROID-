@@ -20,6 +20,8 @@ public class Booking {
 
     private String bookingStatus;
 
+    private int trainer_accepted;
+
     private String createdAt;
 
     private String updatedAt;
@@ -109,4 +111,11 @@ public class Booking {
         this.deletedAt = deletedAt;
     }
 
+    public int getTrainer_accepted() {
+        return trainer_accepted;
+    }
+
+    public void setTrainer_accepted(int trainer_accepted) {
+        this.trainer_accepted = trainer_accepted;
+    }
 }

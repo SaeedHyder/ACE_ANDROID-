@@ -16,7 +16,12 @@ public class AvailableSlot {
     private String endTime;
 
     public String getStartTime() {
-        return startTime;
+
+      /*  String[] array=startTime.split(":");
+        String sTime=array[0]+":"+array[1];
+
+        return sTime;*/
+      return startTime;
     }
 
     public void setStartTime(String startTime) {
@@ -24,7 +29,13 @@ public class AvailableSlot {
     }
 
     public String getEndTime() {
-        return endTime;
+
+     /*   String[] array=endTime.split(":");
+        String eTime=array[0]+":"+array[1];
+
+        return eTime;*/
+     return endTime;
+
     }
 
     public void setEndTime(String endTime) {

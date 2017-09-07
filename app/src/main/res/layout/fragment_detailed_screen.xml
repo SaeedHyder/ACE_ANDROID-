@@ -107,7 +107,41 @@
             android:gravity="center"
             android:text="@string/cancel_booking"
             android:textColor="@color/white"
-            android:textSize="@dimen/x16" />
+            android:textSize="@dimen/x16"
+            android:visibility="visible"/>
+        <LinearLayout
+            android:id="@+id/ll_Accept"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x10"
+            android:layout_marginLeft="@dimen/x25"
+            android:layout_marginRight="@dimen/x25"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/btn_accept"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="@dimen/x4"
+                android:background="@drawable/next_bttn"
+                android:text="@string/accept"
+                android:textColor="@color/white"
+                android:textSize="@dimen/x16" />
+
+            <Button
+                android:id="@+id/btn_decline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/x4"
+                android:background="@drawable/next_bttn"
+                android:text="@string/decline"
+                android:textColor="@color/white"
+                android:textSize="@dimen/x16" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_container"

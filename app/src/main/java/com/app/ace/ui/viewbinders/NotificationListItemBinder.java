@@ -3,15 +3,25 @@ package com.app.ace.ui.viewbinders;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
 import com.app.ace.entities.NotificationEnt;
+import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.ChatFragment;
+import com.app.ace.interfaces.RejectBooking;
+import com.app.ace.interfaces.TraineeSchedule;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 import com.app.ace.ui.views.AnyTextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+
+import static com.app.ace.R.id.detailLayout;
 
 /**
  * Created by khan_muhammad on 3/20/2017.
@@ -21,10 +31,13 @@ public class NotificationListItemBinder extends ViewBinder<NotificationEnt> impl
 
     private ImageLoader imageLoader;
     private DockActivity context;
-    public NotificationListItemBinder(DockActivity context) {
+
+    TraineeSchedule traineeSchedule;
+    public NotificationListItemBinder(DockActivity context ,TraineeSchedule traineeSchedule) {
         super(R.layout.notification_list_item);
         this.context = context;
         imageLoader = ImageLoader.getInstance();
+        this.traineeSchedule=traineeSchedule;
     }
 
     @Override
@@ -34,7 +47,7 @@ public class NotificationListItemBinder extends ViewBinder<NotificationEnt> impl
     }
 
     @Override
-    public void bindView(NotificationEnt entity, int position, int grpPosition,
+    public void bindView(final NotificationEnt entity, final int position, int grpPosition,
                          View view, Activity activity) {
 
 
@@ -43,6 +56,18 @@ public class NotificationListItemBinder extends ViewBinder<NotificationEnt> impl
         viewHolder.container.setOnClickListener(this);
         viewHolder.txtNotificationText.setText(entity.getMessage());
         viewHolder.txtNotificationDate.setText(context.getDate(entity.getCreated_at()));
+
+        viewHolder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(entity.getAction_type().equals("booking")){
+                    traineeSchedule.getTraineeSchedule(entity);
+                }
+            }
+        });
+
+
+
     }
 
     @Override
@@ -55,6 +80,9 @@ public class NotificationListItemBinder extends ViewBinder<NotificationEnt> impl
                         context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getAction_id()
                         ),String.valueOf(entity.getSender_id()),""), "ChatFragment");
                         break;
+                   /* case "booking":
+                        traineeSchedule.getTraineeSchedule(entity);
+                        break;*/
                 }
                 break;
         }
@@ -65,12 +93,21 @@ public class NotificationListItemBinder extends ViewBinder<NotificationEnt> impl
 
         private AnyTextView txtNotificationText;
         private AnyTextView txtNotificationDate;
+
         private LinearLayout container;
+
+        private LinearLayout detailLayout;
+
+
 
         public ViewHolder(View view) {
             container = (LinearLayout) view.findViewById(R.id.notificationContainer);
             txtNotificationText = (AnyTextView) view.findViewById(R.id.txtNotificationText);
             txtNotificationDate = (AnyTextView) view.findViewById(R.id.txtNotificationDate);
+
+
+            detailLayout = (LinearLayout) view.findViewById(R.id.detailLayout);
+
 
 
         }

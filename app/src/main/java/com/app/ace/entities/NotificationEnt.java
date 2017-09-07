@@ -9,30 +9,15 @@ public class NotificationEnt {
     int id;
     int sender_id;
     int receiver_id;
-
-    public String getAction_id() {
-        return action_id;
-    }
-
-    public void setAction_id(String action_id) {
-        this.action_id = action_id;
-    }
-
-    public String getPost_id() {
-        return post_id;
-    }
-
-    public void setPost_id(String post_id) {
-        this.post_id = post_id;
-    }
-
     String action_id;
     String post_id;
-
     String action_type;
+    Integer slot_id;
+  String id_range;
     String message;
     String notification_type;
     Boolean is_read;
+    String booking_start;
     String created_at;
     String updated_at;
 
@@ -106,5 +91,45 @@ public class NotificationEnt {
 
     public void setUpdated_at(String updated_at) {
         this.updated_at = updated_at;
+    }
+
+    public String getAction_id() {
+        return action_id;
+    }
+
+    public void setAction_id(String action_id) {
+        this.action_id = action_id;
+    }
+
+    public String getPost_id() {
+        return post_id;
+    }
+
+    public void setPost_id(String post_id) {
+        this.post_id = post_id;
+    }
+
+    public String getId_range() {
+        return id_range;
+    }
+
+    public void setId_range(String id_range) {
+        this.id_range = id_range;
+    }
+
+    public String getBooking_start() {
+        return booking_start;
+    }
+
+    public void setBooking_start(String booking_start) {
+        this.booking_start = booking_start;
+    }
+
+    public Integer getSlot_id() {
+        return slot_id;
+    }
+
+    public void setSlot_id(Integer slot_id) {
+        this.slot_id = slot_id;
     }
 }
