@@ -151,7 +151,7 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
         super.onViewCreated(view, savedInstanceState);
         imageLoader = ImageLoader.getInstance();
         if (currentSlot!=null){
-            if(currentSlot!=null && currentSlot.getBookings().getTrainer_accepted()==1){
+            if(currentSlot.getBookings()!=null && currentSlot.getBookings().getTrainer_accepted()==1){
                 btn_cancel_booking.setVisibility(View.VISIBLE);
                 ll_accept_reject.setVisibility(View.GONE);
             }

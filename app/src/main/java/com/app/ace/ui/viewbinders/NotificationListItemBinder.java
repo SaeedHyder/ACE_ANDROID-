@@ -63,6 +63,10 @@ public class NotificationListItemBinder extends ViewBinder<NotificationEnt> impl
                 if(entity.getAction_type().equals("booking")){
                     traineeSchedule.getTraineeSchedule(entity);
                 }
+                else if(entity.getAction_type().equals("conversation")){
+                    context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getAction_id()
+                    ),String.valueOf(entity.getSender_id()),""), "ChatFragment");
+                }
             }
         });
 
@@ -73,18 +77,18 @@ public class NotificationListItemBinder extends ViewBinder<NotificationEnt> impl
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.notificationContainer:
+           /* case R.id.notificationContainer:
                 NotificationEnt entity = (NotificationEnt)v.getTag();
                 switch (entity.getAction_type()){
                     case "conversation":
                         context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getAction_id()
                         ),String.valueOf(entity.getSender_id()),""), "ChatFragment");
                         break;
-                   /* case "booking":
+                   *//* case "booking":
                         traineeSchedule.getTraineeSchedule(entity);
-                        break;*/
+                        break;*//*
                 }
-                break;
+                break;*/
         }
     }
 

@@ -2,14 +2,11 @@ package com.app.ace.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.app.ace.R;
@@ -28,8 +25,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
-
-import static com.app.ace.global.AppConstants.trainer;
 
 /**
  * Created by khan_muhammad on 3/18/2017.
@@ -105,6 +100,20 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         toggle_private_or_public.setOnClickListener(this);
         toggle_notifications.setOnClickListener(this);
 
+        toggle_notifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                NotificationStatus();
+            }
+        });
+
+        toggle_private_or_public.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                NotificationStatus();
+            }
+        });
+
     }
 
 
@@ -120,8 +129,16 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         titleBar.showSaveButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingStarted();
-                updateSetting();
+
+                if (!edit_newPassword.getText().toString().equals("") || !txt_CurrentPassword.getText().toString().equals("") || !edit_conNewPassword.getText().toString().equals("") ) {
+                        updateSetting();
+                    }
+                else
+                {
+                    contactUs();
+                    getDockActivity().addDockableFragment(HomeFragment.newInstance(),"HomeFragment");
+                }
+
 
             }
         });
@@ -132,7 +149,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
         UpdatePassword();
         contactUs();
-        NotificationStatus();
+
 
     }
 
@@ -151,14 +168,17 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 callBack.enqueue(new Callback<ResponseWrapper>() {
                     @Override
                     public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
+                        loadingStarted();
                         if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
                             UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                            getDockActivity().addDockableFragment(HomeFragment.newInstance(),"HomeFragment");
+
                             loadingFinished();
 
                         } else {
-                            UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                             loadingFinished();
+                            UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                         }
                     }
 
@@ -183,7 +203,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
                         loadingFinished();
                         txt_contact_us_disc.setText("");
-                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                       // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
 
                     } else {
                         loadingFinished();
@@ -220,7 +240,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
                     loadingFinished();
 
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                   // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
 
                 } else {
                     loadingFinished();

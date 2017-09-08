@@ -310,19 +310,25 @@ public class NotificationListingFragment  extends BaseFragment implements View.O
     }
 
     private void setTraineeData(TrainerBooking result, NotificationEnt entity) {
-        slots = result.getSlots();
         Slot trainerSlots = new Slot();
-        for (Slot item : slots) {
-            if (item.getBookings() !=null){
-               if(item.getBookings().getUser().getId()==entity.getSender_id() && item.getId().equals(entity.getSlot_id()))
-               {
-                   trainerSlots=item;
-               }
+        if(result!=null) {
+            slots = result.getSlots();
+            for (Slot item : slots) {
+                if (item.getBookings() != null) {
+                    if (item.getBookings().getUser().getId() == entity.getSender_id() && item.getId().equals(entity.getSlot_id())) {
+                        trainerSlots = item;
+                    }
+                }
+            }
+            System.out.print(trainerSlots.toString());
+            slotjson = GsonFactory.getConfiguredGson().toJson(trainerSlots);
+        }
+        if(trainerSlots.getBookings()!=null){
+        getDockActivity().addDockableFragment(DetailedScreenFragment.newInstance(slotjson,entity), "DetailedScreenFragment");}
+        else{
+            getDockActivity().addDockableFragment(TrainerClientScheduleFragment.newInstance(), "TrainerClientScheduleFragment");
+           // UIHelper.showShortToastInCenter(getDockActivity(),"creashed");
             }
         }
-        System.out.print(trainerSlots.toString());
-        slotjson =  GsonFactory.getConfiguredGson().toJson(trainerSlots);
-
-        getDockActivity().addDockableFragment(DetailedScreenFragment.newInstance(slotjson,entity), "DetailedScreenFragment");
     }
-}
+

@@ -2,6 +2,7 @@ package com.app.ace.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.map.abstracts.GoogleMapOptions;
 import com.app.ace.map.abstracts.MapMarkerItemBinder;
 import com.app.ace.ui.views.AnyEditTextView;
@@ -24,6 +26,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -40,9 +43,9 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
     private AnyEditTextView edtsearch;
 
 
-    @InjectView(R.id.txt_noresult)
+    //@InjectView(R.id.txt_noresult)
     private TextView txt_noresult;
-
+    private View viewParent;
     private ArrayList<MapScreenItem> userCollection = new ArrayList<>();
 
     public static MapScreenFragment newInstance() {
@@ -51,6 +54,7 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
     }
@@ -58,8 +62,26 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (viewParent != null) {
+            ViewGroup parent = (ViewGroup) viewParent.getParent();
+            if (parent != null)
+                parent.removeView(viewParent);
+        }
+        try {
+            viewParent = inflater.inflate(R.layout.fragment_map_screen, container, false);
+
+        } catch (InflateException e) {
+            e.printStackTrace();
+        }
+        if (viewParent != null){
+            txt_noresult = (TextView)viewParent.findViewById(R.id.txt_noresult);
+        }
+
+
+
+        return viewParent;
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_map_screen, container, false);
+
     }
 
     @Override
@@ -110,7 +132,7 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
                 if (!user.getGym_latitude().isEmpty()) {
 
                     userCollection.add(new MapScreenItem(user.getGym_latitude(),
-                            user.getGym_longitude(), user.getProfile_image()));
+                            user.getGym_longitude(), user.getProfile_image(),user.getId()));
                 }
             }
         } catch (Exception e) {
@@ -154,6 +176,20 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
         );
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(userCollection.get(userCollection.size() - 1).getLat()), Double.valueOf(userCollection.get(userCollection.size() - 1).getLng())), AppConstants.zoomIn));
         googleMapOptions.addMarkers();
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if (userCollection != null) {
+                    for (final MapScreenItem item : userCollection) {
+                        if (String.valueOf(item.getUserId()).equals(marker.getTag().toString())) {
+                            getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(item.getUserId()),"TrainerProfileFragment");
+                        }
+                    }
+                }
+                return true;
+            }
+        });
 
     }
 

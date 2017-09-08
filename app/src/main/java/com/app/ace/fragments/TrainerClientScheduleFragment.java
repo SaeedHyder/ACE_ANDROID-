@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.logging.Level;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -95,6 +96,9 @@ public class TrainerClientScheduleFragment extends BaseFragment implements DateP
                 .setOffset(7)
                 .init();
         datePicker.setDate(new DateTime());
+
+
+
 
         //  getSearchUserData();
         setTraineeBookings(new DateTime());

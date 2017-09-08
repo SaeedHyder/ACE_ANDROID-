@@ -13,11 +13,14 @@ import com.app.ace.helpers.BitmapHelper;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.io.ByteArrayOutputStream;
+
+import static com.app.ace.R.drawable.marker;
 
 /**
  * Created by saeedhyder on 4/7/2017.
@@ -63,13 +66,13 @@ public class MapMarkerItemBinder extends MapMarkerBinder<MapScreenItem> {
                         if (entity.getLat().length() > 0 && entity.getLng().length() > 0) {
 
                             try {
-                                googleMap.addMarker(new MarkerOptions()
-                                        .title(String.valueOf(position))
+                                Marker marker= googleMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(Double.valueOf(entity.getLat()), Double.valueOf(entity.getLng())))
                                         //.icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
                                         .icon(BitmapDescriptorFactory.fromBitmap(BitmapHelper.getRoundCircleImage(loadedImage))));
                                 //.icon(BitmapDescriptorFactory.fromResource(R.drawable.profile_container1)));
                                 //.fromPath(tempUri.toString())));
+                                marker.setTag(entity.getUserId());
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

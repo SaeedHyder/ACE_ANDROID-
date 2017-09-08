@@ -60,6 +60,14 @@ public class TraineeScheduleListItemBinder extends ViewBinder<Slot> {
         viewHolder.txt_traineeSchedule_2stColumn.setText(entity.getDate());
         viewHolder.txt_traineeSchedule_timeslot2stColumn.setText(entity.getStartTime()+"-"+entity.getEndTime());
         viewHolder.txt_traineeSchedule_training2stColumn.setText( entity.getBookings().getTraining_type());
+        if(entity.getBookings().getTrainer_accepted()==1){
+            viewHolder.cancleBooking.setVisibility(View.VISIBLE);
+            viewHolder.pendingbtn.setVisibility(View.GONE);
+        }
+        else{
+            viewHolder.pendingbtn.setVisibility(View.VISIBLE);
+            viewHolder.cancleBooking.setVisibility(View.GONE);
+        }
         viewHolder.cancleBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,6 +103,7 @@ public class TraineeScheduleListItemBinder extends ViewBinder<Slot> {
         private AnyTextView txt_traineeSchedule_training;
         private AnyTextView txt_traineeSchedule_training2stColumn;
         private Button cancleBooking;
+        private Button pendingbtn;
         public ViewHolder(View view) {
 
             txt_traineeSchedule_1stColumn = (AnyTextView) view.findViewById(R.id.txt_traineeSchedule_1stColumn);
@@ -104,6 +113,7 @@ public class TraineeScheduleListItemBinder extends ViewBinder<Slot> {
             txt_traineeSchedule_training = (AnyTextView) view.findViewById(R.id.txt_traineeSchedule_training);
             txt_traineeSchedule_training2stColumn = (AnyTextView) view.findViewById(R.id.txt_traineeSchedule_training2stColumn);
             cancleBooking = (Button)view.findViewById(R.id.btn_training_Cancle_Submit);
+            pendingbtn = (Button)view.findViewById(R.id.btn_pending);
 
         }
     }
