@@ -78,11 +78,11 @@ public class WelcomeTutorialFragment extends BaseFragment implements BaseSliderV
     private void setImageGallery() {
 
         ArrayList<Integer> arrayList = new ArrayList<Integer>();
-        arrayList.add(0, R.drawable.tutorial_bg_1);
-        arrayList.add(1, R.drawable.tutorial_bg_2);
-        arrayList.add(2, R.drawable.tutorial_bg_3);
-        arrayList.add(3, R.drawable.tutorial_bg_4);
-        arrayList.add(4, R.drawable.tutorial_bg_5);
+        arrayList.add(0, R.drawable.welcomeimage1);
+        arrayList.add(1, R.drawable.welcomeimage2);
+        arrayList.add(2, R.drawable.welcomeimage3);
+        arrayList.add(3, R.drawable.welcomeimage4);
+        arrayList.add(4, R.drawable.welcomeimage5);
 
         for (Integer image : arrayList) {
             DefaultSliderView textSliderView = new DefaultSliderView(getDockActivity());
