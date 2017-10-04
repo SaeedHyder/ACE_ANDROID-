@@ -405,6 +405,15 @@
     <string name="No_Trainer_Found">No Trainer Found</string>
     <string name="Unapproved_Account">Unapproved Account</string>
     <string name="pending">PENDING</string>
+    <string name="mathematics">Mathematics</string>
+    <string name="islamic_studies">Islamic Studies</string>
+    <string name="chemistry">Chemistry</string>
+    <string name="physics">Physics</string>
+    <string name="human_resources">Human Resources</string>
+    <string name="project_managment">Project Management</string>
+    <string name="biology">Biology</string>
+    <string name="java">C++,Java</string>
+    <string name="graduation_project">Graduation Project</string>
 
     //Detailed Screen
 

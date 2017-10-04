@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import roboguice.inject.InjectView;
 
+
 /**
  * Created by saeedhyder on 4/3/2017.
  */
@@ -28,29 +29,38 @@ public class TrainingSearchFragment extends BaseFragment implements View.OnClick
     @InjectView(R.id.btn_training_Search_Submit)
     Button btn_training_Search_Submit;
 
-    @InjectView(R.id.cb_SelectAlll)
-    CheckBox cb_SelectAlll;
+    @InjectView(R.id.cb_Mathematics)
+    CheckBox cb_Mathematics;
 
-    @InjectView(R.id.cb_Flexiblity_tra)
-    CheckBox cb_Flexiblity_tra;
+    @InjectView(R.id.cb_Fitness_health)
+    CheckBox cb_Fitness_health;
 
-    @InjectView(R.id.cb_StaticStren)
-    CheckBox cb_StaticStren;
+    @InjectView(R.id.cb_Islamic_studies)
+    CheckBox cb_Islamic_studies;
 
-    @InjectView(R.id.cb_Dynamic_Streng)
-    CheckBox cb_Dynamic_Streng;
+    @InjectView(R.id.cb_English)
+    CheckBox cb_English;
 
-    @InjectView(R.id.cb_Circuit_Training)
-    CheckBox cb_Circuit_Training;
+    @InjectView(R.id.cb_chemistry)
+    CheckBox cb_chemistry;
 
-    @InjectView(R.id.cb_AerobicTraining)
-    CheckBox cb_AerobicTraining;
+    @InjectView(R.id.cb_physics)
+    CheckBox cb_physics;
 
-    @InjectView(R.id.cb_Body_Building)
-    CheckBox cb_Body_Building;
+    @InjectView(R.id.cb_human_resources)
+    CheckBox cb_human_resources;
 
-    @InjectView(R.id.cb_Lose_Weight)
-    CheckBox cb_Lose_Weight;
+    @InjectView(R.id.cb_project_managment)
+    CheckBox cb_project_managment;
+
+    @InjectView(R.id.cb_biology)
+    CheckBox cb_biology;
+
+    @InjectView(R.id.cb_java)
+    CheckBox cb_java;
+
+    @InjectView(R.id.cb_graduation_project)
+    CheckBox cb_graduation_project;
 
     ArrayList<String> checkList;
 
@@ -79,14 +89,17 @@ public class TrainingSearchFragment extends BaseFragment implements View.OnClick
 
         btn_training_Search_Submit.setOnClickListener(this);
 
-        cb_SelectAlll.setOnCheckedChangeListener(this);
-        cb_Flexiblity_tra.setOnCheckedChangeListener(this);
-        cb_StaticStren.setOnCheckedChangeListener(this);
-        cb_Dynamic_Streng.setOnCheckedChangeListener(this);
-        cb_Circuit_Training.setOnCheckedChangeListener(this);
-        cb_AerobicTraining.setOnCheckedChangeListener(this);
-        cb_Body_Building.setOnCheckedChangeListener(this);
-        cb_Lose_Weight.setOnCheckedChangeListener(this);
+        cb_Mathematics.setOnCheckedChangeListener(this);
+        cb_Fitness_health.setOnCheckedChangeListener(this);
+        cb_Islamic_studies.setOnCheckedChangeListener(this);
+        cb_English.setOnCheckedChangeListener(this);
+        cb_chemistry.setOnCheckedChangeListener(this);
+        cb_physics.setOnCheckedChangeListener(this);
+        cb_human_resources.setOnCheckedChangeListener(this);
+        cb_project_managment.setOnCheckedChangeListener(this);
+        cb_biology.setOnCheckedChangeListener(this);
+        cb_java.setOnCheckedChangeListener(this);
+        cb_graduation_project.setOnCheckedChangeListener(this);
 
     }
 
@@ -118,57 +131,71 @@ public class TrainingSearchFragment extends BaseFragment implements View.OnClick
 
         switch (buttonView.getId()) {
 
-            case R.id.cb_SelectAlll:
-                cb_Flexiblity_tra.setChecked(isChecked);
-                cb_StaticStren.setChecked(isChecked);
-                cb_Dynamic_Streng.setChecked(isChecked);
-                cb_Circuit_Training.setChecked(isChecked);
-                cb_AerobicTraining.setChecked(isChecked);
-                cb_Body_Building.setChecked(isChecked);
-                cb_Lose_Weight.setChecked(isChecked);
-                addAllCheck();
-                break;
-            case R.id.cb_Flexiblity_tra:
+            case R.id.cb_Mathematics:
                 if (!isChecked) {
-                    removeOnUncheck(cb_Flexiblity_tra.getText().toString());
+                    removeOnUncheck(cb_Mathematics.getText().toString());
                 } else
-                    addCheck(cb_Flexiblity_tra.getText().toString());
+                    addCheck(cb_Mathematics.getText().toString());
                 break;
-            case R.id.cb_StaticStren:
+            case R.id.cb_Fitness_health:
                 if (!isChecked) {
-                    removeOnUncheck(cb_StaticStren.getText().toString());
+                    removeOnUncheck(cb_Fitness_health.getText().toString());
                 } else
-                    addCheck(cb_StaticStren.getText().toString());
+                    addCheck(cb_Fitness_health.getText().toString());
                 break;
-            case R.id.cb_Dynamic_Streng:
+            case R.id.cb_Islamic_studies:
                 if (!isChecked) {
-                    removeOnUncheck(cb_Dynamic_Streng.getText().toString());
+                    removeOnUncheck(cb_Islamic_studies.getText().toString());
                 } else
-                    addCheck(cb_Dynamic_Streng.getText().toString());
+                    addCheck(cb_Islamic_studies.getText().toString());
                 break;
-            case R.id.cb_Circuit_Training:
+            case R.id.cb_English:
                 if (!isChecked) {
-                    removeOnUncheck(cb_Circuit_Training.getText().toString());
+                    removeOnUncheck(cb_English.getText().toString());
                 } else
-                    addCheck(cb_Circuit_Training.getText().toString());
+                    addCheck(cb_English.getText().toString());
                 break;
-            case R.id.cb_AerobicTraining:
+            case R.id.cb_chemistry:
                 if (!isChecked) {
-                    removeOnUncheck(cb_AerobicTraining.getText().toString());
+                    removeOnUncheck(cb_chemistry.getText().toString());
                 } else
-                    addCheck(cb_AerobicTraining.getText().toString());
+                    addCheck(cb_chemistry.getText().toString());
                 break;
-            case R.id.cb_Body_Building:
+            case R.id.cb_physics:
                 if (!isChecked) {
-                    removeOnUncheck(cb_Body_Building.getText().toString());
+                    removeOnUncheck(cb_physics.getText().toString());
                 } else
-                    addCheck(cb_Body_Building.getText().toString());
+                    addCheck(cb_physics.getText().toString());
                 break;
-            case R.id.cb_Lose_Weight:
+            case R.id.cb_human_resources:
                 if (!isChecked) {
-                    removeOnUncheck(cb_Lose_Weight.getText().toString());
+                    removeOnUncheck(cb_human_resources.getText().toString());
                 } else
-                    addCheck(cb_Lose_Weight.getText().toString());
+                    addCheck(cb_human_resources.getText().toString());
+                break;
+            case R.id.cb_project_managment:
+                if (!isChecked) {
+                    removeOnUncheck(cb_project_managment.getText().toString());
+                } else
+                    addCheck(cb_project_managment.getText().toString());
+                break;
+            case R.id.cb_biology:
+                if (!isChecked) {
+                    removeOnUncheck(cb_biology.getText().toString());
+                } else
+                    addCheck(cb_biology.getText().toString());
+                break;
+            case R.id.cb_java:
+                if (!isChecked) {
+                    removeOnUncheck(cb_java.getText().toString());
+                } else
+                    addCheck(cb_java.getText().toString());
+                break;
+            case R.id.cb_graduation_project:
+                if (!isChecked) {
+                    removeOnUncheck(cb_graduation_project.getText().toString());
+                } else
+                    addCheck(cb_graduation_project.getText().toString());
                 break;
 
 
@@ -179,13 +206,13 @@ public class TrainingSearchFragment extends BaseFragment implements View.OnClick
             checkList.remove(checkList.indexOf(text));
     }
     private void addAllCheck() {
-        addCheck(cb_Flexiblity_tra.getText().toString());
+       /* addCheck(cb_Flexiblity_tra.getText().toString());
         addCheck(cb_StaticStren.getText().toString());
         addCheck(cb_Dynamic_Streng.getText().toString());
         addCheck(cb_Circuit_Training.getText().toString());
         addCheck(cb_AerobicTraining.getText().toString());
         addCheck(cb_Body_Building.getText().toString());
-        addCheck(cb_Lose_Weight.getText().toString());
+        addCheck(cb_Lose_Weight.getText().toString());*/
     }
 
     private void addCheck(String Text) {

@@ -17,6 +17,8 @@
         android:paddingTop="@dimen/x5"
         >
 
+      
+
         <CheckBox
             android:id="@+id/cb_degree"
             android:layout_width="match_parent"
