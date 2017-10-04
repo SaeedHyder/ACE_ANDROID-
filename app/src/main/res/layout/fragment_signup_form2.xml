@@ -14,13 +14,20 @@
         android:orientation="vertical"
         android:paddingLeft="@dimen/x20"
         android:paddingRight="@dimen/x20"
-        android:paddingTop="@dimen/x5"
+        android:paddingTop="@dimen/x10"
         >
 
-      
+        <com.app.ace.ui.views.AnyTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Trainer Speciality"
+            android:textColor="@color/txtview_title_color"
+            android:textSize="@dimen/x12"
+            android:gravity="left"
+            app:typeface="Roboto-Regular.ttf"/>
 
         <CheckBox
-            android:id="@+id/cb_degree"
+            android:id="@+id/cb_Mathematics"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/x5"
@@ -30,13 +37,13 @@
             android:paddingLeft="@dimen/x7"
             android:paddingRight="@dimen/x7"
             android:paddingBottom="@dimen/x2"
-            android:text="@string/cb_degree"
+            android:text="@string/mathematics"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/x14" />
 
 
         <CheckBox
-            android:id="@+id/cb_nasm"
+            android:id="@+id/cb_Fitness_health"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:button="@drawable/selector_chkbox"
@@ -45,12 +52,12 @@
             android:paddingLeft="@dimen/x7"
             android:paddingRight="@dimen/x7"
             android:paddingBottom="@dimen/x2"
-            android:text="@string/cb_nasm"
+            android:text="@string/fitnes_health"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/x14" />
 
         <CheckBox
-            android:id="@+id/cb_ncsa"
+            android:id="@+id/cb_Islamic_studies"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:button="@drawable/selector_chkbox"
@@ -59,12 +66,12 @@
             android:paddingLeft="@dimen/x7"
             android:paddingRight="@dimen/x7"
             android:paddingBottom="@dimen/x2"
-            android:text="@string/cb_ncsa"
+            android:text="@string/islamic_studies"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/x14" />
 
         <CheckBox
-            android:id="@+id/cb_acsm"
+            android:id="@+id/cb_english"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:button="@drawable/selector_chkbox"
@@ -73,12 +80,12 @@
             android:paddingLeft="@dimen/x7"
             android:paddingRight="@dimen/x7"
             android:paddingBottom="@dimen/x2"
-            android:text="@string/cb_acsm"
+            android:text="@string/english"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/x14" />
 
         <CheckBox
-            android:id="@+id/cb_check"
+            android:id="@+id/cb_chemistry"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:button="@drawable/selector_chkbox"
@@ -87,12 +94,12 @@
             android:paddingLeft="@dimen/x7"
             android:paddingRight="@dimen/x7"
             android:paddingBottom="@dimen/x2"
-            android:text="@string/cb_check"
+            android:text="@string/chemistry"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/x14" />
 
         <CheckBox
-            android:id="@+id/cb_ace"
+            android:id="@+id/cb_physics"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:button="@drawable/selector_chkbox"
@@ -101,12 +108,12 @@
             android:paddingLeft="@dimen/x7"
             android:paddingRight="@dimen/x7"
             android:paddingTop="@dimen/x2"
-            android:text="@string/cb_ace"
+            android:text="@string/physics"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/x14" />
 
         <CheckBox
-            android:id="@+id/cb_aother_cirtifications"
+            android:id="@+id/cb_human_resources"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:button="@drawable/selector_chkbox"
@@ -115,12 +122,12 @@
             android:paddingLeft="@dimen/x7"
             android:paddingRight="@dimen/x7"
             android:paddingBottom="@dimen/x2"
-            android:text="@string/cb_aother_cirtifications"
+            android:text="@string/human_resources"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/x14" />
 
         <CheckBox
-            android:id="@+id/cb_cpr"
+            android:id="@+id/cb_project_managment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:button="@drawable/selector_chkbox"
@@ -129,7 +136,49 @@
             android:paddingLeft="@dimen/x7"
             android:paddingRight="@dimen/x7"
             android:paddingBottom="@dimen/x2"
-            android:text="@string/cb_cpr"
+            android:text="@string/project_managment"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <CheckBox
+            android:id="@+id/cb_biology"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/biology"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <CheckBox
+            android:id="@+id/cb_java"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/java"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14" />
+
+        <CheckBox
+            android:id="@+id/cb_graduation_project"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_chkbox"
+            android:checked="false"
+            android:paddingTop="@dimen/x2"
+            android:paddingLeft="@dimen/x7"
+            android:paddingRight="@dimen/x7"
+            android:paddingBottom="@dimen/x2"
+            android:text="@string/graduation_project"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/x14" />
 
@@ -153,6 +202,7 @@
             android:maxLength="50"
             android:inputType="text|textNoSuggestions"
             app:emptyAllowed="false"
+            
             android:textColor="@color/dark_grey"
             android:textColorHint="@color/light_grey"
             android:textSize="@dimen/x14"

@@ -135,7 +135,7 @@
                         android:paddingBottom="@dimen/x2"
                         android:paddingLeft="@dimen/x7"
                         android:paddingRight="@dimen/x7"
-                        android:text="Fitness and Health"
+                        android:text="@string/fitnes_health"
                         android:textColor="@color/lightGray"
                         android:textSize="@dimen/x14" />
 
