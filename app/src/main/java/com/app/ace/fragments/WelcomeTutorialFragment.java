@@ -126,23 +126,23 @@ public class WelcomeTutorialFragment extends BaseFragment implements BaseSliderV
         switch (position){
 
             case 0:
-                iv_text.setImageResource(R.drawable.welcome1);
+                iv_text.setImageResource(R.drawable.text1);
                 break;
 
             case 1:
-                iv_text.setImageResource(R.drawable.welcome2);
+                iv_text.setImageResource(R.drawable.text2);
                 break;
 
             case 2:
-                iv_text.setImageResource(R.drawable.welcome3);
+                iv_text.setImageResource(R.drawable.text3);
                 break;
 
             case 3:
-                iv_text.setImageResource(R.drawable.welcome4);
+                iv_text.setImageResource(R.drawable.text4);
                 break;
 
             case 4:
-                iv_text.setImageResource(R.drawable.welcome5);
+                iv_text.setImageResource(R.drawable.text5);
                 break;
 
         }

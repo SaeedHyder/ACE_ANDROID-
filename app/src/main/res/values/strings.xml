@@ -405,6 +405,25 @@
     <string name="No_Trainer_Found">No Trainer Found</string>
     <string name="Unapproved_Account">Unapproved Account</string>
     <string name="pending">PENDING</string>
+    <string name="mathematics">Mathematics</string>
+    <string name="islamic_studies">Islamic Studies</string>
+    <string name="chemistry">Chemistry</string>
+    <string name="physics">Physics</string>
+    <string name="human_resources">Human Resources</string>
+    <string name="project_managment">Project Management</string>
+    <string name="biology">Biology</string>
+    <string name="java">C++,Java</string>
+    <string name="graduation_project">Graduation Project</string>
+    <string name="fitnes_health">Fitness and Health</string>
+    <string name="hours_per_day">Hours per day</string>
+    <string name="total_days">Total days</string>
+    <string name="total_hours">Total hours of training requested</string>
+    <string name="positive_reputation">Positive Reputation</string>
+    <string name="negative_reputation">Negative Reputation</string>
+    <string name="feedback_head">Feedback</string>
+    <string name="enter_message">Enter your message</string>
+    <string name="feedback_error">Enter Feedback</string>
+    <string name="send_message">Send Message</string>
 
     //Detailed Screen
 
