@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/popup_bg"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/x15"
+        android:paddingTop="@dimen/x15">
+
+        <com.app.ace.ui.views.AnyTextView
+            android:id="@+id/txtHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginEnd="@dimen/x20"
+            android:layout_marginStart="@dimen/x20"
+            android:layout_marginTop="@dimen/x20"
+            android:gravity="center"
+            android:text="@string/dialog_title"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x23"
+            android:textStyle="normal"
+            app:typeface="Roboto-Regular.ttf"/>
+
+
+        <View
+            android:id="@+id/txt_line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_below="@+id/txtHeader"
+            android:layout_marginBottom="@dimen/x3"
+            android:layout_marginEnd="@dimen/x20"
+            android:layout_marginStart="@dimen/x20"
+            android:layout_marginTop="@dimen/x15"
+            android:alpha="0.6"
+            android:background="@drawable/text"/>
+
+        <com.app.ace.ui.views.AnyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="@dimen/x20"
+            android:layout_marginTop="@dimen/x30"
+            android:gravity="center"
+            android:text="@string/hours_per_day"
+            android:textColor="@color/scheduleHeader"
+            android:textSize="@dimen/x14"
+            android:textStyle="normal"
+            app:typeface="Roboto-Regular.ttf"/>
+
+        <com.app.ace.ui.views.AnyEditTextView
+            android:id="@+id/edt_hours_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="@dimen/x20"
+            android:layout_marginTop="@dimen/x5"
+            android:background="@color/transparent"
+            android:gravity="center"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:maxLength="2"
+            android:text="2"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x18"
+            android:textStyle="normal"
+            app:typeface="Roboto-Regular.ttf"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_below="@+id/txtHeader"
+            android:layout_marginBottom="@dimen/x3"
+            android:layout_marginEnd="@dimen/x20"
+            android:layout_marginStart="@dimen/x20"
+            android:layout_marginTop="@dimen/x15"
+            android:alpha="0.6"
+            android:background="@drawable/text"/>
+
+        <com.app.ace.ui.views.AnyTextView
+            android:id="@+id/anyTextView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="@dimen/x20"
+            android:layout_marginTop="@dimen/x20"
+            android:gravity="center"
+            android:text="@string/total_days"
+            android:textColor="@color/scheduleHeader"
+            android:textSize="@dimen/x14"
+            android:textStyle="normal"
+            app:typeface="Roboto-Regular.ttf"/>
+
+        <com.app.ace.ui.views.AnyEditTextView
+            android:id="@+id/edt_total_days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x20"
+            android:layout_marginTop="@dimen/x5"
+            android:background="@color/transparent"
+            android:gravity="center"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:maxLength="5"
+            android:text="0"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x18"
+            android:textStyle="normal"
+            app:typeface="Roboto-Regular.ttf"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginBottom="@dimen/x3"
+            android:layout_marginEnd="@dimen/x20"
+            android:layout_marginStart="@dimen/x20"
+            android:layout_marginTop="@dimen/x15"
+            android:alpha="0.6"
+            android:background="@drawable/text"/>
+
+        <com.app.ace.ui.views.AnyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="@dimen/x20"
+            android:layout_marginTop="@dimen/x20"
+            android:gravity="center"
+            android:text="@string/total_hours"
+            android:textColor="@color/scheduleHeader"
+            android:textSize="@dimen/x14"
+            android:textStyle="normal"
+            app:typeface="Roboto-Regular.ttf"/>
+
+        <com.app.ace.ui.views.AnyTextView
+            android:id="@+id/txt_total_hours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x20"
+            android:layout_marginTop="@dimen/x5"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x18"
+            android:textStyle="normal"
+            app:typeface="Roboto-Regular.ttf"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x1"
+            android:layout_marginBottom="@dimen/x3"
+            android:layout_marginEnd="@dimen/x20"
+            android:layout_marginStart="@dimen/x20"
+            android:layout_marginTop="@dimen/x15"
+            android:alpha="0.6"
+            android:background="@drawable/text"/>
+
+        <Button
+            android:id="@+id/btn_Submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/x15"
+            android:layout_marginEnd="@dimen/x20"
+            android:layout_marginStart="@dimen/x20"
+            android:layout_marginTop="@dimen/x15"
+            android:background="@drawable/next_bttn_plain"
+            android:text="@string/submit"
+            android:textColor="@color/white"
+            android:textSize="@dimen/x16"
+            android:visibility="visible"/>
+
+    </LinearLayout>
+</LinearLayout>

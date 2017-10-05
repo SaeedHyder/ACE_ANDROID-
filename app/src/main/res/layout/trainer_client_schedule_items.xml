@@ -48,7 +48,7 @@
             android:layout_weight="0.6"
             android:text="James Blunt"
             android:gravity="center|center_vertical|center_horizontal"
-            android:background="@drawable/next_bttn"
+            android:background="@drawable/next_bttn_next"
             android:textColor="@color/white"
             android:textSize="@dimen/x16"
             android:layout_marginLeft="@dimen/x16"

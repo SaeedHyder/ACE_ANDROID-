@@ -415,6 +415,7 @@
     <string name="java">C++,Java</string>
     <string name="graduation_project">Graduation Project</string>
     <string name="fitnes_health">Fitness and Health</string>
+
     <string name="enter_uni">Enter University Name</string>
     <string name="east_wood">East Wood Street</string>
     <string name="trainer_specialty">Trainer Speciality</string>
@@ -423,7 +424,18 @@
     <string name="negative_repu">Negative\nReputation</string>
     <string name="feedback">Feedback</string>
 
-    //Detailed Screen
+    <string name="hours_per_day">Hours per day</string>
+    <string name="total_days">Total days</string>
+    <string name="total_hours">Total hours of training requested</string>
+    <string name="positive_reputation">Positive Reputation</string>
+    <string name="negative_reputation">Negative Reputation</string>
+    <string name="feedback_head">Feedback</string>
+    <string name="enter_message">Enter your message</string>
+    <string name="feedback_error">Enter Feedback</string>
+    <string name="send_message">Send Message</string>
+
+
+
 
 
 </resources>

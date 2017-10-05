@@ -141,7 +141,7 @@
                     android:layout_marginLeft="@dimen/x20"
                     android:layout_marginRight="@dimen/x20"
                     android:layout_marginTop="@dimen/x15"
-                    android:background="@drawable/next_bttn"
+                    android:background="@drawable/next_bttn_next"
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="@dimen/x16"

@@ -103,9 +103,10 @@
             android:layout_marginLeft="@dimen/x25"
             android:layout_marginRight="@dimen/x25"
             android:layout_marginTop="@dimen/x10"
-            android:background="@drawable/next_bttn"
+            android:background="@drawable/next_bttn_plain"
             android:gravity="center"
-            android:text="@string/cancel_booking"
+            android:text="@string/send_message"
+            android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="@dimen/x16"
             android:visibility="visible"/>
@@ -125,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginRight="@dimen/x4"
-                android:background="@drawable/next_bttn"
+                android:background="@drawable/next_bttn_next"
                 android:text="@string/accept"
                 android:textColor="@color/white"
                 android:textSize="@dimen/x16" />
@@ -136,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginLeft="@dimen/x4"
-                android:background="@drawable/next_bttn"
+                android:background="@drawable/next_bttn_next"
                 android:text="@string/decline"
                 android:textColor="@color/white"
                 android:textSize="@dimen/x16" />
