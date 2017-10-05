@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:descendantFocusability="blocksDescendants"
     android:background="@drawable/bg"
-    >
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical">
 
 
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:fillViewport="true"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,8 +37,7 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/riv_profile_pic"
                     android:layout_width="@dimen/x70"
-                    android:layout_height="@dimen/x70"
-                     />
+                    android:layout_height="@dimen/x70" />
 
                 <!--<android.support.v4.widget.CircleImageView
                     android:layout_width="@dimen/x70"
@@ -54,34 +51,33 @@
 
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/x7"
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:layout_marginBottom="@dimen/x5"
-                            android:layout_marginLeft="@dimen/x35"
                             android:orientation="vertical">
 
                             <com.app.ace.ui.views.AnyTextView
                                 android:id="@+id/txt_postCount"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
                                 android:gravity="center"
-                                android:text="3431"
                                 android:padding="@dimen/x5"
+                                android:text="3431"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/x15"
                                 app:typeface="Roboto-Bold.ttf" />
 
                             <com.app.ace.ui.views.AnyTextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="left"
+                                android:gravity="center_horizontal"
                                 android:text="@string/posts"
                                 android:textColor="@color/edittext_hint_color"
                                 android:textSize="@dimen/x13"
@@ -91,29 +87,29 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:layout_marginBottom="@dimen/x5"
-                            android:layout_marginLeft="@dimen/x35"
                             android:orientation="vertical">
 
                             <com.app.ace.ui.views.AnyTextView
                                 android:id="@+id/txt_FollowersCount"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
                                 android:gravity="center"
-                                android:text="6530"
                                 android:padding="@dimen/x5"
+                                android:text="6530"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/x15"
                                 app:typeface="Roboto-Bold.ttf" />
 
                             <com.app.ace.ui.views.AnyTextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/x1"
-                                android:gravity="left"
+                                android:gravity="center"
                                 android:text="@string/followers"
                                 android:textColor="@color/edittext_hint_color"
                                 android:textSize="@dimen/x13"
@@ -123,29 +119,30 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:layout_marginBottom="@dimen/x5"
-                            android:layout_marginLeft="@dimen/x35"
+
                             android:orientation="vertical">
 
                             <com.app.ace.ui.views.AnyTextView
                                 android:id="@+id/txt_FollowingsCount"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
                                 android:gravity="center"
-                                android:text="217"
                                 android:padding="@dimen/x5"
+                                android:text="217"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/x15"
                                 app:typeface="Roboto-Bold.ttf" />
 
                             <com.app.ace.ui.views.AnyTextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/x1"
-                                android:gravity="left"
+                                android:gravity="center"
                                 android:text="@string/followings"
                                 android:textColor="@color/edittext_hint_color"
                                 android:textSize="@dimen/x13"
@@ -167,7 +164,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/x25"
                             android:orientation="horizontal"
-                            android:visibility="visible">
+                            android:visibility="gone">
 
                             <!--<ImageView
                                 android:id="@+id/iv_edit_or_follow"
@@ -185,8 +182,8 @@
                                 android:gravity="center"
                                 android:text="@string/edit_profile"
                                 android:textColor="@color/white"
-                                android:visibility="visible"
-                                android:textSize="@dimen/x16" />
+                                android:textSize="@dimen/x16"
+                                android:visibility="visible" />
 
                             <Button
                                 android:id="@+id/btn_followTrainee"
@@ -197,8 +194,8 @@
                                 android:gravity="center"
                                 android:text="Follow"
                                 android:textColor="@color/white"
-                                android:visibility="gone"
-                                android:textSize="@dimen/x16"/>
+                                android:textSize="@dimen/x16"
+                                android:visibility="gone" />
 
                             <Button
                                 android:id="@+id/btn_unfollowTrainee"
@@ -209,8 +206,8 @@
                                 android:gravity="center"
                                 android:text="@string/UnFollow"
                                 android:textColor="@color/white"
-                                android:visibility="gone"
-                                android:textSize="@dimen/x16"/>
+                                android:textSize="@dimen/x16"
+                                android:visibility="gone" />
                             <!--android:text="@string/edit_profile"-->
 
 
@@ -220,9 +217,9 @@
                             android:id="@+id/ll_two_buttons"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/x25"
+                            android:layout_marginLeft="@dimen/x20"
                             android:orientation="horizontal"
-                            android:visibility="invisible">
+                            android:visibility="visible">
 
                             <Button
                                 android:id="@+id/btn_edit"
@@ -233,14 +230,14 @@
                                 android:gravity="center"
                                 android:text="@string/edit_profile"
                                 android:textColor="@color/white"
-                                android:visibility="gone"
-                                android:textSize="@dimen/x16" />
+                                android:textSize="@dimen/x16"
+                                android:visibility="gone" />
 
                             <Button
                                 android:id="@+id/btn_follow"
                                 android:layout_width="0dp"
                                 android:layout_height="@dimen/x35"
-                                android:layout_marginRight="@dimen/x5"
+                                android:layout_marginRight="@dimen/x8"
                                 android:layout_weight="1"
                                 android:background="@drawable/rectangle_buton"
                                 android:gravity="center"
@@ -251,23 +248,34 @@
                                 android:id="@+id/btn_Unfollow"
                                 android:layout_width="0dp"
                                 android:layout_height="@dimen/x35"
-                                android:layout_marginRight="@dimen/x5"
+                                android:layout_marginRight="@dimen/x8"
                                 android:layout_weight="1"
                                 android:background="@drawable/rectangle_buton"
                                 android:gravity="center"
                                 android:text="Unfollow"
-                                android:visibility="gone"
-                                android:textColor="@color/txtview_title_color" />
+                                android:textColor="@color/txtview_title_color"
+                                android:visibility="gone" />
 
                             <Button
                                 android:id="@+id/btn_request"
                                 android:layout_width="0dp"
                                 android:layout_height="@dimen/x35"
-                                android:layout_marginRight="@dimen/x15"
                                 android:layout_weight="1"
+                                android:layout_marginRight="@dimen/x8"
                                 android:background="@drawable/rectangle_buton"
                                 android:gravity="center"
                                 android:text="@string/request"
+                                android:textColor="@color/txtview_title_color" />
+
+                            <Button
+                                android:id="@+id/btn_feedback"
+                                android:layout_width="0dp"
+                                android:layout_height="@dimen/x35"
+                                android:layout_marginRight="@dimen/x10"
+                                android:layout_weight="1"
+                                android:background="@drawable/rectangle_buton"
+                                android:gravity="center"
+                                android:text="@string/feedback"
                                 android:textColor="@color/txtview_title_color" />
 
                             <!--<ImageView
@@ -306,7 +314,7 @@
                 android:id="@+id/ll_profileInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/x3"
+
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -316,26 +324,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:maxLines="1"
-                    android:maxLength="25"
                     android:layout_marginLeft="@dimen/x15"
                     android:gravity="center"
+                    android:maxLength="25"
+                    android:maxLines="1"
                     android:text="Charlie Hunnum"
                     android:textColor="@color/black"
                     android:textSize="@dimen/x15"
                     app:typeface="Roboto-Bold.ttf" />
 
-                <LinearLayout
+                <View
                     android:id="@+id/ll_separator"
                     android:layout_width="@dimen/x1"
-                    android:layout_height="match_parent"
+                    android:layout_height="@dimen/x15"
                     android:layout_marginLeft="@dimen/x5"
                     android:background="@color/gray_dark"
                     android:orientation="vertical"
-                    android:paddingBottom="@dimen/x5"
-                    android:paddingTop="@dimen/x5">
+                    android:paddingBottom="@dimen/x5">
 
-                </LinearLayout>
+                </View>
 
 
                 <com.app.ace.ui.views.AnyTextView
@@ -380,7 +387,7 @@
                     android:rating="3.0"/>-->
 
 
-                <com.app.ace.ui.views.CustomRatingBar
+                <!--<com.app.ace.ui.views.CustomRatingBar
                     android:id="@+id/rbAddRating"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/x12"
@@ -392,8 +399,74 @@
                     app:starOff="@drawable/star1"
                     app:starOn="@drawable/star2"
                     app:starPadding="@dimen/x2"
-                    app:stars="3" />
+                    app:stars="3" />-->
+                <LinearLayout
+                    android:id="@+id/ll_review_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/x15"
+                    android:gravity="right"
+                    android:orientation="horizontal">
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.app.ace.ui.views.AnyTextView
+                            android:id="@+id/txt_positive"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:gravity="center"
+                            android:text="+19"
+                            android:textColor="@color/txtview_title_color"
+                            android:textSize="@dimen/x19"
+                            android:textStyle="bold"
+                            app:typeface="Roboto-Bold.ttf" />
+
+                        <com.app.ace.ui.views.AnyTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/positive_repu"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/x10"
+                            android:textStyle="normal"
+                            app:typeface="Roboto-Regular.ttf" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x20"
+                        android:orientation="vertical">
+
+                        <com.app.ace.ui.views.AnyTextView
+                            android:id="@+id/txt_negative"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="-12"
+                            android:textColor="@color/negative_text"
+                            android:textSize="@dimen/x19"
+                            android:textStyle="bold"
+                            app:typeface="Roboto-Bold.ttf" />
+
+                        <com.app.ace.ui.views.AnyTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/negative_repu"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/x10"
+                            android:textStyle="normal"
+                            app:typeface="Roboto-Regular.ttf" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -515,41 +588,7 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/ll_avaliability"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/x10"
-                    android:orientation="vertical">
 
-                    <com.app.ace.ui.views.AnyTextView
-                        android:id="@+id/txt_avaliability_titile"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/x3"
-                        android:layout_marginLeft="@dimen/x15"
-                        android:gravity="center"
-                        android:text="@string/avaliability"
-                        android:textColor="@color/txtview_title_color"
-                        android:textSize="@dimen/x15"
-                        android:textStyle="normal"
-                        app:typeface="Roboto-Regular.ttf" />
-
-                    <com.app.ace.ui.views.AnyTextView
-                        android:id="@+id/txt_avaliability_dis"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/x3"
-                        android:layout_marginLeft="@dimen/x15"
-                        android:layout_marginRight="@dimen/x15"
-                        android:text="Monday - Friday 10 am - 11 pm"
-                        android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/x13"
-                        android:textStyle="normal"
-                        app:typeface="Roboto-Regular.ttf" />
-
-
-                </LinearLayout>
 
             </LinearLayout>
 
@@ -571,24 +610,36 @@
                 android:layout_below="@+id/txt_line"
                 android:orientation="horizontal">
 
+                <LinearLayout
+                    android:id="@+id/ll_feedback"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:visibility="visible"
+                    >
+
+                    <ImageView
+                        android:id="@+id/iv_feedback"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/feedback" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/ll_grid"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="right"
-                    android:paddingBottom="@dimen/x10"
-                    android:paddingRight="@dimen/x20"
-                    android:paddingTop="@dimen/x10">
+                    android:gravity="center"
+                    >
 
                     <ImageView
                         android:id="@+id/iv_grid"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical"
-                        android:src="@drawable/grid_view" />
+                        android:src="@drawable/grid_view_unselected" />
 
                 </LinearLayout>
 
@@ -597,18 +648,14 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="left"
+                    android:gravity="center"
                     android:paddingBottom="@dimen/x10"
-                    android:paddingLeft="@dimen/x15"
                     android:paddingTop="@dimen/x10">
 
                     <ImageView
                         android:id="@+id/iv_list"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/x15"
-                        android:gravity="center_vertical"
                         android:src="@drawable/list_view_unselected" />
 
                 </LinearLayout>
@@ -619,15 +666,14 @@
 
             <com.app.ace.ui.views.AnyTextView
                 android:id="@+id/txt_no_data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal|center_vertical"
                 android:text="@string/no_data"
                 android:textColor="@color/dark_grey"
-                android:layout_gravity="center"
-                app:typeface="Roboto-Regular.ttf"
                 android:textSize="@dimen/x15"
-                />
+                android:visibility="gone"
+                app:typeface="Roboto-Regular.ttf" />
 
 
             <com.app.ace.ui.views.ExpandableGridView
@@ -640,7 +686,16 @@
                 android:numColumns="3"
                 android:padding="@dimen/x10"
                 android:verticalSpacing="@dimen/x10"
-                />
+                android:visibility="gone"/>
+
+            <ListView
+                android:id="@+id/lv_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:visibility="visible">
+
+            </ListView>
 
 
         </LinearLayout>
@@ -649,14 +704,14 @@
 
     <LinearLayout
         android:id="@+id/ll_bottom_bar"
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="@dimen/x50"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom"
         android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
         android:gravity="center_vertical"
-        android:layout_centerVertical="true">
+        android:orientation="horizontal">
 
 
         <ImageView
@@ -664,51 +719,46 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="@dimen/x15"
-            android:src="@drawable/home_icon"
             android:gravity="center_vertical"
-            />
+            android:padding="@dimen/x15"
+            android:src="@drawable/home_icon" />
 
         <ImageView
             android:id="@+id/iv_Calander"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="@dimen/x15"
-            android:visibility="gone"
-            android:src="@drawable/calendar_icon"
             android:gravity="center_vertical"
-            />
+            android:padding="@dimen/x15"
+            android:src="@drawable/calendar_icon"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/iv_Camera"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="@dimen/x15"
-            android:src="@drawable/camera_icon"
             android:gravity="center_vertical"
-            />
+            android:padding="@dimen/x15"
+            android:src="@drawable/camera_icon" />
 
         <ImageView
             android:id="@+id/iv_Fav"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="@dimen/x15"
-            android:src="@drawable/heart_icon"
             android:gravity="center_vertical"
-            />
+            android:padding="@dimen/x15"
+            android:src="@drawable/heart_icon" />
 
         <ImageView
             android:id="@+id/iv_profile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="@dimen/x15"
-            android:src="@drawable/profile_icon_selected"
             android:gravity="center_vertical"
-            />
+            android:padding="@dimen/x15"
+            android:src="@drawable/profile_icon_selected" />
 
 
     </LinearLayout>

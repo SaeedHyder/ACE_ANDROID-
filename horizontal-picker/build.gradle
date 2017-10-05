@@ -47,4 +47,4 @@ dependencies {
     compile 'joda-time:joda-time:2.9.7'
 }
 
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+//apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'

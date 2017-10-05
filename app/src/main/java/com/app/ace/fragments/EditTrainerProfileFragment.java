@@ -43,8 +43,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
-import static com.app.ace.R.id.edtTagLine;
-import static com.app.ace.R.id.txt_pref_training_gym;
+
 
 /**
  * Created by khan_muhammad on 3/18/2017.

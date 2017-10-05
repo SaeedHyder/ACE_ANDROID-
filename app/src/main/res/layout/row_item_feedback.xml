@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/parenLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginRight="@dimen/x10"
+        android:layout_marginTop="@dimen/x10"
+
+        android:orientation="horizontal">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userImage"
+            android:layout_width="@dimen/x40"
+            android:layout_height="@dimen/x40"
+            android:layout_marginTop="@dimen/x4"
+            android:src="@drawable/profile_pic"
+
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <com.app.ace.ui.views.AnyTextView
+                    android:id="@+id/txtUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:maxLength="23"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:text="@string/james_blunt"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/x14"
+                    app:typeface="Roboto-Bold.ttf" />
+
+                <com.app.ace.ui.views.AnyTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x3"
+                    android:layout_marginRight="@dimen/x3"
+                    android:text="-"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/x14"
+                    app:typeface="Roboto-Bold.ttf" />
+
+
+                <com.app.ace.ui.views.AnyTextView
+                    android:id="@+id/txt_positive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="start"
+                    android:text="+1 positive"
+                    android:textColor="@color/txtview_title_color"
+                    android:textSize="@dimen/x10"
+                    android:textStyle="bold"
+                    app:typeface="Roboto-Bold.ttf" />
+
+            </LinearLayout>
+
+            <com.app.ace.ui.views.AnyTextView
+                android:id="@+id/txtFeedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="@dimen/x1"
+                android:layout_marginLeft="@dimen/x10"
+                android:layout_marginTop="@dimen/x3"
+                android:alpha="0.7"
+                android:gravity="start"
+                android:text="Good Work"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/x13"
+                app:typeface="Roboto-Regular.ttf" />
+
+
+            <com.app.ace.ui.views.AnyTextView
+                android:id="@+id/txtTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/x10"
+                android:alpha="0.7"
+                android:gravity="start"
+                android:text="17m"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/x12"
+                app:typeface="Roboto-Regular.ttf" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/txt_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginBottom="@dimen/x3"
+        android:layout_marginTop="@dimen/x10"
+        android:alpha="0.6"
+        android:background="@drawable/text" />
+
+
+</LinearLayout>

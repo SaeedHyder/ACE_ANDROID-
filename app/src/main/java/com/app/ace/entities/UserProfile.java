@@ -43,23 +43,6 @@ public class UserProfile {
     String social_media_id;
     String social_media_platform;
     String notification_status;
-
-    public String getPrivate_account() {
-        return private_account;
-    }
-
-    public void setPrivate_account(String private_account) {
-        this.private_account = private_account;
-    }
-
-    public String getMute_conversation() {
-        return mute_conversation;
-    }
-
-    public void setMute_conversation(String mute_conversation) {
-        this.mute_conversation = mute_conversation;
-    }
-
     String private_account;
     String mute_conversation;
     String device_type;
@@ -77,11 +60,27 @@ public class UserProfile {
     String posts_count;
     float rating;
     int is_following;
-
-
-
-
+    int positive_review;
+    int negative_review;
     ArrayList<post> posts;
+    ArrayList<TrainerReviews> trainer_reviews;
+
+    public String getPrivate_account() {
+        return private_account;
+    }
+
+    public void setPrivate_account(String private_account) {
+        this.private_account = private_account;
+    }
+
+    public String getMute_conversation() {
+        return mute_conversation;
+    }
+
+    public void setMute_conversation(String mute_conversation) {
+        this.mute_conversation = mute_conversation;
+    }
+
 
     public int getId() {
         return id;
@@ -489,5 +488,29 @@ public class UserProfile {
 
     public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    public ArrayList<TrainerReviews> getTrainer_reviews() {
+        return trainer_reviews;
+    }
+
+    public void setTrainer_reviews(ArrayList<TrainerReviews> trainer_reviews) {
+        this.trainer_reviews = trainer_reviews;
+    }
+
+    public int getPositive_review() {
+        return positive_review;
+    }
+
+    public void setPositive_review(int positive_review) {
+        this.positive_review = positive_review;
+    }
+
+    public int getNegative_review() {
+        return negative_review;
+    }
+
+    public void setNegative_review(int negative_review) {
+        this.negative_review = negative_review;
     }
 }

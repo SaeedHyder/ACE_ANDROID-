@@ -123,7 +123,7 @@
     <string name="enter_university_name">Enter University Name</string>
     <string name="add_location_on_the_map">Add location on the map</string>
     <string name="sellect_type_of_training">Please select the type of trainings you provide (Speciality)</string>
-    <string name="pref_training_loc">Preferred Training Locations</string>
+    <string name="pref_training_loc">Preferred Location</string>
 
     <string name="cb_select_all">Select All</string>
     <string name="cb_flexibility">Flexibility training</string>
@@ -415,6 +415,13 @@
     <string name="java">C++,Java</string>
     <string name="graduation_project">Graduation Project</string>
     <string name="fitnes_health">Fitness and Health</string>
+    <string name="enter_uni">Enter University Name</string>
+    <string name="east_wood">East Wood Street</string>
+    <string name="trainer_specialty">Trainer Speciality</string>
+    <string name="select_gender">Select Gender</string>
+    <string name="positive_repu">Positive\nReputation</string>
+    <string name="negative_repu">Negative\nReputation</string>
+    <string name="feedback">Feedback</string>
 
     //Detailed Screen
 

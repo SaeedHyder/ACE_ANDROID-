@@ -85,6 +85,7 @@ public interface WebService {
             @Part("phone_number") RequestBody phone_number,
             @Part("email") RequestBody email,
             @Part("password") RequestBody password,
+            @Part("gender") RequestBody gender,
             @Part MultipartBody.Part profile_picture,
             @Part MultipartBody.Part resume,
             @Part("user_type") RequestBody user_type,

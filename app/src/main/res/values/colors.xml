@@ -47,6 +47,7 @@
     <color name="edittext_hint_color">#818080</color>
     <!--<color name="txtview_title_color">#b04c50</color>-->
     <color name="txtview_title_color">#B40006</color>
+    <color name="negative_text">#5b5b59</color>
 
     <!-- Top Bar Gradient -->
     <color name="top_bar_color1">#B40006</color>
@@ -67,6 +68,7 @@
 
     <!--Detailed Screen-->
     <color name="profile_name_darkBrown">#9e0007</color>
+    <color name="dark_gray">#5a5859</color>
 
 
 </resources>

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
 
@@ -20,6 +21,7 @@ import com.app.ace.activities.DockActivity;
 import com.app.ace.entities.FollowUser;
 import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.TrainerReviews;
 import com.app.ace.entities.User;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.entities.post;
@@ -31,9 +33,9 @@ import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.ImageClickListener;
 import com.app.ace.ui.adapters.ArrayListAdapter;
+import com.app.ace.ui.viewbinders.FeedbackViewBinder;
 import com.app.ace.ui.viewbinders.UserPicItemBinder;
 import com.app.ace.ui.views.AnyTextView;
-import com.app.ace.ui.views.CustomRatingBar;
 import com.app.ace.ui.views.ExpandableGridView;
 import com.app.ace.ui.views.TitleBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -46,6 +48,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
+
+import static com.app.ace.R.id.gridView;
+import static com.app.ace.R.id.iv_feedback;
+
 
 /**
  * Created by khan_muhammad on 3/17/2017.
@@ -117,23 +123,51 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     @InjectView(R.id.ll_list)
     private LinearLayout ll_list;
     @InjectView(R.id.ll_separator)
-    private LinearLayout ll_separator;
+    private View ll_separator;
     @InjectView(R.id.txt_profileName)
     private AnyTextView txt_profileName;
     @InjectView(R.id.txt_Trainer)
     private AnyTextView txt_Trainer;
-    @InjectView(R.id.rbAddRating)
-    private CustomRatingBar rbAddRating;
     @InjectView(R.id.riv_profile_pic)
     private CircleImageView riv_profile_pic;
     @InjectView(R.id.txt_education_cirtification_dis)
     private AnyTextView txt_education_cirtification_dis;
     @InjectView(R.id.txt_preffered_training_loc_dis)
     private AnyTextView txt_preffered_training_loc_dis;
-    @InjectView(R.id.txt_avaliability_dis)
-    private AnyTextView txt_avaliability_dis;
+
+    @InjectView(R.id.lv_feedback)
+    private ListView lv_feedback;
+
+    @InjectView(R.id.ll_feedback)
+    private LinearLayout ll_feedback;
+
+    @InjectView(R.id.txt_positive)
+    private AnyTextView txt_positive;
+
+    @InjectView(R.id.txt_negative)
+    private AnyTextView txt_negative;
+
+    @InjectView(R.id.iv_feedback)
+    private ImageView iv_feedback;
+
+    @InjectView(R.id.ll_review_count)
+    private LinearLayout ll_review_count;
+
+    @InjectView(R.id.btn_feedback)
+    private Button btn_feedback;
+
+
+
+
+
+
+
+
     private ArrayListAdapter<profilePostEnt> adapter;
     private List<profilePostEnt> dataCollection;
+
+    private ArrayListAdapter<TrainerReviews> feedbackAdapter;
+    private List<TrainerReviews> feedbackDataCollection;
 
     private List<String> ImageCollection;
     private DockActivity activity;
@@ -169,6 +203,8 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
         imageLoader = ImageLoader.getInstance();
         adapter = new ArrayListAdapter<profilePostEnt>(getDockActivity(), new UserPicItemBinder(getDockActivity(), this));
+        feedbackAdapter = new ArrayListAdapter<TrainerReviews>(getDockActivity(), new FeedbackViewBinder(getDockActivity()));
+
 
         BaseApplication.getBus().register(this);
 
@@ -235,18 +271,13 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             result.setSpeciality(response.body().getResult().getSpeciality());
                             prefHelper.putUser(result);
 
+
+
                             if (response.body().getResult().getId() == Integer.parseInt(prefHelper.getUserId())) {
                                 btn_edit.setVisibility(View.VISIBLE);
                                 btn_follow.setVisibility(View.GONE);
                                 btn_Unfollow.setVisibility(View.GONE);
                                 btn_request.setVisibility(View.GONE);
-                                rbAddRating.setOnTouchListener(new View.OnTouchListener() {
-                                    @Override
-                                    public boolean onTouch(View view, MotionEvent motionEvent) {
-                                        rbAddRating.setFocusable(false);
-                                        return true;
-                                    }
-                                });
 
 
                             }
@@ -256,6 +287,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                                     btn_follow.setVisibility(View.VISIBLE);
                                     btn_Unfollow.setVisibility(View.GONE);
                                     btn_request.setVisibility(View.GONE);
+                                    btn_feedback.setVisibility(View.VISIBLE);
 
                                 }
                             } else {
@@ -263,6 +295,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                                 btn_follow.setVisibility(View.VISIBLE);
                                 btn_Unfollow.setVisibility(View.GONE);
                                 btn_request.setVisibility(View.VISIBLE);
+                                btn_feedback.setVisibility(View.VISIBLE);
                             }
 
                             if (response.body().getResult().getIs_following() == 0) {
@@ -297,7 +330,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             ll_trainee.setVisibility(View.GONE);
 
                             txt_Trainer.setVisibility(View.VISIBLE);
-                            rbAddRating.setVisibility(View.VISIBLE);
+
 
 
                             ll_separator.setVisibility(View.VISIBLE);
@@ -309,15 +342,18 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                                 imageLoader.displayImage(response.body().getResult().getProfile_image(), riv_profile_pic);
                                 txt_education_cirtification_dis.setText(response.body().getResult().getEducation() + " " + response.body().getResult().getUniversity());
                                 txt_preffered_training_loc_dis.setText(response.body().getResult().getGym_address());
-                                txt_avaliability_dis.setText(response.body().getResult().getGym_days() + " " + response.body().getResult().getGym_timing_from() + " " + response.body().getResult().getGym_timing_to());
                                 txt_postCount.setText(response.body().getResult().getPosts_count());
                                 txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
                                 txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
-                                rbAddRating.setScore(response.body().getResult().getRating());
 
+                                txt_positive.setText("+"+response.body().getResult().getPositive_review());
+                                txt_negative.setText("-"+response.body().getResult().getNegative_review());
                                 ShowUserPosts(response.body().getResult().getPosts());
+                                setFeedbackData(response.body().getResult().getTrainer_reviews());
+
                             }
                         } else {
+
                             if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
                                 btn_edit_or_follow.setVisibility(View.GONE);
                                 btn_followTrainee.setVisibility(View.VISIBLE);
@@ -333,6 +369,11 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
                             }
 
+                            gridView();
+
+                            ll_review_count.setVisibility(View.GONE);
+                            ll_feedback.setVisibility(View.GONE);
+
                             ll_one_button.setVisibility(View.VISIBLE);
                             ll_two_buttons.setVisibility(View.INVISIBLE);
 
@@ -341,7 +382,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             ll_trainee.setVisibility(View.VISIBLE);
 
                             txt_Trainer.setVisibility(View.GONE);
-                            rbAddRating.setVisibility(View.GONE);
+
 
                             ll_separator.setVisibility(View.GONE);
 
@@ -352,8 +393,8 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                                 txt_postCount.setText(response.body().getResult().getPosts_count());
                                 txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
                                 txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
-                                rbAddRating.setScore(response.body().getResult().getRating());
-                                txt_tagline.setText(response.body().getResult().getUser_status());
+
+                                txt_tagline.setText(response.body().getResult().getUser_status()+"");
                                 ShowUserPosts(response.body().getResult().getPosts());
                             }
                         }
@@ -372,6 +413,28 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
             }
         });
+
+    }
+
+    private void setFeedbackData(ArrayList<TrainerReviews> trainer_reviews) {
+
+        feedbackDataCollection=new ArrayList<>();
+        feedbackDataCollection.addAll(trainer_reviews);
+
+        if(feedbackDataCollection.size()<=0){
+            txt_no_data.setVisibility(View.VISIBLE);
+            lv_feedback.setVisibility(View.GONE);
+        }
+        else {
+            txt_no_data.setVisibility(View.GONE);
+            lv_feedback.setVisibility(View.VISIBLE);
+        }
+
+        feedbackAdapter.clearList();
+        feedbackAdapter.addAll(feedbackDataCollection);
+        lv_feedback.setAdapter(feedbackAdapter);
+        feedbackAdapter.notifyDataSetChanged();
+
 
     }
 
@@ -423,6 +486,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         btn_follow.setOnClickListener(this);
         btn_request.setOnClickListener(this);
         btn_edit_or_follow.setOnClickListener(this);
+        btn_feedback.setOnClickListener(this);
 
         ll_grid.setOnClickListener(this);
         ll_list.setOnClickListener(this);
@@ -434,18 +498,18 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         txt_FollowersCount.setOnClickListener(this);
         txt_FollowingsCount.setOnClickListener(this);
 
-        rbAddRating.setOnTouchListener(new View.OnTouchListener() {
+        ll_feedback.setOnClickListener(this);
+
+        lv_feedback.setOnTouchListener(new View.OnTouchListener() {
+            // Setting on Touch Listener for handling the touch inside ScrollView
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
-                float rating = rbAddRating.getScore();
-                int ratingInt = (int) rating + 1;
-                rating(ratingInt);
-
-                //   Toast.makeText(getDockActivity(),String.valueOf(rbAddRating.getScore()),Toast.LENGTH_LONG).show();
+                // Disallow the touch request for parent scroll on touch of child view
+                v.getParent().requestDisallowInterceptTouchEvent(true);
                 return false;
             }
         });
+
 
     }
 
@@ -510,6 +574,16 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
     }
 
+    void gridView(){
+        lv_feedback.setVisibility(View.GONE);
+        gv_pics.setVisibility(View.VISIBLE);
+        iv_feedback.setImageResource(R.drawable.feedback1);
+        iv_list.setImageResource(R.drawable.list_view_unselected);
+        iv_grid.setImageResource(R.drawable.grid_view);
+        gv_pics.setNumColumns(3);
+        adapter.notifyDataSetChanged();
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -526,14 +600,15 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
             case R.id.iv_grid:
 
-                iv_list.setImageResource(R.drawable.list_view_unselected);
-                iv_grid.setImageResource(R.drawable.grid_view);
-                gv_pics.setNumColumns(3);
-                adapter.notifyDataSetChanged();
+                gridView();
 
                 break;
 
             case R.id.ll_list:
+
+                lv_feedback.setVisibility(View.GONE);
+                gv_pics.setVisibility(View.VISIBLE);
+                iv_feedback.setImageResource(R.drawable.feedback1);
 
                 iv_list.setImageResource(R.drawable.list_view);
                 iv_grid.setImageResource(R.drawable.grid_view_unselected);
@@ -544,10 +619,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
             case R.id.ll_grid:
 
-                iv_list.setImageResource(R.drawable.list_view_unselected);
-                iv_grid.setImageResource(R.drawable.grid_view);
-                gv_pics.setNumColumns(3);
-                adapter.notifyDataSetChanged();
+                gridView();
 
                 break;
 
@@ -645,9 +717,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
                 break;
 
-            case R.id.rbAddRating:
-                //rating();
-                // Toast.makeText(getDockActivity(),String.valueOf(rbAddRating.getScore()),Toast.LENGTH_LONG).show();
+
 
             case R.id.txt_FollowersCount:
                 getDockActivity().addDockableFragment(FollowersCountListFragment.newInstance(Integer.parseInt(user_id)), "FollowingCountListFragment");
@@ -655,6 +725,14 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
             case R.id.txt_FollowingsCount:
                 getDockActivity().addDockableFragment(FollowingCountListFragment.newInstance(Integer.parseInt(user_id)), "FollowersCountListFragment");
+                break;
+
+            case R.id.ll_feedback:
+               lv_feedback.setVisibility(View.VISIBLE);
+                gv_pics.setVisibility(View.GONE);
+                iv_list.setImageResource(R.drawable.list_view_unselected);
+                iv_grid.setImageResource(R.drawable.grid_view_unselected);
+                iv_feedback.setImageResource(R.drawable.feedback);
                 break;
 
 
