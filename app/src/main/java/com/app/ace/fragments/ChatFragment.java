@@ -284,7 +284,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
           //  ProfileImage = result.get(0).getMessages().get(0).getSender().getProfile_image();
         }
 
-        getMainActivity().titleBar.setSubHeading(USERNAME);
+       // getMainActivity().titleBar.setSubHeading(USERNAME);
 
 
     }

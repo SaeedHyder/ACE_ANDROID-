@@ -44,7 +44,7 @@ public class FeedbackViewBinder extends ViewBinder<TrainerReviews> {
         imageLoader.displayImage(entity.getUser().getProfileImage(), viewHolder.userImage);
         viewHolder.txtUserName.setText(entity.getUser().getFirstName() + " " + entity.getUser().getLastName());
         viewHolder.txtFeedback.setText(entity.getReview() + "");
-        viewHolder.txtTime.setText(time);
+        viewHolder.txtTime.setText(entity.getTimeAgo()+"");
         if (entity.getReviewType().equals("positive")) {
             viewHolder.txt_positive.setText("+1 positive");
             viewHolder.txt_positive.setTextColor(context.getResources().getColor(R.color.txtview_title_color));

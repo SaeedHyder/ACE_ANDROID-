@@ -29,12 +29,14 @@ import com.app.ace.entities.profilePostEnt;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.CameraHelper;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.ImageClickListener;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.FeedbackViewBinder;
 import com.app.ace.ui.viewbinders.UserPicItemBinder;
+import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.ExpandableGridView;
 import com.app.ace.ui.views.TitleBar;
@@ -49,9 +51,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
-import static com.app.ace.R.id.gridView;
-import static com.app.ace.R.id.iv_feedback;
-
+import static com.app.ace.R.id.listView;
 
 /**
  * Created by khan_muhammad on 3/17/2017.
@@ -157,12 +157,6 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     private Button btn_feedback;
 
 
-
-
-
-
-
-
     private ArrayListAdapter<profilePostEnt> adapter;
     private List<profilePostEnt> dataCollection;
 
@@ -175,6 +169,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     private boolean isTrainer = false;
     String TrainerGymAddress;
     String Speciality;
+    String messageBtn="hide";
 
     public static TrainerProfileFragment newInstance() {
         return new TrainerProfileFragment();
@@ -202,6 +197,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
 
         imageLoader = ImageLoader.getInstance();
+        
         adapter = new ArrayListAdapter<profilePostEnt>(getDockActivity(), new UserPicItemBinder(getDockActivity(), this));
         feedbackAdapter = new ArrayListAdapter<TrainerReviews>(getDockActivity(), new FeedbackViewBinder(getDockActivity()));
 
@@ -226,6 +222,8 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         loadingFinished();
         setListener();
         showProfiles();
+
+        lv_feedback.setScrollContainer(false);
 
 
     }
@@ -266,11 +264,11 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                         if (response.body().getResult().getUser_type().equals(AppConstants.trainer)) {
 
                             isTrainer = true;
+                            messageBtn="show";
                             Trainer = AppConstants.trainer;
                             result.setEducation(response.body().getResult().getEducation());
                             result.setSpeciality(response.body().getResult().getSpeciality());
                             prefHelper.putUser(result);
-
 
 
                             if (response.body().getResult().getId() == Integer.parseInt(prefHelper.getUserId())) {
@@ -278,6 +276,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                                 btn_follow.setVisibility(View.GONE);
                                 btn_Unfollow.setVisibility(View.GONE);
                                 btn_request.setVisibility(View.GONE);
+                                messageBtn="hide";
 
 
                             }
@@ -332,7 +331,6 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             txt_Trainer.setVisibility(View.VISIBLE);
 
 
-
                             ll_separator.setVisibility(View.VISIBLE);
 
                             if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
@@ -346,8 +344,8 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                                 txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
                                 txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
 
-                                txt_positive.setText("+"+response.body().getResult().getPositive_review());
-                                txt_negative.setText("-"+response.body().getResult().getNegative_review());
+                                txt_positive.setText("+" + response.body().getResult().getPositive_review());
+                                txt_negative.setText("-" + response.body().getResult().getNegative_review());
                                 ShowUserPosts(response.body().getResult().getPosts());
                                 setFeedbackData(response.body().getResult().getTrainer_reviews());
 
@@ -394,7 +392,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                                 txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
                                 txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
 
-                                txt_tagline.setText(response.body().getResult().getUser_status()+"");
+                                txt_tagline.setText(response.body().getResult().getUser_status() + "");
                                 ShowUserPosts(response.body().getResult().getPosts());
                             }
                         }
@@ -418,14 +416,13 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
     private void setFeedbackData(ArrayList<TrainerReviews> trainer_reviews) {
 
-        feedbackDataCollection=new ArrayList<>();
+        feedbackDataCollection = new ArrayList<>();
         feedbackDataCollection.addAll(trainer_reviews);
 
-        if(feedbackDataCollection.size()<=0){
+        if (feedbackDataCollection.size() <= 0) {
             txt_no_data.setVisibility(View.VISIBLE);
             lv_feedback.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             txt_no_data.setVisibility(View.GONE);
             lv_feedback.setVisibility(View.VISIBLE);
         }
@@ -500,7 +497,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
         ll_feedback.setOnClickListener(this);
 
-        lv_feedback.setOnTouchListener(new View.OnTouchListener() {
+      /*  lv_feedback.setOnTouchListener(new View.OnTouchListener() {
             // Setting on Touch Listener for handling the touch inside ScrollView
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -508,7 +505,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 v.getParent().requestDisallowInterceptTouchEvent(true);
                 return false;
             }
-        });
+        });*/
 
 
     }
@@ -563,6 +560,15 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             }
         });
 
+        if(messageBtn.equals("show")){
+            titleBar.showMessageButton(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
+        else{
         titleBar.showSettingButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -570,11 +576,11 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 getDockActivity().addDockableFragment(SettingsFragment.newInstance(isNotificationOn, isPublicAccount), "SettingsFragment");
 
             }
-        });
+        });}
 
     }
 
-    void gridView(){
+    void gridView() {
         lv_feedback.setVisibility(View.GONE);
         gv_pics.setVisibility(View.VISIBLE);
         iv_feedback.setImageResource(R.drawable.feedback1);
@@ -625,10 +631,31 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
             case R.id.btn_request:
 
+                final DialogHelper feedbackDIaloge = new DialogHelper(getDockActivity());
+                feedbackDIaloge.feedback(R.layout.dialog_request_booking, getDockActivity(), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AnyEditTextView hours = feedbackDIaloge.getHours(R.id.edt_hours_day);
+                        AnyEditTextView days = feedbackDIaloge.getDays(R.id.edt_total_days);
+                        AnyTextView totalHours = feedbackDIaloge.getTotalHours(R.id.txt_total_hours);
+                        if (validate(hours, days, totalHours)){
+
+                            requestService(hours.getText().toString(),days.getText().toString(),totalHours.getText().toString(),feedbackDIaloge);
+                        }
+
+
+                    }
+                });
+                feedbackDIaloge.showDialog();
+
                 //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
 
-                getDockActivity().addDockableFragment(CalendarFragment.newInstance(user_id, TrainerGymAddress, Speciality), "CalendarFragment");
+                // getDockActivity().addDockableFragment(CalendarFragment.newInstance(user_id, TrainerGymAddress, Speciality), "CalendarFragment");
 
+                break;
+
+            case R.id.btn_feedback:
+                getDockActivity().addDockableFragment(FeedBackFragment.newInstance(user_id), "FeedBackFragment");
 
                 break;
 
@@ -718,7 +745,6 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 break;
 
 
-
             case R.id.txt_FollowersCount:
                 getDockActivity().addDockableFragment(FollowersCountListFragment.newInstance(Integer.parseInt(user_id)), "FollowingCountListFragment");
                 break;
@@ -728,7 +754,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 break;
 
             case R.id.ll_feedback:
-               lv_feedback.setVisibility(View.VISIBLE);
+                lv_feedback.setVisibility(View.VISIBLE);
                 gv_pics.setVisibility(View.GONE);
                 iv_list.setImageResource(R.drawable.list_view_unselected);
                 iv_grid.setImageResource(R.drawable.grid_view_unselected);
@@ -737,6 +763,49 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
 
         }
+    }
+
+    private boolean validate(AnyEditTextView hours, AnyEditTextView days, AnyTextView totalHours) {
+        if (hours.getText().toString().trim().equals("")) {
+            hours.setError(getString(R.string.hour_empty_error));
+            return false;
+        }
+        else if(Integer.parseInt(hours.getText().toString())<=0 || Integer.parseInt(hours.getText().toString())>24 ){
+            hours.setError(getDockActivity().getResources().getString(R.string.valid_hours));
+            return false;
+        }else if (days.getText().toString().trim().equals("")) {
+            days.setError(getString(R.string.days_error));
+            return false;
+        } else if (totalHours.getText().toString().trim().equals("")) {
+            totalHours.setError(getString(R.string.total_hours_error));
+            return false;
+        } else return true;
+    }
+
+
+    private void requestService(String hours, String days, String totalHours, final DialogHelper feedbackDIaloge) {
+
+        Call<ResponseWrapper> callback = webService.trainerRequest(user_id, prefHelper.getUserId(), hours, days, totalHours);
+
+        callback.enqueue(new Callback<ResponseWrapper>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    getDockActivity().addDockableFragment(HomeFragment.newInstance(), HomeFragment.class.getName());
+                    feedbackDIaloge.hideDialog();
+
+
+                } else {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper> call, Throwable t) {
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+            }
+        });
     }
 
 

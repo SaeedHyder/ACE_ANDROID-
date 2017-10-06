@@ -79,7 +79,7 @@ public class NotificationListingFragment  extends BaseFragment implements View.O
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new ArrayListAdapter<NotificationEnt>(getDockActivity(), new NotificationListItemBinder(getDockActivity(),this));
+        adapter = new ArrayListAdapter<NotificationEnt>(getDockActivity(), new NotificationListItemBinder(getDockActivity(),this,prefHelper));
     }
 
     @Nullable

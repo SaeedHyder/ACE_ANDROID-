@@ -427,15 +427,22 @@
     <string name="hours_per_day">Hours per day</string>
     <string name="total_days">Total days</string>
     <string name="total_hours">Total hours of training requested</string>
-    <string name="positive_reputation">Positive Reputation</string>
-    <string name="negative_reputation">Negative Reputation</string>
+    <string name="positive_reputation">Positive\nReputation</string>
+    <string name="negative_reputation">Negative\nReputation</string>
     <string name="feedback_head">Feedback</string>
     <string name="enter_message">Enter your message</string>
     <string name="feedback_error">Enter Feedback</string>
     <string name="send_message">Send Message</string>
-
-
-
+    <string name="enter_feedback">Enter Feedback</string>
+    <string name="valid_hours">Enter Hours between 1 to 24</string>
+    <string name="hour_empty_error">Hours cannot be Empty</string>
+    <string name="days_error">Days Cannot be Empty</string>
+    <string name="total_hours_error">Total hours cannnot be empty</string>
+    <string name="request_booking_title">Request For Booking</string>
+    <string name="number_of_hours">Number of Hours</string>
+    <string name="number_of_days">Number of Days</string>
+    <string name="total_hourss">Total Hours</string>
+    <string name="booking_requesrt">Booking Request</string>
 
 
 </resources>

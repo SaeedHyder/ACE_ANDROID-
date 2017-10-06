@@ -47,7 +47,7 @@
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
         android:layout_centerVertical="true"
-        android:weightSum="5">
+     >
 
 
         <ImageView
@@ -68,6 +68,7 @@
             android:padding="@dimen/x15"
             android:src="@drawable/calendar_icon"
             android:gravity="center_vertical"
+            android:visibility="gone"
             />
 
         <ImageView

@@ -11,8 +11,8 @@
 
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_weight="1"
         android:fillViewport="true">
 
@@ -692,6 +692,7 @@
                 android:id="@+id/lv_feedback"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+
                 android:divider="@null"
                 android:visibility="visible">
 

@@ -9,9 +9,16 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.app.ace.R;
+import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
+import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.views.AnyEditTextView;
+import com.app.ace.ui.views.TitleBar;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import roboguice.inject.InjectView;
 
 /**
@@ -33,10 +40,11 @@ public class FeedBackFragment extends BaseFragment implements View.OnClickListen
     private String positive = "positive";
     private String negative = "negative";
     private String selectedFeedback = positive;
+    public static String TRAINER_ID = "User_Id";
 
-    public static FeedBackFragment newInstance() {
+    public static FeedBackFragment newInstance(String user_id) {
         Bundle args = new Bundle();
-
+        args.putString(TRAINER_ID, String.valueOf(user_id));
         FeedBackFragment fragment = new FeedBackFragment();
         fragment.setArguments(args);
         return fragment;
@@ -46,6 +54,9 @@ public class FeedBackFragment extends BaseFragment implements View.OnClickListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            TRAINER_ID = getArguments().getString(TRAINER_ID);
+        } else {
+            TRAINER_ID = prefHelper.getUserId();
         }
 
     }
@@ -67,6 +78,30 @@ public class FeedBackFragment extends BaseFragment implements View.OnClickListen
         btn_Submit.setOnClickListener(this);
     }
 
+    private void feedbackService() {
+
+        Call<ResponseWrapper> callback = webService.trainerFeedback(TRAINER_ID, prefHelper.getUserId(), edt_feedback.getText().toString(), selectedFeedback);
+
+        callback.enqueue(new Callback<ResponseWrapper>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    getDockActivity().addDockableFragment(HomeFragment.newInstance(),HomeFragment.class.getName());
+
+                } else {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper> call, Throwable t) {
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+            }
+        });
+
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -86,10 +121,21 @@ public class FeedBackFragment extends BaseFragment implements View.OnClickListen
                 btn_positive.setBackground(getResources().getDrawable(R.drawable.negative_border));
                 break;
             case R.id.btn_Submit:
-                if (validated())
+                if (validated()){
+                    feedbackService();}
                     break;
 
         }
+
+    }
+
+
+    @Override
+    public void setTitleBar(TitleBar titleBar) {
+        super.setTitleBar(titleBar);
+        titleBar.hideButtons();
+        titleBar.showBackButton();
+        titleBar.setSubHeading(getString(R.string.enter_feedback));
 
     }
 

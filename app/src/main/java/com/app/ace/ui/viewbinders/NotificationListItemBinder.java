@@ -11,6 +11,9 @@ import com.app.ace.activities.DockActivity;
 import com.app.ace.entities.NotificationEnt;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.ChatFragment;
+import com.app.ace.fragments.DetailedScreenFragment;
+import com.app.ace.fragments.TrainerProfileFragment;
+import com.app.ace.helpers.BasePreferenceHelper;
 import com.app.ace.interfaces.RejectBooking;
 import com.app.ace.interfaces.TraineeSchedule;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
@@ -31,13 +34,15 @@ public class NotificationListItemBinder extends ViewBinder<NotificationEnt> impl
 
     private ImageLoader imageLoader;
     private DockActivity context;
+    private BasePreferenceHelper preferenceHelper;
 
     TraineeSchedule traineeSchedule;
-    public NotificationListItemBinder(DockActivity context ,TraineeSchedule traineeSchedule) {
+    public NotificationListItemBinder(DockActivity context ,TraineeSchedule traineeSchedule,BasePreferenceHelper preferenceHelper) {
         super(R.layout.notification_list_item);
         this.context = context;
         imageLoader = ImageLoader.getInstance();
         this.traineeSchedule=traineeSchedule;
+        this.preferenceHelper=preferenceHelper;
     }
 
     @Override
@@ -61,7 +66,12 @@ public class NotificationListItemBinder extends ViewBinder<NotificationEnt> impl
             @Override
             public void onClick(View v) {
                 if(entity.getAction_type().equals("booking")){
-                    traineeSchedule.getTraineeSchedule(entity);
+                  //  traineeSchedule.getTraineeSchedule(entity);
+                    context.addDockableFragment(DetailedScreenFragment.newInstance(entity.getAction_id()), "DetailedScreenFragment");
+                }
+                else if(entity.getAction_type().equals("review")){
+                    //  traineeSchedule.getTraineeSchedule(entity);
+                    context.addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(preferenceHelper.getUserId())), "DetailedScreenFragment");
                 }
                 else if(entity.getAction_type().equals("conversation")){
                     context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getAction_id()

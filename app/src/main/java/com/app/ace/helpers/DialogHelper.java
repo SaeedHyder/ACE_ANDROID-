@@ -4,28 +4,24 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.MediaController;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import com.app.ace.R;
-import com.app.ace.fragments.abstracts.BaseFragment;
+import com.app.ace.ui.views.AnyEditTextView;
+import com.app.ace.ui.views.AnyTextView;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.squareup.timessquare.CalendarCellDecorator;
 import com.squareup.timessquare.CalendarPickerView;
 import com.squareup.timessquare.DefaultDayViewAdapter;
-
-import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,22 +33,24 @@ import java.util.List;
  * Created on 4/27/2017.
  */
 
-public class DialogHelper  {
+public class DialogHelper {
     Dialog dialog;
 
     private ImageLoader imageLoader;
-int days = 1;
+    int days = 1;
     CalendarPickerView calendarView;
     Date StartDate;
+
     public DialogHelper(Context context) {
         this.dialog = new Dialog(context);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
        /* */
     }
-    public DialogHelper(Context context,boolean title) {
+
+    public DialogHelper(Context context, boolean title) {
         this.dialog = new Dialog(context);
 
-        if (title){
+        if (title) {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         }
@@ -61,13 +59,14 @@ int days = 1;
     }
 
 
-    public Dialog initDialog(int layoutID,Date startDate) {
+    public Dialog initDialog(int layoutID, Date startDate) {
 
         this.dialog.setContentView(layoutID);
         calendarView = (CalendarPickerView) this.dialog.findViewById(R.id.calendarView);
         StartDate = startDate;
         return this.dialog;
     }
+
     public Dialog initDialog(int layoutID) {
 
         this.dialog.setContentView(layoutID);
@@ -76,9 +75,7 @@ int days = 1;
     }
 
 
-
-    public Dialog postImage(int layoutID, Context context, String picpath)
-    {
+    public Dialog postImage(int layoutID, Context context, String picpath) {
         this.dialog.setContentView(layoutID);
         imageLoader = ImageLoader.getInstance();
         PhotoView photoView = (PhotoView) dialog.findViewById(R.id.photo_view);
@@ -87,7 +84,82 @@ int days = 1;
         return this.dialog;
     }
 
-    public void setDuration(Context context){
+    public Dialog feedback(int layoutID, Context context, View.OnClickListener submit) {
+        this.dialog.setContentView(layoutID);
+        Button Submit = (Button) dialog.findViewById(R.id.btn_Submit);
+        Submit.setOnClickListener(submit);
+        final AnyEditTextView hours = getHours(R.id.edt_hours_day);
+        final AnyEditTextView days = getDays(R.id.edt_total_days);
+        final AnyTextView totalHours = getTotalHours(R.id.txt_total_hours);
+        hours.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().trim().equals("")) {
+                    int hoursnumber = Integer.parseInt(s.toString());
+                    if (hoursnumber <= 0 || hoursnumber > 24) {
+                        hours.setError(dialog.getContext().getResources().getString(R.string.valid_hours));
+                    } else if (!days.getText().toString().trim().equals("")) {
+                        int daysnumber = Integer.parseInt(days.getText().toString());
+                        totalHours.setText(hoursnumber * daysnumber + "");
+                    }
+                }
+                if (s.toString().trim().equals("")) {
+                    totalHours.setText("");
+                }
+            }
+        });
+        days.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!hours.getText().toString().trim().equals("") && !s.toString().trim().equals("")) {
+                    int hoursnumber = Integer.parseInt(hours.getText().toString());
+                    int daysnumber = Integer.parseInt(s.toString());
+                    totalHours.setText(hoursnumber * daysnumber + "");
+                }
+                if (s.toString().trim().equals("")) {
+                    totalHours.setText("");
+                }
+            }
+        });
+        return this.dialog;
+    }
+
+    public AnyEditTextView getHours(int editTextID) {
+        AnyEditTextView hours = (AnyEditTextView) dialog.findViewById(editTextID);
+        return hours;
+    }
+
+    public AnyEditTextView getDays(int editTextID) {
+        AnyEditTextView days = (AnyEditTextView) dialog.findViewById(editTextID);
+        return days;
+    }
+
+    public AnyTextView getTotalHours(int editTextID) {
+        AnyTextView totalHours = (AnyTextView) dialog.findViewById(editTextID);
+        return totalHours;
+    }
+
+    public void setDuration(Context context) {
         final Spinner sp_weeks = (Spinner) this.dialog.findViewById(R.id.sp_weeks);
         List<String> timeDuration = new ArrayList<String>();
         timeDuration.add("Select time duration");
@@ -95,7 +167,7 @@ int days = 1;
         timeDuration.add("1 Month");
         timeDuration.add("3 Months");
         timeDuration.add("6 Months");
-        setCalendarView(StartDate,days);
+        setCalendarView(StartDate, days);
         ArrayAdapter<String> TimeDurationAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, timeDuration);
         TimeDurationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_weeks.setAdapter(TimeDurationAdapter);
@@ -103,26 +175,22 @@ int days = 1;
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 final String duration = sp_weeks.getSelectedItem().toString();
-                if(duration=="2 Week")
-                {
-                    days=14;
-                    setCalendarView(StartDate,days);
+                if (duration == "2 Week") {
+                    days = 14;
+                    setCalendarView(StartDate, days);
 
                 }
-                if(duration=="1 Month")
-                {
-                    days=30;
-                    setCalendarView(StartDate,days);
+                if (duration == "1 Month") {
+                    days = 30;
+                    setCalendarView(StartDate, days);
                 }
-                if(duration=="3 Months")
-                {
-                    days=90;
-                    setCalendarView(StartDate,days);
+                if (duration == "3 Months") {
+                    days = 90;
+                    setCalendarView(StartDate, days);
                 }
-                if(duration=="6 Months")
-                {
-                    days=180;
-                    setCalendarView(StartDate,days);
+                if (duration == "6 Months") {
+                    days = 180;
+                    setCalendarView(StartDate, days);
                 }
 
             }
@@ -133,12 +201,14 @@ int days = 1;
             }
         });
     }
-    public void setSummitButton(View.OnClickListener onClickListener){
-        Button submit = (Button)this.dialog.findViewById(R.id.btn_training_Search_Submit);
+
+    public void setSummitButton(View.OnClickListener onClickListener) {
+        Button submit = (Button) this.dialog.findViewById(R.id.btn_training_Search_Submit);
         submit.setOnClickListener(onClickListener);
 
     }
-    private void setCalendarView(Date StartDate,int days) {
+
+    private void setCalendarView(Date StartDate, int days) {
        /* calendarView.state().edit()
                 .setFirstDayOfWeek(Calendar.SUNDAY)
                 .setMinimumDate(CalendarDay.from(1990, 1, 1))
@@ -153,8 +223,8 @@ int days = 1;
         Calendar nextYear = Calendar.getInstance();
         nextYear.setTime(StartDate);
         nextYear.add(Calendar.YEAR, 1);
-        nextYear.add(Calendar.MONTH,1);
-        nextYear.add(Calendar.DAY_OF_MONTH,1);
+        nextYear.add(Calendar.MONTH, 1);
+        nextYear.add(Calendar.DAY_OF_MONTH, 1);
 
         calendarView.setCustomDayView(new DefaultDayViewAdapter());
         // calendarView.setCustomDayView(new CustomDayViewAdapter(myDockActivity));
@@ -181,7 +251,7 @@ int days = 1;
     }
 
     public void SetTitle(String title) {
-       this.dialog.setTitle(title);
+        this.dialog.setTitle(title);
     }
 
     public void setMessage(int txtmessageID, String message) {
@@ -204,15 +274,19 @@ int days = 1;
     public void showDialog() {
         this.dialog.show();
     }
+    public void hideDialog() {
+        this.dialog.dismiss();
+    }
 
     public Date dismissDialog() {
         this.dialog.dismiss();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(calendarView.getSelectedDate());
-        calendar.add(Calendar.DAY_OF_MONTH,days);
+        calendar.add(Calendar.DAY_OF_MONTH, days);
         return calendar.getTime();
     }
-    public void dismisspoptuDialog(){
+
+    public void dismisspoptuDialog() {
         this.dialog.dismiss();
     }
 

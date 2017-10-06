@@ -1,14 +1,13 @@
 package com.app.ace.entities;
 
-import com.app.ace.helpers.DateHelper;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by saeedhyder on 10/4/2017.
+ * Created by saeedhyder on 10/5/2017.
  */
 
-public class TrainerReviews {
+public class BookingRequestEnt {
 
     @SerializedName("id")
     @Expose
@@ -19,24 +18,24 @@ public class TrainerReviews {
     @SerializedName("trainer_id")
     @Expose
     private Integer trainerId;
-    @SerializedName("review")
+    @SerializedName("no_of_hours")
     @Expose
-    private String review;
-    @SerializedName("review_type")
+    private Integer noOfHours;
+    @SerializedName("no_of_days")
     @Expose
-    private String reviewType;
+    private Integer noOfDays;
+    @SerializedName("total_hours_requested")
+    @Expose
+    private Integer totalHoursRequested;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
-    @SerializedName("time_ago")
-    @Expose
-    private String timeAgo;
     @SerializedName("user")
     @Expose
-    private UserNew user;
+    private User user;
 
     public Integer getId() {
         return id;
@@ -62,20 +61,28 @@ public class TrainerReviews {
         this.trainerId = trainerId;
     }
 
-    public String getReview() {
-        return review;
+    public Integer getNoOfHours() {
+        return noOfHours;
     }
 
-    public void setReview(String review) {
-        this.review = review;
+    public void setNoOfHours(Integer noOfHours) {
+        this.noOfHours = noOfHours;
     }
 
-    public String getReviewType() {
-        return reviewType;
+    public Integer getNoOfDays() {
+        return noOfDays;
     }
 
-    public void setReviewType(String reviewType) {
-        this.reviewType = reviewType;
+    public void setNoOfDays(Integer noOfDays) {
+        this.noOfDays = noOfDays;
+    }
+
+    public Integer getTotalHoursRequested() {
+        return totalHoursRequested;
+    }
+
+    public void setTotalHoursRequested(Integer totalHoursRequested) {
+        this.totalHoursRequested = totalHoursRequested;
     }
 
     public String getCreatedAt() {
@@ -83,7 +90,7 @@ public class TrainerReviews {
     }
 
     public void setCreatedAt(String createdAt) {
-        this.createdAt = DateHelper.getLocalTimeDate(createdAt);
+        this.createdAt = createdAt;
     }
 
     public String getUpdatedAt() {
@@ -94,30 +101,13 @@ public class TrainerReviews {
         this.updatedAt = updatedAt;
     }
 
-    public String getTimeAgo() {
-        return timeAgo;
-    }
-
-    public void setTimeAgo(String timeAgo) {
-        this.timeAgo = timeAgo;
-    }
-
-    public UserNew getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(UserNew user) {
+    public void setUser(User user) {
         this.user = user;
     }
-
-
-
-
-
-
-
-
-
 
 
 }

@@ -1,15 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg">
+    android:id="@+id/ll_mainFrameDetailed"
+    android:background="@drawable/bg"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/ll_mainFrameDetailed"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.8"
@@ -40,55 +39,19 @@
 
                 <com.app.ace.ui.views.AnyTextView
                     android:id="@+id/txt_detailedS_ProfileName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:gravity="left|center_vertical"
-                    android:paddingBottom="@dimen/x5"
+                    android:gravity="left"
+                    android:layout_marginTop="@dimen/x5"
                     android:paddingLeft="@dimen/x8"
                     android:paddingTop="@dimen/x2"
-
                     android:textColor="@color/profile_name_darkBrown"
                     android:textSize="@dimen/x17"
                     android:textStyle="normal"
                     app:typeface="Roboto-Regular.ttf" />
 
-                <LinearLayout
-                    android:id="@+id/ll_time_detail"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
 
-                    <com.app.ace.ui.views.AnyTextView
-                        android:id="@+id/txt_day"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.60"
-                        android:paddingBottom="@dimen/x2"
-                        android:paddingLeft="@dimen/x8"
-
-                        android:textColor="@color/darkGray"
-                        android:textSize="@dimen/x14"
-                        android:textStyle="normal"
-                        app:typeface="Roboto-Regular.ttf" />
-
-                    <com.app.ace.ui.views.AnyTextView
-                        android:id="@+id/txt_time"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="left"
-                        android:paddingBottom="@dimen/x5"
-                        android:paddingLeft="@dimen/x8"
-
-                        android:textColor="@color/darkGray"
-                        android:textSize="@dimen/x14"
-                        android:textStyle="normal"
-                        app:typeface="Roboto-Regular.ttf" />
-
-
-                </LinearLayout>
 
             </LinearLayout>
 
@@ -96,7 +59,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btn_cancel_booking"
+            android:id="@+id/btn_send_msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -109,45 +72,13 @@
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="@dimen/x16"
-            android:visibility="visible"/>
-        <LinearLayout
-            android:id="@+id/ll_Accept"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/x10"
-            android:layout_marginLeft="@dimen/x25"
-            android:layout_marginRight="@dimen/x25"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="visible" />
 
-            <Button
-                android:id="@+id/btn_accept"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginRight="@dimen/x4"
-                android:background="@drawable/next_bttn_next"
-                android:text="@string/accept"
-                android:textColor="@color/white"
-                android:textSize="@dimen/x16" />
-
-            <Button
-                android:id="@+id/btn_decline"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginLeft="@dimen/x4"
-                android:background="@drawable/next_bttn_next"
-                android:text="@string/decline"
-                android:textColor="@color/white"
-                android:textSize="@dimen/x16" />
-
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_container"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/x40"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/x20"
             android:background="@color/white"
             android:orientation="vertical">
@@ -166,77 +97,131 @@
                 android:textSize="@dimen/x17"
                 android:textStyle="normal"
                 app:typeface="Roboto-Regular.ttf" />
+
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/x1"
                 android:alpha="0.5"
-                android:background="@drawable/text"/>
+                android:background="@drawable/text" />
 
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_detailedScreen_listView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ListView
-                android:id="@+id/lv_detailedScreen"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></ListView>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.app.ace.ui.views.AnyTextView
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center|center_vertical|center_horizontal"
+                    android:padding="@dimen/x16"
+                    android:text="@string/number_of_hours"
+                    app:typeface="Roboto-Regular.ttf" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:alpha="0.6"
+                    android:background="@drawable/text" />
+
+                <com.app.ace.ui.views.AnyTextView
+                    android:id="@+id/txt_hours"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center|center_vertical|center_horizontal"
+                    android:padding="@dimen/x16"
+                    app:typeface="Roboto-Regular.ttf" />
+
+            </LinearLayout>
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/x1"
-                android:alpha="0.2"
-                android:background="@drawable/text"/>
+                android:alpha="0.6"
+                android:background="@drawable/text" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.app.ace.ui.views.AnyTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center|center_vertical|center_horizontal"
+                    android:padding="@dimen/x16"
+                    android:text="@string/number_of_days"
+                    app:typeface="Roboto-Regular.ttf" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:alpha="0.6"
+                    android:background="@drawable/text" />
+
+                <com.app.ace.ui.views.AnyTextView
+                    android:id="@+id/txt_days"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center|center_vertical|center_horizontal"
+                    android:padding="@dimen/x16"
+                    app:typeface="Roboto-Regular.ttf" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/x1"
+                android:alpha="0.6"
+                android:background="@drawable/text" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.app.ace.ui.views.AnyTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center|center_vertical|center_horizontal"
+                    android:padding="@dimen/x16"
+                    android:text="@string/total_hourss"
+                    app:typeface="Roboto-Regular.ttf" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:alpha="0.6"
+                    android:background="@drawable/text" />
+
+                <com.app.ace.ui.views.AnyTextView
+                    android:id="@+id/txt_total_hours"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center|center_vertical|center_horizontal"
+                    android:padding="@dimen/x16"
+                    app:typeface="Roboto-Regular.ttf" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/x1"
+                android:alpha="0.6"
+                android:background="@drawable/text" />
 
 
         </LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_bottom_bar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x50"
-        android:layout_alignParentBottom="true"
-        android:layout_centerVertical="true"
-        android:layout_gravity="bottom"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:weightSum="3">
-
-
-        <ImageView
-            android:id="@+id/iv_CalanderDetailedScreen"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:padding="@dimen/x15"
-            android:src="@drawable/calendar_icon" />
-
-
-        <ImageView
-            android:id="@+id/iv_profile"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:padding="@dimen/x15"
-            android:src="@drawable/profile_icon1" />
-
-        <ImageView
-            android:id="@+id/iv_Home"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:padding="@dimen/x15"
-            android:src="@drawable/home_icon" />
 
     </LinearLayout>
 

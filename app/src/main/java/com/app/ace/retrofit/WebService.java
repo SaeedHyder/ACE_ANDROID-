@@ -1,6 +1,7 @@
 package com.app.ace.retrofit;
 
 
+import com.app.ace.entities.BookingRequestEnt;
 import com.app.ace.entities.BookingSchedule;
 import com.app.ace.entities.ConversationEnt;
 import com.app.ace.entities.CreatePostEnt;
@@ -206,7 +207,7 @@ public interface WebService {
             @Part MultipartBody.Part image,
             @Part("user_id") RequestBody user_id,
             @Part MultipartBody.Part thumb_image
-            );
+    );
 
 
     @GET("user/{user_id}")
@@ -234,7 +235,7 @@ public interface WebService {
     @GET("message/get/{conversation_id}")
     Call<ResponseWrapper<ArrayList<ConversationEnt>>> GetConversation(
             @Path("conversation_id") String conversation_id,
-            @Query("user_id")String user_id);
+            @Query("user_id") String user_id);
 
     @FormUrlEncoded
     @POST("message/send-message")
@@ -318,7 +319,7 @@ public interface WebService {
 
     @Multipart
     @POST("user/update")
-    Call<ResponseWrapper<RegistrationResult>>   NotificationStatus(
+    Call<ResponseWrapper<RegistrationResult>> NotificationStatus(
             @Part("user_id") RequestBody user_id,
             @Part("notification_status") RequestBody notification_status,
             @Part("private_account") RequestBody private_account
@@ -330,6 +331,7 @@ public interface WebService {
             @Part("user_id") RequestBody user_id,
             @Part("mute_conversation") RequestBody mute_conversation
     );
+
     @FormUrlEncoded
     @POST("mute/conversation")
     Call<ResponseWrapper<ArrayList<RegistrationResult>>> MuteReciverConversation(
@@ -337,11 +339,13 @@ public interface WebService {
             @Field("user_id") String user_id,
             @Field("mute") String mute_conversation
     );
+
     @FormUrlEncoded
     @POST("user/forgotpassword")
-    Call<ResponseWrapper>forgetPassword(
-            @Field("email")String email
+    Call<ResponseWrapper> forgetPassword(
+            @Field("email") String email
     );
+
     @FormUrlEncoded
     @POST("user/rating/add")
     Call<ResponseWrapper<User>> rating(
@@ -451,6 +455,27 @@ public interface WebService {
             @Field("status") String status,
             @Field("slot_id") String slot_id);
 
+    @FormUrlEncoded
+    @POST("review")
+    Call<ResponseWrapper> trainerFeedback(
+            @Field("trainer_id") String trainer_id,
+            @Field("user_id") String user_id,
+            @Field("review") String review,
+            @Field("review_type") String review_type);
+
+    @FormUrlEncoded
+    @POST("service-request")
+    Call<ResponseWrapper> trainerRequest(
+            @Field("trainer_id") String trainer_id,
+            @Field("user_id") String user_id,
+            @Field("no_of_hours") String no_of_hours,
+            @Field("no_of_days") String no_of_days,
+            @Field("total_hours_requested") String total_hours_requested);
+
+    @GET("service-request-detail")
+    Call<ResponseWrapper<BookingRequestEnt>> bookingRequest(
+            @Query("user_id") String user_id,
+            @Query("request_id") String request_id);
 
 
 

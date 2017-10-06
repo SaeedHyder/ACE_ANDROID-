@@ -36,10 +36,10 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:maxLines="1"
+                android:maxLines="2"
                 android:text="dummy alert"
                 android:textColor="@color/black"
-                android:textSize="@dimen/x16"
+                android:textSize="@dimen/x14"
                 app:typeface="Roboto-Bold.ttf" />
 
 

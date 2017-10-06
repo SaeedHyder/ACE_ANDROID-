@@ -80,10 +80,10 @@ public class UserNew {
     private String gymAddress;
     @SerializedName("gym_latitude")
     @Expose
-    private Integer gymLatitude;
+    private String gymLatitude;
     @SerializedName("gym_longitude")
     @Expose
-    private Integer gymLongitude;
+    private String gymLongitude;
     @SerializedName("speciality")
     @Expose
     private String speciality;
@@ -341,19 +341,19 @@ public class UserNew {
         this.gymAddress = gymAddress;
     }
 
-    public Integer getGymLatitude() {
+    public String getGymLatitude() {
         return gymLatitude;
     }
 
-    public void setGymLatitude(Integer gymLatitude) {
+    public void setGymLatitude(String gymLatitude) {
         this.gymLatitude = gymLatitude;
     }
 
-    public Integer getGymLongitude() {
+    public String getGymLongitude() {
         return gymLongitude;
     }
 
-    public void setGymLongitude(Integer gymLongitude) {
+    public void setGymLongitude(String gymLongitude) {
         this.gymLongitude = gymLongitude;
     }
 
