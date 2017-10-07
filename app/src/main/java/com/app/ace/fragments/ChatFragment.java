@@ -404,6 +404,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 // UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                if(blockReceiverId==null){
+                    blockReceiverId=receiverId;
+                }
                 getDockActivity().addDockableFragment(FriendsInfoFragment.newInstance(
                         ConversationId,
                         blockReceiverId,

@@ -191,7 +191,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
         //imageLoader.displayImage(homeListDataEnt.getProfile_post_pic_path(), viewHolder.iv_post_pic);
 
         viewHolder.txt_profileName.setText(homeListDataEnt.getProfile_name());
-        viewHolder.txt_likes_count.setText(homeListDataEnt.getTotoal_likes()+" likes");
+        viewHolder.txt_likes_count.setText(homeListDataEnt.getTotoal_likes()+activity.getString(R.string.likes));
         viewHolder.txt_view_all_comments.setText(viewHolder.txt_view_all_comments.getContext().getString(R.string.view_all)+" "+ homeListDataEnt.getTotal_comments()
                 +" "+viewHolder.txt_view_all_comments.getContext().getString(R.string.comments));
 

@@ -45,7 +45,8 @@
                 <com.app.ace.ui.views.AnyTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x30"
+                    android:layout_marginStart="@dimen/x30"
+                    android:layout_marginEnd="@dimen/x30"
                     android:layout_marginBottom="@dimen/x3"
                     android:text="@string/email_address"
                     android:textColor="@color/txtview_title_color"
@@ -86,7 +87,8 @@
                 <com.app.ace.ui.views.AnyTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x30"
+                    android:layout_marginStart="@dimen/x30"
+                    android:layout_marginEnd="@dimen/x30"
                     android:layout_marginBottom="@dimen/x3"
                     android:layout_marginTop="@dimen/x20"
                     android:text="@string/password"

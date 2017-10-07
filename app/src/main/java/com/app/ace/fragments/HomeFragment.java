@@ -523,7 +523,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
         final PopupWindow popupWindow = new PopupWindow(
                 popupView,
-                (int) getResources().getDimension(R.dimen.x100),
+                (int) getResources().getDimension(R.dimen.x130),
                 (int) getResources().getDimension(R.dimen.x100));
 
         txt_Trainer = (AnyTextView) popupView.findViewById(R.id.txt_Trainer);

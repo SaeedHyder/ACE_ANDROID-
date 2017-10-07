@@ -41,6 +41,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+import static com.app.ace.R.id.content_frame;
+
 public class LoginFragment extends BaseFragment implements View.OnClickListener {
 
 
@@ -84,7 +86,11 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 	public void onViewCreated( View view, Bundle savedInstanceState ) {
 		// TODO Auto-generated method stub
 		super.onViewCreated( view, savedInstanceState );
-		
+		if (prefHelper.isLanguageArabic())
+			view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+		else {
+			view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+		}
 		setListeners();
 		
 	}

@@ -90,6 +90,15 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         toggle_private_or_public.setChecked(pubicAccount);
         cb_english.setChecked(true);
 
+        if(prefHelper.isLanguageArabic())
+        {
+            cb_arabic.setChecked(true);
+        }
+        else
+        {
+            cb_english.setChecked(true);
+        }
+
         setListeners();
 
     }
@@ -111,6 +120,19 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 NotificationStatus();
+            }
+        });
+
+        cb_english.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prefHelper.putLang(getDockActivity(),"en");
+            }
+        });
+        cb_arabic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prefHelper.putLang(getDockActivity(),"ar");
             }
         });
 

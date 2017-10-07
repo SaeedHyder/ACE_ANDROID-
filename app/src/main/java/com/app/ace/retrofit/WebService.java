@@ -489,6 +489,9 @@ public interface WebService {
 
 
 
+
+
+
    /* @Multipart
     @GET("user/{user_id}")
     Call<ResponseWrapper<CreaterEnt>> traineeProfile(

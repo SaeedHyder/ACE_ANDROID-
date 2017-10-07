@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="start"
-                    android:text="+1 positive"
+                    android:text="@string/postive"
                     android:textColor="@color/txtview_title_color"
                     android:textSize="@dimen/x10"
                     android:textStyle="bold"

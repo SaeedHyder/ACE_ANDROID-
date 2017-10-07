@@ -138,7 +138,13 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
 
         // attaching data adapter to spinner
         sp_Gender.setAdapter(dataAdapter);
-        sp_Gender.setSelection(0);
+        if(prefHelper.getUser().getGender().equals("male")){
+            sp_Gender.setSelection(0);
+        }
+        else {
+            sp_Gender.setSelection(1);
+        }
+
 
         ShowProfile();
 
@@ -162,6 +168,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         edtUniversity.setText(prefHelper.getUser().getUniversity());
         txtGymLocatoin.setText(prefHelper.getUser().getGym_address());
         imageLoader.displayImage(prefHelper.getUser().getProfile_image(), civ_profile_pic);
+
 
 
 
@@ -213,7 +220,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
             result.setGym_longitude(log);
             result.setGym_address(txtGymLocatoin.getText().toString());
             prefHelper.putUser(result);
-
+            loadingStarted();
         Call<ResponseWrapper<RegistrationResult>> callBack = webService.UpdateTrainer(
 
                 RequestBody.create(MediaType.parse("text/plain"),prefHelper.getUserId()),
@@ -283,7 +290,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
             public void onClick(View v) {
                // setSpCertification();
                 //setSpSpeciality();
-                loadingStarted();
+
                 Education = StringUtils.join(EducationArray,",");
                 Speciality = StringUtils.join(SpecialityArray,",");
                 //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
@@ -381,13 +388,26 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
 
         ArrayList<String> Certification= new ArrayList<String>();
 
-        Certification.add(getString(R.string.Select_Certification));
+       /* Certification.add(getString(R.string.Select_Certification));
         Certification.add(getString(R.string.Degree));
         Certification.add(getString(R.string.NASM));
         Certification.add(getString(R.string.NCSA));
         Certification.add(getString(R.string.ACSM));
         Certification.add(getString(R.string.CHECK));
-        Certification.add(getString(R.string.ACE));
+        Certification.add(getString(R.string.ACE));*/
+
+        Certification.add(getString(R.string.Select_Speciality));
+        Certification.add(getString(R.string.mathematics));
+        Certification.add(getString(R.string.fitnes_health));
+        Certification.add(getString(R.string.islamic_studies));
+        Certification.add(getString(R.string.english));
+        Certification.add(getString(R.string.chemistry));
+        Certification.add(getString(R.string.physics));
+        Certification.add(getString(R.string.human_resources));
+        Certification.add(getString(R.string.project_managment));
+        Certification.add(getString(R.string.biology));
+        Certification.add(getString(R.string.java));
+        Certification.add(getString(R.string.graduation_project));
 
 
      ArrayList<SpinnerDataItem> listVOs = new ArrayList<>();
@@ -409,13 +429,17 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         ArrayList<String> Speciality= new ArrayList<String>();
 
         Speciality.add(getString(R.string.Select_Speciality));
-        Speciality.add(getString(R.string.Flexiblity_training));
-        Speciality.add(getString(R.string.dynamic_strenght_taining));
-        Speciality.add(getString(R.string.Static_strength_training));
-        Speciality.add(getString(R.string.Circuit_training));
-        Speciality.add(getString(R.string.Aerobic_training));
-        Speciality.add(getString(R.string.Body_Building));
-        Speciality.add(getString(R.string.Lose_Weight));
+        Speciality.add(getString(R.string.mathematics));
+        Speciality.add(getString(R.string.fitnes_health));
+        Speciality.add(getString(R.string.islamic_studies));
+        Speciality.add(getString(R.string.english));
+        Speciality.add(getString(R.string.chemistry));
+        Speciality.add(getString(R.string.physics));
+        Speciality.add(getString(R.string.human_resources));
+        Speciality.add(getString(R.string.project_managment));
+        Speciality.add(getString(R.string.biology));
+        Speciality.add(getString(R.string.java));
+        Speciality.add(getString(R.string.graduation_project));
 
 
         ArrayList<SpinnerDataItem> listVOs = new ArrayList<>();
@@ -423,7 +447,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         for (int i = 0; i < Speciality.size(); i++) {
             SpinnerDataItem stateVO = new SpinnerDataItem();
             stateVO.setTitle(Speciality.get(i));
-            if(prefHelper.getUser().getSpeciality().contains(Speciality.get(i))) {
+            if(prefHelper.getUser().getEducation().contains(Speciality.get(i))) {
                 stateVO.setSelected(true);
             }
             listVOs.add(stateVO);

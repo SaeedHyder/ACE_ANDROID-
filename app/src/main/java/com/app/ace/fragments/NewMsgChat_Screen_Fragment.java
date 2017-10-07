@@ -137,7 +137,11 @@ public class NewMsgChat_Screen_Fragment extends BaseFragment implements View.OnC
                         hideKeyboard();
                         ArrayList<MsgEnt> msg =response.body().getResult();
 
-                        getDockActivity().addDockableFragment(ChatFragment.newInstance(String.valueOf(msg.get(0).getMessage().getConversation_id()), String.valueOf(msg.get(0).getReceiver().getId()),username,post_path, String.valueOf(msg.get(0).getIs_following()),msg.get(0).getReceiver().getProfile_image(),msg.get(0).getReceiver().getFirst_name()+" "+msg.get(0).getReceiver().getLast_name(),msg.get(0).getSender_block(),msg.get(0).getReceiver_block()),"ChatFragment");
+                        getDockActivity().addDockableFragment(ChatFragment.newInstance(
+                                String.valueOf(msg.get(0).getMessage().getConversation_id()), String.valueOf(msg.get(0).getReceiver().getId())
+                                ,username,post_path, String.valueOf(msg.get(0).getIs_following())
+                                ,msg.get(0).getReceiver().getProfile_image(),msg.get(0).getReceiver().getFirst_name()
+                                        +" "+msg.get(0).getReceiver().getLast_name(),msg.get(0).getSender_block(),msg.get(0).getReceiver_block()),"ChatFragment");
 
                     }
                 }

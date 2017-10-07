@@ -3,10 +3,16 @@ package com.app.ace.helpers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
+import android.util.Log;
 
+import com.app.ace.activities.MainActivity;
 import com.app.ace.entities.RegistrationResult;
 import com.app.ace.retrofit.GsonFactory;
 import com.google.inject.Inject;
+
+import java.util.Locale;
 
 public class BasePreferenceHelper extends PreferenceHelper {
 
@@ -19,6 +25,7 @@ public class BasePreferenceHelper extends PreferenceHelper {
     protected static final String KEY_USER = "key_user";
     protected static final String BADGE_COUNT = "BADGE_COUNT";
     private static final String FILENAME = "preferences";
+    protected static final String KEY_DEFAULT_LANG = "keyLanguage";
 
     private Context context;
 
@@ -99,6 +106,40 @@ public class BasePreferenceHelper extends PreferenceHelper {
         putStringPreference(context, FILENAME, KEY_USER, GsonFactory
                 .getConfiguredGson().toJson(user));
     }
+
+    public void putLang(Activity activity, String lang) {
+        Log.v("lang", "|" + lang);
+        Resources resources = context.getResources();
+
+        if (lang.equals("ar")){
+            lang = "ar";}
+        else{
+            lang = "en";}
+
+        putStringPreference(context, FILENAME, KEY_DEFAULT_LANG, lang);
+        //Resources resources = context.getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        android.content.res.Configuration conf = resources.getConfiguration();
+        conf.locale = new Locale(lang);
+        resources.updateConfiguration(conf, dm);
+        ((MainActivity) activity).restartActivity();
+    }
+
+    public void PutLang(MainActivity activity,String lang){
+        putStringPreference(context, FILENAME, KEY_DEFAULT_LANG, lang);
+
+    }
+
+
+    public String getLang() {
+        return getStringPreference(context, FILENAME, KEY_DEFAULT_LANG);
+    }
+
+    public boolean isLanguageArabic() {
+        return getLang().equalsIgnoreCase("ar");
+    }
+
+
 
 
 }

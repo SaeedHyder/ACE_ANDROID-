@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -20,6 +23,7 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -50,9 +54,12 @@ import com.kbeanie.imagechooser.api.VideoChooserManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import roboguice.inject.InjectView;
+
+import static com.app.ace.R.id.content_frame;
 
 //import com.kbeanie.imagechooser.api.ChosenImages;
 
@@ -62,6 +69,9 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
     private final int videoDuration = 30;
     @InjectView(R.id.header_main)
     public TitleBar titleBar;
+
+    @InjectView(R.id.content_frame)
+    public RelativeLayout content_frame;
 
     @InjectView(R.id.progressBar)
     ProgressBar progressBar;
@@ -86,6 +96,9 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dock);
+
+        setCurrentLocale();
+     //   setLayoutDirection();
 
         if (getIntent() != null) {
             if (getIntent().getExtras() != null)
@@ -129,6 +142,14 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
             initFragment();
 
 
+    }
+
+    private void setLayoutDirection() {
+        if (prefHelper.isLanguageArabic())
+            content_frame.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        else {
+            content_frame.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
     }
 /*
 
@@ -208,6 +229,28 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         } else {
             addDockableFragment(LanguageFragment.newInstance(), "LanguageFragment");
             //addDockableFragment(LoginFragment.newInstance(),"LoginFragment");
+        }
+    }
+
+    public void restartActivity() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
+
+    private void setCurrentLocale() {
+        if (prefHelper.isLanguageArabic()) {
+            Resources resources = getResources();
+            DisplayMetrics dm = resources.getDisplayMetrics();
+            Configuration conf = resources.getConfiguration();
+            conf.locale = new Locale("ar");
+            resources.updateConfiguration(conf, dm);
+        } else {
+            Resources resources = getResources();
+            DisplayMetrics dm = resources.getDisplayMetrics();
+            Configuration conf = resources.getConfiguration();
+            conf.locale = new Locale("en");
+            resources.updateConfiguration(conf, dm);
         }
     }
 

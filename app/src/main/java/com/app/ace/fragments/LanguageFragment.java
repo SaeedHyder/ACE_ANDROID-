@@ -23,7 +23,7 @@ import roboguice.inject.InjectView;
  * Created by khan_muhammad on 3/10/2017.
  */
 
-public class LanguageFragment extends BaseFragment implements View.OnClickListener ,AdapterView.OnItemSelectedListener{
+public class LanguageFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     String[] LANGUAGELIST = {"English", "Arabic"};
 
@@ -32,6 +32,7 @@ public class LanguageFragment extends BaseFragment implements View.OnClickListen
 
     @InjectView(R.id.android_material_design_spinner)
     private Spinner materialDesignSpinner;
+    private String language = "";
 
     public static LanguageFragment newInstance() {
 
@@ -69,11 +70,17 @@ public class LanguageFragment extends BaseFragment implements View.OnClickListen
 
         // attaching data adapter to spinner
         materialDesignSpinner.setAdapter(dataAdapter);
-        materialDesignSpinner.setSelection(0);
+        //   materialDesignSpinner.setSelection(0);
 
         setListener();
-    }
 
+        if (prefHelper.isLanguageArabic()) {
+            materialDesignSpinner.setSelection(1);
+        } else {
+            materialDesignSpinner.setSelection(0);
+        }
+
+    }
 
 
     private void setListener() {
@@ -86,7 +93,20 @@ public class LanguageFragment extends BaseFragment implements View.OnClickListen
 
         switch (v.getId()) {
             case R.id.btnDone:
-               getDockActivity().addDockableFragment(WelcomeTutorialFragment.newInstance(), "WelcomeTutorialFragment");
+                if (!prefHelper.isLanguageArabic() && materialDesignSpinner.getSelectedItemPosition() == 0) {
+                    getDockActivity().addDockableFragment(WelcomeTutorialFragment.newInstance(), "WelcomeTutorialFragment");
+                }
+                else if (prefHelper.isLanguageArabic() && materialDesignSpinner.getSelectedItemPosition() == 1) {
+                    getDockActivity().addDockableFragment(WelcomeTutorialFragment.newInstance(), "WelcomeTutorialFragment");
+                }
+                else if(materialDesignSpinner.getSelectedItemPosition() == 0) {
+                    prefHelper.putLang(getDockActivity(), "en");
+                }
+                else if(materialDesignSpinner.getSelectedItemPosition() == 1) {
+                    prefHelper.putLang(getDockActivity(), "ar");
+                }
+
+                //   getDockActivity().addDockableFragment(WelcomeTutorialFragment.newInstance(), "WelcomeTutorialFragment");
                /* DialogFragment dialog = DialogFragment.newInstance();
                 dialog.setPopupData("",""," ","",true,true);
                 dialog.setFragment(CalenderPopupDialogFragment.newInstance(), "CalenderPopupDialogFragment");
@@ -105,6 +125,7 @@ public class LanguageFragment extends BaseFragment implements View.OnClickListen
         // Showing selected spinner item
         //Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
     }
+
     public void onNothingSelected(AdapterView<?> arg0) {
         // TODO Auto-generated method stub
     }
