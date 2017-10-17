@@ -156,6 +156,13 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
 
     }
 
+    public String selectedLanguage() {
+        if (prefHelper.isLanguageArabic())
+            return "ar";
+        else
+            return "en";
+    }
+
     private void setLayoutDirection() {
         if (prefHelper.isLanguageArabic())
             content_frame.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
@@ -236,6 +243,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
             alert.show();
 
     }
+
 
     private void startImpIntent(DialogInterface dialog, String IntentType, int requestCode) {
         dialog.dismiss();

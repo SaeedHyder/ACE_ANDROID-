@@ -499,6 +499,7 @@
     <string name="view_all">عرض الكل</string>
     <string name="no_commnets_found">لا توجد تعليقات</string>
     <string name="phone_should_be_11">يجب أن يكون رقم الجوال 11 حرفا أو أكثر</string>
+    <string name="deatils">تفاصيل</string>
 
 
 </resources>

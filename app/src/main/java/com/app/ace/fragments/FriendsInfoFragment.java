@@ -349,7 +349,7 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
-        titleBar.setSubHeading("Details");
+        titleBar.setSubHeading(getString(R.string.deatils));
 
     }
 
