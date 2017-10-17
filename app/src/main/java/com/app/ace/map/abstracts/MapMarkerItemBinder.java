@@ -2,25 +2,30 @@ package com.app.ace.map.abstracts;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
 import android.view.View;
 
+import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
 import com.app.ace.activities.MainActivity;
 import com.app.ace.entities.MapScreenItem;
+import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.BitmapHelper;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.squareup.picasso.Target;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-
-import static com.app.ace.R.drawable.marker;
 
 /**
  * Created by saeedhyder on 4/7/2017.
@@ -32,6 +37,8 @@ public class MapMarkerItemBinder extends MapMarkerBinder<MapScreenItem> {
     DockActivity dockActivity;
     Bitmap bitmap;
     ImageLoader imageLoader;
+    Bitmap myBitmap;
+    Target loadtarget;
 
     public MapMarkerItemBinder(MainActivity activity, DockActivity dockActivity) {
         this.activity = activity;
@@ -45,6 +52,7 @@ public class MapMarkerItemBinder extends MapMarkerBinder<MapScreenItem> {
         return Uri.parse(path);
     }
 
+
 //    public String getRealPathFromURI(Uri uri) {
 //        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
 //        cursor.moveToFirst();
@@ -56,20 +64,29 @@ public class MapMarkerItemBinder extends MapMarkerBinder<MapScreenItem> {
     @Override
     public void addMarker(final GoogleMap googleMap, final MapScreenItem entity, final int position) {
 
+
         imageLoader = ImageLoader.getInstance();
-        //bitmap = imageLoader.loadImageSync(entity.getImage());
         imageLoader.loadImage(entity.getImage(), new SimpleImageLoadingListener() {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
                 if (entity.getLat() != null && entity.getLng() != null) {
                     if (!entity.getLat().equals("null") && !entity.getLng().equals("null"))
                         if (entity.getLat().length() > 0 && entity.getLng().length() > 0) {
 
                             try {
-                                Marker marker= googleMap.addMarker(new MarkerOptions()
+
+                                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                                loadedImage.compress(Bitmap.CompressFormat.JPEG, 10, out);
+
+                                Bitmap decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
+
+                                Marker marker = googleMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(Double.valueOf(entity.getLat()), Double.valueOf(entity.getLng())))
                                         //.icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
-                                        .icon(BitmapDescriptorFactory.fromBitmap(BitmapHelper.getRoundCircleImage(loadedImage))));
+                                        .icon(BitmapDescriptorFactory.fromBitmap(BitmapHelper.getRoundCircleImage(BitmapHelper.getResizedBitmap(decoded, 230)))));
+                                //  .icon(BitmapDescriptorFactory.fromBitmap(loadedImage)));
+                                //.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher)));
                                 //.icon(BitmapDescriptorFactory.fromResource(R.drawable.profile_container1)));
                                 //.fromPath(tempUri.toString())));
                                 marker.setTag(entity.getUserId());
@@ -78,10 +95,38 @@ public class MapMarkerItemBinder extends MapMarkerBinder<MapScreenItem> {
                             }
 
 
-                            // googleMap.moveCamera();
-
                         }
                 }
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(24.807825187774412, 46.74573140058601), AppConstants.zoomIn));
+
+            }
+
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+                super.onLoadingStarted(imageUri, view);
+
+
+                if (entity.getLat() != null && entity.getLng() != null) {
+                    if (!entity.getLat().equals("null") && !entity.getLng().equals("null"))
+                        if (entity.getLat().length() > 0 && entity.getLng().length() > 0) {
+
+                            try {
+
+                                Marker marker = googleMap.addMarker(new MarkerOptions()
+                                        .position(new LatLng(Double.valueOf(entity.getLat()), Double.valueOf(entity.getLng())))
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.profile_container)));
+                                marker.setTag(entity.getUserId());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                }
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                super.onLoadingFailed(imageUri, view, failReason);
             }
         });
 

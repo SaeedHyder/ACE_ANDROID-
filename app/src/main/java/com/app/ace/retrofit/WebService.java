@@ -152,8 +152,18 @@ public interface WebService {
     @FormUrlEncoded
     @POST("user/search")
     Call<ResponseWrapper<ArrayList<UserProfile>>> getSearchUser(
-            @Field("keyword") String username,
-            @Field("user_type") String user_type);
+            @Field("keyword") String keyword,
+            @Field("user_type") String user_type,
+            @Field("latitude") Double latitude,
+            @Field("longitude") Double longitude,
+            @Query("language") String language);
+
+    @FormUrlEncoded
+    @POST("user/search")
+    Call<ResponseWrapper<ArrayList<UserProfile>>> getSearchUser(
+            @Field("keyword") String keyword,
+            @Field("user_type") String user_type,
+            @Query("language") String language);
 
     @FormUrlEncoded
     @POST("user/search")

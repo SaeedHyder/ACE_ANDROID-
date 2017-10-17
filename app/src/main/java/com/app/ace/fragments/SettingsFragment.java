@@ -98,6 +98,14 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         {
             cb_english.setChecked(true);
         }
+        if(prefHelper.isLanguageArabic())
+        {
+           view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
+        else
+        {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
 
         setListeners();
 

@@ -111,6 +111,7 @@ dependencies {
     compile project(':aspectjrt-1.7.3')
     compile project(':isoparser-1.0.6')
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
+    compile 'id.zelory:compressor:2.1.0'
 
 
 }

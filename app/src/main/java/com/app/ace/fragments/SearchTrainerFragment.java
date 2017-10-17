@@ -41,6 +41,7 @@ public class SearchTrainerFragment extends BaseFragment {
     private TextView txt_noresult;
 
     private AnyEditTextView edtsearch;
+    String language = "";
     private ArrayListAdapter<UserProfile> adapter;
 
     private ArrayList<UserProfile> userCollection = new ArrayList<>();
@@ -67,6 +68,7 @@ public class SearchTrainerFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        edtsearch = getTitleBar().showSearchBar();
         SearchTrainee_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -74,29 +76,34 @@ public class SearchTrainerFragment extends BaseFragment {
             }
         });
 
+        if (prefHelper.isLanguageArabic()) {
+            language = "ar";
+        } else
+            language = "en";
+
+        getSearchUserData();
 
     }
 
     private void getSearchUserData() {
-        if (edtsearch != null) {
-            Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edtsearch.getText().toString(),AppConstants.trainer);
 
-            callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
-                @Override
-                public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
-                    //  resultuser = response.body().getResult();
-                    if (response.body()!= null)
+        Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edtsearch.getText().toString(), AppConstants.trainer, language);
+
+        callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
+                //  resultuser = response.body().getResult();
+                if (response.body() != null)
                     bindview(response.body().getResult());
-                    // System.out.println(response.body().getResult().get(0).getId());
-                }
+                // System.out.println(response.body().getResult().get(0).getId());
+            }
 
-                @Override
-                public void onFailure(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Throwable t) {
-                    Log.e("Search", t.toString());
-                }
-            });
+            @Override
+            public void onFailure(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Throwable t) {
+                Log.e("Search", t.toString());
+            }
+        });
 
-        }
     }
 
     private void bindview(ArrayList<UserProfile> resultuser) {
@@ -104,8 +111,7 @@ public class SearchTrainerFragment extends BaseFragment {
         if (resultuser.size() <= 0) {
             txt_noresult.setVisibility(View.VISIBLE);
             SearchTrainee_ListView.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             txt_noresult.setVisibility(View.GONE);
             SearchTrainee_ListView.setVisibility(View.VISIBLE);
         }

@@ -82,6 +82,11 @@ public class TrainingSearchFragment extends BaseFragment implements View.OnClick
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         checkList = new ArrayList<>();
+        if (prefHelper.isLanguageArabic()) {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        } else
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+
         setListener();
     }
 
@@ -118,7 +123,7 @@ public class TrainingSearchFragment extends BaseFragment implements View.OnClick
 
         switch (view.getId()) {
             case R.id.btn_training_Search_Submit:
-                String list_types = StringUtils.join(checkList,",");
+                String list_types = StringUtils.join(checkList, ",");
                 getDockActivity().addDockableFragment(TrainerAvailListFragment.newInstance(list_types), "TrainerAvaliableFragment");
                 break;
 
@@ -201,10 +206,12 @@ public class TrainingSearchFragment extends BaseFragment implements View.OnClick
 
         }
     }
-    private void removeOnUncheck(String text){
+
+    private void removeOnUncheck(String text) {
         if (checkList.contains(text))
             checkList.remove(checkList.indexOf(text));
     }
+
     private void addAllCheck() {
        /* addCheck(cb_Flexiblity_tra.getText().toString());
         addCheck(cb_StaticStren.getText().toString());

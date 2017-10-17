@@ -447,8 +447,14 @@
     <string name="advance_collaboration">Advanced Collaboration Edge</string>
     <string name="likes">likes</string>
     <string name="englishh">English</string>
-
-
+    <string name="get_started">Get Started</string>
+    <string name="no_commnets_found">No Comments Found</string>
+    <string name="phone_should_be_11">Mobile Number should be 11 or more characters long</string>
+    <string name="wifi_question">No Network found  Do you want to enable Wifi ?</string>
+    <string name="internet_not_connected">Internet not Available</string>
+    <string name="gps_question">Location is turned of Do you want to enable it ?</string>
+    <string name="gps_yes">Yes</string>
+    <string name="gps_no">No</string>
 
 
 </resources>

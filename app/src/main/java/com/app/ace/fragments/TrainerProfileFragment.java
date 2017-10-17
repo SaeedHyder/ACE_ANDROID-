@@ -316,7 +316,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                                     btn_edit.setVisibility(View.GONE);
                                     btn_follow.setVisibility(View.VISIBLE);
                                     btn_Unfollow.setVisibility(View.GONE);
-                                    btn_request.setVisibility(View.GONE);
+                                    btn_request.setVisibility(View.VISIBLE);
                                     btn_feedback.setVisibility(View.VISIBLE);
 
                                 }
@@ -511,6 +511,16 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     }
 
     private void bindData(List<profilePostEnt> dataCollection, int noOfColumns) {
+
+        if (dataCollection.size() <= 0) {
+            txt_no_data.setVisibility(View.VISIBLE);
+            gv_pics.setVisibility(View.GONE);
+        } else {
+            txt_no_data.setVisibility(View.GONE);
+            gv_pics.setVisibility(View.VISIBLE);
+        }
+
+
         adapter.clearList();
         gv_pics.setNumColumns(noOfColumns);
         gv_pics.setVisibility(View.VISIBLE);

@@ -10,13 +10,18 @@ public class MapScreenItem {
     private String lng;
     private String image;
     private int userId;
+    private double userLat;
+    private double userLng;
 
-    public MapScreenItem(String lat, String lng, String image,int userId)
+
+    public MapScreenItem(String lat, String lng, String image, int userId, double latitude, double longitude)
     {
         setLat(lat);
         setLng(lng);
         setImage(image);
         this.userId=userId;
+        this.userLat=latitude;
+        this.userLng=longitude;
 
     }
 
@@ -50,5 +55,21 @@ public class MapScreenItem {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public double getUserLat() {
+        return userLat;
+    }
+
+    public void setUserLat(double userLat) {
+        this.userLat = userLat;
+    }
+
+    public double getUserLng() {
+        return userLng;
+    }
+
+    public void setUserLng(double userLng) {
+        this.userLng = userLng;
     }
 }

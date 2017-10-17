@@ -15,12 +15,17 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.ExifInterface;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+
+import static android.R.attr.bitmap;
 
 public class BitmapHelper {
 
@@ -149,11 +154,13 @@ public class BitmapHelper {
 		
 	}
 	public static Bitmap getRoundCircleImage( Bitmap bitmap ) {
-	//	int w = bitmap.getWidth();
-	//	int h = bitmap.getHeight();
+		//int w = bitmap.getWidth();
+		//int h = bitmap.getHeight();
 
-		int w=200;
-		int h=200;
+		int w=220;
+		int h=220;
+
+
 
 		int radius = Math.min(h / 2, w / 2);
 		Bitmap output = Bitmap.createBitmap(w + 8, h + 8, Config.ARGB_8888);
@@ -179,7 +186,49 @@ public class BitmapHelper {
 		return output;
 
 	}
-	
+
+	public static Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+		int width = image.getWidth();
+		int height = image.getHeight();
+
+		float bitmapRatio = (float)width / (float) height;
+		if (bitmapRatio > 1) {
+			width = maxSize;
+			height = (int) (width / bitmapRatio);
+		} else {
+			height = maxSize;
+			width = (int) (height * bitmapRatio);
+		}
+		return Bitmap.createScaledBitmap(image, width, height, true);
+	}
+
+	private static Bitmap decodeFile(File f) {
+		try {
+			// Decode image size
+			BitmapFactory.Options o = new BitmapFactory.Options();
+			o.inJustDecodeBounds = true;
+			BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+
+			// The new size we want to scale to
+			final int REQUIRED_SIZE=70;
+
+			// Find the correct scale value. It should be the power of 2.
+			int scale = 1;
+			while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
+					o.outHeight / scale / 2 >= REQUIRED_SIZE) {
+				scale *= 2;
+			}
+
+			// Decode with inSampleSize
+			BitmapFactory.Options o2 = new BitmapFactory.Options();
+			o2.inSampleSize = scale;
+			return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+		} catch (FileNotFoundException e) {}
+		return null;
+	}
+
+
+
 	public static Bitmap getImageOrientation( Bitmap bitmap, int rotate ) {
 		Bitmap bmp = null;
 		try {

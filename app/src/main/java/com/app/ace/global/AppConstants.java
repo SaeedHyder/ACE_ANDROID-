@@ -26,7 +26,8 @@ public class AppConstants {
 
     public static String fixPassword = "123456";
 
-    public static float zoomIn =20;
+    public static float zoomIn =14;
+    public static float zoomInToTrainer =15;
 
     //Firebase Constants
     // broadcast receiver intent filters

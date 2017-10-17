@@ -80,7 +80,7 @@
             android:paddingLeft="@dimen/x7"
             android:paddingRight="@dimen/x7"
             android:paddingBottom="@dimen/x2"
-            android:text="@string/english"
+            android:text="@string/englishh"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/x14" />
 

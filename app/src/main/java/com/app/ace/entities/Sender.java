@@ -49,6 +49,8 @@ public class Sender {
     String created_at;
     String updated_at;
     String deleted_at;
+    int positive_review;
+    int negative_review;
 
 
     public int getId() {
@@ -396,6 +398,19 @@ public class Sender {
     }
 
 
+    public int getPositive_review() {
+        return positive_review;
+    }
 
+    public void setPositive_review(int positive_review) {
+        this.positive_review = positive_review;
+    }
 
+    public int getNegative_review() {
+        return negative_review;
+    }
+
+    public void setNegative_review(int negative_review) {
+        this.negative_review = negative_review;
+    }
 }

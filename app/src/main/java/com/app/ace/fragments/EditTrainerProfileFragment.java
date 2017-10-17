@@ -43,6 +43,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+import static com.app.ace.R.string.categories;
 
 
 /**
@@ -125,6 +126,12 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if(prefHelper.isLanguageArabic()){
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
+        else{
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
         // Spinner Drop down elements
         List<String> categories = new ArrayList<>();
         categories.add(getString(R.string.male));
@@ -205,7 +212,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
             Speciality = prefHelper.getUser().getSpeciality();
         }
         if(edtMobileNumber.getText().toString().length() < 11){
-            UIHelper.showShortToastInCenter(getDockActivity(), "Mobile Number should be 11 or more characters long");
+            UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.phone_should_be_11));
         }
         else{
 
@@ -400,7 +407,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         Certification.add(getString(R.string.mathematics));
         Certification.add(getString(R.string.fitnes_health));
         Certification.add(getString(R.string.islamic_studies));
-        Certification.add(getString(R.string.english));
+        Certification.add(getString(R.string.englishh));
         Certification.add(getString(R.string.chemistry));
         Certification.add(getString(R.string.physics));
         Certification.add(getString(R.string.human_resources));
@@ -432,7 +439,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         Speciality.add(getString(R.string.mathematics));
         Speciality.add(getString(R.string.fitnes_health));
         Speciality.add(getString(R.string.islamic_studies));
-        Speciality.add(getString(R.string.english));
+        Speciality.add(getString(R.string.englishh));
         Speciality.add(getString(R.string.chemistry));
         Speciality.add(getString(R.string.physics));
         Speciality.add(getString(R.string.human_resources));

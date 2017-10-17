@@ -239,7 +239,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     public void setTitleBar(TitleBar titleBar) {
         super.setTitleBar(titleBar);
         this.titleBar = titleBar;
-
+        titleBar.invalidate();
         titleBar.hideButtons();
         titleBar.setSubHeading(getString(R.string.app_name));
         titleBar.hideSearchBar();
@@ -252,10 +252,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         titleBar.showSearchButton(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                if (prefHelper.getUser().getUser_type().equals(AppConstants.trainer))
-                    getDockActivity().addDockableFragment(SearchTraineeFragment.newInstance(), "SearchTraineeFragment");
+                popUpDropdown(v);
+             /*   if (prefHelper.getUser().getUser_type().equals(AppConstants.trainer)){
+                    //getMainActivity().setCurrentLocale();
+                    getDockActivity().addDockableFragment(SearchTraineeFragment.newInstance(), "SearchTraineeFragment");}
                 else
-                    popUpDropdown(v);
+                    popUpDropdown(v);*/
             }
         });
 
