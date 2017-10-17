@@ -11,6 +11,7 @@ import android.widget.Button;
 import com.app.ace.R;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.TitleBar;
@@ -92,15 +93,29 @@ public class ForgotPasswordFragment extends BaseFragment implements View.OnClick
             case R.id.btnSubmit:
                 if(validate()) {
                     loadingStarted();
-                    Call<ResponseWrapper> call = webService.forgetPassword(edtEmail.getText().toString());
+                    Call<ResponseWrapper> call = webService.forgetPassword(edtEmail.getText().toString(), getMainActivity().selectedLanguage());
                     call.enqueue(new Callback<ResponseWrapper>() {
                         @Override
                         public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
 
                             if(response.body().getMessage().contains("new password"))
                             {
-                                loadingFinished();
-                                showForgotPasswordDialog();
+                                if (response.body().getUserDeleted()==0) {
+                                    loadingFinished();
+                                    showForgotPasswordDialog();
+                                } else {
+                                    final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                                    dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+
+                                            dialogHelper.hideDialog();
+                                            getDockActivity().popBackStackTillEntry(0);
+                                            getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                                        }
+                                    });
+                                    dialogHelper.showDialog();
+                                }
                             }
                             else
                             {

@@ -22,6 +22,7 @@ import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.map.abstracts.GoogleMapOptions;
 import com.app.ace.map.abstracts.MapMarkerItemBinder;
@@ -139,22 +140,33 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
     private void getSearchUserData() {
 
 
-        Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edtsearch.getText().toString(), AppConstants.trainer, 24.807825187774412, 46.74573140058601, language);
+        Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edtsearch.getText().toString(), AppConstants.trainer, 24.807825187774412, 46.74573140058601, getMainActivity().selectedLanguage());
 
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
             @Override
-            public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call,
-                                   Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
+            public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
 
                 if (response.body() != null)
                     if (response.body().getResult().size() <= 0) {
+                        if (response.body().getUserDeleted() == 0){
                         txt_noresult.setVisibility(View.VISIBLE);
+                        } else {
+                            final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                            dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    dialogHelper.hideDialog();
+                                    getDockActivity().popBackStackTillEntry(0);
+                                    getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                                }
+                            });
+                            dialogHelper.showDialog();
+                        }
                     } else {
                         txt_noresult.setVisibility(View.GONE);
                         bindview(response.body().getResult());
                         addMarker();
-
-
                     }
             }
 

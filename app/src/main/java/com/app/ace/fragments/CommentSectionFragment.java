@@ -30,6 +30,7 @@ import com.app.ace.entities.ShowComments;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.global.CommentToChatMsgConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.CommentSection;
 import com.app.ace.interfaces.LastPostComment;
@@ -252,28 +253,43 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
                 prefHelper.getUserId(),
                 post_id,
                 et_CommentBar.getText().toString(),
-                user_id);
+                user_id,
+                getMainActivity().selectedLanguage());
 
         callBack.enqueue(new Callback<ResponseWrapper<ShowComments>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<ShowComments>> call, Response<ResponseWrapper<ShowComments>> response) {
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                    txt_noresult.setVisibility(View.GONE);
-                    listViewCommentSection.setVisibility(View.VISIBLE);
-                    hideKeyboard();
-                    listViewCommentSection.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            // Select the last row so it will scroll into view...
-                            listViewCommentSection.setSelection(adapter.getCount() - 1);
-                        }
-                    });
+                    if (response.body().getUserDeleted()==0) {
+                        txt_noresult.setVisibility(View.GONE);
+                        listViewCommentSection.setVisibility(View.VISIBLE);
+                        hideKeyboard();
+                        listViewCommentSection.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Select the last row so it will scroll into view...
+                                listViewCommentSection.setSelection(adapter.getCount() - 1);
+                            }
+                        });
 
 
-                    userCollection.add(new CommentsSectionItemsEnt(response.body().getResult().getUser().getProfile_image(),response.body().getResult().getUser().getFirst_name()+" "+response.body().getResult().getUser().getLast_name(),response.body().getResult().getComment_text(),getDockActivity().getDate(response.body().getResult().getCreated_at()),String.valueOf(response.body().getResult().getUser_id())));
-                    bindData(userCollection);
-                    et_CommentBar.setText("");
+                        userCollection.add(new CommentsSectionItemsEnt(response.body().getResult().getUser().getProfile_image(), response.body().getResult().getUser().getFirst_name() + " " + response.body().getResult().getUser().getLast_name(), response.body().getResult().getComment_text(), getDockActivity().getDate(response.body().getResult().getCreated_at()), String.valueOf(response.body().getResult().getUser_id())));
+                        bindData(userCollection);
+                        et_CommentBar.setText("");
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
                 }
                 else
                 {

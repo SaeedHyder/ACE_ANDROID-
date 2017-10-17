@@ -22,6 +22,7 @@ import com.app.ace.entities.SearchPeopleDataItem;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.NewMessageListItemBinder;
@@ -102,13 +103,27 @@ public class NewMessageFragment extends BaseFragment implements TextWatcher {
 
     private void getNewMsgUserData() {
         if (edit_sendTo != null) {
-            Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchAllUsers(edit_sendTo.getText().toString());
+            Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchAllUsers(edit_sendTo.getText().toString(), getMainActivity().selectedLanguage());
 
             callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
                 @Override
                 public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
-                    hideKeyboard();
-                    bindview(response.body().getResult());
+                    if (response.body().getUserDeleted() == 0) {
+                        hideKeyboard();
+                        bindview(response.body().getResult());
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
                 }
 
                 @Override

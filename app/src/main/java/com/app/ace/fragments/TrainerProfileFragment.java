@@ -882,16 +882,29 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
     private void requestService(String hours, String days, String totalHours, final DialogHelper feedbackDIaloge) {
 
-        Call<ResponseWrapper> callback = webService.trainerRequest(user_id, prefHelper.getUserId(), hours, days, totalHours);
+        Call<ResponseWrapper> callback = webService.trainerRequest(user_id, prefHelper.getUserId(), hours, days, totalHours, getMainActivity().selectedLanguage());
 
         callback.enqueue(new Callback<ResponseWrapper>() {
             @Override
             public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                    getDockActivity().addDockableFragment(HomeFragment.newInstance(), HomeFragment.class.getName());
-                    feedbackDIaloge.hideDialog();
+                    if (response.body().getUserDeleted()==0) {
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                        getDockActivity().addDockableFragment(HomeFragment.newInstance(), HomeFragment.class.getName());
+                        feedbackDIaloge.hideDialog();
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
 
                 } else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());

@@ -22,6 +22,7 @@ import com.app.ace.entities.SharePopUpItemsEnt;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.ui.adapters.RecyclerViewAdapterSharePop;
 import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.AnyTextView;
@@ -136,15 +137,29 @@ public class SharePopUpfragment extends BaseFragment implements View.OnClickList
 
     private void getNewMsgUserData(final View view) {
 
-            Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchAllUsers(tv_Search.getText().toString());
+            Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchAllUsers(tv_Search.getText().toString(),getMainActivity().selectedLanguage());
 
             callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
                 @Override
                 public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call,
                                        Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
                     hideKeyboard();
-                    bindview(response.body().getResult());
-                    setDataInAdapter(view, userCollection);
+                    if (response.body().getUserDeleted()==0) {
+                        bindview(response.body().getResult());
+                        setDataInAdapter(view, userCollection);
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
                 }
 
                 @Override
