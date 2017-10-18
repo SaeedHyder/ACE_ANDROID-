@@ -14,6 +14,7 @@ import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.AnyTextView;
@@ -225,16 +226,29 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
     void contactUs() {
         if (!txt_contact_us_disc.getText().toString().equals("")) {
-            Call<ResponseWrapper> callBack = webService.ContactUs(prefHelper.getUserId(), txt_contact_us_disc.getText().toString());
+            Call<ResponseWrapper> callBack = webService.ContactUs(prefHelper.getUserId(), txt_contact_us_disc.getText().toString(), getMainActivity().selectedLanguage());
 
             callBack.enqueue(new Callback<ResponseWrapper>() {
                 @Override
                 public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                        loadingFinished();
-                        txt_contact_us_disc.setText("");
-                       // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                        if (response.body().getUserDeleted()==0) {
+                            loadingFinished();
+                            txt_contact_us_disc.setText("");
+                            // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                        } else {
+                            final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                            dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
 
+                                    dialogHelper.hideDialog();
+                                    getDockActivity().popBackStackTillEntry(0);
+                                    getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                                }
+                            });
+                            dialogHelper.showDialog();
+                        }
                     } else {
                         loadingFinished();
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
@@ -262,7 +276,8 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         Call<ResponseWrapper<RegistrationResult>> callBack = webService.NotificationStatus(
                 RequestBody.create(MediaType.parse("text/plain"), prefHelper.getUserId()),
                 RequestBody.create(MediaType.parse("text/plain"), notification),
-                RequestBody.create(MediaType.parse("text/plain"), account));
+                RequestBody.create(MediaType.parse("text/plain"), account),
+                RequestBody.create(MediaType.parse("text/plain"), getMainActivity().selectedLanguage()));
         callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
@@ -270,6 +285,21 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
                     loadingFinished();
 
+                    if (response.body().getUserDeleted()==0){
+
+                    }else{
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
                    // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
 
                 } else {

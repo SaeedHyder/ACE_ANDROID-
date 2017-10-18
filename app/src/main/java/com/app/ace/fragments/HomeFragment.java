@@ -27,10 +27,10 @@ import com.app.ace.entities.HomeListDataEnt;
 import com.app.ace.entities.HomeResultEnt;
 import com.app.ace.entities.PostsEnt;
 import com.app.ace.entities.ResponseWrapper;
-import com.app.ace.entities.YouDataItem;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.CameraHelper;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.TokenUpdater;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.IOnLike;
@@ -53,9 +53,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
-
-import static com.app.ace.R.id.SearchTrainer_ListView;
-import static com.app.ace.R.id.txt_noresult;
 
 public class HomeFragment extends BaseFragment implements View.OnClickListener,
         MainActivity.ImageSetter, IOnLike, SetHomeUpdatedData {
@@ -84,7 +81,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     private ImageView iv_profile;
     @InjectView(R.id.txt_no_data)
     private AnyTextView txt_no_data;
-    @InjectView (R.id.ll_UnApproved)
+    @InjectView(R.id.ll_UnApproved)
     LinearLayout ll_UnApproved;
     private ArrayListAdapter<HomeListDataEnt> adapter;
     private List<HomeListDataEnt> dataCollection;
@@ -101,7 +98,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         super.onCreate(savedInstanceState);
         loadingStarted();
         adapter = new ArrayListAdapter<HomeListDataEnt>(getDockActivity(),
-                new HomeFragmentItemBinder(getDockActivity(), this, this,prefHelper));
+                new HomeFragmentItemBinder(getDockActivity(), this, this, prefHelper));
 
 
         BaseApplication.getBus().register(this);
@@ -205,8 +202,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         if (postsEntArrayList.size() <= 0) {
             txt_no_data.setVisibility(View.VISIBLE);
             gridView.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             txt_no_data.setVisibility(View.GONE);
             gridView.setVisibility(View.VISIBLE);
         }
@@ -215,7 +211,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             try {
                 dataCollection.add(new HomeListDataEnt(Integer.parseInt(postsEnt.getLike_count()),
                         Integer.parseInt(postsEnt.getComment_count()), postsEnt.getCreator().getProfile_image(),
-                        postsEnt.getCreator().getFirst_name() + " " + postsEnt.getCreator().getLast_name(), postsEnt.getPost_image(), "Time Joe", "Hi nice", postsEnt.getUser_id(), postsEnt.getId(), postsEnt.getComment(), postsEnt.getIs_liked(),postsEnt.getPost_thumb_image(),is_approved_user));
+                        postsEnt.getCreator().getFirst_name() + " " + postsEnt.getCreator().getLast_name(), postsEnt.getPost_image(), "Time Joe", "Hi nice", postsEnt.getUser_id(), postsEnt.getId(), postsEnt.getComment(), postsEnt.getIs_liked(), postsEnt.getPost_thumb_image(), is_approved_user));
             } catch (Exception e) {
                 bindData(dataCollection);
                 e.printStackTrace();
@@ -300,8 +296,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             UserName = "";
         }
         MultipartBody.Part thumbnail = null;
-        if(videoThumb!=null&&!videoThumb.toString().equals("")) {
-            thumbnail= MultipartBody.Part.createFormData("thumb_image", videoThumb.getName(), RequestBody.create(MediaType.parse("image/*"), videoThumb));
+        if (videoThumb != null && !videoThumb.toString().equals("")) {
+            thumbnail = MultipartBody.Part.createFormData("thumb_image", videoThumb.getName(), RequestBody.create(MediaType.parse("image/*"), videoThumb));
         }
         MultipartBody.Part filePart;
 
@@ -317,8 +313,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
                 RequestBody.create(MediaType.parse("text/plain"), UserName),
                 filePart,
                 RequestBody.create(MediaType.parse("text/plain"), UserId),
-                thumbnail)
-                ;
+                thumbnail,
+                RequestBody.create(MediaType.parse("text/plain"), getMainActivity().selectedLanguage()));
 
         callBack.enqueue(new Callback<ResponseWrapper<CreatePostEnt>>() {
             @Override
@@ -328,9 +324,21 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
+                        if (response.body().getUserDeleted()==0) {
+                            getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                        }else{
+                            final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                            dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
 
-                        getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
-
+                                    dialogHelper.hideDialog();
+                                    getDockActivity().popBackStackTillEntry(0);
+                                    getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                                }
+                            });
+                            dialogHelper.showDialog();
+                        }
                     } else {
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                     }
@@ -352,35 +360,50 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
         loadingStarted();
 
-        Call<ResponseWrapper<HomeResultEnt>> callBack = webService.getAllHomePosts(prefHelper.getUserId());
+        Call<ResponseWrapper<HomeResultEnt>> callBack = webService.getAllHomePosts(prefHelper.getUserId(),
+                getMainActivity().selectedLanguage());
 
         callBack.enqueue(new Callback<ResponseWrapper<HomeResultEnt>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<HomeResultEnt>> call, Response<ResponseWrapper<HomeResultEnt>> response) {
 
 
-                if(response.body() != null){
+                if (response.body() != null) {
 
-                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                    loadingFinished();
-                    setHomePostsData(response.body().getResult().getPosts(),response.body().getResult().getIs_approved_user());
+                    if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                        {
+                            loadingFinished();
+                            if (response.body().getUserDeleted() == 0) {
+                                setHomePostsData(response.body().getResult().getPosts(), response.body().getResult().getIs_approved_user());
 
-                    if(response.body().getResult().getIs_approved_user()==1)
-                    {
-                      ll_UnApproved.setVisibility(View.GONE);
+                                if (response.body().getResult().getIs_approved_user() == 1) {
+                                    ll_UnApproved.setVisibility(View.GONE);
+                                } else {
+                                    ll_UnApproved.setVisibility(View.VISIBLE);
+                                }
+                            } else {
+
+
+                                final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                                dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        dialogHelper.hideDialog();
+                                        getDockActivity().popBackStackTillEntry(0);
+                                        getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                                    }
+                                });
+                                dialogHelper.showDialog();
+                            }
+                        }
+                    } else {
+                        loadingFinished();
+                        gridView.setVisibility(View.INVISIBLE);
+                        txt_no_data.setVisibility(View.VISIBLE);
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                     }
-                    else
-                    {
-                      ll_UnApproved.setVisibility(View.VISIBLE);
-                    }
-
                 } else {
-                    loadingFinished();
-                    gridView.setVisibility(View.INVISIBLE);
-                    txt_no_data.setVisibility(View.VISIBLE);
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                }}
-                else {
                     txt_no_data.setVisibility(View.VISIBLE);
                     txt_no_data.setText(getString(R.string.no_internet));
                     loadingFinished();
@@ -451,7 +474,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
 
                 //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
-               if (prefHelper.getUser().getUser_type().equalsIgnoreCase("trainer")) {
+                if (prefHelper.getUser().getUser_type().equalsIgnoreCase("trainer")) {
                     getDockActivity().addDockableFragment(TrainingBookingCalenderFragment.newInstance(), "TrainingBookingCalenderFragment");
                 } else {
                     getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(), "TraineeScheduleFragment");
@@ -593,11 +616,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     }
 
     @Override
-    public void setVideo(String videoPath,String videoThumbnail) {
+    public void setVideo(String videoPath, String videoThumbnail) {
 
-        if(videoThumbnail !=null)
-        {
-            videoThumb=new File(videoThumbnail);
+        if (videoThumbnail != null) {
+            videoThumb = new File(videoThumbnail);
         }
         if (videoPath != null) {
             postImage = new File(videoPath);
@@ -612,7 +634,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
         String filePath;
 
-        public VideoCompressor(String filePath){
+        public VideoCompressor(String filePath) {
             this.filePath = filePath;
         }
 
@@ -642,9 +664,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
                 if (lengthMB <= 7) {
                     loadingFinished();
                     createPost(false);
-                }
-
-                else {
+                } else {
                     UIHelper.showShortToastInCenter(getDockActivity(), "Video size is too big");
                 }
 
@@ -653,7 +673,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
         }
     }
-
 
 
     @Override

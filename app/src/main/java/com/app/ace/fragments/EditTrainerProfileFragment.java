@@ -18,6 +18,7 @@ import com.app.ace.entities.SpinnerDataItem;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.CameraHelper;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.EditTrainerData;
 import com.app.ace.interfaces.IGetLocation;
@@ -241,7 +242,8 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
                 RequestBody.create(MediaType.parse("text/plain"),Speciality),
                 RequestBody.create(MediaType.parse("text/plain"),txtGymLocatoin.getText().toString()),
                 RequestBody.create(MediaType.parse("text/plain"),lat),
-                RequestBody.create(MediaType.parse("text/plain"),log)
+                RequestBody.create(MediaType.parse("text/plain"),log),
+                RequestBody.create(MediaType.parse("text/plain"),getMainActivity().selectedLanguage())
                  );
 
         callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
@@ -254,7 +256,21 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
                         loadingFinished();
 
                       //  UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                        getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(), "TrainerProfileFragment");
+                        if (response.body().getUserDeleted()==0) {
+                            getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(), "TrainerProfileFragment");
+                        } else {
+                            final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                            dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    dialogHelper.hideDialog();
+                                    getDockActivity().popBackStackTillEntry(0);
+                                    getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                                }
+                            });
+                            dialogHelper.showDialog();
+                        }
                     }
                     else {
                         loadingFinished();

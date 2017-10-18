@@ -22,6 +22,7 @@ import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.global.PasswordEditTextChangeListener;
 import com.app.ace.helpers.CameraHelper;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.TokenUpdater;
 import com.app.ace.helpers.UIHelper;
@@ -90,6 +91,7 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
     public File profilePic;
 
     public String UserName = "";
+    private String LANGUAGE = "";
 
     public static TrianeeSignUpFragment newInstance() {
 
@@ -223,6 +225,7 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
     }
 
 
+
     private void signupTrainee() {
 
         loadingStarted();
@@ -260,7 +263,8 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
                 RequestBody.create(MediaType.parse("text/plain"), edtPassword.getText().toString()),
                 filePart,
                 RequestBody.create(MediaType.parse("text/plain"), AppConstants.trainee),
-                RequestBody.create(MediaType.parse("text/plain"), "android"));
+                RequestBody.create(MediaType.parse("text/plain"), "android"),
+                RequestBody.create(MediaType.parse("text/plain"), getMainActivity().selectedLanguage()));
 
         callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
             @Override
@@ -270,33 +274,49 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
 
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                        if (twitterUser != null) {
-                            if (twitterUser.getUserId() != null)
-                                prefHelper.setIsTwitterLogin(true);
-                            else
+                        if (response.body().getUserDeleted() == 0) {
+
+                            if (twitterUser != null) {
+                                if (twitterUser.getUserId() != null)
+                                    prefHelper.setIsTwitterLogin(true);
+                                else
+                                    prefHelper.setIsTwitterLogin(false);
+                            } else {
                                 prefHelper.setIsTwitterLogin(false);
-                        } else {
-                            prefHelper.setIsTwitterLogin(false);
-                        }
+                            }
 
-                        AppConstants.user_id = response.body().getResult().getId();
-                        AppConstants._token = response.body().getResult().get_token();
-                        prefHelper.setToken(AppConstants._token);
-                        prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
-                        prefHelper.setUsrId(response.body().getResult().getId());
-                        prefHelper.putUser(response.body().getResult());
+                            AppConstants.user_id = response.body().getResult().getId();
+                            AppConstants._token = response.body().getResult().get_token();
+                            prefHelper.setToken(AppConstants._token);
+                            prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
+                            prefHelper.setUsrId(response.body().getResult().getId());
+                            prefHelper.putUser(response.body().getResult());
 
-                        if (response.body().getResult().getUser_type().equals(AppConstants.trainee)) {
+                            if (response.body().getResult().getUser_type().equals(AppConstants.trainee)) {
 
-                            // AppConstants.is_show_trainer = false;
+                                // AppConstants.is_show_trainer = false;
 
-                        } else {
-                            // AppConstants.is_show_trainer = true;
-                        }
+                            } else {
+                                // AppConstants.is_show_trainer = true;
+                            }
 
-                        getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(UserName, edtEmail.getText().toString()), "VarificationCodeFragment");
+                            getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(UserName, edtEmail.getText().toString()), "VarificationCodeFragment");
                         /*showSuccessDialog();
                         getDockActivity().showHome();*/
+                        } else {
+
+                            final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                            dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    dialogHelper.hideDialog();
+                                    getDockActivity().popBackStackTillEntry(0);
+                                    getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                                }
+                            });
+                            dialogHelper.showDialog();
+                        }
                     } else {
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                     }

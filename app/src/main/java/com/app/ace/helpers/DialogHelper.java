@@ -41,6 +41,18 @@ public class DialogHelper {
     CalendarPickerView calendarView;
     Date StartDate;
 
+    public Dialog initLogoutDialog(int layoutID, View.OnClickListener onclicklistenerYes) {
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        this.dialog.setContentView(layoutID);
+        Button btnDeleteOk = (Button) dialog.findViewById(R.id.btnDeleteOk);
+        btnDeleteOk.setOnClickListener(onclicklistenerYes);
+
+        return this.dialog;
+    }
+
     public DialogHelper(Context context) {
         this.dialog = new Dialog(context);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

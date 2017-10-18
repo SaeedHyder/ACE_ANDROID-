@@ -17,6 +17,7 @@ import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.SearchPeopleListItemBinder;
 import com.app.ace.ui.views.AnyEditTextView;
@@ -79,14 +80,27 @@ public class SearchTraineeFragment extends BaseFragment {
 
     private void getSearchUserData() {
         if (edtsearch != null) {
-            Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchAllUsers(edtsearch.getText().toString());
+            Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchAllUsers(edtsearch.getText().toString(), getMainActivity().selectedLanguage());
 
             callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
                 @Override
-                public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call,
-                                       Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
+                public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
                     //  resultuser = response.body().getResult();
-                    bindview(response.body().getResult());
+                    if (response.body().getUserDeleted() == 0) {
+                        bindview(response.body().getResult());
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
                     // System.out.println(response.body().getResult().get(0).getId());
                 }
 

@@ -23,6 +23,7 @@ import com.app.ace.global.AppConstants;
 import com.app.ace.global.SignupFormConstants;
 import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.DateHelper;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.TokenUpdater;
 import com.app.ace.helpers.UIHelper;
@@ -607,7 +608,8 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
                 RequestBody.create(MediaType.parse("text/plain"), Gym_days),
                 RequestBody.create(MediaType.parse("text/plain"), txt_from.getText().toString()),
                 RequestBody.create(MediaType.parse("text/plain"), txt_to.getText().toString()),
-                RequestBody.create(MediaType.parse("text/plain"), "android"));
+                RequestBody.create(MediaType.parse("text/plain"), "android"),
+                RequestBody.create(MediaType.parse("text/plain"), getMainActivity().selectedLanguage()));
 
         callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
             @Override
@@ -616,6 +618,7 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
                     loadingFinished();
 
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                        if (response.body().getUserDeleted() == 0) {
 
                         AppConstants.user_id = response.body().getResult().getId();
                         AppConstants._token = response.body().getResult().get_token();
@@ -635,8 +638,22 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
                         getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(signupFormConstants.getUserName(), signupFormConstants.getEmail()), "VarificationCodeFragment");
                         /*showSuccessDialog();
                         getDockActivity().showHome();*/
+
                     } else {
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    }  } else {
+
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
