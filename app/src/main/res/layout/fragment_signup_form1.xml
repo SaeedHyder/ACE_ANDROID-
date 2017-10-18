@@ -278,7 +278,8 @@
                         android:gravity="center"
                         android:textColor="@color/white"
                         android:textSize="@dimen/x16"
-                        android:text="@string/next"
+                        android:text="@string/signup"
+
                         />
 
 

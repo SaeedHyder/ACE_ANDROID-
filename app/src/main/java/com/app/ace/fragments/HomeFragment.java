@@ -13,10 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.app.ace.BaseApplication;
 import com.app.ace.R;
@@ -38,8 +40,11 @@ import com.app.ace.interfaces.SetHomeUpdatedData;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.HomeFragmentItemBinder;
 import com.app.ace.ui.views.AnyTextView;
+import com.app.ace.ui.views.LoadMoreListView;
 import com.app.ace.ui.views.TitleBar;
 import com.app.ace.videocompression.MediaController;
+import com.paginate.Paginate;
+import com.paginate.abslistview.LoadingListItemCreator;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,8 +59,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
+import static com.app.ace.R.id.listView;
+
 public class HomeFragment extends BaseFragment implements View.OnClickListener,
-        MainActivity.ImageSetter, IOnLike, SetHomeUpdatedData {
+        MainActivity.ImageSetter, IOnLike, SetHomeUpdatedData
+{
 
     public File postImage;
     public File videoThumb;
@@ -68,7 +76,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     String Lastcomment;
     String NameCommentor;
     @InjectView(R.id.gridView)
-    private GridView gridView;
+    private LoadMoreListView gridView;
     @InjectView(R.id.iv_Home)
     private ImageView iv_Home;
     @InjectView(R.id.iv_Calander)
@@ -88,6 +96,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     private DockActivity activity;
     private TitleBar titleBar;
     private CountBadge badge;
+    private boolean loading = false;
+    private int offset=0;
+    private int limit=2;
+    private int totalCount=100;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -117,7 +129,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         loadingFinished();
 
         System.out.println(prefHelper.getBadgeCount());
-        getAllHomePosts();
+        getAllHomePosts(offset,limit);
         setListener();
         if (getMainActivity().isNotificationTap) {
             getMainActivity().isNotificationTap = false;
@@ -136,6 +148,20 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
 
         getMainActivity().setImageSetter(this);
+
+        gridView.setOnLoadMoreListener(new LoadMoreListView.OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                if (adapter.getCount() <= totalCount - 1) {
+                    offset = offset + limit;
+                    getAllHomePosts(offset, limit);
+                    gridView.onLoadMoreComplete();
+
+
+                }
+            }
+        });
+
 
     }
 
@@ -228,7 +254,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         gridView.setAdapter(adapter);
         adapter.addAll(dataCollection);
         adapter.notifyDataSetChanged();
+
     }
+
+
 
 
     @Override
@@ -356,12 +385,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
     }
 
-    private void getAllHomePosts() {
+    private void getAllHomePosts(int offset, int limit) {
 
         loadingStarted();
 
-        Call<ResponseWrapper<HomeResultEnt>> callBack = webService.getAllHomePosts(prefHelper.getUserId(),
-                getMainActivity().selectedLanguage());
+        Call<ResponseWrapper<HomeResultEnt>> callBack = webService.getAllHomePosts(prefHelper.getUserId(),offset,limit,getMainActivity().selectedLanguage());
 
         callBack.enqueue(new Callback<ResponseWrapper<HomeResultEnt>>() {
             @Override
@@ -375,7 +403,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
                             loadingFinished();
                             if (response.body().getUserDeleted() == 0) {
                                 setHomePostsData(response.body().getResult().getPosts(), response.body().getResult().getIs_approved_user());
-
+                                totalCount=response.body().getResult().getTotal_records();
                                 if (response.body().getResult().getIs_approved_user() == 1) {
                                     ll_UnApproved.setVisibility(View.GONE);
                                 } else {
@@ -630,6 +658,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
     }
 
+
+
     private class VideoCompressor extends AsyncTask<Void, Void, Boolean> {
 
         String filePath;
@@ -716,16 +746,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     public void setUpdatedData(int position, String data, int likes, int comments) {
 
 
-     /*   HomeListDataEnt updatedItem = (HomeListDataEnt) adapter.getItem(position);
-        updatedItem.setIs_liked(data);
-        updatedItem.setTotoal_likes(likes);
-        updatedItem.setTotal_comments(comments);
-
-        adapter.add(updatedItem);
-
-        adapter.notifyDataSetChanged();
-*/
-
         HomeListDataEnt updatedItem = (HomeListDataEnt) adapter.getItem(position);
         updatedItem.setIs_liked(data);
         updatedItem.setTotoal_likes(likes);
@@ -744,4 +764,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     public void showNotification() {
         getDockActivity().addDockableFragment(NotificationListingFragment.newInstance(), "NotificationListingFragment");
     }
+
+
 }
