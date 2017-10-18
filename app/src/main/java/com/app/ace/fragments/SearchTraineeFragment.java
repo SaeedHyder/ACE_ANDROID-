@@ -96,7 +96,7 @@ public class SearchTraineeFragment extends BaseFragment {
 
                                 dialogHelper.hideDialog();
                                 getDockActivity().popBackStackTillEntry(0);
-                                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
                         });
                         dialogHelper.showDialog();

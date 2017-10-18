@@ -650,7 +650,7 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
                                 dialogHelper.hideDialog();
                                 getDockActivity().popBackStackTillEntry(0);
-                                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
                         });
                         dialogHelper.showDialog();

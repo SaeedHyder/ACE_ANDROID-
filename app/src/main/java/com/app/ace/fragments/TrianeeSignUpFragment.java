@@ -312,7 +312,7 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
 
                                     dialogHelper.hideDialog();
                                     getDockActivity().popBackStackTillEntry(0);
-                                    getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                                    getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                                 }
                             });
                             dialogHelper.showDialog();

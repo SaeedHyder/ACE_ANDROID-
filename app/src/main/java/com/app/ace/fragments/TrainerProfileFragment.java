@@ -900,7 +900,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
                                 dialogHelper.hideDialog();
                                 getDockActivity().popBackStackTillEntry(0);
-                                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
                         });
                         dialogHelper.showDialog();

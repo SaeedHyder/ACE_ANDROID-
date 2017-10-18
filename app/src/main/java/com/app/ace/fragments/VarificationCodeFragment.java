@@ -155,7 +155,7 @@ public class VarificationCodeFragment extends BaseFragment implements View.OnCli
 
                                 dialogHelper.hideDialog();
                                 getDockActivity().popBackStackTillEntry(0);
-                                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
                         });
                         dialogHelper.showDialog();
@@ -203,7 +203,7 @@ public class VarificationCodeFragment extends BaseFragment implements View.OnCli
 
                                     dialogHelper.hideDialog();
                                     getDockActivity().popBackStackTillEntry(0);
-                                    getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                                    getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                                 }
                             });
                             dialogHelper.showDialog();

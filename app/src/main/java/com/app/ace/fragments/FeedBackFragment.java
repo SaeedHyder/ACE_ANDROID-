@@ -98,7 +98,7 @@ public class FeedBackFragment extends BaseFragment implements View.OnClickListen
 
                                 dialogHelper.hideDialog();
                                 getDockActivity().popBackStackTillEntry(0);
-                                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
                         });
                         dialogHelper.showDialog();

@@ -220,7 +220,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 
                             dialogHelper.hideDialog();
                             getDockActivity().popBackStackTillEntry(0);
-                            getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                            getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                         }
                     });
                     dialogHelper.showDialog();
@@ -324,7 +324,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 
                                 dialogHelper.hideDialog();
                                 getDockActivity().popBackStackTillEntry(0);
-                                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
                         });
                         dialogHelper.showDialog();
