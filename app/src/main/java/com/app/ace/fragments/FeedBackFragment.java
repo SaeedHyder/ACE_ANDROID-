@@ -87,7 +87,7 @@ public class FeedBackFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                    if (response.body().getUserDeleted()==0) {
+                    if (response.body().getUserDeleted() == 0) {
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                         getDockActivity().addDockableFragment(HomeFragment.newInstance(), HomeFragment.class.getName());
                     } else {
@@ -136,9 +136,10 @@ public class FeedBackFragment extends BaseFragment implements View.OnClickListen
                 btn_positive.setBackground(getResources().getDrawable(R.drawable.negative_border));
                 break;
             case R.id.btn_Submit:
-                if (validated()){
-                    feedbackService();}
-                    break;
+                if (validated()) {
+                    feedbackService();
+                }
+                break;
 
         }
 

@@ -95,8 +95,8 @@ public class SearchTrainerFragment extends BaseFragment {
             public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
                 //  resultuser = response.body().getResult();
                 if (response.body() != null)
-                    if (response.body().getUserDeleted() == 0){
-                    bindview(response.body().getResult());
+                    if (response.body().getUserDeleted() == 0) {
+                        bindview(response.body().getResult());
                     } else {
                         final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
                         dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {

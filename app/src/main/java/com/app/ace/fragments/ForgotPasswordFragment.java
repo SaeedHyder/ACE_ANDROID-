@@ -25,7 +25,7 @@ import roboguice.inject.InjectView;
  * Created by khan_muhammad on 3/14/2017.
  */
 
-public class ForgotPasswordFragment extends BaseFragment implements View.OnClickListener{
+public class ForgotPasswordFragment extends BaseFragment implements View.OnClickListener {
 
     @InjectView(R.id.edtEmail)
     private AnyEditTextView edtEmail;
@@ -84,23 +84,21 @@ public class ForgotPasswordFragment extends BaseFragment implements View.OnClick
         successPopUp.show(getMainActivity().getSupportFragmentManager(), "forgotPasswordPopUp");
 
 
-
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btnSubmit:
-                if(validate()) {
+                if (validate()) {
                     loadingStarted();
                     Call<ResponseWrapper> call = webService.forgetPassword(edtEmail.getText().toString(), getMainActivity().selectedLanguage());
                     call.enqueue(new Callback<ResponseWrapper>() {
                         @Override
                         public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
 
-                            if(response.body().getMessage().contains("new password"))
-                            {
-                                if (response.body().getUserDeleted()==0) {
+                            if (response.body().getMessage().contains("new password")) {
+                                if (response.body().getUserDeleted() == 0) {
                                     loadingFinished();
                                     showForgotPasswordDialog();
                                 } else {
@@ -116,9 +114,7 @@ public class ForgotPasswordFragment extends BaseFragment implements View.OnClick
                                     });
                                     dialogHelper.showDialog();
                                 }
-                            }
-                            else
-                            {
+                            } else {
                                 loadingFinished();
                                 UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                             }
@@ -128,7 +124,7 @@ public class ForgotPasswordFragment extends BaseFragment implements View.OnClick
                         @Override
                         public void onFailure(Call<ResponseWrapper> call, Throwable t) {
                             loadingFinished();
-                            Log.e("ForgotPasswordFragment",t.toString());
+                            Log.e("ForgotPasswordFragment", t.toString());
                         }
                     });
 

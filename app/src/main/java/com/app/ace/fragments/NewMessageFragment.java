@@ -11,22 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.app.ace.R;
-import com.app.ace.entities.NewMessageDataItem;
 import com.app.ace.entities.ResponseWrapper;
-import com.app.ace.entities.SearchPeopleDataItem;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.fragments.abstracts.BaseFragment;
-import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.DialogHelper;
-import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.NewMessageListItemBinder;
-import com.app.ace.ui.viewbinders.SearchPeopleListItemBinder;
 import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
@@ -37,11 +31,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
-
-import static android.R.attr.filter;
-import static android.R.attr.key;
-import static com.app.ace.R.id.listView;
-import static com.app.ace.R.id.txt_noresult;
 
 /**
  * Created by saeedhyder on 4/6/2017.
@@ -85,7 +74,7 @@ public class NewMessageFragment extends BaseFragment implements TextWatcher {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-       // edit_sendTo.addTextChangedListener(this);
+        // edit_sendTo.addTextChangedListener(this);
         edit_sendTo.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -98,7 +87,7 @@ public class NewMessageFragment extends BaseFragment implements TextWatcher {
 
         ListViewItemListner();
 
-       // getNewMsgUserData();
+        // getNewMsgUserData();
     }
 
     private void getNewMsgUserData() {
@@ -140,8 +129,7 @@ public class NewMessageFragment extends BaseFragment implements TextWatcher {
         if (resultuser.size() <= 0) {
             txt_noresult.setVisibility(View.VISIBLE);
             lv_newMessage.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             txt_noresult.setVisibility(View.GONE);
             lv_newMessage.setVisibility(View.VISIBLE);
         }
@@ -168,14 +156,13 @@ public class NewMessageFragment extends BaseFragment implements TextWatcher {
         lv_newMessage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                String UserName=userCollection.get(i).getFirst_name()+" "+userCollection.get(i).getLast_name();
+                String UserName = userCollection.get(i).getFirst_name() + " " + userCollection.get(i).getLast_name();
                 getDockActivity().popBackStackTillEntry(1);
-                getDockActivity().addDockableFragment(NewMsgChat_Screen_Fragment.newInstance(userCollection.get(i).getId(),UserName), "NewMsgChat_Screen_Fragment");
+                getDockActivity().addDockableFragment(NewMsgChat_Screen_Fragment.newInstance(userCollection.get(i).getId(), UserName), "NewMsgChat_Screen_Fragment");
                 //  getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(userCollection.get(i).));
             }
         });
     }
-
 
 
     @Override
@@ -213,7 +200,7 @@ public class NewMessageFragment extends BaseFragment implements TextWatcher {
         ArrayList<UserProfile> arrayList = new ArrayList<>();
 
         for (UserProfile item : userCollection) {
-            String UserName=item.getFirst_name()+" "+item.getLast_name();
+            String UserName = item.getFirst_name() + " " + item.getLast_name();
             if (UserName.contains(keyword)) {
                 arrayList.add(item);
             }

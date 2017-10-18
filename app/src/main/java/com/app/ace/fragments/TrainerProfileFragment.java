@@ -50,8 +50,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
-import static com.app.ace.R.string.app;
-
 /**
  * Created by khan_muhammad on 3/17/2017.
  */
@@ -157,7 +155,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
 
     private ArrayListAdapter<profilePostEnt> adapter;
-    private List<profilePostEnt> dataCollection=new ArrayList<>();
+    private List<profilePostEnt> dataCollection = new ArrayList<>();
 
     private ArrayListAdapter<TrainerReviews> feedbackAdapter;
     private List<TrainerReviews> feedbackDataCollection;
@@ -168,7 +166,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     private boolean isTrainer = false;
     String TrainerGymAddress;
     String Speciality;
-    String messageBtn="hide";
+    String messageBtn = "hide";
 
     String trainer_name;
 
@@ -198,7 +196,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
 
         imageLoader = ImageLoader.getInstance();
-        
+
         adapter = new ArrayListAdapter<profilePostEnt>(getDockActivity(), new UserPicItemBinder(getDockActivity(), this));
         feedbackAdapter = new ArrayListAdapter<TrainerReviews>(getDockActivity(), new FeedbackViewBinder(getDockActivity()));
 
@@ -229,21 +227,19 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         lv_feedback.setExpanded(true);
 
 
-
     }
 
-    void showTitleBarIcon(){
-        if(messageBtn.equals("show")){
+    void showTitleBarIcon() {
+        if (messageBtn.equals("show")) {
             getMainActivity().titleBar.showMessageButton(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                //    getDockActivity().addDockableFragment(ChatFragment.newInstance("0", user_id,trainer_name), "ChatFragment");
-                    getDockActivity().addDockableFragment(NewMsgChat_Screen_Fragment.newInstance(Integer.parseInt(user_id),trainer_name), "NewMsgChat_Screen_Fragment");
+                    //    getDockActivity().addDockableFragment(ChatFragment.newInstance("0", user_id,trainer_name), "ChatFragment");
+                    getDockActivity().addDockableFragment(NewMsgChat_Screen_Fragment.newInstance(Integer.parseInt(user_id), trainer_name), "NewMsgChat_Screen_Fragment");
 
                 }
             });
-        }
-        else{
+        } else {
             getMainActivity().titleBar.showSettingButton(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -251,7 +247,8 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                     getDockActivity().addDockableFragment(SettingsFragment.newInstance(isNotificationOn, isPublicAccount), "SettingsFragment");
 
                 }
-            });}
+            });
+        }
     }
 
     private void showProfiles() {
@@ -262,80 +259,82 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             @Override
             public void onResponse(Call<ResponseWrapper<UserProfile>> call, Response<ResponseWrapper<UserProfile>> response) {
 
-                loadingFinished();
-                if (response.body() != null) {
-                    if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                        trainer_name=response.body().getResult().getFirst_name()+" "+response.body().getResult().getLast_name();
-                        try {
-                            if (response.body().getResult().getNotification_status().equals("1")) {
-                                isNotificationOn = true;
-                            } else {
-                                isNotificationOn = false;
+                if (response.body().getUserDeleted() == 0) {
+
+                    loadingFinished();
+                    if (response.body() != null) {
+                        if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                            trainer_name = response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name();
+                            try {
+                                if (response.body().getResult().getNotification_status().equals("1")) {
+                                    isNotificationOn = true;
+                                } else {
+                                    isNotificationOn = false;
+                                }
+                                if (response.body().getResult().getPrivate_account().equals("0")) {
+                                    isPublicAccount = true;
+                                } else {
+                                    isPublicAccount = false;
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                            if (response.body().getResult().getPrivate_account().equals("0")) {
-                                isPublicAccount = true;
-                            } else {
-                                isPublicAccount = false;
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
 
 
-                        RegistrationResult result = prefHelper.getUser();
-                        result.setProfile_image(response.body().getResult().getProfile_image());
-                        prefHelper.putUser(result);
-
-                        scrollView.setVisibility(View.VISIBLE);
-
-                        if (response.body().getResult().getUser_type().equals(AppConstants.trainer)) {
-
-                            isTrainer = true;
-                            messageBtn="show";
-                            showTitleBarIcon();
-
-
-                            Trainer = AppConstants.trainer;
-                            result.setEducation(response.body().getResult().getEducation());
-                            result.setSpeciality(response.body().getResult().getSpeciality());
+                            RegistrationResult result = prefHelper.getUser();
+                            result.setProfile_image(response.body().getResult().getProfile_image());
                             prefHelper.putUser(result);
 
+                            scrollView.setVisibility(View.VISIBLE);
 
-                            if (response.body().getResult().getId() == Integer.parseInt(prefHelper.getUserId())) {
-                                btn_edit.setVisibility(View.VISIBLE);
-                                btn_follow.setVisibility(View.GONE);
-                                btn_Unfollow.setVisibility(View.GONE);
-                                btn_request.setVisibility(View.GONE);
-                                messageBtn="hide";
+                            if (response.body().getResult().getUser_type().equals(AppConstants.trainer)) {
+
+                                isTrainer = true;
+                                messageBtn = "show";
                                 showTitleBarIcon();
 
 
-                            }
-                            if (response.body().getResult().getUser_type().equalsIgnoreCase(prefHelper.getUser().getUser_type())) {
-                                if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
+                                Trainer = AppConstants.trainer;
+                                result.setEducation(response.body().getResult().getEducation());
+                                result.setSpeciality(response.body().getResult().getSpeciality());
+                                prefHelper.putUser(result);
+
+
+                                if (response.body().getResult().getId() == Integer.parseInt(prefHelper.getUserId())) {
+                                    btn_edit.setVisibility(View.VISIBLE);
+                                    btn_follow.setVisibility(View.GONE);
+                                    btn_Unfollow.setVisibility(View.GONE);
+                                    btn_request.setVisibility(View.GONE);
+                                    messageBtn = "hide";
+                                    showTitleBarIcon();
+
+
+                                }
+                                if (response.body().getResult().getUser_type().equalsIgnoreCase(prefHelper.getUser().getUser_type())) {
+                                    if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
+                                        btn_edit.setVisibility(View.GONE);
+                                        btn_follow.setVisibility(View.VISIBLE);
+                                        btn_Unfollow.setVisibility(View.GONE);
+                                        btn_request.setVisibility(View.VISIBLE);
+                                        btn_feedback.setVisibility(View.VISIBLE);
+
+                                    }
+                                } else {
                                     btn_edit.setVisibility(View.GONE);
                                     btn_follow.setVisibility(View.VISIBLE);
                                     btn_Unfollow.setVisibility(View.GONE);
                                     btn_request.setVisibility(View.VISIBLE);
                                     btn_feedback.setVisibility(View.VISIBLE);
+                                }
+
+                                if (response.body().getResult().getIs_following() == 0) {
+                                    btn_follow.setVisibility(View.VISIBLE);
+                                    btn_Unfollow.setVisibility(View.GONE);
+                                } else {
+                                    btn_follow.setVisibility(View.GONE);
+                                    btn_Unfollow.setVisibility(View.VISIBLE);
 
                                 }
-                            } else {
-                                btn_edit.setVisibility(View.GONE);
-                                btn_follow.setVisibility(View.VISIBLE);
-                                btn_Unfollow.setVisibility(View.GONE);
-                                btn_request.setVisibility(View.VISIBLE);
-                                btn_feedback.setVisibility(View.VISIBLE);
-                            }
-
-                            if (response.body().getResult().getIs_following() == 0) {
-                                btn_follow.setVisibility(View.VISIBLE);
-                                btn_Unfollow.setVisibility(View.GONE);
-                            } else {
-                                btn_follow.setVisibility(View.GONE);
-                                btn_Unfollow.setVisibility(View.VISIBLE);
-
-                            }
                       /*  if(response.body().getResult().getUser_type().equalsIgnoreCase(AppConstants.trainer) && response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())){
                             btn_edit.setVisibility(View.GONE);
                             btn_follow.setVisibility(View.VISIBLE);
@@ -352,99 +351,111 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             }
                         }
 */
-                            ll_one_button.setVisibility(View.INVISIBLE);
-                            ll_two_buttons.setVisibility(View.VISIBLE);
+                                ll_one_button.setVisibility(View.INVISIBLE);
+                                ll_two_buttons.setVisibility(View.VISIBLE);
 
 
-                            ll_trainer.setVisibility(View.VISIBLE);
-                            ll_trainee.setVisibility(View.GONE);
+                                ll_trainer.setVisibility(View.VISIBLE);
+                                ll_trainee.setVisibility(View.GONE);
 
-                            txt_Trainer.setVisibility(View.VISIBLE);
+                                txt_Trainer.setVisibility(View.VISIBLE);
 
 
-                            ll_separator.setVisibility(View.VISIBLE);
+                                ll_separator.setVisibility(View.VISIBLE);
 
-                            if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
-                                Speciality = response.body().getResult().getSpeciality();
-                                TrainerGymAddress = response.body().getResult().getGym_address();
-                                txt_profileName.setText(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
-                                imageLoader.displayImage(response.body().getResult().getProfile_image(), riv_profile_pic);
-                                txt_education_cirtification_dis.setText(response.body().getResult().getEducation() + " " + response.body().getResult().getUniversity());
-                                txt_preffered_training_loc_dis.setText(response.body().getResult().getGym_address());
-                                txt_postCount.setText(response.body().getResult().getPosts_count());
-                                txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
-                                txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
+                                if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
+                                    Speciality = response.body().getResult().getSpeciality();
+                                    TrainerGymAddress = response.body().getResult().getGym_address();
+                                    txt_profileName.setText(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
+                                    imageLoader.displayImage(response.body().getResult().getProfile_image(), riv_profile_pic);
+                                    txt_education_cirtification_dis.setText(response.body().getResult().getEducation() + " " + response.body().getResult().getUniversity());
+                                    txt_preffered_training_loc_dis.setText(response.body().getResult().getGym_address());
+                                    txt_postCount.setText(response.body().getResult().getPosts_count());
+                                    txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
+                                    txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
 
-                                txt_positive.setText("+" + response.body().getResult().getPositive_review());
-                                txt_negative.setText("-" + response.body().getResult().getNegative_review());
-                                ShowUserPosts(response.body().getResult().getPosts(),response.body().getResult().getUser_type());
-                                gv_pics.setVisibility(View.GONE);
-                                setFeedbackData(response.body().getResult().getTrainer_reviews());
-
-                            }
-                        } else {
-
-                            getMainActivity().titleBar.showSettingButton(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                    getDockActivity().addDockableFragment(SettingsFragment.newInstance(isNotificationOn, isPublicAccount), "SettingsFragment");
+                                    txt_positive.setText("+" + response.body().getResult().getPositive_review());
+                                    txt_negative.setText("-" + response.body().getResult().getNegative_review());
+                                    ShowUserPosts(response.body().getResult().getPosts(), response.body().getResult().getUser_type());
+                                    gv_pics.setVisibility(View.GONE);
+                                    setFeedbackData(response.body().getResult().getTrainer_reviews());
 
                                 }
-                            });
-
-                            if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
-                                btn_edit_or_follow.setVisibility(View.GONE);
-                                btn_followTrainee.setVisibility(View.VISIBLE);
-
-                            }
-
-                            if (response.body().getResult().getIs_following() == 0) {
-                                btn_followTrainee.setVisibility(View.VISIBLE);
-                                btn_unfollowTrainee.setVisibility(View.GONE);
                             } else {
-                                btn_followTrainee.setVisibility(View.GONE);
-                                btn_unfollowTrainee.setVisibility(View.VISIBLE);
 
-                            }
+                                getMainActivity().titleBar.showSettingButton(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        getDockActivity().addDockableFragment(SettingsFragment.newInstance(isNotificationOn, isPublicAccount), "SettingsFragment");
+
+                                    }
+                                });
+
+                                if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
+                                    btn_edit_or_follow.setVisibility(View.GONE);
+                                    btn_followTrainee.setVisibility(View.VISIBLE);
+
+                                }
+
+                                if (response.body().getResult().getIs_following() == 0) {
+                                    btn_followTrainee.setVisibility(View.VISIBLE);
+                                    btn_unfollowTrainee.setVisibility(View.GONE);
+                                } else {
+                                    btn_followTrainee.setVisibility(View.GONE);
+                                    btn_unfollowTrainee.setVisibility(View.VISIBLE);
+
+                                }
 
 
+                                ll_review_count.setVisibility(View.GONE);
+                                ll_feedback.setVisibility(View.GONE);
 
-                            ll_review_count.setVisibility(View.GONE);
-                            ll_feedback.setVisibility(View.GONE);
-
-                            ll_one_button.setVisibility(View.VISIBLE);
-                            ll_two_buttons.setVisibility(View.INVISIBLE);
-
-
-                            ll_trainer.setVisibility(View.GONE);
-                            ll_trainee.setVisibility(View.VISIBLE);
-
-                            txt_Trainer.setVisibility(View.GONE);
+                                ll_one_button.setVisibility(View.VISIBLE);
+                                ll_two_buttons.setVisibility(View.INVISIBLE);
 
 
-                            ll_separator.setVisibility(View.GONE);
+                                ll_trainer.setVisibility(View.GONE);
+                                ll_trainee.setVisibility(View.VISIBLE);
 
-                            if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
-                                // ShowTrianeeData();
-                                txt_profileName.setText(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
-                                imageLoader.displayImage(response.body().getResult().getProfile_image(), riv_profile_pic);
-                                txt_postCount.setText(response.body().getResult().getPosts_count());
-                                txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
-                                txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
+                                txt_Trainer.setVisibility(View.GONE);
 
-                                txt_tagline.setText(response.body().getResult().getUser_status() + "");
-                                gv_pics.setVisibility(View.VISIBLE);
-                                iv_list.setImageResource(R.drawable.list_view_unselected);
-                                iv_grid.setImageResource(R.drawable.grid_view);
-                                ShowUserPosts(response.body().getResult().getPosts(), response.body().getResult().getUser_type());
+
+                                ll_separator.setVisibility(View.GONE);
+
+                                if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
+                                    // ShowTrianeeData();
+                                    txt_profileName.setText(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
+                                    imageLoader.displayImage(response.body().getResult().getProfile_image(), riv_profile_pic);
+                                    txt_postCount.setText(response.body().getResult().getPosts_count());
+                                    txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
+                                    txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
+
+                                    txt_tagline.setText(response.body().getResult().getUser_status() + "");
+                                    gv_pics.setVisibility(View.VISIBLE);
+                                    iv_list.setImageResource(R.drawable.list_view_unselected);
+                                    iv_grid.setImageResource(R.drawable.grid_view);
+                                    ShowUserPosts(response.body().getResult().getPosts(), response.body().getResult().getUser_type());
+                                }
                             }
                         }
+                    } else {
+                        loadingFinished();
                     }
-                } else {
-                    loadingFinished();
-                }
 
+                } else {
+                    final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                    dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            dialogHelper.hideDialog();
+                            getDockActivity().popBackStackTillEntry(0);
+                            getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                        }
+                    });
+                    dialogHelper.showDialog();
+                }
             }
 
             @Override
@@ -498,10 +509,9 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
         gridView();
 
-        if(user_type.equals(AppConstants.trainer)){
+        if (user_type.equals(AppConstants.trainer)) {
             gv_pics.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             gv_pics.setVisibility(View.VISIBLE);
 
         }
@@ -590,8 +600,21 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
+                    if (response.body().getUserDeleted() == 0) {
+                        UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
                 } else {
                     UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
                 }
@@ -648,12 +671,11 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
     void gridView() {
 
-        if(dataCollection.size()<=0){
+        if (dataCollection.size() <= 0) {
             gv_pics.setVisibility(View.GONE);
             txt_no_data.setVisibility(View.VISIBLE);
 
-        }
-        else {
+        } else {
             gv_pics.setVisibility(View.VISIBLE);
             txt_no_data.setVisibility(View.GONE);
         }
@@ -671,12 +693,11 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         switch (v.getId()) {
             case R.id.iv_list:
 
-                if(dataCollection.size()<=0){
+                if (dataCollection.size() <= 0) {
                     gv_pics.setVisibility(View.GONE);
                     txt_no_data.setVisibility(View.VISIBLE);
 
-                }
-                else {
+                } else {
                     gv_pics.setVisibility(View.VISIBLE);
                     txt_no_data.setVisibility(View.GONE);
                 }
@@ -728,9 +749,9 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                         AnyEditTextView hours = feedbackDIaloge.getHours(R.id.edt_hours_day);
                         AnyEditTextView days = feedbackDIaloge.getDays(R.id.edt_total_days);
                         AnyTextView totalHours = feedbackDIaloge.getTotalHours(R.id.txt_total_hours);
-                        if (validate(hours, days, totalHours)){
+                        if (validate(hours, days, totalHours)) {
 
-                            requestService(hours.getText().toString(),days.getText().toString(),totalHours.getText().toString(),feedbackDIaloge);
+                            requestService(hours.getText().toString(), days.getText().toString(), totalHours.getText().toString(), feedbackDIaloge);
                         }
 
 
@@ -866,11 +887,10 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         if (hours.getText().toString().trim().equals("")) {
             hours.setError(getString(R.string.hour_empty_error));
             return false;
-        }
-        else if(Integer.parseInt(hours.getText().toString())<=0 || Integer.parseInt(hours.getText().toString())>24 ){
+        } else if (Integer.parseInt(hours.getText().toString()) <= 0 || Integer.parseInt(hours.getText().toString()) > 24) {
             hours.setError(getDockActivity().getResources().getString(R.string.valid_hours));
             return false;
-        }else if (days.getText().toString().trim().equals("")) {
+        } else if (days.getText().toString().trim().equals("")) {
             days.setError(getString(R.string.days_error));
             return false;
         } else if (totalHours.getText().toString().trim().equals("")) {
@@ -888,7 +908,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             @Override
             public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                    if (response.body().getUserDeleted()==0) {
+                    if (response.body().getUserDeleted() == 0) {
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                         getDockActivity().addDockableFragment(HomeFragment.newInstance(), HomeFragment.class.getName());
                         feedbackDIaloge.hideDialog();
@@ -933,10 +953,23 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
+                    if (response.body().getUserDeleted() == 0) {
+                        UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
                    /* btn_follow.setVisibility(View.GONE);
                     btn_Unfollow.setVisibility(View.VISIBLE);*/
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
                 } else {
                     UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
                 }
@@ -967,10 +1000,23 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
+                    if (response.body().getUserDeleted() == 0) {
+                        UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
                    /* btn_follow.setVisibility(View.VISIBLE);
                     btn_Unfollow.setVisibility(View.GONE);*/
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
                 } else {
                     UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
                 }

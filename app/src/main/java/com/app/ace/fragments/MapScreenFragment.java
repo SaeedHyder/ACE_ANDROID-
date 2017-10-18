@@ -52,8 +52,8 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
 
     private GoogleMap mMap;
     private AnyEditTextView edtsearch;
-    double latitude ;
-    double longitude ;
+    double latitude;
+    double longitude;
     String language = "";
     //@InjectView(R.id.txt_noresult)
     private TextView txt_noresult;
@@ -148,8 +148,8 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
 
                 if (response.body() != null)
                     if (response.body().getResult().size() <= 0) {
-                        if (response.body().getUserDeleted() == 0){
-                        txt_noresult.setVisibility(View.VISIBLE);
+                        if (response.body().getUserDeleted() == 0) {
+                            txt_noresult.setVisibility(View.VISIBLE);
                         } else {
                             final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
                             dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
@@ -212,7 +212,7 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
         }*/
 
         if (edtsearch.getText().toString().equals("")) {
-           mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(24.807825187774412, 46.74573140058601), AppConstants.zoomIn));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(24.807825187774412, 46.74573140058601), AppConstants.zoomIn));
         } else {
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(userCollection.get(userCollection.size() - 1).getLat()), Double.valueOf(userCollection.get(userCollection.size() - 1).getLng())), AppConstants.zoomInToTrainer));
 
@@ -227,7 +227,7 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
                 if (!user.getGym_latitude().isEmpty()) {
 
                     userCollection.add(new MapScreenItem(user.getGym_latitude(),
-                            user.getGym_longitude(), user.getProfile_image(), user.getId(),latitude,longitude));
+                            user.getGym_longitude(), user.getProfile_image(), user.getId(), latitude, longitude));
                 }
             }
         } catch (Exception e) {

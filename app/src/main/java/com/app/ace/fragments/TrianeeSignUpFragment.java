@@ -1,12 +1,8 @@
 package com.app.ace.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,12 +11,11 @@ import android.widget.RelativeLayout;
 
 import com.app.ace.R;
 import com.app.ace.activities.MainActivity;
-import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.RegistrationResult;
+import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.TwitterUser;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
-import com.app.ace.global.PasswordEditTextChangeListener;
 import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.InternetHelper;
@@ -41,8 +36,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
-
-import static android.os.Build.VERSION_CODES.N;
 
 /**
  * Created by khan_muhammad on 3/13/2017.
@@ -109,8 +102,7 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
             fragment.setArguments(args);
 
             return fragment;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -200,21 +192,20 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
 
             case R.id.btnSignUp:
 
-                if (validateFields() ) {
+                if (validateFields()) {
 
-                    if(profilePic == null){
+                    if (profilePic == null) {
                         UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.profile_pic_error));
-                    }else {
+                    } else {
 
                         if (edtPassword.getText().toString().length() < 6) {
                             UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.password_length_alert));
-                        }
-                        else if(edtMobileNumber.getText().toString().length() < 11){
+                        } else if (edtMobileNumber.getText().toString().length() < 11) {
                             UIHelper.showShortToastInCenter(getDockActivity(), "Mobile Number should be 11 or more characters long");
-                        }else {
+                        } else {
                             if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()))
-                                TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"android",prefHelper.getFirebase_TOKEN());
-                                signupTrainee();
+                                TokenUpdater.getInstance().UpdateToken(getDockActivity(), prefHelper.getUserId(), "android", prefHelper.getFirebase_TOKEN());
+                            signupTrainee();
                         }
                     }
                 }
@@ -223,7 +214,6 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
 
         }
     }
-
 
 
     private void signupTrainee() {
@@ -247,9 +237,9 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
                 profilePic.getName(), RequestBody.create(MediaType.parse("image/*"), profilePic));
 
         String SocialMediaName = "";
-        if(!UserId.equalsIgnoreCase("")){
+        if (!UserId.equalsIgnoreCase("")) {
             SocialMediaName = AppConstants.twitter;
-        }else{
+        } else {
             SocialMediaName = "";
         }
 
@@ -354,7 +344,7 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
         if (imagePath != null) {
             profilePic = new File(imagePath);
             ImageLoader.getInstance().displayImage(
-                    "file:///" +imagePath, iv_profile);
+                    "file:///" + imagePath, iv_profile);
         }
     }
 
@@ -364,7 +354,7 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
     }
 
     @Override
-    public void setVideo(String videoPath,String videothumb) {
+    public void setVideo(String videoPath, String videothumb) {
 
     }
 }

@@ -31,7 +31,7 @@ import roboguice.inject.InjectView;
  * Created by khan_muhammad on 3/18/2017.
  */
 
-public class SettingsFragment extends BaseFragment implements View.OnClickListener{
+public class SettingsFragment extends BaseFragment implements View.OnClickListener {
     private static String NOTIFICATION_ON = "NOTIFICATION_ON";
     private static String PRIVATE_ACCOUNT = "PRIVATE_ACCOUNT";
     @InjectView(R.id.cb_english)
@@ -91,20 +91,14 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         toggle_private_or_public.setChecked(pubicAccount);
         cb_english.setChecked(true);
 
-        if(prefHelper.isLanguageArabic())
-        {
+        if (prefHelper.isLanguageArabic()) {
             cb_arabic.setChecked(true);
-        }
-        else
-        {
+        } else {
             cb_english.setChecked(true);
         }
-        if(prefHelper.isLanguageArabic())
-        {
-           view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        }
-        else
-        {
+        if (prefHelper.isLanguageArabic()) {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        } else {
             view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
         }
 
@@ -135,13 +129,13 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         cb_english.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                prefHelper.putLang(getDockActivity(),"en");
+                prefHelper.putLang(getDockActivity(), "en");
             }
         });
         cb_arabic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                prefHelper.putLang(getDockActivity(),"ar");
+                prefHelper.putLang(getDockActivity(), "ar");
             }
         });
 
@@ -161,13 +155,11 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onClick(View v) {
 
-                if (!edit_newPassword.getText().toString().equals("") || !txt_CurrentPassword.getText().toString().equals("") || !edit_conNewPassword.getText().toString().equals("") ) {
-                        updateSetting();
-                    }
-                else
-                {
+                if (!edit_newPassword.getText().toString().equals("") || !txt_CurrentPassword.getText().toString().equals("") || !edit_conNewPassword.getText().toString().equals("")) {
+                    updateSetting();
+                } else {
                     contactUs();
-                    getDockActivity().addDockableFragment(HomeFragment.newInstance(),"HomeFragment");
+                    getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
                 }
 
 
@@ -202,9 +194,22 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                         loadingStarted();
                         if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                            UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                            getDockActivity().addDockableFragment(HomeFragment.newInstance(),"HomeFragment");
+                            if (response.body().getUserDeleted() == 0) {
+                                UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                            } else {
+                                final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                                dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
 
+                                        dialogHelper.hideDialog();
+                                        getDockActivity().popBackStackTillEntry(0);
+                                        getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                                    }
+                                });
+                                dialogHelper.showDialog();
+                            }
                             loadingFinished();
 
                         } else {
@@ -232,7 +237,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 @Override
                 public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                        if (response.body().getUserDeleted()==0) {
+                        if (response.body().getUserDeleted() == 0) {
                             loadingFinished();
                             txt_contact_us_disc.setText("");
                             // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
@@ -285,9 +290,9 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
                     loadingFinished();
 
-                    if (response.body().getUserDeleted()==0){
+                    if (response.body().getUserDeleted() == 0) {
 
-                    }else{
+                    } else {
                         final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
                         dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
                             @Override
@@ -300,7 +305,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                         });
                         dialogHelper.showDialog();
                     }
-                   // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
 
                 } else {
                     loadingFinished();

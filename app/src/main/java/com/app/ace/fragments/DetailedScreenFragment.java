@@ -17,6 +17,7 @@ import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.Slot;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.views.AnyTextView;
@@ -65,7 +66,7 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
     @InjectView(R.id.img_DetailedProfile)
     CircleImageView img_DetailedProfile;
 
-    private BookingRequestEnt bookingData=new BookingRequestEnt();
+    private BookingRequestEnt bookingData = new BookingRequestEnt();
 
     private Slot currentSlot;
     private static String SLOT = "SLOT";
@@ -149,9 +150,23 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
             @Override
             public void onResponse(Call<ResponseWrapper<BookingRequestEnt>> call, Response<ResponseWrapper<BookingRequestEnt>> response) {
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                    setRequestData(response.body().getResult());
-                    bookingData=response.body().getResult();
-                    view.setVisibility(View.VISIBLE);
+                    if (response.body().getUserDeleted() == 0) {
+                        setRequestData(response.body().getResult());
+                        bookingData = response.body().getResult();
+                        view.setVisibility(View.VISIBLE);
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
 
                 } else {
 
@@ -200,7 +215,7 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
         switch (view.getId()) {
             case R.id.btn_send_msg:
                 getDockActivity().popBackStackTillEntry(1);
-                getDockActivity().addDockableFragment(NewMsgChat_Screen_Fragment.newInstance(bookingData.getUser().getId(),bookingData.getUser().getFirst_name()+" "+bookingData.getUser().getLast_name()), "NewMsgChat_Screen_Fragment");
+                getDockActivity().addDockableFragment(NewMsgChat_Screen_Fragment.newInstance(bookingData.getUser().getId(), bookingData.getUser().getFirst_name() + " " + bookingData.getUser().getLast_name()), "NewMsgChat_Screen_Fragment");
                 break;
 
 

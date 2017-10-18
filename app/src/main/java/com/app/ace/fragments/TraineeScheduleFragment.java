@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,7 +15,7 @@ import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.Slot;
 import com.app.ace.entities.TraineeScheduleEnt;
 import com.app.ace.fragments.abstracts.BaseFragment;
-import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.interfaces.OndeleteListener;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.TraineeScheduleListItemBinder;
@@ -28,10 +27,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.joda.time.DateTime;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -43,10 +40,10 @@ import roboguice.inject.InjectView;
  * Created by saeedhyder on 4/6/2017.
  */
 
-public class TraineeScheduleFragment extends BaseFragment implements View.OnClickListener, DatePickerListener,OndeleteListener {
+public class TraineeScheduleFragment extends BaseFragment implements View.OnClickListener, DatePickerListener, OndeleteListener {
 
-@InjectView(R.id.img_DetailedProfile)
-ImageView img_DetailedProfile;
+    @InjectView(R.id.img_DetailedProfile)
+    ImageView img_DetailedProfile;
     @InjectView(R.id.iv_Home)
     ImageView iv_Home;
     @InjectView(R.id.iv_Calander)
@@ -77,7 +74,7 @@ ImageView img_DetailedProfile;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new ArrayListAdapter<Slot>(getDockActivity(), new TraineeScheduleListItemBinder(getDockActivity(),this));
+        adapter = new ArrayListAdapter<Slot>(getDockActivity(), new TraineeScheduleListItemBinder(getDockActivity(), getDockActivity(), this));
     }
 
     @Override
@@ -116,8 +113,22 @@ ImageView img_DetailedProfile;
             @Override
             public void onResponse(Call<ResponseWrapper<TraineeScheduleEnt>> call, Response<ResponseWrapper<TraineeScheduleEnt>> response) {
 
-                if(response.body()!=null) {
-                    setTraineeScheduleData(response.body().getResult());
+                if (response.body().getUserDeleted() == 0) {
+                    if (response.body() != null) {
+                        setTraineeScheduleData(response.body().getResult());
+                    }
+                } else {
+                    final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                    dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            dialogHelper.hideDialog();
+                            getDockActivity().popBackStackTillEntry(0);
+                            getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                        }
+                    });
+                    dialogHelper.showDialog();
                 }
             }
 
@@ -134,15 +145,14 @@ ImageView img_DetailedProfile;
         if (result.getSlots().size() <= 0) {
             txt_noresult.setVisibility(View.VISIBLE);
             lv_trauneeScheduleScreen.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             txt_noresult.setVisibility(View.GONE);
             lv_trauneeScheduleScreen.setVisibility(View.VISIBLE);
         }
-        ImageLoader.getInstance().displayImage(result.getUser().getProfile_image(),img_DetailedProfile);
+        ImageLoader.getInstance().displayImage(result.getUser().getProfile_image(), img_DetailedProfile);
         txt_detailedS_ProfileName.setText(result.getUser().getFirst_name()
-                +" "+result.getUser().getLast_name());
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+                + " " + result.getUser().getLast_name());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         txt_day.setText("");
         txt_time.setText("");
         /*try {
@@ -222,14 +232,14 @@ ImageView img_DetailedProfile;
     @Override
     public void Ondelete() {
 
-       // getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(),"TraineeScheduleFragment");
+        // getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(),"TraineeScheduleFragment");
         //adapter.notifyDataSetChanged();
     }
 
     @Override
     public void OndeleteTrainee(int position) {
         loadingStarted();
-        if (userCollection.size()>position) {
+        if (userCollection.size() > position) {
             userCollection.remove(position);
             adapter.clearList();
             lv_trauneeScheduleScreen.setAdapter(adapter);

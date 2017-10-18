@@ -324,9 +324,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                        if (response.body().getUserDeleted()==0) {
+                        if (response.body().getUserDeleted() == 0) {
                             getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
-                        }else{
+                        } else {
                             final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
                             dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
                                 @Override
@@ -690,6 +690,20 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
+                    if (response.body().getUserDeleted() == 0) {
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
 
                     //UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
 

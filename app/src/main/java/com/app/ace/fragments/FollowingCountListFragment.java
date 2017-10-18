@@ -15,6 +15,7 @@ import com.app.ace.entities.FollowingCountListEnt;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.FollowingCountListBinder;
@@ -86,7 +87,7 @@ public class FollowingCountListFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         //setListener();
-       // getUserData();
+        // getUserData();
         getAllFollowings();
         listViewListner();
     }
@@ -116,11 +117,10 @@ public class FollowingCountListFragment extends BaseFragment {
             listView.setVisibility(View.VISIBLE);
         }
 
-        for(FollowingCountListEnt msg : followingCountListEntArrayList){
+        for (FollowingCountListEnt msg : followingCountListEntArrayList) {
 
             FollowingsuserCollection.add(new FollowingCountDataItem(msg.getProfile_image()
-                    ,msg.getFirst_name()+" "+msg.getLast_name(),msg.getId()));
-
+                    , msg.getFirst_name() + " " + msg.getLast_name(), msg.getId()));
 
 
         }
@@ -167,11 +167,23 @@ public class FollowingCountListFragment extends BaseFragment {
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    getFollowing(response.body().getResult());
+                    if (response.body().getUserDeleted() == 0) {
+                        getFollowing(response.body().getResult());
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-                }
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
 
-                else {
+                } else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
 

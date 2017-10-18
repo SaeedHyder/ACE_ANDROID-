@@ -5,16 +5,16 @@ import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import com.app.ace.R;
+import com.app.ace.activities.DockActivity;
+import com.app.ace.activities.MainActivity;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.Slot;
-import com.app.ace.entities.TraineeScheduleItem;
-import com.app.ace.fragments.NotificationListingFragment;
-import com.app.ace.global.AppConstants;
+import com.app.ace.fragments.LoginFragment;
 import com.app.ace.global.WebServiceConstants;
 import com.app.ace.helpers.BasePreferenceHelper;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.interfaces.OndeleteListener;
 import com.app.ace.retrofit.WebService;
 import com.app.ace.retrofit.WebServiceFactory;
@@ -33,10 +33,14 @@ public class TraineeScheduleListItemBinder extends ViewBinder<Slot> {
     OndeleteListener deleteListener;
     private WebService service;
     Context context;
+    DockActivity dockActivity;
     private BasePreferenceHelper preferenceHelper;
-    public TraineeScheduleListItemBinder(Context context , OndeleteListener ondeleteListener) {
+    MainActivity getMainActivity;
+
+    public TraineeScheduleListItemBinder(Context context, DockActivity dockActivity, OndeleteListener ondeleteListener) {
         super(R.layout.trainee_schedule_item);
         deleteListener = ondeleteListener;
+        this.dockActivity = dockActivity;
         context = context;
         service = WebServiceFactory.getWebServiceInstanceWithCustomInterceptor(context,
                 WebServiceConstants.SERVICE_BASE_URL);
@@ -52,19 +56,18 @@ public class TraineeScheduleListItemBinder extends ViewBinder<Slot> {
     public void bindView(final Slot entity, final int position, int grpPosition, View view, Activity activity) {
 
         TraineeScheduleListItemBinder.ViewHolder viewHolder = (TraineeScheduleListItemBinder.ViewHolder) view.getTag();
-        Context context =  viewHolder.txt_traineeSchedule_1stColumn.getContext();
+        final Context context = viewHolder.txt_traineeSchedule_1stColumn.getContext();
         viewHolder.txt_traineeSchedule_1stColumn.setText(context.getString(R.string.date_schedule));
         viewHolder.txt_traineeSchedule_timeslot.setText(context.getString(R.string.time_slot));
         viewHolder.txt_traineeSchedule_training.setText(context.getString(R.string.training));
 
         viewHolder.txt_traineeSchedule_2stColumn.setText(entity.getDate());
-        viewHolder.txt_traineeSchedule_timeslot2stColumn.setText(entity.getStartTime()+"-"+entity.getEndTime());
-        viewHolder.txt_traineeSchedule_training2stColumn.setText( entity.getBookings().getTraining_type());
-        if(entity.getBookings().getTrainer_accepted()==1){
+        viewHolder.txt_traineeSchedule_timeslot2stColumn.setText(entity.getStartTime() + "-" + entity.getEndTime());
+        viewHolder.txt_traineeSchedule_training2stColumn.setText(entity.getBookings().getTraining_type());
+        if (entity.getBookings().getTrainer_accepted() == 1) {
             viewHolder.cancleBooking.setVisibility(View.VISIBLE);
             viewHolder.pendingbtn.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             viewHolder.pendingbtn.setVisibility(View.VISIBLE);
             viewHolder.cancleBooking.setVisibility(View.GONE);
         }
@@ -77,13 +80,26 @@ public class TraineeScheduleListItemBinder extends ViewBinder<Slot> {
                     @Override
                     public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
 
+                        if (response.body().getUserDeleted() == 0) {
                             deleteListener.OndeleteTrainee(position);
+                        } else {
+                            final DialogHelper dialogHelper = new DialogHelper(dockActivity);
+                            dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
 
+                                    dialogHelper.hideDialog();
+                                    dockActivity.popBackStackTillEntry(0);
+                                    dockActivity.addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                                }
+                            });
+                            dialogHelper.showDialog();
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseWrapper> call, Throwable t) {
-                        Log.e("DetailedScreenFragment",t.toString());
+                        Log.e("DetailedScreenFragment", t.toString());
                     }
                 });
 
@@ -91,7 +107,6 @@ public class TraineeScheduleListItemBinder extends ViewBinder<Slot> {
         });
 
     }
-
 
 
     public static class ViewHolder extends BaseViewHolder {
@@ -104,6 +119,7 @@ public class TraineeScheduleListItemBinder extends ViewBinder<Slot> {
         private AnyTextView txt_traineeSchedule_training2stColumn;
         private Button cancleBooking;
         private Button pendingbtn;
+
         public ViewHolder(View view) {
 
             txt_traineeSchedule_1stColumn = (AnyTextView) view.findViewById(R.id.txt_traineeSchedule_1stColumn);
@@ -112,8 +128,8 @@ public class TraineeScheduleListItemBinder extends ViewBinder<Slot> {
             txt_traineeSchedule_timeslot2stColumn = (AnyTextView) view.findViewById(R.id.txt_traineeSchedule_timeslot2stColumn);
             txt_traineeSchedule_training = (AnyTextView) view.findViewById(R.id.txt_traineeSchedule_training);
             txt_traineeSchedule_training2stColumn = (AnyTextView) view.findViewById(R.id.txt_traineeSchedule_training2stColumn);
-            cancleBooking = (Button)view.findViewById(R.id.btn_training_Cancle_Submit);
-            pendingbtn = (Button)view.findViewById(R.id.btn_pending);
+            cancleBooking = (Button) view.findViewById(R.id.btn_training_Cancle_Submit);
+            pendingbtn = (Button) view.findViewById(R.id.btn_pending);
 
         }
     }
