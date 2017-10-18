@@ -79,7 +79,7 @@ public class TrainerAvailListFragment extends BaseFragment {
             public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call,
                                    Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
 
-                if (response.body().getUserDeleted()==0) {
+                if (response.body().getUserDeleted() == 0) {
                     getUserData(response.body().getResult());
                 } else {
                     final DialogHelper dialogHelper = new DialogHelper(getMainActivity());

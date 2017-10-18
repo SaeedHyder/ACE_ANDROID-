@@ -16,7 +16,6 @@ import com.app.ace.R;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.fragments.abstracts.BaseFragment;
-import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.DialogHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.SearchPeopleListItemBinder;
@@ -118,8 +117,7 @@ public class SearchTraineeFragment extends BaseFragment {
         if (resultuser.size() <= 0) {
             txt_noresult.setVisibility(View.VISIBLE);
             SearchTrainer_ListView.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             txt_noresult.setVisibility(View.GONE);
             SearchTrainer_ListView.setVisibility(View.VISIBLE);
         }

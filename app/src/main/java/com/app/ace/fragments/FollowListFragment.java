@@ -9,13 +9,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.app.ace.R;
-
 import com.app.ace.entities.FollowDataItem;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.UserNotificatoin;
-import com.app.ace.entities.YouDataItem;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.FollowListItemBinder;
@@ -41,9 +40,9 @@ public class FollowListFragment extends BaseFragment {
 
     private ArrayListAdapter<FollowDataItem> adapter;
 
-    private ArrayList<FollowDataItem> userCollection ;
+    private ArrayList<FollowDataItem> userCollection;
 
-    private ArrayList<String> arrChildCollection ;
+    private ArrayList<String> arrChildCollection;
 
 
     public static FollowListFragment newInstance() {
@@ -83,12 +82,22 @@ public class FollowListFragment extends BaseFragment {
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
                     getDockActivity().onLoadingFinished();
+                    if (response.body().getUserDeleted() == 0) {
+                        setDataInNOtificationList(response.body().getResult());
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-                    setDataInNOtificationList(response.body().getResult());
-
-                }
-                else
-                {
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
+                } else {
                     getDockActivity().onLoadingFinished();
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
@@ -110,24 +119,22 @@ public class FollowListFragment extends BaseFragment {
         if (result.size() <= 0) {
             txt_noresult.setVisibility(View.VISIBLE);
             listView.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             txt_noresult.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
         }
 
-        for(UserNotificatoin item : result) {
+        for (UserNotificatoin item : result) {
 
-            try{
-            if(item.getAction_type().contains("post")) {
-                arrChildCollection = new ArrayList<>();
-                arrChildCollection.add(item.getPost().getPost_image());
-            }
+            try {
+                if (item.getAction_type().contains("post")) {
+                    arrChildCollection = new ArrayList<>();
+                    arrChildCollection.add(item.getPost().getPost_image());
+                }
 
-                userCollection.add(new FollowDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(),arrChildCollection ,getDockActivity().getDate(item.getCreated_at()),item.getSender_id()));
+                userCollection.add(new FollowDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), arrChildCollection, getDockActivity().getDate(item.getCreated_at()), item.getSender_id()));
 
-        }catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

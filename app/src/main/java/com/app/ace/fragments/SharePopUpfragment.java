@@ -21,7 +21,6 @@ import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.SharePopUpItemsEnt;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.fragments.abstracts.BaseFragment;
-import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.DialogHelper;
 import com.app.ace.ui.adapters.RecyclerViewAdapterSharePop;
 import com.app.ace.ui.views.AnyEditTextView;
@@ -35,11 +34,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
-import static com.app.ace.R.id.edit_sendTo;
-import static com.app.ace.fragments.CommentSectionFragment.POSTID;
 
-
-public class SharePopUpfragment extends BaseFragment implements View.OnClickListener,TextWatcher {
+public class SharePopUpfragment extends BaseFragment implements View.OnClickListener, TextWatcher {
 
     @InjectView(R.id.btn_Cancel)
     Button btn_Cancel;
@@ -89,9 +85,9 @@ public class SharePopUpfragment extends BaseFragment implements View.OnClickList
                              Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.fragment_share_pop, container, false);
-        SharePopup=view;
+        SharePopup = view;
 
-       // getUserData();
+        // getUserData();
 
         // getUserData();
 
@@ -102,7 +98,7 @@ public class SharePopUpfragment extends BaseFragment implements View.OnClickList
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.lv_SendTo);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getDockActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        mAdapter = new RecyclerViewAdapterSharePop(searchedArray,getDockActivity(),post_pic_path);
+        mAdapter = new RecyclerViewAdapterSharePop(searchedArray, getDockActivity(), post_pic_path);
        /* RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());*/
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -128,7 +124,6 @@ public class SharePopUpfragment extends BaseFragment implements View.OnClickList
     }
 
 
-
     private void setListener() {
 
         btn_Cancel.setOnClickListener(this);
@@ -137,36 +132,36 @@ public class SharePopUpfragment extends BaseFragment implements View.OnClickList
 
     private void getNewMsgUserData(final View view) {
 
-            Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchAllUsers(tv_Search.getText().toString(),getMainActivity().selectedLanguage());
+        Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchAllUsers(tv_Search.getText().toString(), getMainActivity().selectedLanguage());
 
-            callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
-                @Override
-                public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call,
-                                       Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
-                    hideKeyboard();
-                    if (response.body().getUserDeleted()==0) {
-                        bindview(response.body().getResult());
-                        setDataInAdapter(view, userCollection);
-                    } else {
-                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
-                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+        callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call,
+                                   Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
+                hideKeyboard();
+                if (response.body().getUserDeleted() == 0) {
+                    bindview(response.body().getResult());
+                    setDataInAdapter(view, userCollection);
+                } else {
+                    final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                    dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-                                dialogHelper.hideDialog();
-                                getDockActivity().popBackStackTillEntry(0);
-                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
-                            }
-                        });
-                        dialogHelper.showDialog();
-                    }
+                            dialogHelper.hideDialog();
+                            getDockActivity().popBackStackTillEntry(0);
+                            getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                        }
+                    });
+                    dialogHelper.showDialog();
                 }
+            }
 
-                @Override
-                public void onFailure(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Throwable t) {
-                    Log.e("Search", t.toString());
-                }
-            });
+            @Override
+            public void onFailure(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Throwable t) {
+                Log.e("Search", t.toString());
+            }
+        });
 
     }
 
@@ -175,10 +170,9 @@ public class SharePopUpfragment extends BaseFragment implements View.OnClickList
         if (resultuser.size() <= 0) {
             txt_noresult.setVisibility(View.VISIBLE);
             //lv_newMessage.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             txt_noresult.setVisibility(View.GONE);
-           // lv_newMessage.setVisibility(View.VISIBLE);
+            // lv_newMessage.setVisibility(View.VISIBLE);
         }
 
         for (UserProfile user : resultuser
@@ -186,8 +180,6 @@ public class SharePopUpfragment extends BaseFragment implements View.OnClickList
             userCollection.add(user);
         }
     }
-
-
 
 
     @Override
@@ -217,7 +209,7 @@ public class SharePopUpfragment extends BaseFragment implements View.OnClickList
     public void afterTextChanged(Editable s) {
 
 
-        setDataInAdapter(SharePopup,getSearchedArray(s.toString()));
+        setDataInAdapter(SharePopup, getSearchedArray(s.toString()));
 
 
     }
@@ -230,7 +222,7 @@ public class SharePopUpfragment extends BaseFragment implements View.OnClickList
         ArrayList<UserProfile> arrayList = new ArrayList<>();
 
         for (UserProfile item : userCollection) {
-            String UserName=item.getFirst_name()+" "+item.getLast_name();
+            String UserName = item.getFirst_name() + " " + item.getLast_name();
             if (UserName.contains(keyword)) {
                 arrayList.add(item);
             }

@@ -15,6 +15,7 @@ import com.app.ace.entities.FollowersCountListEnt;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.FollowersCountListBinder;
@@ -31,7 +32,7 @@ import roboguice.inject.InjectView;
  * Created by muniyemiftikhar on 5/2/2017.
  */
 
-public class FollowersCountListFragment  extends BaseFragment {
+public class FollowersCountListFragment extends BaseFragment {
 
     @InjectView(R.id.listViewFollowersCount)
     private ListView listView;
@@ -115,10 +116,10 @@ public class FollowersCountListFragment  extends BaseFragment {
             listView.setVisibility(View.VISIBLE);
         }
 
-        for(FollowersCountListEnt msg : followersCountListEntArrayList){
+        for (FollowersCountListEnt msg : followersCountListEntArrayList) {
 
-            FollowersuserCollection.add(new FollowersCountDataItem(msg.getProfile_image(),msg.getFirst_name()
-                    +" "+msg.getLast_name(),msg.getId()));
+            FollowersuserCollection.add(new FollowersCountDataItem(msg.getProfile_image(), msg.getFirst_name()
+                    + " " + msg.getLast_name(), msg.getId()));
 
             //  userCollection.add(new InboxDataItem(msg.getReceiver().getProfile_image(),msg.getReceiver().getFirst_name()+" "+msg.getReceiver().getLast_name(),msg.getMessage().getMessage_text(),msg.getMessage().getConversation_id()));
 
@@ -167,11 +168,22 @@ public class FollowersCountListFragment  extends BaseFragment {
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    getFollowers(response.body().getResult());
+                    if (response.body().getUserDeleted() == 0) {
+                        getFollowers(response.body().getResult());
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-                }
-
-                else {
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
+                } else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
 

@@ -180,8 +180,22 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
             @Override
             public void onResponse(Call<ResponseWrapper<ArrayList<ScheduleEnt>>> call, Response<ResponseWrapper<ArrayList<ScheduleEnt>>> response) {
 
-                bindData(response.body().getResult());
-                loadingFinished();
+                if (response.body().getUserDeleted() == 0) {
+                    bindData(response.body().getResult());
+                    loadingFinished();
+                } else {
+                    final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                    dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            dialogHelper.hideDialog();
+                            getDockActivity().popBackStackTillEntry(0);
+                            getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                        }
+                    });
+                    dialogHelper.showDialog();
+                }
             }
 
             @Override
@@ -227,7 +241,7 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
     }
 
     private void bindView() {
-        listItemBinder = new ScheduleExpendableList(getDockActivity(), this);
+        listItemBinder = new ScheduleExpendableList(getDockActivity(), getDockActivity(), this);
         adapter = new ArrayListExpandableAdapter<>(getDockActivity(),
                 listDataHeader,
                 listDataChild,
@@ -397,11 +411,25 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
                     loadingFinished();
-                    showBookingDialog();
+                    if (response.body().getUserDeleted() == 0) {
+                        showBookingDialog();
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
 
                 } else {
                     loadingFinished();
-                    EndDate=null;
+                    EndDate = null;
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
 
                 }
@@ -650,8 +678,8 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
                                 public void afterTextChanged(Editable s) {
 
                                     if (checkprevious(txtTo, txtFrom)) {
-                                    if (!slot2fromedit)
-                                        checkorder(s, SecondtxtTo, 4);
+                                        if (!slot2fromedit)
+                                            checkorder(s, SecondtxtTo, 4);
 
                                     }
                                 }
@@ -983,8 +1011,9 @@ public class TrainingBookingCalenderFragment extends BaseFragment implements Vie
         slot3fromedit = false;
         slot2fromedit = false;
     }
-    private void removefromhashmap(Integer key){
-        if (ScheduleHashMap.containsKey(key)){
+
+    private void removefromhashmap(Integer key) {
+        if (ScheduleHashMap.containsKey(key)) {
             ScheduleHashMap.remove(key);
         }
     }

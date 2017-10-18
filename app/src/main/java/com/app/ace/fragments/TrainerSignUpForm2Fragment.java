@@ -522,11 +522,12 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
             case R.id.txt_Location:
 
-                if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())){
-                MapControllerFragment mapControllerFragment = MapControllerFragment.newInstance();
-                mapControllerFragment.setDelegate(this);
+                if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
+                    MapControllerFragment mapControllerFragment = MapControllerFragment.newInstance();
+                    mapControllerFragment.setDelegate(this);
 
-                DialogFactory.showMapControllerDialog(getDockActivity(), mapControllerFragment);}
+                    DialogFactory.showMapControllerDialog(getDockActivity(), mapControllerFragment);
+                }
 
                 break;
 
@@ -620,28 +621,29 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
                         if (response.body().getUserDeleted() == 0) {
 
-                        AppConstants.user_id = response.body().getResult().getId();
-                        AppConstants._token = response.body().getResult().get_token();
-                        prefHelper.setToken(AppConstants._token);
-                        prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
-                        prefHelper.setUsrId(response.body().getResult().getId());
-                        prefHelper.putUser(response.body().getResult());
+                            AppConstants.user_id = response.body().getResult().getId();
+                            AppConstants._token = response.body().getResult().get_token();
+                            prefHelper.setToken(AppConstants._token);
+                            prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
+                            prefHelper.setUsrId(response.body().getResult().getId());
+                            prefHelper.putUser(response.body().getResult());
 
-                        if (response.body().getResult().getUser_type().equals(AppConstants.trainee)) {
+                            if (response.body().getResult().getUser_type().equals(AppConstants.trainee)) {
 
-                            //AppConstants.is_show_trainer = false;
+                                //AppConstants.is_show_trainer = false;
 
-                        } else {
-                            //AppConstants.is_show_trainer = true;
-                        }
+                            } else {
+                                //AppConstants.is_show_trainer = true;
+                            }
 
-                        getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(signupFormConstants.getUserName(), signupFormConstants.getEmail()), "VarificationCodeFragment");
+                            getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(signupFormConstants.getUserName(), signupFormConstants.getEmail()), "VarificationCodeFragment");
                         /*showSuccessDialog();
                         getDockActivity().showHome();*/
 
+                        } else {
+                            UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                        }
                     } else {
-                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                    }  } else {
 
                         final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
                         dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {

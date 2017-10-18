@@ -21,6 +21,7 @@ import com.app.ace.entities.TrainerBooking;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.CameraHelper;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.TraineeSchedule;
 import com.app.ace.retrofit.GsonFactory;
@@ -65,8 +66,8 @@ public class NotificationListingFragment extends BaseFragment implements View.On
     @InjectView(R.id.iv_profile)
     private ImageView iv_profile;
     private boolean loading = false;
-    int offset=0;
-    int limit=10;
+    int offset = 0;
+    int limit = 10;
 
     private ArrayList<Slot> userCollection = new ArrayList<>();
 
@@ -100,20 +101,33 @@ public class NotificationListingFragment extends BaseFragment implements View.On
         setListener();
 
 
-
-        notificationService(0,10);
+        notificationService(0, 10);
 
     }
 
-    private void notificationService(int offset,int limit) {
+    private void notificationService(int offset, int limit) {
 
         Call<ResponseWrapper<NewNotificationEnt>> callback = webService.getAppNotification(prefHelper.getUserId(), offset, limit);
         System.out.println(prefHelper.getUserId());
         callback.enqueue(new Callback<ResponseWrapper<NewNotificationEnt>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<NewNotificationEnt>> call, Response<ResponseWrapper<NewNotificationEnt>> response) {
-                getNotificationData(response.body().getResult().getNotification());
-                prefHelper.setBadgeCount(0);
+                if (response.body().getUserDeleted() == 0) {
+                    getNotificationData(response.body().getResult().getNotification());
+                    prefHelper.setBadgeCount(0);
+                } else {
+                    final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                    dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            dialogHelper.hideDialog();
+                            getDockActivity().popBackStackTillEntry(0);
+                            getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                        }
+                    });
+                    dialogHelper.showDialog();
+                }
             }
 
             @Override
@@ -217,7 +231,6 @@ public class NotificationListingFragment extends BaseFragment implements View.On
     }
 
 
-
     @Override
     public void getTraineeSchedule(final NotificationEnt entity) {
 
@@ -229,7 +242,21 @@ public class NotificationListingFragment extends BaseFragment implements View.On
             public void onResponse(Call<ResponseWrapper<TrainerBooking>> call, Response<ResponseWrapper<TrainerBooking>> response) {
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                    setTraineeData(response.body().getResult(), entity);
+                    if (response.body().getUserDeleted() == 0) {
+                        setTraineeData(response.body().getResult(), entity);
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
                 } else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
@@ -295,7 +322,6 @@ public class NotificationListingFragment extends BaseFragment implements View.On
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
     }
-
 
 
     private static class CustomLoadingListItemCreator implements LoadingListItemCreator {

@@ -413,7 +413,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
         }
 
 		/*try {
-			if(resultCode != 1) {
+            if(resultCode != 1) {
 				twitterLogin.onActivityResult(requestCode, resultCode, data);
 			}
 			else{

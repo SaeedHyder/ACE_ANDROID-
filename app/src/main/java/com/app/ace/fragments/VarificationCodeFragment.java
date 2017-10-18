@@ -193,7 +193,7 @@ public class VarificationCodeFragment extends BaseFragment implements View.OnCli
 
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                        if (response.body().getUserDeleted()==0) {
+                        if (response.body().getUserDeleted() == 0) {
                             UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                         } else {
                             final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
