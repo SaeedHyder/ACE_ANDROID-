@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 
 import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
+import com.app.ace.entities.Notification;
 import com.app.ace.entities.NotificationEnt;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.ChatFragment;
@@ -30,7 +31,7 @@ import static com.app.ace.R.id.detailLayout;
  * Created by khan_muhammad on 3/20/2017.
  */
 
-public class NotificationListItemBinder extends ViewBinder<NotificationEnt> implements View.OnClickListener {
+public class NotificationListItemBinder extends ViewBinder<Notification> implements View.OnClickListener {
 
     private ImageLoader imageLoader;
     private DockActivity context;
@@ -52,7 +53,7 @@ public class NotificationListItemBinder extends ViewBinder<NotificationEnt> impl
     }
 
     @Override
-    public void bindView(final NotificationEnt entity, final int position, int grpPosition,
+    public void bindView(final Notification entity, final int position, int grpPosition,
                          View view, Activity activity) {
 
 
@@ -60,22 +61,22 @@ public class NotificationListItemBinder extends ViewBinder<NotificationEnt> impl
         viewHolder.container.setTag(entity);
         viewHolder.container.setOnClickListener(this);
         viewHolder.txtNotificationText.setText(entity.getMessage());
-        viewHolder.txtNotificationDate.setText(context.getDate(entity.getCreated_at()));
+        viewHolder.txtNotificationDate.setText(context.getDate(entity.getSender().getCreated_at()));
 
         viewHolder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(entity.getAction_type().equals("booking")){
+                if(entity.getActionType().equals("booking")){
                   //  traineeSchedule.getTraineeSchedule(entity);
-                    context.addDockableFragment(DetailedScreenFragment.newInstance(entity.getAction_id()), "DetailedScreenFragment");
+                    context.addDockableFragment(DetailedScreenFragment.newInstance(entity.getActionType()), "DetailedScreenFragment");
                 }
-                else if(entity.getAction_type().equals("review")){
+                else if(entity.getActionType().equals("review")){
                     //  traineeSchedule.getTraineeSchedule(entity);
                     context.addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(preferenceHelper.getUserId())), "DetailedScreenFragment");
                 }
-                else if(entity.getAction_type().equals("conversation")){
-                    context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getAction_id()
-                    ),String.valueOf(entity.getSender_id()),""), "ChatFragment");
+                else if(entity.getActionType().equals("conversation")){
+                    context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getActionType()
+                    ),String.valueOf(entity.getSenderId()),""), "ChatFragment");
                 }
             }
         });

@@ -13,6 +13,7 @@ import com.app.ace.entities.GetTraineeBookings;
 import com.app.ace.entities.GoogleGeoCodeResponse;
 import com.app.ace.entities.HomeResultEnt;
 import com.app.ace.entities.MsgEnt;
+import com.app.ace.entities.NewNotificationEnt;
 import com.app.ace.entities.NotificationEnt;
 import com.app.ace.entities.PostsEnt;
 import com.app.ace.entities.RegistrationResult;
@@ -178,8 +179,10 @@ public interface WebService {
     );
 
     @GET("notification/app/{user_id}")
-    Call<ResponseWrapper<ArrayList<NotificationEnt>>> getAppNotification(
-            @Path("user_id") String userid
+    Call<ResponseWrapper<NewNotificationEnt>> getAppNotification(
+            @Path("user_id") String userid,
+            @Query("offset") int offset,
+            @Query("limit") int limit
     );
 
     @DELETE("booking/{booking_id}")
