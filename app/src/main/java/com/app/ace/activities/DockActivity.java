@@ -124,7 +124,7 @@ public abstract class DockActivity extends RoboFragmentActivity implements
     {
         try
         {
-            
+
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date value = formatter.parse(OurDate);
