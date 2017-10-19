@@ -101,7 +101,7 @@ public class NotificationListingFragment extends BaseFragment implements View.On
         setListener();
 
 
-        notificationService(0, 10);
+        notificationService(0, 1000);
 
     }
 

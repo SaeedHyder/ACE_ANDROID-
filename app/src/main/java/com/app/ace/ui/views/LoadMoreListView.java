@@ -62,7 +62,7 @@ public class LoadMoreListView extends ListView implements OnScrollListener {
     public void setLoadMoreStatusView(View v) {
         removeFooterView(mFooterView);
         mFooterView = v;
-//      mLoadMoreStatusView = mFooterView.findViewById(R.id.load_more_progress_bar);
+        mLoadMoreStatusView = mFooterView;
         addFooterView(mFooterView);
     }
 
@@ -104,7 +104,7 @@ public class LoadMoreListView extends ListView implements OnScrollListener {
             boolean loadMore = firstVisibleItem + visibleItemCount >= totalItemCount;
             if (!mIsLoadingMore && loadMore
                     && mCurrentScrollState != SCROLL_STATE_IDLE) {
-                // setLoading(true);
+                  setLoading(true);
                 onLoadMore();
             }
         }
@@ -131,7 +131,7 @@ public class LoadMoreListView extends ListView implements OnScrollListener {
     }
 
     public void onLoadMoreComplete() {
-        //setLoading(false);
+          setLoading(false);
     }
 
     public interface OnLoadMoreListener {

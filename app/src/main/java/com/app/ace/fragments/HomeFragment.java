@@ -13,12 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import com.app.ace.BaseApplication;
 import com.app.ace.R;
@@ -43,8 +41,6 @@ import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.LoadMoreListView;
 import com.app.ace.ui.views.TitleBar;
 import com.app.ace.videocompression.MediaController;
-import com.paginate.Paginate;
-import com.paginate.abslistview.LoadingListItemCreator;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -59,11 +55,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
-import static com.app.ace.R.id.listView;
-
 public class HomeFragment extends BaseFragment implements View.OnClickListener,
-        MainActivity.ImageSetter, IOnLike, SetHomeUpdatedData
-{
+        MainActivity.ImageSetter, IOnLike, SetHomeUpdatedData {
 
     public File postImage;
     public File videoThumb;
@@ -76,7 +69,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     String Lastcomment;
     String NameCommentor;
     @InjectView(R.id.gridView)
-    private LoadMoreListView gridView;
+    private ListView ListView;
     @InjectView(R.id.iv_Home)
     private ImageView iv_Home;
     @InjectView(R.id.iv_Calander)
@@ -97,9 +90,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     private TitleBar titleBar;
     private CountBadge badge;
     private boolean loading = false;
-    private int offset=0;
-    private int limit=2;
-    private int totalCount=100;
+    private int offset = 0;
+    private int limit = 5;
+    private int totalCount = 100;
+    int onload;
+
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -128,14 +123,18 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         super.onViewCreated(view, savedInstanceState);
         loadingFinished();
 
+
         System.out.println(prefHelper.getBadgeCount());
-        getAllHomePosts(offset,limit);
+        getAllHomePosts(offset, limit);
         setListener();
         if (getMainActivity().isNotificationTap) {
             getMainActivity().isNotificationTap = false;
             showNotification();
         }
         onNotificationReceived();
+
+        //  handler.removeCallbacks(fakeCallback);
+
     }
 
     private void setListener() {
@@ -145,25 +144,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         iv_Camera.setOnClickListener(this);
         iv_Fav.setOnClickListener(this);
         iv_profile.setOnClickListener(this);
-
-
         getMainActivity().setImageSetter(this);
 
-        gridView.setOnLoadMoreListener(new LoadMoreListView.OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                if (adapter.getCount() <= totalCount - 1) {
-                    offset = offset + limit;
-                    getAllHomePosts(offset, limit);
-                    gridView.onLoadMoreComplete();
-
-
-                }
-            }
-        });
-
-
     }
+
 
     private void onNotificationReceived() {
         broadcastReceiver = new BroadcastReceiver() {
@@ -227,10 +211,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
         if (postsEntArrayList.size() <= 0) {
             txt_no_data.setVisibility(View.VISIBLE);
-            gridView.setVisibility(View.GONE);
+            ListView.setVisibility(View.GONE);
         } else {
             txt_no_data.setVisibility(View.GONE);
-            gridView.setVisibility(View.VISIBLE);
+            ListView.setVisibility(View.VISIBLE);
         }
 
         for (PostsEnt postsEnt : postsEntArrayList) {
@@ -249,15 +233,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     }
 
 
-    private void bindData(List<HomeListDataEnt> dataCollection) {
+    private void bindData(final List<HomeListDataEnt> dataCollection) {
         adapter.clearList();
-        gridView.setAdapter(adapter);
+        ListView.setAdapter(adapter);
         adapter.addAll(dataCollection);
         adapter.notifyDataSetChanged();
-
     }
-
-
 
 
     @Override
@@ -389,7 +370,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
         loadingStarted();
 
-        Call<ResponseWrapper<HomeResultEnt>> callBack = webService.getAllHomePosts(prefHelper.getUserId(),offset,limit,getMainActivity().selectedLanguage());
+        Call<ResponseWrapper<HomeResultEnt>> callBack = webService.getAllHomePosts(prefHelper.getUserId(), getMainActivity().selectedLanguage());
 
         callBack.enqueue(new Callback<ResponseWrapper<HomeResultEnt>>() {
             @Override
@@ -402,8 +383,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
                         {
                             loadingFinished();
                             if (response.body().getUserDeleted() == 0) {
+
                                 setHomePostsData(response.body().getResult().getPosts(), response.body().getResult().getIs_approved_user());
-                                totalCount=response.body().getResult().getTotal_records();
+
+                                totalCount = response.body().getResult().getTotal_records();
                                 if (response.body().getResult().getIs_approved_user() == 1) {
                                     ll_UnApproved.setVisibility(View.GONE);
                                 } else {
@@ -427,7 +410,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
                         }
                     } else {
                         loadingFinished();
-                        gridView.setVisibility(View.INVISIBLE);
+                        ListView.setVisibility(View.INVISIBLE);
                         txt_no_data.setVisibility(View.VISIBLE);
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                     }
@@ -442,7 +425,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
             @Override
             public void onFailure(Call<ResponseWrapper<HomeResultEnt>> call, Throwable t) {
                 loadingFinished();
-                gridView.setVisibility(View.INVISIBLE);
+                ListView.setVisibility(View.INVISIBLE);
                 txt_no_data.setVisibility(View.VISIBLE);
                 txt_no_data.setText(getString(R.string.no_internet));
                 UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
@@ -450,6 +433,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         });
 
     }
+
+
 
     @Override
     public void onClick(View v) {
@@ -657,7 +642,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         }
 
     }
-
 
 
     private class VideoCompressor extends AsyncTask<Void, Void, Boolean> {

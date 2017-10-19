@@ -156,8 +156,6 @@ public interface WebService {
     @POST("post")
     Call<ResponseWrapper<HomeResultEnt>> getAllHomePosts(
             @Field("user_id") String user_id,
-            @Query("offset") int offset,
-            @Query("limit") int limit,
             @Query("language") String language);
 
     @FormUrlEncoded

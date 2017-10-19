@@ -639,13 +639,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         titleBar.showSearchButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (prefHelper.getUser().getUser_type().equals(AppConstants.trainer))
-                    getDockActivity().addDockableFragment(SearchTraineeFragment.newInstance(), "SearchTraineeFragment");
-                else
-                    popUpDropDown(v);
-
-
+                popUpDropDown(v);
             }
         });
 
