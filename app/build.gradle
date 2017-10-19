@@ -47,6 +47,8 @@ android {
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
+        maven { url "https://jitpack.io" }
+        mavenCentral()
     }
 
     dependencies {
@@ -64,6 +66,7 @@ repositories {
 }
 
 dependencies {
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile('com.andreabaccega:android-form-edittext:1.2.1@aar') {
         exclude module: 'design'
