@@ -54,7 +54,8 @@ import roboguice.inject.InjectView;
  * Created by khan_muhammad on 3/13/2017.
  */
 
-public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, MainActivity.ImageSetter, IGetLocation {
+public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnClickListener,
+        CompoundButton.OnCheckedChangeListener, MainActivity.ImageSetter, IGetLocation {
 
 
     @InjectView(R.id.btnSignUp)

@@ -56,6 +56,21 @@ public class FollowListFragment extends BaseFragment {
         adapter = new ArrayListAdapter<FollowDataItem>(getDockActivity(), new FollowListItemBinder(getDockActivity()));
     }
 
+    @Override
+    public void setTitleBar(TitleBar titleBar) {
+        super.setTitleBar(titleBar);
+        titleBar.hideButtons();
+        titleBar.showBackButton();
+        titleBar.setSubHeading(getString(R.string.Follow));
+
+       /* titleBar.showAddButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+            }
+        });*/
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -112,35 +127,6 @@ public class FollowListFragment extends BaseFragment {
         });
     }
 
-    private void setDataInNOtificationList(ArrayList<UserNotificatoin> result) {
-
-        userCollection = new ArrayList<>();
-
-        if (result.size() <= 0) {
-            txt_noresult.setVisibility(View.VISIBLE);
-            listView.setVisibility(View.GONE);
-        } else {
-            txt_noresult.setVisibility(View.GONE);
-            listView.setVisibility(View.VISIBLE);
-        }
-
-        for (UserNotificatoin item : result) {
-
-            try {
-                if (item.getAction_type().contains("post")) {
-                    arrChildCollection = new ArrayList<>();
-                    arrChildCollection.add(item.getPost().getPost_image());
-                }
-
-                userCollection.add(new FollowDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), arrChildCollection, getDockActivity().getDate(item.getCreated_at()), item.getSender_id(),item.getPost().getPost_thumb_image()));
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        bindData(userCollection);
-    }
-
   /* private void getUserData() {
 
         userCollection= new ArrayList<>();
@@ -166,26 +152,45 @@ public class FollowListFragment extends BaseFragment {
 
     }*/
 
+    private void setDataInNOtificationList(ArrayList<UserNotificatoin> result) {
+
+        userCollection = new ArrayList<>();
+
+        if (result.size() <= 0) {
+            txt_noresult.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+        } else {
+            txt_noresult.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+        }
+
+        for (UserNotificatoin item : result) {
+
+            try {
+                if (item.getAction_type().contains("post")) {
+                    arrChildCollection = new ArrayList<>();
+
+
+                    if (item.getPost().getPost_thumb_image() != null && !item.getPost().getPost_thumb_image().trim().equals("")) {
+                        arrChildCollection.add(item.getPost().getPost_thumb_image());
+                    }else {
+                        arrChildCollection.add(item.getPost().getPost_image());
+                    }
+                }
+                userCollection.add(new FollowDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), arrChildCollection, getDockActivity().getDate(item.getCreated_at()), item.getSender_id(), item.getPost().getPost_thumb_image()));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        bindData(userCollection);
+    }
+
     private void bindData(ArrayList<FollowDataItem> userCollection) {
         adapter.clearList();
         listView.setAdapter(adapter);
         adapter.addAll(userCollection);
         adapter.notifyDataSetChanged();
 
-    }
-
-    @Override
-    public void setTitleBar(TitleBar titleBar) {
-        super.setTitleBar(titleBar);
-        titleBar.hideButtons();
-        titleBar.showBackButton();
-        titleBar.setSubHeading(getString(R.string.Follow));
-
-       /* titleBar.showAddButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
-            }
-        });*/
     }
 }

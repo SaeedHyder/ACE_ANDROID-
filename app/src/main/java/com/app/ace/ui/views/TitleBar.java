@@ -205,7 +205,7 @@ public class TitleBar extends RelativeLayout {
 
     public CountBadge initBadge(Context mcontext) {
         imgNotificationCounter.setVisibility(View.VISIBLE);
-        CountBadge.Factory circle = new CountBadge.Factory(BadgeShape.circle(.7f, Gravity.END | Gravity.TOP),
+        CountBadge.Factory circle = new CountBadge.Factory(BadgeShape.circle(.6f, Gravity.END | Gravity.TOP),
                 getResources().getColor(R.color.white), getResources().getColor(R.color.black));
 
         Badger<CountBadge> badger = Badger.sett(getResources().getDrawable(R.drawable.ic_badge), circle);
@@ -219,7 +219,7 @@ public class TitleBar extends RelativeLayout {
     public void addtoBadge(int count) {
         try {
             if (count > 99) {
-                CountBadge.Factory circle = new CountBadge.Factory(BadgeShape.oval(1f, 2f, Gravity.BOTTOM),
+                CountBadge.Factory circle = new CountBadge.Factory(BadgeShape.oval(0.8f, 1.6f, Gravity.BOTTOM),
                         getResources().getColor(R.color.white), getResources().getColor(R.color.black));
 
                 Badger<CountBadge> badger = Badger.sett(getResources().getDrawable(R.drawable.ic_badge), circle);

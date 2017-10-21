@@ -103,7 +103,7 @@
             android:layout_marginStart="@dimen/x20"
             android:layout_toEndOf="@id/btnRight2"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_launcher"
+            android:src="@drawable/notfication"
             android:visibility="gone" />
 
 
@@ -133,8 +133,7 @@
             android:id="@+id/imgNotificationCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:foregroundGravity="top"
+            android:layout_centerInParent="true"
             android:scaleType="centerInside" />
     </RelativeLayout>
 
