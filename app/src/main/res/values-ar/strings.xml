@@ -182,7 +182,7 @@
     <string name="english">English</string>
 
     <string name="notifications">إخطارات</string>
-    <string name="prvate_or_public_account"> حساب خاص\/ حساب عام</string>
+    <string name="prvate_or_public_account"> حساب خاص / حساب عام</string>
     <string name="contact_us">اتصل بنا</string>
 
     <string name="confirm_pass">تأكيد كلمة المرور الجديدة</string>
@@ -233,7 +233,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="to">إلى</string>
-
+    <string name="too">إلى</string>
 
     <string name="comments">تعليقات</string>
     <string name="_13m">13m</string>
@@ -500,6 +500,24 @@
     <string name="no_commnets_found">لا توجد تعليقات</string>
     <string name="phone_should_be_11">يجب أن يكون رقم الجوال 11 حرفا أو أكثر</string>
     <string name="deatils">تفاصيل</string>
+    <string name="are_you_sure_you_want_to_logout">  هل أنت متأكد أنك تريد تسجيل الخروج؟</string>
+    <string name="yes">نعم فعلا</string>
+    <string name="no">لا</string>
+    <string name="select_photo_video">حدد صورة / فيديو</string>
+    <string name="how_do_you_want_photo">كيف تريد تعيين مشاركتك؟</string>
+    <string name="video">فيديو</string>
+    <string name="select_video">حدد الفيديو</string>
+    <string name="how_do_select_video">كيف تريد تعيين الفيديو الخاص بك؟</string>
+    <string name="camera">الة تصوير</string>
+    <string name="gallery">صالة عرض</string>
+    <string name="imgae">صورة</string>
+    <string name="select_image">اختر صورة</string>
+    <string name="how_do_you_want__to_selectphoto">كيف تريد تعيين صورتك؟</string>
+    <string name="upload_photo">حمل الصورة</string>
+    <string name="enter_current_password">إدخل كلمة السر الحالية</string>
+    <string name="password_not_matched">كلمة المرور غير متطابقة</string>
+    <string name="are_you_sure_you_want_to_language">هل تريد بالتأكيد تغيير اللغة؟</string>
+
 
 
 </resources>

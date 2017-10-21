@@ -72,6 +72,7 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
     private static String SLOT = "SLOT";
     private static String ACTIONID = "actionid";
     private static String ENTITY = "entity";
+    private int actionID;
     private NotificationEnt slotIdEntity;
     private String slotId;
     private ArrayListAdapter<DetailedScreenItem> adapter;
@@ -83,9 +84,9 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
         return new DetailedScreenFragment();
     }
 
-    public static DetailedScreenFragment newInstance(String actionId) {
+    public static DetailedScreenFragment newInstance(int actionId) {
         Bundle args = new Bundle();
-        args.putString(ACTIONID, actionId);
+        args.putInt(ACTIONID, actionId);
         DetailedScreenFragment fragment = new DetailedScreenFragment();
         fragment.setArguments(args);
         return fragment;
@@ -106,7 +107,7 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            ACTIONID = getArguments().getString(ACTIONID);
+            actionID = getArguments().getInt(ACTIONID);
             // Toast.makeText(getDockActivity(), ConversationId, Toast.LENGTH_LONG).show();
         }
        /* if (getArguments() != null) {
@@ -144,7 +145,7 @@ public class DetailedScreenFragment extends BaseFragment implements View.OnClick
     }
 
     private void bookingRequetData(final View view) {
-        Call<ResponseWrapper<BookingRequestEnt>> callback = webService.bookingRequest(prefHelper.getUserId(), ACTIONID);
+        Call<ResponseWrapper<BookingRequestEnt>> callback = webService.bookingRequest(prefHelper.getUserId(), actionID);
 
         callback.enqueue(new Callback<ResponseWrapper<BookingRequestEnt>>() {
             @Override

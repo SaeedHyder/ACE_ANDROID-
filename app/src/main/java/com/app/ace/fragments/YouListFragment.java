@@ -130,10 +130,10 @@ public class YouListFragment extends BaseFragment implements FollowService {
             try {
 
                 if (item.getAction_type().contains("post")) {
-                    userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), item.getPost().getPost_image(), getDockActivity().getDate(item.getCreated_at()), item.getSender_id(), null));
+                    userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), item.getPost().getPost_image(), getDockActivity().getDate(item.getCreated_at()), item.getSender_id(), null,item.getPost().getPost_thumb_image()));
 
                 } else {
-                    userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), null, getDockActivity().getDate(item.getCreated_at()), item.getSender_id(), item.getIs_following()));
+                    userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), null, getDockActivity().getDate(item.getCreated_at()), item.getSender_id(), item.getIs_following(),item.getPost().getPost_thumb_image()));
 
                 }
             } catch (Exception e) {

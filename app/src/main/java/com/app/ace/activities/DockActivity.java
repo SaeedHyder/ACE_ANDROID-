@@ -119,6 +119,22 @@ public abstract class DockActivity extends RoboFragmentActivity implements
 
 
     }
+    public void addDockableFragmentwithnoBackstack(BaseFragment frag) {
+
+        try {
+            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager()
+                    .beginTransaction();
+
+            transaction.replace(getDockFrameLayoutId(), frag, frag.getClass().getSimpleName());
+            //transaction.commitAllowingStateLoss();
+            transaction
+                    .addToBackStack(null).commitAllowingStateLoss(); //ommit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
     public String getDate(String OurDate)
     {

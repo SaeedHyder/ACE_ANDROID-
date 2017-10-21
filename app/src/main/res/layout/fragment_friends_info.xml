@@ -119,7 +119,7 @@
             android:background="@drawable/rectangle_buton"
             android:gravity="center"
             android:layout_marginTop="@dimen/x8"
-            android:text="Unfollow"
+            android:text="@string/UnFollow"
             android:visibility="gone"
             android:textColor="@color/txtview_title_color" />
 

@@ -570,7 +570,7 @@ public interface WebService {
     @GET("service-request-detail")
     Call<ResponseWrapper<BookingRequestEnt>> bookingRequest(
             @Query("user_id") String user_id,
-            @Query("request_id") String request_id
+            @Query("request_id") int request_id
             //language not required
     );
 

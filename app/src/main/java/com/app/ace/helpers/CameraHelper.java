@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.widget.ImageView;
 
+import com.app.ace.R;
 import com.app.ace.activities.MainActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -394,24 +395,24 @@ public class CameraHelper {
 	public static void uploadMedia(final
 										 MainActivity activity) {
 		AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(activity);
-		myAlertDialog.setTitle("Select Photo / Video");
-		myAlertDialog.setMessage("How do you want to set your post?");
+		myAlertDialog.setTitle(R.string.select_photo_video);
+		myAlertDialog.setMessage(R.string.how_do_you_want_photo);
 
-		myAlertDialog.setPositiveButton("Video",
+		myAlertDialog.setPositiveButton(R.string.video,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface arg0, int arg1) {
 
 						AlertDialog.Builder videoDialog=new AlertDialog.Builder(activity);
-						videoDialog.setTitle("Select Video");
-						videoDialog.setMessage("How do you want to set your video?");
-						videoDialog.setPositiveButton("Camera", new DialogInterface.OnClickListener() {
+						videoDialog.setTitle(R.string.select_video);
+						videoDialog.setMessage(R.string.how_do_select_video);
+						videoDialog.setPositiveButton(R.string.camera, new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 
 								activity.captureVideo();
 							}
 						});
-						videoDialog.setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
+						videoDialog.setNegativeButton(R.string.gallery, new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								activity.pickVideo();
@@ -425,19 +426,19 @@ public class CameraHelper {
 					}
 				});
 
-		myAlertDialog.setNegativeButton("Image",
+		myAlertDialog.setNegativeButton(R.string.imgae,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface arg0, int arg1) {
 						AlertDialog.Builder imageDialog=new AlertDialog.Builder(activity);
-						imageDialog.setTitle("Select Image");
-						imageDialog.setMessage("How do you want to set your photo?");
-						imageDialog.setPositiveButton("Camera", new DialogInterface.OnClickListener() {
+						imageDialog.setTitle(R.string.select_image);
+						imageDialog.setMessage(R.string.how_do_you_want__to_selectphoto);
+						imageDialog.setPositiveButton(R.string.camera, new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								activity.takePicture();
 							}
 						});
-						imageDialog.setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
+						imageDialog.setNegativeButton(R.string.gallery, new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								activity.chooseImage();
@@ -453,17 +454,17 @@ public class CameraHelper {
 	public static void uploadPhotoDialog(final
 										 MainActivity activity) {
 		AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(activity);
-		myAlertDialog.setTitle("Upload Photo");
-		myAlertDialog.setMessage("How do you want to set your photo?");
+		myAlertDialog.setTitle(R.string.upload_photo);
+		myAlertDialog.setMessage(R.string.how_do_you_want__to_selectphoto);
 
-		myAlertDialog.setPositiveButton("Gallery",
+		myAlertDialog.setPositiveButton(R.string.gallery,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface arg0, int arg1) {
 						activity.chooseImage();
 					}
 				});
 
-		myAlertDialog.setNegativeButton("Camera",
+		myAlertDialog.setNegativeButton(R.string.camera,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface arg0, int arg1) {
 						activity.takePicture();

@@ -45,12 +45,12 @@
             <com.app.ace.ui.views.AnyTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/x8"
+                android:layout_marginStart="@dimen/x8"
                 android:layout_marginBottom="@dimen/x3"
                 android:text="@string/first_name"
                 android:textColor="@color/txtview_title_color"
                 android:textSize="@dimen/x12"
-                android:gravity="left"
+                android:gravity="start"
                 app:typeface="Roboto-Regular.ttf"
                 />
 
@@ -84,12 +84,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/x10"
-                android:layout_marginLeft="@dimen/x8"
+                android:layout_marginStart="@dimen/x8"
                 android:layout_marginBottom="@dimen/x3"
                 android:text="@string/last_name"
                 android:textColor="@color/txtview_title_color"
                 android:textSize="@dimen/x12"
-                android:gravity="left"
+                android:gravity="start"
                 app:typeface="Roboto-Regular.ttf"
                 />
 
@@ -122,12 +122,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/x10"
-                android:layout_marginLeft="@dimen/x8"
+                android:layout_marginStart="@dimen/x8"
                 android:layout_marginBottom="@dimen/x3"
                 android:text="@string/email_address"
                 android:textColor="@color/txtview_title_color"
                 android:textSize="@dimen/x12"
-                android:gravity="left"
+                android:gravity="start"
                 app:typeface="Roboto-Regular.ttf"
                 />
 
@@ -159,12 +159,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/x10"
-                android:layout_marginLeft="@dimen/x8"
+                android:layout_marginStart="@dimen/x8"
                 android:layout_marginBottom="@dimen/x3"
                 android:text="@string/password"
                 android:textColor="@color/txtview_title_color"
                 android:textSize="@dimen/x12"
-                android:gravity="left"
+                android:gravity="start"
                 app:typeface="Roboto-Regular.ttf"
                 />
 
@@ -197,12 +197,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/x10"
-                android:layout_marginLeft="@dimen/x8"
+                android:layout_marginStart="@dimen/x8"
                 android:layout_marginBottom="@dimen/x3"
                 android:text="@string/mobile_number"
                 android:textColor="@color/txtview_title_color"
                 android:textSize="@dimen/x12"
-                android:gravity="left"
+                android:gravity="start"
                 app:typeface="Roboto-Regular.ttf"
                 />
 
@@ -257,13 +257,14 @@
                         android:id="@+id/btnSignUp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"
+                        android:layout_gravity="end"
                         android:layout_marginTop="@dimen/x10"
-                        android:background="@drawable/next_bttn_next"
+                        android:background="@drawable/next_bttn_plain"
                         android:gravity="center"
                         android:textColor="@color/white"
                         android:textSize="@dimen/x16"
                         android:text="@string/signup"
+                        android:visibility="visible"
 
                         />
 
@@ -273,12 +274,12 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
                         android:layout_marginTop="@dimen/x10"
-                        android:visibility="invisible"
+                        android:visibility="gone"
                         android:background="@drawable/next_bttn_plain"
                         android:gravity="center"
                         android:textColor="@color/white"
                         android:textSize="@dimen/x16"
-                        android:text="@string/signup"
+                        android:text="@string/next"
 
                         />
 

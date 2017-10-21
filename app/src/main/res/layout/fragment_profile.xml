@@ -37,7 +37,9 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/riv_profile_pic"
                     android:layout_width="@dimen/x70"
-                    android:layout_height="@dimen/x70" />
+                    android:layout_height="@dimen/x70"
+                    android:background="@drawable/profile_container"
+                    android:layout_gravity="center"/>
 
                 <!--<android.support.v4.widget.CircleImageView
                     android:layout_width="@dimen/x70"

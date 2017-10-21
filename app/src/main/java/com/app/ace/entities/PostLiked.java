@@ -14,6 +14,7 @@ public class PostLiked {
     String created_at;
     String updated_at;
     String post_image;
+    String post_thumb_image;
 
     public int getId() {
         return id;
@@ -77,5 +78,13 @@ public class PostLiked {
 
     public void setPost_image(String post_image) {
         this.post_image = post_image;
+    }
+
+    public String getPost_thumb_image() {
+        return post_thumb_image;
+    }
+
+    public void setPost_thumb_image(String post_thumb_image) {
+        this.post_thumb_image = post_thumb_image;
     }
 }

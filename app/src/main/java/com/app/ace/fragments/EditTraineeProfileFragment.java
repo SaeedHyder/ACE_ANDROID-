@@ -87,6 +87,12 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (prefHelper.isLanguageArabic()) {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        } else {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
+
         imageLoader = ImageLoader.getInstance();
         sp_Gender();
         sp_Certification();
@@ -123,7 +129,7 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
                     RequestBody.create(MediaType.parse("image/*"), profilePic));
         }
         if (edtMobileNumber.getText().toString().length() < 11) {
-            UIHelper.showShortToastInCenter(getDockActivity(), "Mobile Number should be 11 or more characters long");
+            UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.phone_should_be_11));
         } else {
             RegistrationResult result = prefHelper.getUser();
             result.setUser_status(edtTagLine.getText().toString());

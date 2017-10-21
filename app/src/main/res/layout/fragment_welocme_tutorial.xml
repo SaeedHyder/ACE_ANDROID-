@@ -43,7 +43,7 @@
             android:layout_above="@+id/pagerIndicator"
             android:layout_marginBottom="@dimen/x5"
             android:text="@string/get_started"
-            android:visibility="visible"
+            android:visibility="gone"
             android:textColor="@color/white"
             android:textSize="@dimen/x16"
 

@@ -4,6 +4,7 @@ package com.app.ace.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 
 import roboguice.inject.InjectView;
 
+import static android.os.Build.VERSION_CODES.M;
 import static com.app.ace.R.id.cb_arabic;
 import static com.app.ace.R.id.cb_english;
 
@@ -119,6 +121,7 @@ public class WelcomeTutorialFragment extends BaseFragment implements BaseSliderV
         imageSlider.setIndicatorVisibility(PagerIndicator.IndicatorVisibility.Visible);
         imageSlider.stopAutoCycle();
 
+
     }
 
 
@@ -127,13 +130,25 @@ public class WelcomeTutorialFragment extends BaseFragment implements BaseSliderV
 
     }
 
+
+
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        if(position==4){
+
+        imageSlider.stopAutoCycle();
+        }
 
     }
 
     @Override
     public void onPageSelected(int position) {
+       /* if (imageSlider.getCurrentPosition() == 4) {
+            imageSlider.setCurrentPosition(1, false);
+        }
+        if (imageSlider.getCurrentPosition() == 0) {
+            imageSlider.setCurrentPosition(3, false); // false will prevent sliding                      animation of view pager
+        }*/
 
         switch (position) {
 

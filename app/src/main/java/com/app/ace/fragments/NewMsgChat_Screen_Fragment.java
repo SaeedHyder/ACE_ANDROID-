@@ -127,7 +127,7 @@ public class NewMsgChat_Screen_Fragment extends BaseFragment implements View.OnC
                         } else {
                             hideKeyboard();
                             ArrayList<MsgEnt> msg = response.body().getResult();
-
+                            getActivity().getSupportFragmentManager().popBackStack();
                             getDockActivity().addDockableFragment(ChatFragment.newInstance(
                                     String.valueOf(msg.get(0).getMessage().getConversation_id()), String.valueOf(msg.get(0).getReceiver().getId())
                                     , username, post_path, String.valueOf(msg.get(0).getIs_following())

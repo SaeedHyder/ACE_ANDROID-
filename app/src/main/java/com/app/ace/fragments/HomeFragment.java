@@ -31,6 +31,7 @@ import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.DialogHelper;
+import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.TokenUpdater;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.IOnLike;
@@ -89,7 +90,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     private DockActivity activity;
     private TitleBar titleBar;
     private CountBadge badge;
-    private boolean loading = false;
     private int offset = 0;
     private int limit = 5;
     private int totalCount = 100;
@@ -123,17 +123,20 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         super.onViewCreated(view, savedInstanceState);
         loadingFinished();
 
+       if( InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()) ) {
+           getAllHomePosts(offset, limit);
+       }
+           System.out.println(prefHelper.getBadgeCount());
 
-        System.out.println(prefHelper.getBadgeCount());
-        getAllHomePosts(offset, limit);
-        setListener();
-        if (getMainActivity().isNotificationTap) {
-            getMainActivity().isNotificationTap = false;
-            showNotification();
-        }
-        onNotificationReceived();
+           setListener();
+           if (getMainActivity().isNotificationTap) {
+               getMainActivity().isNotificationTap = false;
+               showNotification();
+           }
+           onNotificationReceived();
 
-        //  handler.removeCallbacks(fakeCallback);
+           //  handler.removeCallbacks(fakeCallback);
+
 
     }
 

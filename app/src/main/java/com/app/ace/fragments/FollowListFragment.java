@@ -132,7 +132,7 @@ public class FollowListFragment extends BaseFragment {
                     arrChildCollection.add(item.getPost().getPost_image());
                 }
 
-                userCollection.add(new FollowDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), arrChildCollection, getDockActivity().getDate(item.getCreated_at()), item.getSender_id()));
+                userCollection.add(new FollowDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), arrChildCollection, getDockActivity().getDate(item.getCreated_at()), item.getSender_id(),item.getPost().getPost_thumb_image()));
 
             } catch (Exception e) {
                 e.printStackTrace();

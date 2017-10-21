@@ -46,6 +46,7 @@ public class FollowListItemBinder extends ViewBinder<FollowDataItem> {
         String[] SplitTime=entity.getCreated_at().split(" ");
         String time=SplitTime[1];
 
+
         imageLoader.displayImage(entity.getUserImage(), viewHolder.userImage);
         viewHolder.txtUserName.setText(entity.getUserName());
         viewHolder.txtUserDetail.setText(entity.getUserMessage());

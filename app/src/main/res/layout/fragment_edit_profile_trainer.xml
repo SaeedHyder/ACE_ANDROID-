@@ -19,7 +19,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/x30"
             android:scaleType="centerCrop"
-            android:background="@drawable/profile_pic_trainer"
+            android:background="@drawable/profile_container"
             android:text="@string/change_profile_photo"
             android:textColor="@color/white"/>
 

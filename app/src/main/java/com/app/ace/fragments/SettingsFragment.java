@@ -129,13 +129,56 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         cb_english.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                prefHelper.putLang(getDockActivity(), "en");
+
+                final DialogHelper dialog = new DialogHelper(getDockActivity());
+                dialog.initLanguage(R.layout.language_dialog, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        prefHelper.putLang(getDockActivity(), "en");
+                        dialog.hideDialog();
+                    }
+                }, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                       if(prefHelper.isLanguageArabic()){
+                           cb_arabic.setChecked(true);
+                       }
+                       else{
+                           cb_english.setChecked(true);
+                       }
+
+                        dialog.hideDialog();
+                    }
+                });
+                dialog.showDialog();
+
+
             }
         });
         cb_arabic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                prefHelper.putLang(getDockActivity(), "ar");
+                final DialogHelper dialog = new DialogHelper(getDockActivity());
+                dialog.initLanguage(R.layout.language_dialog, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        prefHelper.putLang(getDockActivity(), "ar");
+                        dialog.hideDialog();
+                    }
+                }, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(prefHelper.isLanguageArabic()){
+                            cb_arabic.setChecked(true);
+                        }
+                        else{
+                            cb_english.setChecked(true);
+                        }
+                        dialog.hideDialog();
+                    }
+                });
+                dialog.showDialog();
+
             }
         });
 
@@ -180,10 +223,10 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
         if (!edit_newPassword.getText().toString().equals("")) {
             if (txt_CurrentPassword.getText().toString().equals("")) {
-                UIHelper.showLongToastInCenter(getDockActivity(), "Enter Current Password");
+                UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.enter_current_password));
             }
             if (!edit_newPassword.getText().toString().equals(edit_conNewPassword.getText().toString())) {
-                UIHelper.showLongToastInCenter(getDockActivity(), "Password Not Matched");
+                UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.password_not_matched));
             } else {
 
                 Call<ResponseWrapper> callBack = webService.ChangePassword(prefHelper.getUserId(), edit_conNewPassword.getText().toString(), txt_CurrentPassword.getText().toString());
@@ -331,10 +374,26 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         switch (v.getId()) {
 
             case R.id.txt_logout:
-                prefHelper.setLoginStatus(false);
-                prefHelper.setIsTwitterLogin(false);
-                getDockActivity().popBackStackTillEntry(0);
-                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+
+                final DialogHelper dialog = new DialogHelper(getDockActivity());
+                dialog.initlogout(R.layout.logout_dialog, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        prefHelper.setLoginStatus(false);
+                        prefHelper.setIsTwitterLogin(false);
+                        getDockActivity().popBackStackTillEntry(0);
+                        getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                        dialog.hideDialog();
+                    }
+                }, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.hideDialog();
+                    }
+                });
+                dialog.showDialog();
+
+
 
                 break;
         }

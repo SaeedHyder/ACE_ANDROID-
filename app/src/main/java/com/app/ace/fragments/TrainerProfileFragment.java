@@ -259,6 +259,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             @Override
             public void onResponse(Call<ResponseWrapper<UserProfile>> call, Response<ResponseWrapper<UserProfile>> response) {
 
+                if(response!=null){
                 if (response.body().getUserDeleted() == 0) {
 
                     loadingFinished();
@@ -383,15 +384,16 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                                 }
                             } else {
 
-                                getMainActivity().titleBar.showSettingButton(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
+                                if(getMainActivity()!=null) {
+                                    getMainActivity().titleBar.showSettingButton(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
 
-                                        getDockActivity().addDockableFragment(SettingsFragment.newInstance(isNotificationOn, isPublicAccount), "SettingsFragment");
+                                            getDockActivity().addDockableFragment(SettingsFragment.newInstance(isNotificationOn, isPublicAccount), "SettingsFragment");
 
-                                    }
-                                });
-
+                                        }
+                                    });
+                                }
                                 if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
                                     btn_edit_or_follow.setVisibility(View.GONE);
                                     btn_followTrainee.setVisibility(View.VISIBLE);
@@ -443,7 +445,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                         loadingFinished();
                     }
 
-                } else {
+                }} else {
                     final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
                     dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
                         @Override
@@ -1033,7 +1035,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
         final PopupWindow popupWindow = new PopupWindow(
                 popupView,
-                (int) getResources().getDimension(R.dimen.x100),
+                (int) getResources().getDimension(R.dimen.x130),
                 (int) getResources().getDimension(R.dimen.x100));
 
         txt_TrainerProfileFrag = (AnyTextView) popupView.findViewById(R.id.txt_Trainer);

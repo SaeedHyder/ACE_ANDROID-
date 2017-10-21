@@ -83,7 +83,7 @@ public class FollowingFragment extends BaseFragment{
        if( adapter.getCount()>0)
        {adapter.clearList();}
 
-        adapter.addFragment(new FollowListFragment(),getString(R.string.Follow));
+        adapter.addFragment(new FollowListFragment(),getString(R.string.Following));
         adapter.addFragment(new YouListFragment(),getString(R.string.You));
         pager.setAdapter(adapter);
         pager.getAdapter().notifyDataSetChanged();
@@ -98,7 +98,7 @@ public class FollowingFragment extends BaseFragment{
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
-        titleBar.setSubHeading(getString(R.string.Follow));
+        titleBar.setSubHeading(getString(R.string.Following));
 
        /* titleBar.showAddButton(new View.OnClickListener() {
             @Override

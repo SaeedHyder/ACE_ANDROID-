@@ -204,6 +204,12 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
         // TODO Auto-generated method stub
         super.onViewCreated(view, savedInstanceState);
 
+        if (prefHelper.isLanguageArabic()) {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        } else {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
+
         btnSignUp.setText(getString(R.string.signup));
 
         setListeners();

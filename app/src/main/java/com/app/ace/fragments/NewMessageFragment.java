@@ -157,8 +157,12 @@ public class NewMessageFragment extends BaseFragment implements TextWatcher {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 String UserName = userCollection.get(i).getFirst_name() + " " + userCollection.get(i).getLast_name();
-                getDockActivity().popBackStackTillEntry(1);
+                //getDockActivity().popBackStackTillEntry(1);
+
+//                getActivity().getSupportFragmentManager().beginTransaction().remove(NewMessageFragment.this).commit();
+                getActivity().getSupportFragmentManager().popBackStack();
                 getDockActivity().addDockableFragment(NewMsgChat_Screen_Fragment.newInstance(userCollection.get(i).getId(), UserName), "NewMsgChat_Screen_Fragment");
+
                 //  getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(userCollection.get(i).));
             }
         });
@@ -173,6 +177,7 @@ public class NewMessageFragment extends BaseFragment implements TextWatcher {
         titleBar.setSubHeading(getString(R.string.New_Message));
 
     }
+
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {

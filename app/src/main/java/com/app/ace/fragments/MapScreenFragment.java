@@ -212,7 +212,7 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
         }*/
 
         if (edtsearch.getText().toString().equals("")) {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(24.807825187774412, 46.74573140058601), AppConstants.zoomIn));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), AppConstants.zoomIn));
         } else {
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(userCollection.get(userCollection.size() - 1).getLat()), Double.valueOf(userCollection.get(userCollection.size() - 1).getLng())), AppConstants.zoomInToTrainer));
 

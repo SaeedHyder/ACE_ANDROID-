@@ -253,8 +253,6 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
             @Override
             public void onClick(View v) {
 
-
-
                 if(homeListDataEnt.getIs_liked().contains("0"))
                 {
                     IOnLike.setLikeHit(homeListDataEnt.getId());
@@ -268,28 +266,7 @@ public class HomeFragmentItemBinder extends ViewBinder<HomeListDataEnt>  {
                     IOnLike.setLikeHit(homeListDataEnt.getId());
                     setHomeUpdatedData.setUpdatedData(position,"0",homeListDataEnt.getTotoal_likes()-1,homeListDataEnt.getTotal_comments());
 
-                   /* if (is_liked1) {
-                        viewHolder.iv_like.setImageResource(R.drawable.heart_icon2);
-                        IOnLike.setLikeHit(homeListDataEnt.getId(), viewHolder.txt_likes_count, homeListDataEnt);
-                      //  count++;
-                        is_liked1=false;
-                    }
-                    else
-                    {
-                        viewHolder.iv_like.setImageResource(R.drawable.heart_icon3);
-                        IOnLike.setLikeHit(homeListDataEnt.getId(), viewHolder.txt_likes_count, homeListDataEnt);
-                        is_liked1=true;
-
-                    }*/
                 }
-
-               /* Runnable r = new Runnable() {
-                    public void run(){
-                        viewHolder.iv_like.setImageResource(R.drawable.heart_icon2);
-                    }
-                };
-                viewHolder.iv_like.postDelayed(r,1000);*/
-
 
 
             }

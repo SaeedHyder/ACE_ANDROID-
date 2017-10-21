@@ -37,12 +37,11 @@ public class NotificationListItemBinder extends ViewBinder<Notification> impleme
     private DockActivity context;
     private BasePreferenceHelper preferenceHelper;
 
-    TraineeSchedule traineeSchedule;
-    public NotificationListItemBinder(DockActivity context ,TraineeSchedule traineeSchedule,BasePreferenceHelper preferenceHelper) {
+
+    public NotificationListItemBinder(DockActivity context,BasePreferenceHelper preferenceHelper) {
         super(R.layout.notification_list_item);
         this.context = context;
         imageLoader = ImageLoader.getInstance();
-        this.traineeSchedule=traineeSchedule;
         this.preferenceHelper=preferenceHelper;
     }
 
@@ -61,21 +60,21 @@ public class NotificationListItemBinder extends ViewBinder<Notification> impleme
         viewHolder.container.setTag(entity);
         viewHolder.container.setOnClickListener(this);
         viewHolder.txtNotificationText.setText(entity.getMessage());
-        viewHolder.txtNotificationDate.setText(context.getDate(entity.getSender().getCreated_at()));
+        viewHolder.txtNotificationDate.setText(context.getDate(entity.getCreatedAt()));
 
         viewHolder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(entity.getActionType().equals("booking")){
                   //  traineeSchedule.getTraineeSchedule(entity);
-                    context.addDockableFragment(DetailedScreenFragment.newInstance(entity.getActionType()), "DetailedScreenFragment");
+                    context.addDockableFragment(DetailedScreenFragment.newInstance(entity.getActionId()), "DetailedScreenFragment");
                 }
                 else if(entity.getActionType().equals("review")){
                     //  traineeSchedule.getTraineeSchedule(entity);
                     context.addDockableFragment(TrainerProfileFragment.newInstance(Integer.parseInt(preferenceHelper.getUserId())), "DetailedScreenFragment");
                 }
                 else if(entity.getActionType().equals("conversation")){
-                    context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getActionType()
+                    context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getActionId()
                     ),String.valueOf(entity.getSenderId()),""), "ChatFragment");
                 }
             }

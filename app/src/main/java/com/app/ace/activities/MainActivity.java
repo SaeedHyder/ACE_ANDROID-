@@ -142,8 +142,8 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
                     UIHelper.showLongToastInCenter(getApplicationContext(),
                             R.string.message_wait);
                 } else {
-                    popBackStackTillEntry(1);
-                    // popFragment();
+                   // popBackStackTillEntry(1);
+                     popFragment();
                     UIHelper.hideSoftKeyboard(getApplicationContext(),
                             titleBar);
                 }
