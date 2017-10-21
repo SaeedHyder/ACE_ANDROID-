@@ -41,6 +41,18 @@ public class DialogHelper {
     CalendarPickerView calendarView;
     Date StartDate;
 
+    public Dialog initLogoutDialog(int layoutID, View.OnClickListener onclicklistenerYes) {
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        this.dialog.setContentView(layoutID);
+        Button btnDeleteOk = (Button) dialog.findViewById(R.id.btnDeleteOk);
+        btnDeleteOk.setOnClickListener(onclicklistenerYes);
+
+        return this.dialog;
+    }
+
     public DialogHelper(Context context) {
         this.dialog = new Dialog(context);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -71,6 +83,28 @@ public class DialogHelper {
 
         this.dialog.setContentView(layoutID);
 
+        return this.dialog;
+    }
+
+    public Dialog initlogout(int layoutID, View.OnClickListener onokclicklistener, View.OnClickListener oncancelclicklistener) {
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        this.dialog.setContentView(layoutID);
+        Button okbutton = (Button) dialog.findViewById(R.id.btn_yes);
+        okbutton.setOnClickListener(onokclicklistener);
+        Button cancelbutton = (Button) dialog.findViewById(R.id.btn_No);
+        cancelbutton.setOnClickListener(oncancelclicklistener);
+        return this.dialog;
+    }
+
+    public Dialog initLanguage(int layoutID, View.OnClickListener onokclicklistener, View.OnClickListener oncancelclicklistener) {
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        this.dialog.setContentView(layoutID);
+        Button okbutton = (Button) dialog.findViewById(R.id.btn_yes);
+        okbutton.setOnClickListener(onokclicklistener);
+        Button cancelbutton = (Button) dialog.findViewById(R.id.btn_No);
+        cancelbutton.setOnClickListener(oncancelclicklistener);
         return this.dialog;
     }
 

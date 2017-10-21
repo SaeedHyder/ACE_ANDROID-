@@ -14,8 +14,9 @@
         <com.app.ace.ui.views.AnyTextView
             android:id="@+id/txt_noresult"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:paddingBottom="@dimen/x5"
             android:paddingLeft="@dimen/x8"
             android:paddingTop="@dimen/x2"
@@ -30,6 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/x3"
+        android:visibility="visible"
         android:divider="@null"
         />
 

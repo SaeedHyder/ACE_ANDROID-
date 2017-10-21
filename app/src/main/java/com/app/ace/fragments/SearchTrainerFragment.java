@@ -17,6 +17,7 @@ import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.SearchPeopleListItemBinder;
 import com.app.ace.ui.views.AnyEditTextView;
@@ -41,6 +42,7 @@ public class SearchTrainerFragment extends BaseFragment {
     private TextView txt_noresult;
 
     private AnyEditTextView edtsearch;
+    String language = "";
     private ArrayListAdapter<UserProfile> adapter;
 
     private ArrayList<UserProfile> userCollection = new ArrayList<>();
@@ -67,6 +69,7 @@ public class SearchTrainerFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        edtsearch = getTitleBar().showSearchBar();
         SearchTrainee_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -74,29 +77,48 @@ public class SearchTrainerFragment extends BaseFragment {
             }
         });
 
+        if (prefHelper.isLanguageArabic()) {
+            language = "ar";
+        } else
+            language = "en";
+
+        getSearchUserData();
 
     }
 
     private void getSearchUserData() {
-        if (edtsearch != null) {
-            Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edtsearch.getText().toString(),AppConstants.trainer);
 
-            callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
-                @Override
-                public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
-                    //  resultuser = response.body().getResult();
-                    if (response.body()!= null)
-                    bindview(response.body().getResult());
-                    // System.out.println(response.body().getResult().get(0).getId());
-                }
+        Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edtsearch.getText().toString(), AppConstants.trainer, getMainActivity().selectedLanguage());
 
-                @Override
-                public void onFailure(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Throwable t) {
-                    Log.e("Search", t.toString());
-                }
-            });
+        callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
+                //  resultuser = response.body().getResult();
+                if (response.body() != null)
+                    if (response.body().getUserDeleted() == 0) {
+                        bindview(response.body().getResult());
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-        }
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
+                // System.out.println(response.body().getResult().get(0).getId());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Throwable t) {
+                Log.e("Search", t.toString());
+            }
+        });
+
     }
 
     private void bindview(ArrayList<UserProfile> resultuser) {
@@ -104,8 +126,7 @@ public class SearchTrainerFragment extends BaseFragment {
         if (resultuser.size() <= 0) {
             txt_noresult.setVisibility(View.VISIBLE);
             SearchTrainee_ListView.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             txt_noresult.setVisibility(View.GONE);
             SearchTrainee_ListView.setVisibility(View.VISIBLE);
         }

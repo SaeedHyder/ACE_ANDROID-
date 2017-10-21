@@ -3,6 +3,8 @@ package com.app.ace.activities;
 import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +12,7 @@ import android.support.v4.app.FragmentManager.BackStackEntry;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
+import android.util.DisplayMetrics;
 
 import com.app.ace.BaseApplication;
 import com.app.ace.R;
@@ -26,6 +29,7 @@ import com.google.inject.Inject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import roboguice.activity.RoboFragmentActivity;
@@ -52,13 +56,32 @@ public abstract class DockActivity extends RoboFragmentActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setCurrentLocale();
 
     }
-
+    public void setCurrentLocale() {
+        if (prefHelper.isLanguageArabic()) {
+            Resources resources = getResources();
+            DisplayMetrics dm = resources.getDisplayMetrics();
+            Configuration conf = resources.getConfiguration();
+            conf.locale = new Locale("ar");
+            resources.updateConfiguration(conf, dm);
+        } else {
+            Resources resources = getResources();
+            DisplayMetrics dm = resources.getDisplayMetrics();
+            Configuration conf = resources.getConfiguration();
+            conf.locale = new Locale("en");
+            resources.updateConfiguration(conf, dm);
+        }
+    }
     @Override
     protected void onPause() {
 
         super.onPause();
+    }
+
+    public DockActivity getDockActivity() {
+        return (DockActivity) this;
     }
 
     protected void onResume() {
@@ -96,11 +119,28 @@ public abstract class DockActivity extends RoboFragmentActivity implements
 
 
     }
+    public void addDockableFragmentwithnoBackstack(BaseFragment frag) {
+
+        try {
+            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager()
+                    .beginTransaction();
+
+            transaction.replace(getDockFrameLayoutId(), frag, frag.getClass().getSimpleName());
+            //transaction.commitAllowingStateLoss();
+            transaction
+                    .addToBackStack(null).commitAllowingStateLoss(); //ommit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
     public String getDate(String OurDate)
     {
         try
         {
+
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date value = formatter.parse(OurDate);

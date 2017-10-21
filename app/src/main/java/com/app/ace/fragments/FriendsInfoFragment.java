@@ -14,6 +14,7 @@ import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
@@ -91,9 +92,9 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
         Bundle args = new Bundle();
         args.putString(CONVERSATION_ID, conversationId);
         args.putString(Receiver_ID, receiver_ID);
-        args.putString(ISFOLLOWING,isFollowing);
-        args.putString(PROFILEIMAGE,profileImage);
-        args.putString(FULLNAME,fullName);
+        args.putString(ISFOLLOWING, isFollowing);
+        args.putString(PROFILEIMAGE, profileImage);
+        args.putString(FULLNAME, fullName);
         args.putString(SENDERBLOCK, String.valueOf(senderblock));
         args.putString(RECEIVERBLOCK, String.valueOf(receiverblock));
         args.putString(IS_RECEIVER_MUTE, String.valueOf(isReceiverMute));
@@ -112,12 +113,12 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
         if (getArguments() != null) {
             ConversationId = getArguments().getString(CONVERSATION_ID);
             receiverId = getArguments().getString(Receiver_ID);
-            IsFollowing=getArguments().getString(ISFOLLOWING);
-            ProfilePicture=getArguments().getString(PROFILEIMAGE);
-            FullName=getArguments().getString(FULLNAME);
-            SenderBlock=getArguments().getString(SENDERBLOCK);
-            ReceiverBlock=getArguments().getString(RECEIVERBLOCK);
-            IS_RECEIVER_MUTE=getArguments().getString(IS_RECEIVER_MUTE);
+            IsFollowing = getArguments().getString(ISFOLLOWING);
+            ProfilePicture = getArguments().getString(PROFILEIMAGE);
+            FullName = getArguments().getString(FULLNAME);
+            SenderBlock = getArguments().getString(SENDERBLOCK);
+            ReceiverBlock = getArguments().getString(RECEIVERBLOCK);
+            IS_RECEIVER_MUTE = getArguments().getString(IS_RECEIVER_MUTE);
         }
         imageLoader = ImageLoader.getInstance();
 
@@ -135,11 +136,9 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (IS_RECEIVER_MUTE.equals("0"))
-        {
+        if (IS_RECEIVER_MUTE.equals("0")) {
             muteConversation.setChecked(false);
-        }
-        else {
+        } else {
             muteConversation.setChecked(true);
         }
         Listners();
@@ -159,26 +158,19 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
         imageLoader.displayImage(ProfilePicture, ProfileImage);
         txt_UserName.setText(FullName);
 
-        if(prefHelper.getUserId().equals(receiverId)) {
-            if(SenderBlock.contains("0"))
-            {
+        if (prefHelper.getUserId().equals(receiverId)) {
+            if (SenderBlock.contains("0")) {
                 btn_Unblock.setVisibility(View.GONE);
                 btn_block.setVisibility(View.VISIBLE);
-            }
-            else
-            {
+            } else {
                 btn_Unblock.setVisibility(View.VISIBLE);
                 btn_block.setVisibility(View.GONE);
             }
-        }
-        else {
-            if(ReceiverBlock.contains("0"))
-            {
+        } else {
+            if (ReceiverBlock.contains("0")) {
                 btn_Unblock.setVisibility(View.GONE);
                 btn_block.setVisibility(View.VISIBLE);
-            }
-            else
-            {
+            } else {
                 btn_Unblock.setVisibility(View.VISIBLE);
                 btn_block.setVisibility(View.GONE);
             }
@@ -186,13 +178,10 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
         }
 
 
-        if(IsFollowing.contains("0"))
-        {
+        if (IsFollowing.contains("0")) {
             btn_follow.setVisibility(View.VISIBLE);
             btn_Unfollow.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             btn_follow.setVisibility(View.GONE);
             btn_Unfollow.setVisibility(View.VISIBLE);
         }
@@ -202,8 +191,8 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
 
     private void setBlockService(int x, int y) {
 
-        sender_block=x;
-        receiver_block=y;
+        sender_block = x;
+        receiver_block = y;
       /*  if(prefHelper.getUserId().equals(receiverId)){
              sender_block=x;
              receiver_block=y;}
@@ -212,7 +201,7 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
             sender_block=0;
             receiver_block=1;
         }*/
-        Call<ResponseWrapper> callBack = webService.BlockConversation(ConversationId,sender_block,receiver_block);
+        Call<ResponseWrapper> callBack = webService.BlockConversation(ConversationId, sender_block, receiver_block);
         callBack.enqueue(new Callback<ResponseWrapper>() {
             @Override
             public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
@@ -220,7 +209,22 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                   // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    if (response.body().getUserDeleted() == 0) {
+                        // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
+
 
                 } else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
@@ -231,8 +235,8 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
             public void onFailure(Call<ResponseWrapper> call, Throwable t) {
 
                 loadingFinished();
-                Log.e("FriendsInfo",t.toString());
-               // UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+                Log.e("FriendsInfo", t.toString());
+                // UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
             }
         });
     }
@@ -251,10 +255,24 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    if (response.body().getUserDeleted() == 0) {
+
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                    /* btn_follow.setVisibility(View.GONE);
                     btn_Unfollow.setVisibility(View.VISIBLE);*/
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
                 } else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
@@ -265,8 +283,8 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
             public void onFailure(Call<ResponseWrapper<FollowUser>> call, Throwable t) {
 
                 loadingFinished();
-                Log.e("FriendsInfo",t.toString());
-             //   UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+                Log.e("FriendsInfo", t.toString());
+                //   UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
 
             }
         });
@@ -286,10 +304,23 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    if (response.body().getUserDeleted() == 0) {
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                    /* btn_follow.setVisibility(View.VISIBLE);
                     btn_Unfollow.setVisibility(View.GONE);*/
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
                 } else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
@@ -305,22 +336,21 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
             }
         });
     }
+
     String mutecheck = "0";
-    void muteConversation()
-    {
+
+    void muteConversation() {
 
 
-        if(muteConversation.isChecked())
-        {
-            mutecheck="1";
-        }
-        else {
-            mutecheck="0";
+        if (muteConversation.isChecked()) {
+            mutecheck = "1";
+        } else {
+            mutecheck = "0";
         }
 
-        Call<ResponseWrapper<ArrayList<RegistrationResult>>>callBack = webService.MuteReciverConversation(
+        Call<ResponseWrapper<ArrayList<RegistrationResult>>> callBack = webService.MuteReciverConversation(
                 ConversationId,
-               prefHelper.getUserId(),
+                prefHelper.getUserId(),
                 mutecheck);
 
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<RegistrationResult>>>() {
@@ -330,11 +360,28 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                   // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    if (response.body().getUserDeleted() == 0) {
+                        // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
+
                 } else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseWrapper<ArrayList<RegistrationResult>>> call, Throwable t) {
                 UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
@@ -349,7 +396,7 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
-        titleBar.setSubHeading("Details");
+        titleBar.setSubHeading(getString(R.string.deatils));
 
     }
 
@@ -363,12 +410,10 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
                 btn_Unblock.setVisibility(View.VISIBLE);
                 btn_block.setVisibility(View.GONE);
 
-                if(prefHelper.getUserId().equals(receiverId)) {
+                if (prefHelper.getUserId().equals(receiverId)) {
                     setBlockService(1, 0);
-                }
-                else
-                {
-                    setBlockService(0,1);
+                } else {
+                    setBlockService(0, 1);
                 }
                 break;
 
@@ -377,12 +422,10 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
                 btn_Unblock.setVisibility(View.GONE);
                 btn_block.setVisibility(View.VISIBLE);
 
-                if(prefHelper.getUserId().equals(receiverId)) {
+                if (prefHelper.getUserId().equals(receiverId)) {
                     setBlockService(0, 0);
-                }
-                else
-                {
-                    setBlockService(0,0);
+                } else {
+                    setBlockService(0, 0);
                 }
                 break;
 
@@ -412,6 +455,6 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
                 break;
 
 
-
-    }}
+        }
+    }
 }

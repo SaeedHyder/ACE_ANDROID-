@@ -14,6 +14,7 @@ import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.AnyTextView;
@@ -30,7 +31,7 @@ import roboguice.inject.InjectView;
  * Created by khan_muhammad on 3/18/2017.
  */
 
-public class SettingsFragment extends BaseFragment implements View.OnClickListener{
+public class SettingsFragment extends BaseFragment implements View.OnClickListener {
     private static String NOTIFICATION_ON = "NOTIFICATION_ON";
     private static String PRIVATE_ACCOUNT = "PRIVATE_ACCOUNT";
     @InjectView(R.id.cb_english)
@@ -90,6 +91,17 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         toggle_private_or_public.setChecked(pubicAccount);
         cb_english.setChecked(true);
 
+        if (prefHelper.isLanguageArabic()) {
+            cb_arabic.setChecked(true);
+        } else {
+            cb_english.setChecked(true);
+        }
+        if (prefHelper.isLanguageArabic()) {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        } else {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
+
         setListeners();
 
     }
@@ -114,6 +126,62 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             }
         });
 
+        cb_english.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final DialogHelper dialog = new DialogHelper(getDockActivity());
+                dialog.initLanguage(R.layout.language_dialog, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        prefHelper.putLang(getDockActivity(), "en");
+                        dialog.hideDialog();
+                    }
+                }, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                       if(prefHelper.isLanguageArabic()){
+                           cb_arabic.setChecked(true);
+                       }
+                       else{
+                           cb_english.setChecked(true);
+                       }
+
+                        dialog.hideDialog();
+                    }
+                });
+                dialog.showDialog();
+
+
+            }
+        });
+        cb_arabic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final DialogHelper dialog = new DialogHelper(getDockActivity());
+                dialog.initLanguage(R.layout.language_dialog, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        prefHelper.putLang(getDockActivity(), "ar");
+                        dialog.hideDialog();
+                    }
+                }, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(prefHelper.isLanguageArabic()){
+                            cb_arabic.setChecked(true);
+                        }
+                        else{
+                            cb_english.setChecked(true);
+                        }
+                        dialog.hideDialog();
+                    }
+                });
+                dialog.showDialog();
+
+            }
+        });
+
     }
 
 
@@ -130,13 +198,11 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onClick(View v) {
 
-                if (!edit_newPassword.getText().toString().equals("") || !txt_CurrentPassword.getText().toString().equals("") || !edit_conNewPassword.getText().toString().equals("") ) {
-                        updateSetting();
-                    }
-                else
-                {
+                if (!edit_newPassword.getText().toString().equals("") || !txt_CurrentPassword.getText().toString().equals("") || !edit_conNewPassword.getText().toString().equals("")) {
+                    updateSetting();
+                } else {
                     contactUs();
-                    getDockActivity().addDockableFragment(HomeFragment.newInstance(),"HomeFragment");
+                    getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
                 }
 
 
@@ -157,10 +223,10 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
         if (!edit_newPassword.getText().toString().equals("")) {
             if (txt_CurrentPassword.getText().toString().equals("")) {
-                UIHelper.showLongToastInCenter(getDockActivity(), "Enter Current Password");
+                UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.enter_current_password));
             }
             if (!edit_newPassword.getText().toString().equals(edit_conNewPassword.getText().toString())) {
-                UIHelper.showLongToastInCenter(getDockActivity(), "Password Not Matched");
+                UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.password_not_matched));
             } else {
 
                 Call<ResponseWrapper> callBack = webService.ChangePassword(prefHelper.getUserId(), edit_conNewPassword.getText().toString(), txt_CurrentPassword.getText().toString());
@@ -171,9 +237,22 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                         loadingStarted();
                         if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                            UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                            getDockActivity().addDockableFragment(HomeFragment.newInstance(),"HomeFragment");
+                            if (response.body().getUserDeleted() == 0) {
+                                UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                            } else {
+                                final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                                dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
 
+                                        dialogHelper.hideDialog();
+                                        getDockActivity().popBackStackTillEntry(0);
+                                        getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                                    }
+                                });
+                                dialogHelper.showDialog();
+                            }
                             loadingFinished();
 
                         } else {
@@ -195,16 +274,29 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
     void contactUs() {
         if (!txt_contact_us_disc.getText().toString().equals("")) {
-            Call<ResponseWrapper> callBack = webService.ContactUs(prefHelper.getUserId(), txt_contact_us_disc.getText().toString());
+            Call<ResponseWrapper> callBack = webService.ContactUs(prefHelper.getUserId(), txt_contact_us_disc.getText().toString(), getMainActivity().selectedLanguage());
 
             callBack.enqueue(new Callback<ResponseWrapper>() {
                 @Override
                 public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                        loadingFinished();
-                        txt_contact_us_disc.setText("");
-                       // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                        if (response.body().getUserDeleted() == 0) {
+                            loadingFinished();
+                            txt_contact_us_disc.setText("");
+                            // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                        } else {
+                            final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                            dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
 
+                                    dialogHelper.hideDialog();
+                                    getDockActivity().popBackStackTillEntry(0);
+                                    getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                                }
+                            });
+                            dialogHelper.showDialog();
+                        }
                     } else {
                         loadingFinished();
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
@@ -232,7 +324,8 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         Call<ResponseWrapper<RegistrationResult>> callBack = webService.NotificationStatus(
                 RequestBody.create(MediaType.parse("text/plain"), prefHelper.getUserId()),
                 RequestBody.create(MediaType.parse("text/plain"), notification),
-                RequestBody.create(MediaType.parse("text/plain"), account));
+                RequestBody.create(MediaType.parse("text/plain"), account),
+                RequestBody.create(MediaType.parse("text/plain"), getMainActivity().selectedLanguage()));
         callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
@@ -240,7 +333,22 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
                     loadingFinished();
 
-                   // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    if (response.body().getUserDeleted() == 0) {
+
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
+                    // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
 
                 } else {
                     loadingFinished();
@@ -266,10 +374,26 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         switch (v.getId()) {
 
             case R.id.txt_logout:
-                prefHelper.setLoginStatus(false);
-                prefHelper.setIsTwitterLogin(false);
-                getDockActivity().popBackStackTillEntry(0);
-                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+
+                final DialogHelper dialog = new DialogHelper(getDockActivity());
+                dialog.initlogout(R.layout.logout_dialog, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        prefHelper.setLoginStatus(false);
+                        prefHelper.setIsTwitterLogin(false);
+                        getDockActivity().popBackStackTillEntry(0);
+                        getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                        dialog.hideDialog();
+                    }
+                }, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.hideDialog();
+                    }
+                });
+                dialog.showDialog();
+
+
 
                 break;
         }

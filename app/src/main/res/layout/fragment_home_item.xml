@@ -160,14 +160,14 @@
                 android:id="@+id/iv_do_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/x15"
+                android:layout_marginStart="@dimen/x15"
                 android:src="@drawable/comment_icon2" />
 
             <ImageView
                 android:id="@+id/iv_sendto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/x15"
+                android:layout_marginStart="@dimen/x15"
                 android:src="@drawable/arrow_icon" />
 
         </LinearLayout>
@@ -187,8 +187,8 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/x10"
-            android:paddingLeft="@dimen/x15"
-            android:paddingRight="@dimen/x10"
+            android:paddingStart="@dimen/x15"
+            android:paddingEnd="@dimen/x10"
             android:paddingTop="@dimen/x10">
 
             <ImageView
@@ -201,7 +201,7 @@
                 android:id="@+id/txt_likes_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/x5"
+                android:layout_marginStart="@dimen/x5"
                 android:gravity="center"
                 android:text="394 likes"
                 android:textColor="@color/dark_grey"
@@ -217,8 +217,8 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
 
-        android:paddingLeft="@dimen/x15"
-        android:paddingRight="@dimen/x10">
+        android:paddingStart="@dimen/x15"
+        android:paddingEnd="@dimen/x10">
 
         <com.app.ace.ui.views.AnyTextView
             android:id="@+id/txt_commenter_Name"
@@ -238,7 +238,7 @@
             android:id="@+id/txt_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x5"
+            android:layout_marginStart="@dimen/x5"
             android:gravity="center"
             android:text="Hi nice"
             android:textColor="@color/black"
@@ -258,8 +258,8 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/x20"
-            android:paddingLeft="@dimen/x16"
-            android:paddingRight="@dimen/x10">
+            android:paddingStart="@dimen/x16"
+            android:paddingEnd="@dimen/x10">
 
 
             <com.app.ace.ui.views.AnyTextView

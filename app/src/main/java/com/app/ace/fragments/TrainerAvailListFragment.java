@@ -13,6 +13,7 @@ import com.app.ace.R;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.fragments.abstracts.BaseFragment;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.TraineravaialListItemBinder;
 import com.app.ace.ui.views.TitleBar;
@@ -72,13 +73,27 @@ public class TrainerAvailListFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getTrainingSearch("null", body_building_type);
+        Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getTrainingSearch("null", body_building_type, getMainActivity().selectedLanguage());
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call,
                                    Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
 
-                getUserData(response.body().getResult());
+                if (response.body().getUserDeleted() == 0) {
+                    getUserData(response.body().getResult());
+                } else {
+                    final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                    dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            dialogHelper.hideDialog();
+                            getDockActivity().popBackStackTillEntry(0);
+                            getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                        }
+                    });
+                    dialogHelper.showDialog();
+                }
             }
 
             @Override

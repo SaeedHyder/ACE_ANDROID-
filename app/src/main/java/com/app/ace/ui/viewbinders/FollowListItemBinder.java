@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.view.View;
 
 import com.app.ace.R;
-
 import com.app.ace.activities.DockActivity;
 import com.app.ace.entities.FollowDataItem;
 import com.app.ace.fragments.TrainerProfileFragment;
@@ -22,13 +21,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class FollowListItemBinder extends ViewBinder<FollowDataItem> {
-    private ImageLoader imageLoader;
     ArrayList<FollowDataItem> Array = new ArrayList<>();
     DockActivity context;
-    public FollowListItemBinder( DockActivity context) {
+    private ImageLoader imageLoader;
+
+    public FollowListItemBinder(DockActivity context) {
         super(R.layout.follow_listitem);
 
-        this.context=context;
+        this.context = context;
 
         imageLoader = ImageLoader.getInstance();
     }
@@ -43,13 +43,15 @@ public class FollowListItemBinder extends ViewBinder<FollowDataItem> {
 
         FollowListItemBinder.ViewHolder viewHolder = (FollowListItemBinder.ViewHolder) view.getTag();
 
-        String[] SplitTime=entity.getCreated_at().split(" ");
-        String time=SplitTime[1];
+        String[] SplitTime = entity.getCreated_at().split(" ");
+        String time = SplitTime[1];
+
 
         imageLoader.displayImage(entity.getUserImage(), viewHolder.userImage);
         viewHolder.txtUserName.setText(entity.getUserName());
         viewHolder.txtUserDetail.setText(entity.getUserMessage());
-        viewHolder.txtTime.setText(time);
+
+            viewHolder.txtTime.setText(time);
 
         viewHolder.userImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,7 +62,7 @@ public class FollowListItemBinder extends ViewBinder<FollowDataItem> {
 
 
         CustomeGridViewAdapter adapterCustomeGridView;
-        adapterCustomeGridView = new CustomeGridViewAdapter(activity, R.layout.follow_listitem, entity.getImgChildGrid() );
+        adapterCustomeGridView = new CustomeGridViewAdapter(activity, R.layout.follow_listitem, entity.getImgChildGrid());
         viewHolder.gridview.setAdapter(adapterCustomeGridView);
         viewHolder.gridview.setExpanded(true);
     }
@@ -68,19 +70,18 @@ public class FollowListItemBinder extends ViewBinder<FollowDataItem> {
     public static class ViewHolder extends BaseViewHolder {
 
 
+        ExpandableGridView gridview;
         private CircleImageView userImage;
         private AnyTextView txtUserName;
         private AnyTextView txtUserDetail;
         private AnyTextView txtTime;
-
-        ExpandableGridView gridview;
 
         public ViewHolder(View view) {
 
             userImage = (CircleImageView) view.findViewById(R.id.userImage);
             txtUserName = (AnyTextView) view.findViewById(R.id.txtUserName);
             txtUserDetail = (AnyTextView) view.findViewById(R.id.txtUserDetail);
-            txtTime=(AnyTextView) view.findViewById(R.id.txtTime);
+            txtTime = (AnyTextView) view.findViewById(R.id.txtTime);
             gridview = (ExpandableGridView) view.findViewById(R.id.gridId);
 
         }

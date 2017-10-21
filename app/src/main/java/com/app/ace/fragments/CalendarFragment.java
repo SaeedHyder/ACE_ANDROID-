@@ -1,6 +1,5 @@
 package com.app.ace.fragments;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -26,7 +25,6 @@ import com.app.ace.entities.Slot;
 import com.app.ace.entities.TrainerBooking;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
-import com.app.ace.helpers.DateHelper;
 import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.retrofit.GsonFactory;
@@ -35,17 +33,12 @@ import com.app.ace.ui.views.TitleBar;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
-import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -80,7 +73,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     Button btn_training_Search_Submit;
     @InjectView(R.id.txt_headerText)
     AnyTextView txt_headerText;
-    String buildingTypes ="";// getString(R.string.Flexiblity_training);
+    String buildingTypes = "";// getString(R.string.Flexiblity_training);
     Map<Date, Drawable> dateDrawableMap = new TreeMap<>();
     Map<Date, Integer> dateTextDrawableMap = new TreeMap<>();
     BookingSchedule bookingSchedule;
@@ -99,11 +92,11 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     public static String SPECIALTY = "specialty";
     String Specialty;
 
-    public static CalendarFragment newInstance(String startDate,String trainerGymAddress,String specialty) {
+    public static CalendarFragment newInstance(String startDate, String trainerGymAddress, String specialty) {
         Bundle args = new Bundle();
         args.putString(USER_ID, startDate);
         args.putString(ADDRESS, trainerGymAddress);
-        args.putString(SPECIALTY,specialty);
+        args.putString(SPECIALTY, specialty);
         CalendarFragment fragment = new CalendarFragment();
         fragment.setArguments(args);
         return fragment;
@@ -115,14 +108,13 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     }
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             USER_ID = getArguments().getString(USER_ID);
-            GymAddress=getArguments().getString(ADDRESS);
-            Specialty=getArguments().getString(SPECIALTY);
+            GymAddress = getArguments().getString(ADDRESS);
+            Specialty = getArguments().getString(SPECIALTY);
             // Toast.makeText(getDockActivity(), ConversationId, Toast.LENGTH_LONG).show();
         }
 
@@ -164,10 +156,10 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(date);
 
-               EndDate = getEndDate(calendar.getTime(),duration);
+                EndDate = getEndDate(calendar.getTime(), duration);
                /* caldroidFragment.setMinDate(date);
                 caldroidFragment.setMaxDate(EndDate);*/
-               caldroidFragment.setSelectedDates(date,EndDate);
+                caldroidFragment.setSelectedDates(date, EndDate);
                 // Attach to the activity
                 startDate = date;
                 resetDate();
@@ -289,7 +281,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
     private void initCategorySpinner() {
         //Spinner Category
 
-        String[] specialtyArray=Specialty.split(",");
+        String[] specialtyArray = Specialty.split(",");
 
         final List<String> category = new ArrayList<String>();
         category.add(getString(R.string.Flexiblity_training));
@@ -316,7 +308,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         });
     }
 
-    public Date getEndDate(Date date,String days) {
+    public Date getEndDate(Date date, String days) {
 
 
         if (days.contains(getString(R.string.two_Week))) {
@@ -353,6 +345,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         return EndDate;
 
     }
+
     public Date getEndDate(String days) {
 
 
@@ -386,8 +379,8 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         if (EndDate == null)
             UIHelper.showShortToastInCenter(getDockActivity(), "Select Duration First");
         else {
-            if (startDate == null){
-                startDate =new Date();
+            if (startDate == null) {
+                startDate = new Date();
             }
             String StartDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(startDate.getTime());
 
@@ -401,14 +394,27 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
                 @Override
                 public void onResponse(Call<ResponseWrapper<TrainerBooking>> call, Response<ResponseWrapper<TrainerBooking>> response) {
                     loadingFinished();
-                    if(response.body() !=null){
-                    if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                        getTrainerTimingSlots(response.body().getResult());
+                    if (response.body() != null) {
+                        if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                            if (response.body().getUserDeleted() == 0) {
+                                getTrainerTimingSlots(response.body().getResult());
+                            } else {
+                                final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                                dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        dialogHelper.hideDialog();
+                                        getDockActivity().popBackStackTillEntry(0);
+                                        getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                                    }
+                                });
+                                dialogHelper.showDialog();
+                            }
+                        } else {
+                            UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                        }
                     } else {
-                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                    }}
-                    else
-                    {
                         loadingFinished();
                     }
                 }
@@ -429,8 +435,8 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         //timings.add("Slots Avaliable");
         slots.clear();
         slots = result.getSlots();
-        if (slots.isEmpty()){
-            UIHelper.showShortToastInCenter(getDockActivity(),"Trainer is not Available during this Period");
+        if (slots.isEmpty()) {
+            UIHelper.showShortToastInCenter(getDockActivity(), "Trainer is not Available during this Period");
             calenderids.clear();
             caldroidFragment.clearSelectedDates();
             caldroidFragment.clearDisableDates();
@@ -500,9 +506,9 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
                         dateTextDrawableMap.put(date, R.color.white);
                     } else {
 
-                        if (dateDrawableMap.containsKey(date)){
+                        if (dateDrawableMap.containsKey(date)) {
 
-                        }else{
+                        } else {
                             calenderids.add(new CalenderEnt(item.getId()));
                             dateDrawableMap.put(date, white);
                             dateTextDrawableMap.put(date, R.color.black);
@@ -526,55 +532,53 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         });*/
 
 
-
-
         Calendar calender = Calendar.getInstance();
         if (!totaldate.isEmpty()) {
 
             final List<Map.Entry<Date, Drawable>> entries =
                     new ArrayList<Map.Entry<Date, Drawable>>(dateDrawableMap.entrySet());
-            Map.Entry<Date,Drawable> entry=dateDrawableMap.entrySet().iterator().next();
-       if (entry.getKey() !=null){
-           Date date1 =entry.getKey();
-           Date currentDate = startDate;
-           int numadd =0;
-           SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-           String currentDatestring = f.format(currentDate);
-           String startdateString = f.format(date1);
-           while (!currentDatestring.equals(startdateString)) {
+            Map.Entry<Date, Drawable> entry = dateDrawableMap.entrySet().iterator().next();
+            if (entry.getKey() != null) {
+                Date date1 = entry.getKey();
+                Date currentDate = startDate;
+                int numadd = 0;
+                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+                String currentDatestring = f.format(currentDate);
+                String startdateString = f.format(date1);
+                while (!currentDatestring.equals(startdateString)) {
 
-               numadd = 1;
+                    numadd = 1;
 
-               dateDrawableMap.put(calender.getTime(), red);
-               dateTextDrawableMap.put(calender.getTime(), R.color.white);
-               calender.add(Calendar.DAY_OF_MONTH, 1);
-               currentDate = calender.getTime();
-               currentDatestring = f.format(currentDate);
-               //calender.add(Calendar.DAY_OF_MONTH, 1);
-           }
-       }
-            Map.Entry<Date,Drawable> lastentry = entries.get(entries.size()-1);
-           if (lastentry.getKey()!=null){
-               Date date2 = lastentry.getKey();//totaldate.get(totaldate.size() - 1);
-               calender.setTime(date2);
-               calender.add(Calendar.DAY_OF_MONTH, 1);
-               int numadd =0;
-               SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-               String enddatestring = f.format(EndDate);
-               String startdateString = f.format(date2);
-               while (!startdateString.equals(enddatestring)) {
+                    dateDrawableMap.put(calender.getTime(), red);
+                    dateTextDrawableMap.put(calender.getTime(), R.color.white);
+                    calender.add(Calendar.DAY_OF_MONTH, 1);
+                    currentDate = calender.getTime();
+                    currentDatestring = f.format(currentDate);
+                    //calender.add(Calendar.DAY_OF_MONTH, 1);
+                }
+            }
+            Map.Entry<Date, Drawable> lastentry = entries.get(entries.size() - 1);
+            if (lastentry.getKey() != null) {
+                Date date2 = lastentry.getKey();//totaldate.get(totaldate.size() - 1);
+                calender.setTime(date2);
+                calender.add(Calendar.DAY_OF_MONTH, 1);
+                int numadd = 0;
+                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+                String enddatestring = f.format(EndDate);
+                String startdateString = f.format(date2);
+                while (!startdateString.equals(enddatestring)) {
 
-                   date2 = calender.getTime();
-                   startdateString = f.format(date2);
+                    date2 = calender.getTime();
+                    startdateString = f.format(date2);
 
 
-                   dateDrawableMap.put(calender.getTime(), red);
-                   dateTextDrawableMap.put(calender.getTime(), R.color.white);
-                   calender.add(Calendar.DAY_OF_MONTH, numadd);
-                   numadd = 1;
-                   //  calender.add(Calendar.DAY_OF_MONTH, 1);
-               }
-           }
+                    dateDrawableMap.put(calender.getTime(), red);
+                    dateTextDrawableMap.put(calender.getTime(), R.color.white);
+                    calender.add(Calendar.DAY_OF_MONTH, numadd);
+                    numadd = 1;
+                    //  calender.add(Calendar.DAY_OF_MONTH, 1);
+                }
+            }
         }
         setCustomResourceForDates();
         caldroidFragment.refreshView();
@@ -596,17 +600,29 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         callback.enqueue(new Callback<ResponseWrapper>() {
             @Override
             public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
-                if(response.body() !=null){
-                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                    loadingFinished();
-                    //UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                    getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(), "TraineeScheduleFragment");
+                if (response.body() != null) {
+                    if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                        loadingFinished();
+                        if (response.body().getUserDeleted() == 0) {
+                            //UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                            getDockActivity().addDockableFragment(TraineeScheduleFragment.newInstance(), "TraineeScheduleFragment");
+                        } else {
+                            final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                            dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
 
+                                    dialogHelper.hideDialog();
+                                    getDockActivity().popBackStackTillEntry(0);
+                                    getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                                }
+                            });
+                            dialogHelper.showDialog();
+                        }
+                    } else {
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    }
                 } else {
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                }}
-                else
-                {
                     loadingFinished();
                 }
 
@@ -624,14 +640,14 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
 
     private void bookTrainer() {
 
-            bookingSchedule = new BookingSchedule();
-            bookingSchedule.setUser_id(Integer.parseInt(prefHelper.getUserId()));
-            bookingSchedule.setTraining_type(buildingTypes);
-            bookingSchedule.setAll_ids(calenderids);
-            bookingScheduleArrayList.add(bookingSchedule);
-            setBooking(bookingScheduleArrayList);
-            String sad = GsonFactory.getConfiguredGson().toJson(bookingScheduleArrayList);
-            System.out.println(sad);
+        bookingSchedule = new BookingSchedule();
+        bookingSchedule.setUser_id(Integer.parseInt(prefHelper.getUserId()));
+        bookingSchedule.setTraining_type(buildingTypes);
+        bookingSchedule.setAll_ids(calenderids);
+        bookingScheduleArrayList.add(bookingSchedule);
+        setBooking(bookingScheduleArrayList);
+        String sad = GsonFactory.getConfiguredGson().toJson(bookingScheduleArrayList);
+        System.out.println(sad);
 
     }
 
@@ -674,14 +690,14 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         switch (v.getId()) {
             case R.id.btn_training_Search_Submit:
                 if (dateDrawableMap.size() == (calenderids.size())) {
-                    if (buildingTypes!=null && !buildingTypes.isEmpty()) {
+                    if (buildingTypes != null && !buildingTypes.isEmpty()) {
                         if (!calenderids.isEmpty())
-                        setupDialog();
+                            setupDialog();
                         else {
-                            UIHelper.showShortToastInCenter(getDockActivity(),"Trainer is not available ");
+                            UIHelper.showShortToastInCenter(getDockActivity(), "Trainer is not available ");
                         }
-                    }else{
-                        UIHelper.showShortToastInCenter(getDockActivity(),"Select Training Type First");
+                    } else {
+                        UIHelper.showShortToastInCenter(getDockActivity(), "Select Training Type First");
                     }
                 } else {
                     UIHelper.showShortToastInCenter(getDockActivity(), "Trainer is not available for whole Duration");
@@ -715,8 +731,6 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
         });
         dialog.showDialog();
     }
-
-
 
 
     @Override

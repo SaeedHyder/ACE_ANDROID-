@@ -4,21 +4,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.View;
 
 import com.app.ace.R;
+import com.app.ace.activities.DockActivity;
 import com.app.ace.activities.MainActivity;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.countEnt;
+import com.app.ace.fragments.LoginFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.global.WebServiceConstants;
 import com.app.ace.helpers.BasePreferenceHelper;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.NotificationHelper;
 import com.app.ace.retrofit.WebService;
 import com.app.ace.retrofit.WebServiceFactory;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import retrofit2.Call;
@@ -29,6 +32,7 @@ import retrofit2.Response;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = MyFirebaseMessagingService.class.getSimpleName();
     private WebService webservice;
+    private DockActivity dockActivity;
     private BasePreferenceHelper preferenceHelper;
 
     @Override
@@ -74,14 +78,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void handleDataMessage(final RemoteMessage messageBody) {
-            webservice = WebServiceFactory.getWebServiceInstanceWithCustomInterceptor(getApplicationContext(),
-                    WebServiceConstants.SERVICE_BASE_URL);
-            preferenceHelper = new BasePreferenceHelper(getApplicationContext());
-            Call<ResponseWrapper<countEnt>> callback = webservice.getNotificationCount(preferenceHelper.getUserId());
-            callback.enqueue(new Callback<ResponseWrapper<countEnt>>() {
-                @Override
-                public void onResponse(Call<ResponseWrapper<countEnt>> call, Response<ResponseWrapper<countEnt>> response) {
-                    ;
+        webservice = WebServiceFactory.getWebServiceInstanceWithCustomInterceptor(getApplicationContext(),
+                WebServiceConstants.SERVICE_BASE_URL);
+        preferenceHelper = new BasePreferenceHelper(getApplicationContext());
+        Call<ResponseWrapper<countEnt>> callback = webservice.getNotificationCount(preferenceHelper.getUserId());
+        callback.enqueue(new Callback<ResponseWrapper<countEnt>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<countEnt>> call, Response<ResponseWrapper<countEnt>> response) {
+                ;
+                if (response.body().getUserDeleted() == 0) {
                     preferenceHelper.setBadgeCount(response.body().getResult().getCount());
                     try {
 
@@ -104,17 +109,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         Log.e(TAG, "Exception: " + e.getMessage());
                     }
 
-                    Log.e(TAG,"aasd"+preferenceHelper.getUserId()+response.body().getResult().getCount());
+                    Log.e(TAG, "aasd" + preferenceHelper.getUserId() + response.body().getResult().getCount());
                     //  SendNotification(response.body().getResult().getCount(), json);
-                }
+                } else {
+                    final DialogHelper dialogHelper = new DialogHelper(dockActivity);
+                    dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-                @Override
-                public void onFailure(Call<ResponseWrapper<countEnt>> call, Throwable t) {
-                    Log.e(TAG,t.toString());
-                    System.out.println(t.toString());
+                            dialogHelper.hideDialog();
+                            dockActivity.popBackStackTillEntry(0);
+                            dockActivity.addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                        }
+                    });
+                    dialogHelper.showDialog();
                 }
-            });
+            }
 
+            @Override
+            public void onFailure(Call<ResponseWrapper<countEnt>> call, Throwable t) {
+                Log.e(TAG, t.toString());
+                System.out.println(t.toString());
+            }
+        });
 
 
     }

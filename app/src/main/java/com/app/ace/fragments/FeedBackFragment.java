@@ -12,6 +12,7 @@ import com.app.ace.R;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.TitleBar;
@@ -80,14 +81,28 @@ public class FeedBackFragment extends BaseFragment implements View.OnClickListen
 
     private void feedbackService() {
 
-        Call<ResponseWrapper> callback = webService.trainerFeedback(TRAINER_ID, prefHelper.getUserId(), edt_feedback.getText().toString(), selectedFeedback);
+        Call<ResponseWrapper> callback = webService.trainerFeedback(TRAINER_ID, prefHelper.getUserId(), edt_feedback.getText().toString(), selectedFeedback, getMainActivity().selectedLanguage());
 
         callback.enqueue(new Callback<ResponseWrapper>() {
             @Override
             public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                    getDockActivity().addDockableFragment(HomeFragment.newInstance(),HomeFragment.class.getName());
+                    if (response.body().getUserDeleted() == 0) {
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                        getDockActivity().addDockableFragment(HomeFragment.newInstance(), HomeFragment.class.getName());
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
 
                 } else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
@@ -121,9 +136,10 @@ public class FeedBackFragment extends BaseFragment implements View.OnClickListen
                 btn_positive.setBackground(getResources().getDrawable(R.drawable.negative_border));
                 break;
             case R.id.btn_Submit:
-                if (validated()){
-                    feedbackService();}
-                    break;
+                if (validated()) {
+                    feedbackService();
+                }
+                break;
 
         }
 

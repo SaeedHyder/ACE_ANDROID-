@@ -214,9 +214,9 @@
     <string name="english">English</string>
     <string name="arabic">Arabic</string>
     <string name="notifications">Notifications</string>
-    <string name="prvate_or_public_account"> Private Account \/ Public Account</string>
+    <string name="prvate_or_public_account"> Private Account / Public Account</string>
     <string name="contact_us">Contact Us</string>
-    <string name="please_feel">Please feel free to contact us for any quries on the option below</string>
+    <string name="please_feel">Please feel free to contact us for any enquiries on the option below</string>
     <string name="confirm_pass">Confirm New Password</string>
     <string name="current_password">Current Pasword</string>
 
@@ -303,6 +303,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="to">to</string>
+    <string name="too">To</string>
     <string name="booking_summary_details">Booking Summary Details</string>
     <string name="title_activity_maps">Map</string>
 
@@ -443,6 +444,37 @@
     <string name="number_of_days">Number of Days</string>
     <string name="total_hourss">Total Hours</string>
     <string name="booking_requesrt">Booking Request</string>
+    <string name="postive">+1 positive</string>
+    <string name="advance_collaboration">Advanced Collaboration Edge</string>
+    <string name="likes">likes</string>
+    <string name="englishh">English</string>
+    <string name="get_started">Get Started</string>
+    <string name="no_commnets_found">No Comments Found</string>
+    <string name="phone_should_be_11">Mobile Number should be 11 or more characters long</string>
+    <string name="wifi_question">No Network found  Do you want to enable Wifi ?</string>
+    <string name="internet_not_connected">Internet not Available</string>
+    <string name="gps_question">Location is turned of Do you want to enable it ?</string>
+    <string name="gps_yes">Yes</string>
+    <string name="gps_no">No</string>
+    <string name="deatils">Details</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="are_you_sure_you_want_to_logout">Are you sure you want to logout?</string>
+    <string name="select_photo_video">Select Photo / Video</string>
+    <string name="how_do_you_want_photo">How do you want to set your post?</string>
+    <string name="video">Video</string>
+    <string name="select_video">Select Video</string>
+    <string name="how_do_select_video">How do you want to set your video?</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="imgae">Image</string>
+    <string name="select_image">Select Image</string>
+    <string name="how_do_you_want__to_selectphoto">How do you want to set your photo?</string>
+    <string name="upload_photo">Upload Photo</string>
+    <string name="enter_current_password">Enter Current Password</string>
+    <string name="password_not_matched">Password Not Matched</string>
+    <string name="are_you_sure_you_want_to_language">Are you sure you want to change language?</string>
+
 
 
 </resources>

@@ -1,61 +1,42 @@
 package com.app.ace.fragments;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextWatcher;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.app.ace.R;
 import com.app.ace.entities.CommentsSectionItemsEnt;
-import com.app.ace.entities.HomeListDataEnt;
-import com.app.ace.entities.PostsEnt;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.ShowComments;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
-import com.app.ace.global.CommentToChatMsgConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.CommentSection;
-import com.app.ace.interfaces.LastPostComment;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.CommentSectionItemBinder;
 import com.app.ace.ui.views.AnyEditTextView;
-import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
 
-import static android.content.Context.INPUT_METHOD_SERVICE;
-import static com.app.ace.R.id.listView;
 import static com.app.ace.R.id.lv_CommentSection;
-import static com.app.ace.fragments.TrainerProfileFragment.USER_ID;
-import static com.app.ace.global.AppConstants.user_id;
 
 
-public class CommentSectionFragment extends BaseFragment implements  CommentSection, View.OnClickListener{
+public class CommentSectionFragment extends BaseFragment implements CommentSection, View.OnClickListener {
 
     @InjectView(lv_CommentSection)
     private ListView listViewCommentSection;
@@ -88,7 +69,6 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
         return fragment;
 
     }
-
 
 
     @Override
@@ -131,10 +111,22 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
+                    if (response.body().getUserDeleted() == 0) {
                         SetAllComments(response.body().getResult());
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-                }
-                else {
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
+                } else {
 
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
@@ -161,21 +153,18 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
             listViewCommentSection.setVisibility(View.VISIBLE);
         }
 
-        for(ShowComments item : result){
+        for (ShowComments item : result) {
 
             userCollection.add(new CommentsSectionItemsEnt(item.getUser().getProfile_image(),
-                    item.getUser().getFirst_name()+" "+item.getUser().getLast_name(),item.getComment_text(),getDockActivity().getDate(item.getCreated_at()),String.valueOf(item.getUser_id())));
+                    item.getUser().getFirst_name() + " " + item.getUser().getLast_name(), item.getComment_text(), getDockActivity().getDate(item.getCreated_at()), String.valueOf(item.getUser_id())));
 
         }
-
 
 
         bindData(userCollection);
 
 
     }
-
-
 
 
     private void setListener() {
@@ -190,6 +179,7 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
         adapter.notifyDataSetChanged();
 
     }
+
     @Override
     public void setTitleBar(TitleBar titleBar) {
         super.setTitleBar(titleBar);
@@ -204,9 +194,9 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
     public void onReplyClicked(CommentsSectionItemsEnt ShowName) {
 
 
-       final String name ="@"+ShowName.getNameCommentor().toLowerCase()+" " ;
+        final String name = "@" + ShowName.getNameCommentor().toLowerCase() + " ";
 
-        if(!et_CommentBar.getText().toString().contains(ShowName.getNameCommentor())) {
+        if (!et_CommentBar.getText().toString().contains(ShowName.getNameCommentor())) {
             et_CommentBar.setText(parseActiveReply(name, et_CommentBar.getText().toString()));
             et_CommentBar.setTag(ShowName.getUser_id());
         }
@@ -223,6 +213,7 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
         // Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return sp;
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -230,54 +221,68 @@ public class CommentSectionFragment extends BaseFragment implements  CommentSect
 
                 SendComment();
 
-              //  CommentToChatMsgConstants commentToChatMsgConstants = new CommentToChatMsgConstants();
+                //  CommentToChatMsgConstants commentToChatMsgConstants = new CommentToChatMsgConstants();
 
-               // commentToChatMsgConstants.setCommentC(et_CommentBar.getText().toString());
+                // commentToChatMsgConstants.setCommentC(et_CommentBar.getText().toString());
 
 
-              // getDockActivity().addDockableFragment(ChatFragment.newInstance(commentToChatMsgConstants), "ChatFragment");
+                // getDockActivity().addDockableFragment(ChatFragment.newInstance(commentToChatMsgConstants), "ChatFragment");
                 break;
         }
     }
+
     String user_id = "0";
+
     private void SendComment() {
 
-        if ( et_CommentBar.getTag()!=null){
-            user_id =  (String) et_CommentBar.getTag();
-        }
-        else{
+        if (et_CommentBar.getTag() != null) {
+            user_id = (String) et_CommentBar.getTag();
+        } else {
             user_id = "0";
         }
         Call<ResponseWrapper<ShowComments>> callBack = webService.CreateComment(
                 prefHelper.getUserId(),
                 post_id,
                 et_CommentBar.getText().toString(),
-                user_id);
+                user_id,
+                getMainActivity().selectedLanguage());
 
         callBack.enqueue(new Callback<ResponseWrapper<ShowComments>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<ShowComments>> call, Response<ResponseWrapper<ShowComments>> response) {
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                    txt_noresult.setVisibility(View.GONE);
-                    listViewCommentSection.setVisibility(View.VISIBLE);
-                    hideKeyboard();
-                    listViewCommentSection.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            // Select the last row so it will scroll into view...
-                            listViewCommentSection.setSelection(adapter.getCount() - 1);
-                        }
-                    });
+                    if (response.body().getUserDeleted() == 0) {
+                        txt_noresult.setVisibility(View.GONE);
+                        listViewCommentSection.setVisibility(View.VISIBLE);
+                        hideKeyboard();
+                        listViewCommentSection.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Select the last row so it will scroll into view...
+                                listViewCommentSection.setSelection(adapter.getCount() - 1);
+                            }
+                        });
 
 
-                    userCollection.add(new CommentsSectionItemsEnt(response.body().getResult().getUser().getProfile_image(),response.body().getResult().getUser().getFirst_name()+" "+response.body().getResult().getUser().getLast_name(),response.body().getResult().getComment_text(),getDockActivity().getDate(response.body().getResult().getCreated_at()),String.valueOf(response.body().getResult().getUser_id())));
-                    bindData(userCollection);
-                    et_CommentBar.setText("");
-                }
-                else
-                {
-                    UIHelper.showLongToastInCenter(getDockActivity(),"Please Enter Comment");
+                        userCollection.add(new CommentsSectionItemsEnt(response.body().getResult().getUser().getProfile_image(), response.body().getResult().getUser().getFirst_name() + " " + response.body().getResult().getUser().getLast_name(), response.body().getResult().getComment_text(), getDockActivity().getDate(response.body().getResult().getCreated_at()), String.valueOf(response.body().getResult().getUser_id())));
+                        bindData(userCollection);
+                        et_CommentBar.setText("");
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
+                } else {
+                    UIHelper.showLongToastInCenter(getDockActivity(), "Please Enter Comment");
                 }
 
             }

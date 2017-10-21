@@ -11,6 +11,7 @@ import android.widget.Button;
 import com.app.ace.R;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.TitleBar;
@@ -24,7 +25,7 @@ import roboguice.inject.InjectView;
  * Created by khan_muhammad on 3/14/2017.
  */
 
-public class ForgotPasswordFragment extends BaseFragment implements View.OnClickListener{
+public class ForgotPasswordFragment extends BaseFragment implements View.OnClickListener {
 
     @InjectView(R.id.edtEmail)
     private AnyEditTextView edtEmail;
@@ -83,27 +84,37 @@ public class ForgotPasswordFragment extends BaseFragment implements View.OnClick
         successPopUp.show(getMainActivity().getSupportFragmentManager(), "forgotPasswordPopUp");
 
 
-
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btnSubmit:
-                if(validate()) {
+                if (validate()) {
                     loadingStarted();
-                    Call<ResponseWrapper> call = webService.forgetPassword(edtEmail.getText().toString());
+                    Call<ResponseWrapper> call = webService.forgetPassword(edtEmail.getText().toString(), getMainActivity().selectedLanguage());
                     call.enqueue(new Callback<ResponseWrapper>() {
                         @Override
                         public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
 
-                            if(response.body().getMessage().contains("new password"))
-                            {
-                                loadingFinished();
-                                showForgotPasswordDialog();
-                            }
-                            else
-                            {
+                            if (response.body().getMessage().contains("new password")) {
+                                if (response.body().getUserDeleted() == 0) {
+                                    loadingFinished();
+                                    showForgotPasswordDialog();
+                                } else {
+                                    final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                                    dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+
+                                            dialogHelper.hideDialog();
+                                            getDockActivity().popBackStackTillEntry(0);
+                                            getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                                        }
+                                    });
+                                    dialogHelper.showDialog();
+                                }
+                            } else {
                                 loadingFinished();
                                 UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                             }
@@ -113,7 +124,7 @@ public class ForgotPasswordFragment extends BaseFragment implements View.OnClick
                         @Override
                         public void onFailure(Call<ResponseWrapper> call, Throwable t) {
                             loadingFinished();
-                            Log.e("ForgotPasswordFragment",t.toString());
+                            Log.e("ForgotPasswordFragment", t.toString());
                         }
                     });
 

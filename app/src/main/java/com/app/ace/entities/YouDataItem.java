@@ -12,10 +12,12 @@ public class YouDataItem {
     private String time;
     private String SenderId;
     private String Isfollowing;
+    private String post_thumb_image;
 
 
 
-    public YouDataItem(String userImage, String userName, String userDetail, String youImage, String time, int sender_id, String is_following){
+
+    public YouDataItem(String userImage, String userName, String userDetail, String youImage, String time, int sender_id, String is_following, String post_thumb_image){
         setUserImage(userImage);
         setUserName(userName);
         setUserMessage(userDetail);
@@ -23,6 +25,7 @@ public class YouDataItem {
         setTime(time);
         setSenderId(String.valueOf(sender_id));
         setIsfollowing(is_following);
+        this.post_thumb_image=post_thumb_image;
 
     }
     public String getUserImage() {
@@ -87,5 +90,13 @@ public class YouDataItem {
 
     public void setIsfollowing(String isfollowing) {
         Isfollowing = isfollowing;
+    }
+
+    public String getPost_thumb_image() {
+        return post_thumb_image;
+    }
+
+    public void setPost_thumb_image(String post_thumb_image) {
+        this.post_thumb_image = post_thumb_image;
     }
 }

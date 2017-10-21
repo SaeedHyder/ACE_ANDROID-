@@ -122,6 +122,12 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
         // TODO Auto-generated method stub
         super.onViewCreated( view, savedInstanceState );
 
+        if (prefHelper.isLanguageArabic()) {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        } else {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
+
         if(prefHelper.isTwitterLogin()){
 
             edtPassword.setVisibility(View.GONE);
@@ -195,7 +201,7 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
                         if (edtPassword.getText().toString().length() < 6) {
                             UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.password_length_alert));
                         }else if(edtMobileNumber.getText().toString().length() < 11){
-                            UIHelper.showShortToastInCenter(getDockActivity(), "Mobile Number should be 11 or more characters long");
+                            UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.phone_should_be_11));
                         } else {
 
                             SignupFormConstants signupFormConstants = new SignupFormConstants();

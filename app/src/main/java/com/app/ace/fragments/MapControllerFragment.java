@@ -21,7 +21,6 @@ import com.app.ace.helpers.GPSHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.IGetLocation;
 import com.app.ace.retrofit.GoogleServiceResponse;
-import com.app.ace.ui.views.AnyEditTextView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,7 +37,6 @@ import roboguice.inject.InjectView;
 /**
  * Created by saeedhyder on 5/9/2017.
  */
-
 
 
 public class MapControllerFragment extends BaseFragment {
@@ -190,7 +188,6 @@ public class MapControllerFragment extends BaseFragment {
                 } else {*/
 
 
-
                 delegate.onLocationSet(scammerLocation, SearchedAddress);
                 BaseApplication.getBus().post("true");
                 //}
@@ -243,7 +240,7 @@ public class MapControllerFragment extends BaseFragment {
             @Override
             public void onFailure(Call<GoogleServiceResponse<List<GoogleGeoCodeResponse>>> call, Throwable error) {
                 getMainActivity().onLoadingFinished();
-              //  RetrofitErrorHandler.onServiceFail(getDockActivity(), error);
+                //  RetrofitErrorHandler.onServiceFail(getDockActivity(), error);
                 setLocationButton(false);
                 btnUseLocation.setEnabled(true);
             }

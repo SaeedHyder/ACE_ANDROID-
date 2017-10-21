@@ -4,26 +4,29 @@ package com.app.ace.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.app.ace.R;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.ui.views.TitleBar;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
-import com.app.ace.R;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import roboguice.inject.InjectView;
+
+import static android.os.Build.VERSION_CODES.M;
+import static com.app.ace.R.id.cb_arabic;
+import static com.app.ace.R.id.cb_english;
 
 /**
  * Created by khan_muhammad on 3/10/2017.
@@ -43,6 +46,7 @@ public class WelcomeTutorialFragment extends BaseFragment implements BaseSliderV
     @InjectView(R.id.iv_text)
     private ImageView iv_text;
 
+    private static String LANGUAGE = "language";
 
 
     public static WelcomeTutorialFragment newInstance() {
@@ -50,6 +54,14 @@ public class WelcomeTutorialFragment extends BaseFragment implements BaseSliderV
         return new WelcomeTutorialFragment();
     }
 
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+    }
 
     @Nullable
     @Override
@@ -69,6 +81,8 @@ public class WelcomeTutorialFragment extends BaseFragment implements BaseSliderV
 
         setImageGallery();
         setListener();
+
+
     }
 
     private void setListener() {
@@ -95,7 +109,7 @@ public class WelcomeTutorialFragment extends BaseFragment implements BaseSliderV
             //add your extra information
             textSliderView.bundle(new Bundle());
             textSliderView.getBundle()
-                    .putString("extra", image+"");
+                    .putString("extra", image + "");
 
             imageSlider.addSlider(textSliderView);
         }
@@ -107,6 +121,7 @@ public class WelcomeTutorialFragment extends BaseFragment implements BaseSliderV
         imageSlider.setIndicatorVisibility(PagerIndicator.IndicatorVisibility.Visible);
         imageSlider.stopAutoCycle();
 
+
     }
 
 
@@ -115,15 +130,27 @@ public class WelcomeTutorialFragment extends BaseFragment implements BaseSliderV
 
     }
 
+
+
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        if(position==4){
+
+        imageSlider.stopAutoCycle();
+        }
 
     }
 
     @Override
     public void onPageSelected(int position) {
+       /* if (imageSlider.getCurrentPosition() == 4) {
+            imageSlider.setCurrentPosition(1, false);
+        }
+        if (imageSlider.getCurrentPosition() == 0) {
+            imageSlider.setCurrentPosition(3, false); // false will prevent sliding                      animation of view pager
+        }*/
 
-        switch (position){
+        switch (position) {
 
             case 0:
                 iv_text.setImageResource(R.drawable.text1);
@@ -147,9 +174,9 @@ public class WelcomeTutorialFragment extends BaseFragment implements BaseSliderV
 
         }
 
-        if(position == 4){
+        if (position == 4) {
             btnStart.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             btnStart.setVisibility(View.GONE);
         }
 

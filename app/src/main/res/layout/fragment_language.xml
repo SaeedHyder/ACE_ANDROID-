@@ -36,12 +36,12 @@
 
         <com.app.ace.ui.views.AnyTextView
             android:id="@+id/txtWelocmeSlogan"
-            android:layout_width="@dimen/x250"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginTop="@dimen/x2"
             android:gravity="center"
-            android:text="@string/wellcome_slogan"
+            android:text="@string/advance_collaboration"
             android:textColor="@color/lightish_grey"
             android:textSize="@dimen/x19"
             app:typeface="Roboto-Regular.ttf" />

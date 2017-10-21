@@ -21,7 +21,7 @@
         android:paddingBottom="@dimen/x5"
         android:paddingLeft="@dimen/x8"
         android:paddingTop="@dimen/x2"
-        android:text="No Comments Found"
+        android:text="@string/no_commnets_found"
         android:textColor="@color/black"
         android:textSize="@dimen/x20"
         android:textStyle="normal"

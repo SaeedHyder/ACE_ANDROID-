@@ -30,8 +30,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/text_box_map"
-            android:hint="Search"
-            android:paddingLeft="@dimen/x10"
+            android:hint="@string/search"
+            android:paddingStart="@dimen/x15"
+            android:paddingEnd="@dimen/x15"
             android:visibility="gone"
             android:imeOptions="actionSearch"
             android:singleLine="true"
@@ -61,7 +62,7 @@
         android:layout_height="@dimen/x30"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginStart="@dimen/x10"
         android:scaleType="centerInside"
         android:src="@drawable/back"
         android:visibility="visible" />
@@ -72,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/x10"
+        android:layout_marginEnd="@dimen/x10"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -90,7 +91,7 @@
             android:layout_width="@dimen/x30"
             android:layout_height="@dimen/x30"
             android:layout_marginLeft="@dimen/x20"
-            android:layout_toRightOf="@id/btnRight"
+            android:layout_toEndOf="@id/btnRight"
             android:scaleType="centerInside"
             android:src="@drawable/ic_launcher"
             android:visibility="gone" />
@@ -99,10 +100,10 @@
             android:id="@+id/btnRight3"
             android:layout_width="@dimen/x30"
             android:layout_height="@dimen/x30"
-            android:layout_marginLeft="@dimen/x20"
-            android:layout_toRightOf="@id/btnRight2"
+            android:layout_marginStart="@dimen/x20"
+            android:layout_toEndOf="@id/btnRight2"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_launcher"
+            android:src="@drawable/notfication"
             android:visibility="gone" />
 
 
@@ -110,8 +111,8 @@
             android:id="@+id/txtRight"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/x20"
-            android:layout_marginLeft="@dimen/x20"
-            android:layout_toRightOf="@id/btnRight2"
+            android:layout_marginStart="@dimen/x20"
+            android:layout_toEndOf="@id/btnRight2"
             android:text="asdsd"
             android:textColor="@color/white"
             android:textSize="@dimen/x17"
@@ -124,7 +125,7 @@
         android:layout_height="@dimen/x30"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/rel"
-        android:layout_marginRight="@dimen/x5"
+        android:layout_marginEnd="@dimen/x5"
         android:layout_marginTop="@dimen/x10_">
 
 
@@ -132,8 +133,7 @@
             android:id="@+id/imgNotificationCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:foregroundGravity="top"
+            android:layout_centerInParent="true"
             android:scaleType="centerInside" />
     </RelativeLayout>
 

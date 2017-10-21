@@ -77,7 +77,12 @@ public class YouListItemBinder extends ViewBinder<YouDataItem> {
             viewHolder.btn_follow.setVisibility(View.GONE);
             viewHolder.btn_Unfollow.setVisibility(View.GONE);
             viewHolder.imgYou.setVisibility(View.VISIBLE);
-            imageLoader.displayImage(entity.getYouImage(), viewHolder.imgYou);
+            if(entity.getPost_thumb_image().equals("")) {
+                imageLoader.displayImage(entity.getYouImage(), viewHolder.imgYou);
+            }
+            else {
+                imageLoader.displayImage(entity.getPost_thumb_image(), viewHolder.imgYou);
+            }
         }
 
         viewHolder.btn_follow.setOnClickListener(new View.OnClickListener() {

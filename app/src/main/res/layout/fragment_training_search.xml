@@ -261,7 +261,7 @@
                         android:paddingBottom="@dimen/x2"
                         android:paddingLeft="@dimen/x7"
                         android:paddingRight="@dimen/x7"
-                        android:text="@string/english"
+                        android:text="@string/englishh"
                         android:textColor="@color/lightGray"
                         android:textSize="@dimen/x14" />
 
@@ -804,7 +804,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginTop="@dimen/x10"
-            android:background="@drawable/next_bttn_next"
+            android:background="@drawable/next_bttn_plain"
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="@dimen/x16"

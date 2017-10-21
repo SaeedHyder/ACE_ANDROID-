@@ -31,9 +31,9 @@ public class BaseApplication extends Application {
 		// TODO Auto-generated method stub
 
 
-		super.onCreate();
-		MultiDex.install(this);
-		TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+		MultiDex.install(this);		super.onCreate();
+
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
 		Fabric.with(this, new Twitter(authConfig));
 		initImageLoader();
 

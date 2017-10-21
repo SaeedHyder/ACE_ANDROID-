@@ -19,7 +19,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/x30"
         android:scaleType="centerCrop"
-        android:background="@drawable/profile_pic"/>
+        android:background="@drawable/profile_container"/>
 
     <Button
         android:id="@+id/btnChangeProfilePhoto"
@@ -52,14 +52,14 @@
         android:layout_below="@+id/txt_personal_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/x15"
+        android:layout_marginStart="@dimen/x15"
         android:layout_marginBottom="@dimen/x3"
         android:text="@string/personal_information"
         android:textColor="@color/black"
         android:textSize="@dimen/x15"
         android:gravity="center"
         android:textStyle="normal"
-        app:typeface="Roboto-Regular.ttf"
+        app:typeface="Roboto-Bold.ttf"
         />
 
     <com.app.ace.ui.views.AnyEditTextView
@@ -68,11 +68,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enter_name"
-        android:drawableLeft="@drawable/user_icon"
+        android:drawableStart="@drawable/user_icon"
         android:layout_margin="@dimen/x15"
         android:inputType="textNoSuggestions"
         android:singleLine="true"
         android:maxLength="50"
+        android:imeOptions="actionNext"
         app:emptyAllowed="false"
         android:textColorHint="@color/edittext_hint_color"
         android:textColor="@color/dark_grey"
@@ -94,11 +95,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=""
-        android:drawableLeft="@drawable/comment_icon_color"
+        android:drawableStart="@drawable/comment_icon_color"
         android:layout_margin="@dimen/x15"
         android:inputType="textNoSuggestions"
         android:singleLine="false"
         android:maxLines="2"
+        android:imeOptions="actionDone"
         android:hint="@string/enter_status"
         android:maxLength="100"
         android:drawablePadding="@dimen/x15"
@@ -141,14 +143,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/x10"
-        android:layout_marginLeft="@dimen/x15"
+        android:layout_marginStart="@dimen/x15"
         android:layout_marginBottom="@dimen/x3"
         android:text="@string/private_information"
         android:textColor="@color/black"
         android:textSize="@dimen/x15"
         android:gravity="center"
         android:textStyle="normal"
-        app:typeface="Roboto-Regular.ttf"
+        app:typeface="Roboto-Bold.ttf"
         />
 
     <com.app.ace.ui.views.AnyEditTextView
@@ -157,10 +159,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enter_email"
-        android:drawableLeft="@drawable/email_icon"
+        android:drawableStart="@drawable/email_icon"
         android:layout_margin="@dimen/x15"
         android:inputType="textNoSuggestions"
         android:singleLine="true"
+        android:imeOptions="actionDone"
         android:maxLength="50"
         app:emptyAllowed="false"
         android:textColorHint="@color/edittext_hint_color"
@@ -208,13 +211,13 @@
             android:layout_height="wrap_content"
             android:src="@drawable/gender_icon"
             android:layout_centerVertical="true"
-            android:paddingLeft="@dimen/x10"/>
+            android:paddingStart="@dimen/x10"/>
 
         <Spinner
             android:id="@+id/sp_Gender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/iv_Gender"
+            android:layout_toEndOf="@+id/iv_Gender"
             android:layout_centerVertical="true"
             android:hint="@string/Male"
             android:drawableLeft="@drawable/gender_icon"
@@ -243,10 +246,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enter_mobile_no"
-        android:drawableLeft="@drawable/phone_icon"
+        android:drawableStart="@drawable/phone_icon"
         android:layout_margin="@dimen/x15"
         android:inputType="number"
         app:testType="numeric"
+        android:imeOptions="actionDone"
         android:singleLine="true"
         android:drawablePadding="@dimen/x15"
         android:maxLength="50"

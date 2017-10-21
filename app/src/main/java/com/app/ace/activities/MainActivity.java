@@ -1,18 +1,25 @@
 package com.app.ace.activities;
 
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.IntentSender;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.location.LocationManager;
 import android.media.MediaMetadataRetriever;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -20,6 +27,7 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -28,11 +36,22 @@ import com.app.ace.fragments.HomeFragment;
 import com.app.ace.fragments.LanguageFragment;
 import com.app.ace.fragments.SideMenuFragment;
 import com.app.ace.fragments.abstracts.BaseFragment;
-import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.ScreenHelper;
 import com.app.ace.helpers.UIHelper;
+import com.app.ace.interfaces.OnSettingActivateListener;
 import com.app.ace.ui.dialogs.DialogFactory;
 import com.app.ace.ui.views.TitleBar;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.kbeanie.imagechooser.api.ChooserType;
 import com.kbeanie.imagechooser.api.ChosenFile;
 import com.kbeanie.imagechooser.api.ChosenImage;
@@ -47,22 +66,23 @@ import com.kbeanie.imagechooser.api.IntentUtils;
 import com.kbeanie.imagechooser.api.VideoChooserListener;
 import com.kbeanie.imagechooser.api.VideoChooserManager;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.Locale;
 
 import roboguice.inject.InjectView;
 
 //import com.kbeanie.imagechooser.api.ChosenImages;
 
-public class MainActivity extends DockActivity implements OnClickListener, ImageChooserListener, VideoChooserListener, FileChooserListener {
+public class MainActivity extends DockActivity implements OnClickListener, ImageChooserListener, VideoChooserListener, FileChooserListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private final static String TAG = "ICA";
     private final int videoDuration = 30;
     @InjectView(R.id.header_main)
     public TitleBar titleBar;
-
+    public final int LocationResultCode = 1;
+    public final int WifiResultCode = 2;
+    @InjectView(R.id.content_frame)
+    public RelativeLayout content_frame;
+    private AlertDialog alert;
     @InjectView(R.id.progressBar)
     ProgressBar progressBar;
     @InjectView(R.id.mainFrameLayout)
@@ -83,9 +103,14 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
     private String thumbnailSmallFilePath;
     public boolean isNotificationTap = false;
     private Uri fileUri;
+    private OnSettingActivateListener settingActivateListener;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dock);
+
+        setCurrentLocale();
+        //   setLayoutDirection();
 
         if (getIntent() != null) {
             if (getIntent().getExtras() != null)
@@ -117,20 +142,171 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
                     UIHelper.showLongToastInCenter(getApplicationContext(),
                             R.string.message_wait);
                 } else {
-                    popBackStackTillEntry(1);
-                   // popFragment();
+                   // popBackStackTillEntry(1);
+                     popFragment();
                     UIHelper.hideSoftKeyboard(getApplicationContext(),
                             titleBar);
                 }
             }
         });
-      //  onNotificationReceived();
+        //  onNotificationReceived();
         if (savedInstanceState == null)
             initFragment();
 
 
     }
-/*
+
+    public String selectedLanguage() {
+        if (prefHelper.isLanguageArabic())
+            return "ar";
+        else
+            return "en";
+    }
+
+    private void setLayoutDirection() {
+        if (prefHelper.isLanguageArabic())
+            content_frame.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        else {
+            content_frame.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
+    }
+
+    public void setOnSettingActivateListener(OnSettingActivateListener ActivateListener) {
+        this.settingActivateListener = ActivateListener;
+    }
+
+    public boolean statusCheck() {
+        if (isConnected(getApplicationContext())) {
+            final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                turnLocationOn(null);
+                // buildAlertMessageNoGps(R.string.gps_question, Settings.ACTION_LOCATION_SOURCE_SETTINGS, LocationResultCode);
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isConnected(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfoMob = cm.getNetworkInfo(cm.TYPE_MOBILE);
+        NetworkInfo netInfoWifi = cm.getNetworkInfo(cm.TYPE_WIFI);
+        if (netInfoMob != null && netInfoMob.isConnectedOrConnecting()) {
+            Log.v("TAG", "Mobile Internet connected");
+            return true;
+        }
+        if (netInfoWifi != null && netInfoWifi.isConnectedOrConnecting()) {
+            Log.v("TAG", "Wifi Internet connected");
+            return true;
+        }
+        buildAlertMessageNoGps(R.string.wifi_question, Settings.ACTION_WIFI_SETTINGS, WifiResultCode);
+        return false;
+
+    }
+
+    private void buildAlertMessageNoGps(final int StringResourceID, final String IntentType, final int requestCode) {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getDockActivity());
+        builder
+                .setMessage(getString(StringResourceID))
+                .setCancelable(false)
+                .setPositiveButton(getResources().getString(R.string.gps_yes), new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        if (StringResourceID == R.string.gps_question) {
+                            dialog.cancel();
+                            turnLocationOn(null);
+                            dialog.dismiss();
+                        } else {
+                            dialog.cancel();
+                            startImpIntent(dialog, IntentType, requestCode);
+                            dialog.dismiss();
+                        }
+
+                        // startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),LocationResultCode);
+                    }
+                })
+                .setNegativeButton(getResources().getString(R.string.gps_no), new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.dismiss();
+                        dialog.cancel();
+
+                    }
+                });
+        if (alert == null) {
+            alert = builder.create();
+
+        }
+
+        if (!alert.isShowing())
+            alert.show();
+
+    }
+
+
+    private void startImpIntent(DialogInterface dialog, String IntentType, int requestCode) {
+        dialog.dismiss();
+        Intent i = new Intent(IntentType);
+        i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivityForResult(i, requestCode);
+    }
+
+    public void turnLocationOn(GoogleApiClient apiClient) {
+        if (apiClient == null) {
+            apiClient = new GoogleApiClient.Builder(getApplicationContext())
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this).build();
+            apiClient.connect();
+
+            LocationRequest locationRequest = LocationRequest.create();
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            locationRequest.setInterval(30 * 1000);
+            locationRequest.setFastestInterval(5 * 1000);
+            LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                    .addLocationRequest(locationRequest);
+
+            //**************************
+            builder.setAlwaysShow(true); //this is the key ingredient
+            //**************************
+
+            PendingResult<LocationSettingsResult> result =
+                    LocationServices.SettingsApi.checkLocationSettings(apiClient, builder.build());
+            result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+                @Override
+                public void onResult(LocationSettingsResult result) {
+                    final Status status = result.getStatus();
+                    final LocationSettingsStates state = result.getLocationSettingsStates();
+                    switch (status.getStatusCode()) {
+                        case LocationSettingsStatusCodes.SUCCESS:
+                            settingActivateListener.onLocationActivateListener();
+                            // All location settings are satisfied. The client can initialize location
+                            // requests here.
+                            break;
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            // Location settings are not satisfied. But could be fixed by showing the user
+                            // a dialog.
+                            try {
+                                // Show the dialog by calling startResolutionForResult(),
+                                // and check the result in onActivityResult().
+                                status.startResolutionForResult(
+                                        getDockActivity(), 1000);
+                            } catch (IntentSender.SendIntentException e) {
+                                // Ignore the error.
+                            }
+                            break;
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            // Location settings are not satisfied. However, we have no way to fix the
+                            // settings so we won't show the dialog.
+                            break;
+                    }
+                }
+            });
+        }
+    }
+
+    /*
 
     protected BroadcastReceiver broadcastReceiver;
     private void onNotificationReceived() {
@@ -204,10 +380,32 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
 
     public void initFragment() {
         if (prefHelper.isLogin()) {
-                addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+            addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
         } else {
             addDockableFragment(LanguageFragment.newInstance(), "LanguageFragment");
             //addDockableFragment(LoginFragment.newInstance(),"LoginFragment");
+        }
+    }
+
+    public void restartActivity() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
+
+    public void setCurrentLocale() {
+        if (prefHelper.isLanguageArabic()) {
+            Resources resources = getResources();
+            DisplayMetrics dm = resources.getDisplayMetrics();
+            Configuration conf = resources.getConfiguration();
+            conf.locale = new Locale("ar");
+            resources.updateConfiguration(conf, dm);
+        } else {
+            Resources resources = getResources();
+            DisplayMetrics dm = resources.getDisplayMetrics();
+            Configuration conf = resources.getConfiguration();
+            conf.locale = new Locale("en");
+            resources.updateConfiguration(conf, dm);
         }
     }
 
@@ -509,10 +707,10 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
                             } else {
                                 originalFilePath = video.getVideoFilePath().toString();
                                 thumbnailSmallFilePath = video.getVideoPreviewImage().toString();
-                            //    Toast.makeText(getApplicationContext(), originalFilePath, Toast.LENGTH_LONG).show();
-                               // Toast.makeText(getApplicationContext(), thumbnailSmallFilePath, Toast.LENGTH_LONG).show();
+                                //    Toast.makeText(getApplicationContext(), originalFilePath, Toast.LENGTH_LONG).show();
+                                // Toast.makeText(getApplicationContext(), thumbnailSmallFilePath, Toast.LENGTH_LONG).show();
 
-                                imageSetter.setVideo(originalFilePath,thumbnailSmallFilePath);
+                                imageSetter.setVideo(originalFilePath, thumbnailSmallFilePath);
                             }
                         }
                     } catch (Exception e) {
@@ -546,7 +744,7 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         Log.i(TAG, "OnActivityResult");
         Log.i(TAG, "File Path : " + filePath);
         Log.i(TAG, "Chooser Type: " + chooserType);
-
+        setCurrentLocale();
         if (requestCode == ChooserType.REQUEST_PICK_FILE && resultCode == RESULT_OK) {
             if (fm == null) {
                 fm = new FileChooserManager(this);
@@ -675,13 +873,28 @@ public class MainActivity extends DockActivity implements OnClickListener, Image
         this.imageSetter = imageSetter;
     }
 
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
     public interface ImageSetter {
 
         public void setImage(String imagePath);
 
         public void setFilePath(String filePath);
 
-        public void setVideo(String videoPath,String VideoThumbail);
+        public void setVideo(String videoPath, String VideoThumbail);
 
     }
 }

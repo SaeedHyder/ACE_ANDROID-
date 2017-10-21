@@ -42,10 +42,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.8"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/x10"
+                android:layout_marginStart="@dimen/x10"
                 android:text="@string/james_blunt"
                 android:textColor="@color/black"
                 android:textSize="@dimen/x14"
+                android:textAlignment="viewStart"
                 app:typeface="Roboto-Bold.ttf" />
 
             <com.app.ace.ui.views.AnyTextView

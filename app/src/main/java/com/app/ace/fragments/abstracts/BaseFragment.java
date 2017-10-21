@@ -187,6 +187,7 @@ public abstract class BaseFragment extends RoboFragment {
 	 */
 	public void setTitleBar( TitleBar titleBar ) {
 		titleBar.showTitleBar();
+		titleBar.invalidate();
 		// titleBar.refreshListener();
 	}
 	

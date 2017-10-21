@@ -21,6 +21,13 @@ android {
         javaMaxHeapSize "4g"
         incremental true
     }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -40,10 +47,13 @@ android {
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
+        maven { url "https://jitpack.io" }
+        mavenCentral()
     }
 
     dependencies {
         classpath 'io.fabric.tools:gradle:1.+'
+
     }
 }
 
@@ -56,6 +66,7 @@ repositories {
 }
 
 dependencies {
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile('com.andreabaccega:android-form-edittext:1.2.1@aar') {
         exclude module: 'design'
@@ -110,6 +121,12 @@ dependencies {
     compile project(':aspectjrt-1.7.3')
     compile project(':isoparser-1.0.6')
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
+    compile 'com.github.markomilos:paginate:0.5.1'
+    compile 'com.github.castorflex.smoothprogressbar:library-circular:1.1.0'
+    compile 'com.github.nicolasjafelle:paginglistview:1.2'
+
+
 }
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
+

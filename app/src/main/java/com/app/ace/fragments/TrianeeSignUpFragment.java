@@ -1,12 +1,8 @@
 package com.app.ace.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,13 +11,13 @@ import android.widget.RelativeLayout;
 
 import com.app.ace.R;
 import com.app.ace.activities.MainActivity;
-import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.RegistrationResult;
+import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.TwitterUser;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
-import com.app.ace.global.PasswordEditTextChangeListener;
 import com.app.ace.helpers.CameraHelper;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.TokenUpdater;
 import com.app.ace.helpers.UIHelper;
@@ -40,8 +36,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
-
-import static android.os.Build.VERSION_CODES.N;
 
 /**
  * Created by khan_muhammad on 3/13/2017.
@@ -90,6 +84,7 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
     public File profilePic;
 
     public String UserName = "";
+    private String LANGUAGE = "";
 
     public static TrianeeSignUpFragment newInstance() {
 
@@ -107,8 +102,7 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
             fragment.setArguments(args);
 
             return fragment;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -140,6 +134,12 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onViewCreated(view, savedInstanceState);
+
+        if (prefHelper.isLanguageArabic()) {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        } else {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
 
         if (prefHelper.isTwitterLogin()) {
 
@@ -198,21 +198,20 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
 
             case R.id.btnSignUp:
 
-                if (validateFields() ) {
+                if (validateFields()) {
 
-                    if(profilePic == null){
+                    if (profilePic == null) {
                         UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.profile_pic_error));
-                    }else {
+                    } else {
 
                         if (edtPassword.getText().toString().length() < 6) {
                             UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.password_length_alert));
-                        }
-                        else if(edtMobileNumber.getText().toString().length() < 11){
-                            UIHelper.showShortToastInCenter(getDockActivity(), "Mobile Number should be 11 or more characters long");
-                        }else {
+                        } else if (edtMobileNumber.getText().toString().length() < 11) {
+                            UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.phone_should_be_11));
+                        } else {
                             if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()))
-                                TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"android",prefHelper.getFirebase_TOKEN());
-                                signupTrainee();
+                                TokenUpdater.getInstance().UpdateToken(getDockActivity(), prefHelper.getUserId(), "android", prefHelper.getFirebase_TOKEN());
+                            signupTrainee();
                         }
                     }
                 }
@@ -244,9 +243,9 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
                 profilePic.getName(), RequestBody.create(MediaType.parse("image/*"), profilePic));
 
         String SocialMediaName = "";
-        if(!UserId.equalsIgnoreCase("")){
+        if (!UserId.equalsIgnoreCase("")) {
             SocialMediaName = AppConstants.twitter;
-        }else{
+        } else {
             SocialMediaName = "";
         }
 
@@ -260,7 +259,8 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
                 RequestBody.create(MediaType.parse("text/plain"), edtPassword.getText().toString()),
                 filePart,
                 RequestBody.create(MediaType.parse("text/plain"), AppConstants.trainee),
-                RequestBody.create(MediaType.parse("text/plain"), "android"));
+                RequestBody.create(MediaType.parse("text/plain"), "android"),
+                RequestBody.create(MediaType.parse("text/plain"), getMainActivity().selectedLanguage()));
 
         callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
             @Override
@@ -270,33 +270,49 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
 
                     if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                        if (twitterUser != null) {
-                            if (twitterUser.getUserId() != null)
-                                prefHelper.setIsTwitterLogin(true);
-                            else
+                        if (response.body().getUserDeleted() == 0) {
+
+                            if (twitterUser != null) {
+                                if (twitterUser.getUserId() != null)
+                                    prefHelper.setIsTwitterLogin(true);
+                                else
+                                    prefHelper.setIsTwitterLogin(false);
+                            } else {
                                 prefHelper.setIsTwitterLogin(false);
-                        } else {
-                            prefHelper.setIsTwitterLogin(false);
-                        }
+                            }
 
-                        AppConstants.user_id = response.body().getResult().getId();
-                        AppConstants._token = response.body().getResult().get_token();
-                        prefHelper.setToken(AppConstants._token);
-                        prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
-                        prefHelper.setUsrId(response.body().getResult().getId());
-                        prefHelper.putUser(response.body().getResult());
+                            AppConstants.user_id = response.body().getResult().getId();
+                            AppConstants._token = response.body().getResult().get_token();
+                            prefHelper.setToken(AppConstants._token);
+                            prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
+                            prefHelper.setUsrId(response.body().getResult().getId());
+                            prefHelper.putUser(response.body().getResult());
 
-                        if (response.body().getResult().getUser_type().equals(AppConstants.trainee)) {
+                            if (response.body().getResult().getUser_type().equals(AppConstants.trainee)) {
 
-                            // AppConstants.is_show_trainer = false;
+                                // AppConstants.is_show_trainer = false;
 
-                        } else {
-                            // AppConstants.is_show_trainer = true;
-                        }
+                            } else {
+                                // AppConstants.is_show_trainer = true;
+                            }
 
-                        getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(UserName, edtEmail.getText().toString()), "VarificationCodeFragment");
+                            getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(UserName, edtEmail.getText().toString()), "VarificationCodeFragment");
                         /*showSuccessDialog();
                         getDockActivity().showHome();*/
+                        } else {
+
+                            final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                            dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    dialogHelper.hideDialog();
+                                    getDockActivity().popBackStackTillEntry(0);
+                                    getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                                }
+                            });
+                            dialogHelper.showDialog();
+                        }
                     } else {
                         UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                     }
@@ -334,7 +350,7 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
         if (imagePath != null) {
             profilePic = new File(imagePath);
             ImageLoader.getInstance().displayImage(
-                    "file:///" +imagePath, iv_profile);
+                    "file:///" + imagePath, iv_profile);
         }
     }
 
@@ -344,7 +360,7 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
     }
 
     @Override
-    public void setVideo(String videoPath,String videothumb) {
+    public void setVideo(String videoPath, String videothumb) {
 
     }
 }

@@ -5,13 +5,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
 
@@ -34,6 +32,7 @@ import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.ImageClickListener;
 import com.app.ace.ui.adapters.ArrayListAdapter;
+import com.app.ace.ui.adapters.ExpandedListView;
 import com.app.ace.ui.viewbinders.FeedbackViewBinder;
 import com.app.ace.ui.viewbinders.UserPicItemBinder;
 import com.app.ace.ui.views.AnyEditTextView;
@@ -50,8 +49,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
-
-import static com.app.ace.R.id.listView;
 
 /**
  * Created by khan_muhammad on 3/17/2017.
@@ -136,7 +133,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     private AnyTextView txt_preffered_training_loc_dis;
 
     @InjectView(R.id.lv_feedback)
-    private ListView lv_feedback;
+    private ExpandedListView lv_feedback;
 
     @InjectView(R.id.ll_feedback)
     private LinearLayout ll_feedback;
@@ -158,7 +155,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
 
     private ArrayListAdapter<profilePostEnt> adapter;
-    private List<profilePostEnt> dataCollection;
+    private List<profilePostEnt> dataCollection = new ArrayList<>();
 
     private ArrayListAdapter<TrainerReviews> feedbackAdapter;
     private List<TrainerReviews> feedbackDataCollection;
@@ -169,7 +166,9 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     private boolean isTrainer = false;
     String TrainerGymAddress;
     String Speciality;
-    String messageBtn="hide";
+    String messageBtn = "hide";
+
+    String trainer_name;
 
     public static TrainerProfileFragment newInstance() {
         return new TrainerProfileFragment();
@@ -197,7 +196,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
 
         imageLoader = ImageLoader.getInstance();
-        
+
         adapter = new ArrayListAdapter<profilePostEnt>(getDockActivity(), new UserPicItemBinder(getDockActivity(), this));
         feedbackAdapter = new ArrayListAdapter<TrainerReviews>(getDockActivity(), new FeedbackViewBinder(getDockActivity()));
 
@@ -223,9 +222,33 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         setListener();
         showProfiles();
 
+        lv_feedback.setOnTouchListener(null);
         lv_feedback.setScrollContainer(false);
+        lv_feedback.setExpanded(true);
 
 
+    }
+
+    void showTitleBarIcon() {
+        if (messageBtn.equals("show")) {
+            getMainActivity().titleBar.showMessageButton(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //    getDockActivity().addDockableFragment(ChatFragment.newInstance("0", user_id,trainer_name), "ChatFragment");
+                    getDockActivity().addDockableFragment(NewMsgChat_Screen_Fragment.newInstance(Integer.parseInt(user_id), trainer_name), "NewMsgChat_Screen_Fragment");
+
+                }
+            });
+        } else {
+            getMainActivity().titleBar.showSettingButton(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    getDockActivity().addDockableFragment(SettingsFragment.newInstance(isNotificationOn, isPublicAccount), "SettingsFragment");
+
+                }
+            });
+        }
     }
 
     private void showProfiles() {
@@ -236,75 +259,83 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             @Override
             public void onResponse(Call<ResponseWrapper<UserProfile>> call, Response<ResponseWrapper<UserProfile>> response) {
 
-                loadingFinished();
-                if (response.body() != null) {
-                    if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                        try {
-                            if (response.body().getResult().getNotification_status().equals("1")) {
-                                isNotificationOn = true;
-                            } else {
-                                isNotificationOn = false;
+                if(response!=null){
+                if (response.body().getUserDeleted() == 0) {
+
+                    loadingFinished();
+                    if (response.body() != null) {
+                        if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                            trainer_name = response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name();
+                            try {
+                                if (response.body().getResult().getNotification_status().equals("1")) {
+                                    isNotificationOn = true;
+                                } else {
+                                    isNotificationOn = false;
+                                }
+                                if (response.body().getResult().getPrivate_account().equals("0")) {
+                                    isPublicAccount = true;
+                                } else {
+                                    isPublicAccount = false;
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                            if (response.body().getResult().getPrivate_account().equals("0")) {
-                                isPublicAccount = true;
-                            } else {
-                                isPublicAccount = false;
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
 
 
-                        RegistrationResult result = prefHelper.getUser();
-                        result.setProfile_image(response.body().getResult().getProfile_image());
-                        prefHelper.putUser(result);
-
-                        scrollView.setVisibility(View.VISIBLE);
-
-                        if (response.body().getResult().getUser_type().equals(AppConstants.trainer)) {
-
-                            isTrainer = true;
-                            messageBtn="show";
-                            Trainer = AppConstants.trainer;
-                            result.setEducation(response.body().getResult().getEducation());
-                            result.setSpeciality(response.body().getResult().getSpeciality());
+                            RegistrationResult result = prefHelper.getUser();
+                            result.setProfile_image(response.body().getResult().getProfile_image());
                             prefHelper.putUser(result);
 
+                            scrollView.setVisibility(View.VISIBLE);
 
-                            if (response.body().getResult().getId() == Integer.parseInt(prefHelper.getUserId())) {
-                                btn_edit.setVisibility(View.VISIBLE);
-                                btn_follow.setVisibility(View.GONE);
-                                btn_Unfollow.setVisibility(View.GONE);
-                                btn_request.setVisibility(View.GONE);
-                                messageBtn="hide";
+                            if (response.body().getResult().getUser_type().equals(AppConstants.trainer)) {
+
+                                isTrainer = true;
+                                messageBtn = "show";
+                                showTitleBarIcon();
 
 
-                            }
-                            if (response.body().getResult().getUser_type().equalsIgnoreCase(prefHelper.getUser().getUser_type())) {
-                                if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
+                                Trainer = AppConstants.trainer;
+                                result.setEducation(response.body().getResult().getEducation());
+                                result.setSpeciality(response.body().getResult().getSpeciality());
+                                prefHelper.putUser(result);
+
+
+                                if (response.body().getResult().getId() == Integer.parseInt(prefHelper.getUserId())) {
+                                    btn_edit.setVisibility(View.VISIBLE);
+                                    btn_follow.setVisibility(View.GONE);
+                                    btn_Unfollow.setVisibility(View.GONE);
+                                    btn_request.setVisibility(View.GONE);
+                                    messageBtn = "hide";
+                                    showTitleBarIcon();
+
+
+                                }
+                                if (response.body().getResult().getUser_type().equalsIgnoreCase(prefHelper.getUser().getUser_type())) {
+                                    if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
+                                        btn_edit.setVisibility(View.GONE);
+                                        btn_follow.setVisibility(View.VISIBLE);
+                                        btn_Unfollow.setVisibility(View.GONE);
+                                        btn_request.setVisibility(View.VISIBLE);
+                                        btn_feedback.setVisibility(View.VISIBLE);
+
+                                    }
+                                } else {
                                     btn_edit.setVisibility(View.GONE);
                                     btn_follow.setVisibility(View.VISIBLE);
                                     btn_Unfollow.setVisibility(View.GONE);
-                                    btn_request.setVisibility(View.GONE);
+                                    btn_request.setVisibility(View.VISIBLE);
                                     btn_feedback.setVisibility(View.VISIBLE);
+                                }
+
+                                if (response.body().getResult().getIs_following() == 0) {
+                                    btn_follow.setVisibility(View.VISIBLE);
+                                    btn_Unfollow.setVisibility(View.GONE);
+                                } else {
+                                    btn_follow.setVisibility(View.GONE);
+                                    btn_Unfollow.setVisibility(View.VISIBLE);
 
                                 }
-                            } else {
-                                btn_edit.setVisibility(View.GONE);
-                                btn_follow.setVisibility(View.VISIBLE);
-                                btn_Unfollow.setVisibility(View.GONE);
-                                btn_request.setVisibility(View.VISIBLE);
-                                btn_feedback.setVisibility(View.VISIBLE);
-                            }
-
-                            if (response.body().getResult().getIs_following() == 0) {
-                                btn_follow.setVisibility(View.VISIBLE);
-                                btn_Unfollow.setVisibility(View.GONE);
-                            } else {
-                                btn_follow.setVisibility(View.GONE);
-                                btn_Unfollow.setVisibility(View.VISIBLE);
-
-                            }
                       /*  if(response.body().getResult().getUser_type().equalsIgnoreCase(AppConstants.trainer) && response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())){
                             btn_edit.setVisibility(View.GONE);
                             btn_follow.setVisibility(View.VISIBLE);
@@ -321,86 +352,112 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             }
                         }
 */
-                            ll_one_button.setVisibility(View.INVISIBLE);
-                            ll_two_buttons.setVisibility(View.VISIBLE);
+                                ll_one_button.setVisibility(View.INVISIBLE);
+                                ll_two_buttons.setVisibility(View.VISIBLE);
 
 
-                            ll_trainer.setVisibility(View.VISIBLE);
-                            ll_trainee.setVisibility(View.GONE);
+                                ll_trainer.setVisibility(View.VISIBLE);
+                                ll_trainee.setVisibility(View.GONE);
 
-                            txt_Trainer.setVisibility(View.VISIBLE);
+                                txt_Trainer.setVisibility(View.VISIBLE);
 
 
-                            ll_separator.setVisibility(View.VISIBLE);
+                                ll_separator.setVisibility(View.VISIBLE);
 
-                            if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
-                                Speciality = response.body().getResult().getSpeciality();
-                                TrainerGymAddress = response.body().getResult().getGym_address();
-                                txt_profileName.setText(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
-                                imageLoader.displayImage(response.body().getResult().getProfile_image(), riv_profile_pic);
-                                txt_education_cirtification_dis.setText(response.body().getResult().getEducation() + " " + response.body().getResult().getUniversity());
-                                txt_preffered_training_loc_dis.setText(response.body().getResult().getGym_address());
-                                txt_postCount.setText(response.body().getResult().getPosts_count());
-                                txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
-                                txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
+                                if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
+                                    Speciality = response.body().getResult().getSpeciality();
+                                    TrainerGymAddress = response.body().getResult().getGym_address();
+                                    txt_profileName.setText(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
+                                    imageLoader.displayImage(response.body().getResult().getProfile_image(), riv_profile_pic);
+                                    txt_education_cirtification_dis.setText(response.body().getResult().getEducation() + " " + response.body().getResult().getUniversity());
+                                    txt_preffered_training_loc_dis.setText(response.body().getResult().getGym_address());
+                                    txt_postCount.setText(response.body().getResult().getPosts_count());
+                                    txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
+                                    txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
 
-                                txt_positive.setText("+" + response.body().getResult().getPositive_review());
-                                txt_negative.setText("-" + response.body().getResult().getNegative_review());
-                                ShowUserPosts(response.body().getResult().getPosts());
-                                setFeedbackData(response.body().getResult().getTrainer_reviews());
+                                    txt_positive.setText("+" + response.body().getResult().getPositive_review());
+                                    txt_negative.setText("-" + response.body().getResult().getNegative_review());
+                                    ShowUserPosts(response.body().getResult().getPosts(), response.body().getResult().getUser_type());
+                                    gv_pics.setVisibility(View.GONE);
+                                    setFeedbackData(response.body().getResult().getTrainer_reviews());
 
-                            }
-                        } else {
-
-                            if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
-                                btn_edit_or_follow.setVisibility(View.GONE);
-                                btn_followTrainee.setVisibility(View.VISIBLE);
-
-                            }
-
-                            if (response.body().getResult().getIs_following() == 0) {
-                                btn_followTrainee.setVisibility(View.VISIBLE);
-                                btn_unfollowTrainee.setVisibility(View.GONE);
+                                }
                             } else {
-                                btn_followTrainee.setVisibility(View.GONE);
-                                btn_unfollowTrainee.setVisibility(View.VISIBLE);
 
-                            }
+                                if(getMainActivity()!=null) {
+                                    getMainActivity().titleBar.showSettingButton(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
 
-                            gridView();
+                                            getDockActivity().addDockableFragment(SettingsFragment.newInstance(isNotificationOn, isPublicAccount), "SettingsFragment");
 
-                            ll_review_count.setVisibility(View.GONE);
-                            ll_feedback.setVisibility(View.GONE);
+                                        }
+                                    });
+                                }
+                                if (response.body().getResult().getId() != Integer.parseInt(prefHelper.getUserId())) {
+                                    btn_edit_or_follow.setVisibility(View.GONE);
+                                    btn_followTrainee.setVisibility(View.VISIBLE);
 
-                            ll_one_button.setVisibility(View.VISIBLE);
-                            ll_two_buttons.setVisibility(View.INVISIBLE);
+                                }
+
+                                if (response.body().getResult().getIs_following() == 0) {
+                                    btn_followTrainee.setVisibility(View.VISIBLE);
+                                    btn_unfollowTrainee.setVisibility(View.GONE);
+                                } else {
+                                    btn_followTrainee.setVisibility(View.GONE);
+                                    btn_unfollowTrainee.setVisibility(View.VISIBLE);
+
+                                }
 
 
-                            ll_trainer.setVisibility(View.GONE);
-                            ll_trainee.setVisibility(View.VISIBLE);
+                                ll_review_count.setVisibility(View.GONE);
+                                ll_feedback.setVisibility(View.GONE);
 
-                            txt_Trainer.setVisibility(View.GONE);
+                                ll_one_button.setVisibility(View.VISIBLE);
+                                ll_two_buttons.setVisibility(View.INVISIBLE);
 
 
-                            ll_separator.setVisibility(View.GONE);
+                                ll_trainer.setVisibility(View.GONE);
+                                ll_trainee.setVisibility(View.VISIBLE);
 
-                            if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
-                                // ShowTrianeeData();
-                                txt_profileName.setText(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
-                                imageLoader.displayImage(response.body().getResult().getProfile_image(), riv_profile_pic);
-                                txt_postCount.setText(response.body().getResult().getPosts_count());
-                                txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
-                                txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
+                                txt_Trainer.setVisibility(View.GONE);
 
-                                txt_tagline.setText(response.body().getResult().getUser_status() + "");
-                                ShowUserPosts(response.body().getResult().getPosts());
+
+                                ll_separator.setVisibility(View.GONE);
+
+                                if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
+                                    // ShowTrianeeData();
+                                    txt_profileName.setText(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
+                                    imageLoader.displayImage(response.body().getResult().getProfile_image(), riv_profile_pic);
+                                    txt_postCount.setText(response.body().getResult().getPosts_count());
+                                    txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
+                                    txt_FollowingsCount.setText(response.body().getResult().getFollowing_count());
+
+                                    txt_tagline.setText(response.body().getResult().getUser_status() + "");
+                                    gv_pics.setVisibility(View.VISIBLE);
+                                    iv_list.setImageResource(R.drawable.list_view_unselected);
+                                    iv_grid.setImageResource(R.drawable.grid_view);
+                                    ShowUserPosts(response.body().getResult().getPosts(), response.body().getResult().getUser_type());
+                                }
                             }
                         }
+                    } else {
+                        loadingFinished();
                     }
-                } else {
-                    loadingFinished();
-                }
 
+                }} else {
+                    final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                    dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            dialogHelper.hideDialog();
+                            getDockActivity().popBackStackTillEntry(0);
+                            getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                        }
+                    });
+                    dialogHelper.showDialog();
+                }
             }
 
             @Override
@@ -435,7 +492,8 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
     }
 
-    private void ShowUserPosts(ArrayList<post> userPost) {
+    private void ShowUserPosts(ArrayList<post> userPost, String user_type) {
+
 
         dataCollection = new ArrayList<profilePostEnt>();
         ImageCollection = new ArrayList<>();
@@ -451,13 +509,33 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             e.printStackTrace();
         }
 
+        gridView();
+
+        if (user_type.equals(AppConstants.trainer)) {
+            gv_pics.setVisibility(View.GONE);
+        } else {
+            gv_pics.setVisibility(View.VISIBLE);
+
+        }
+
 
         bindData(dataCollection, 3);
     }
 
     private void bindData(List<profilePostEnt> dataCollection, int noOfColumns) {
+
+        if (dataCollection.size() <= 0) {
+            txt_no_data.setVisibility(View.VISIBLE);
+            gv_pics.setVisibility(View.GONE);
+        } else {
+            txt_no_data.setVisibility(View.GONE);
+            gv_pics.setVisibility(View.VISIBLE);
+        }
+
+
         adapter.clearList();
         gv_pics.setNumColumns(noOfColumns);
+        gv_pics.setVisibility(View.VISIBLE);
         adapter.addAll(dataCollection);
         gv_pics.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -524,8 +602,21 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
+                    if (response.body().getUserDeleted() == 0) {
+                        UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
                 } else {
                     UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
                 }
@@ -550,17 +641,11 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         titleBar.showSearchButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (prefHelper.getUser().getUser_type().equals(AppConstants.trainer))
-                    getDockActivity().addDockableFragment(SearchTraineeFragment.newInstance(), "SearchTraineeFragment");
-                else
-                    popUpDropDown(v);
-
-
+                popUpDropDown(v);
             }
         });
 
-        if(messageBtn.equals("show")){
+      /*  if(messageBtn.equals("show")){
             titleBar.showMessageButton(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -576,16 +661,23 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 getDockActivity().addDockableFragment(SettingsFragment.newInstance(isNotificationOn, isPublicAccount), "SettingsFragment");
 
             }
-        });}
+        });}*/
 
     }
 
     void gridView() {
+
+        if (dataCollection.size() <= 0) {
+            gv_pics.setVisibility(View.GONE);
+            txt_no_data.setVisibility(View.VISIBLE);
+
+        } else {
+            gv_pics.setVisibility(View.VISIBLE);
+            txt_no_data.setVisibility(View.GONE);
+        }
+
         lv_feedback.setVisibility(View.GONE);
-        gv_pics.setVisibility(View.VISIBLE);
-        iv_feedback.setImageResource(R.drawable.feedback1);
-        iv_list.setImageResource(R.drawable.list_view_unselected);
-        iv_grid.setImageResource(R.drawable.grid_view);
+
         gv_pics.setNumColumns(3);
         adapter.notifyDataSetChanged();
     }
@@ -597,6 +689,15 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         switch (v.getId()) {
             case R.id.iv_list:
 
+                if (dataCollection.size() <= 0) {
+                    gv_pics.setVisibility(View.GONE);
+                    txt_no_data.setVisibility(View.VISIBLE);
+
+                } else {
+                    gv_pics.setVisibility(View.VISIBLE);
+                    txt_no_data.setVisibility(View.GONE);
+                }
+
                 iv_list.setImageResource(R.drawable.list_view);
                 iv_grid.setImageResource(R.drawable.grid_view_unselected);
                 gv_pics.setNumColumns(1);
@@ -607,6 +708,9 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             case R.id.iv_grid:
 
                 gridView();
+                iv_feedback.setImageResource(R.drawable.feedback1);
+                iv_list.setImageResource(R.drawable.list_view_unselected);
+                iv_grid.setImageResource(R.drawable.grid_view);
 
                 break;
 
@@ -626,6 +730,9 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             case R.id.ll_grid:
 
                 gridView();
+                iv_feedback.setImageResource(R.drawable.feedback1);
+                iv_list.setImageResource(R.drawable.list_view_unselected);
+                iv_grid.setImageResource(R.drawable.grid_view);
 
                 break;
 
@@ -638,9 +745,9 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                         AnyEditTextView hours = feedbackDIaloge.getHours(R.id.edt_hours_day);
                         AnyEditTextView days = feedbackDIaloge.getDays(R.id.edt_total_days);
                         AnyTextView totalHours = feedbackDIaloge.getTotalHours(R.id.txt_total_hours);
-                        if (validate(hours, days, totalHours)){
+                        if (validate(hours, days, totalHours)) {
 
-                            requestService(hours.getText().toString(),days.getText().toString(),totalHours.getText().toString(),feedbackDIaloge);
+                            requestService(hours.getText().toString(), days.getText().toString(), totalHours.getText().toString(), feedbackDIaloge);
                         }
 
 
@@ -754,6 +861,13 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 break;
 
             case R.id.ll_feedback:
+                if (feedbackDataCollection.size() <= 0) {
+                    txt_no_data.setVisibility(View.VISIBLE);
+                    lv_feedback.setVisibility(View.GONE);
+                } else {
+                    txt_no_data.setVisibility(View.GONE);
+                    lv_feedback.setVisibility(View.VISIBLE);
+                }
                 lv_feedback.setVisibility(View.VISIBLE);
                 gv_pics.setVisibility(View.GONE);
                 iv_list.setImageResource(R.drawable.list_view_unselected);
@@ -769,11 +883,10 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         if (hours.getText().toString().trim().equals("")) {
             hours.setError(getString(R.string.hour_empty_error));
             return false;
-        }
-        else if(Integer.parseInt(hours.getText().toString())<=0 || Integer.parseInt(hours.getText().toString())>24 ){
+        } else if (Integer.parseInt(hours.getText().toString()) <= 0 || Integer.parseInt(hours.getText().toString()) > 24) {
             hours.setError(getDockActivity().getResources().getString(R.string.valid_hours));
             return false;
-        }else if (days.getText().toString().trim().equals("")) {
+        } else if (days.getText().toString().trim().equals("")) {
             days.setError(getString(R.string.days_error));
             return false;
         } else if (totalHours.getText().toString().trim().equals("")) {
@@ -785,16 +898,29 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
     private void requestService(String hours, String days, String totalHours, final DialogHelper feedbackDIaloge) {
 
-        Call<ResponseWrapper> callback = webService.trainerRequest(user_id, prefHelper.getUserId(), hours, days, totalHours);
+        Call<ResponseWrapper> callback = webService.trainerRequest(user_id, prefHelper.getUserId(), hours, days, totalHours, getMainActivity().selectedLanguage());
 
         callback.enqueue(new Callback<ResponseWrapper>() {
             @Override
             public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                    getDockActivity().addDockableFragment(HomeFragment.newInstance(), HomeFragment.class.getName());
-                    feedbackDIaloge.hideDialog();
+                    if (response.body().getUserDeleted() == 0) {
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                        getDockActivity().addDockableFragment(HomeFragment.newInstance(), HomeFragment.class.getName());
+                        feedbackDIaloge.hideDialog();
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
 
                 } else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
@@ -823,10 +949,23 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
+                    if (response.body().getUserDeleted() == 0) {
+                        UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
                    /* btn_follow.setVisibility(View.GONE);
                     btn_Unfollow.setVisibility(View.VISIBLE);*/
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
                 } else {
                     UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
                 }
@@ -857,10 +996,23 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
+                    if (response.body().getUserDeleted() == 0) {
+                        UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
                    /* btn_follow.setVisibility(View.VISIBLE);
                     btn_Unfollow.setVisibility(View.GONE);*/
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
                 } else {
                     UIHelper.showShortToastInCenter(getDockActivity(), response.body().getMessage());
                 }
@@ -883,7 +1035,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
         final PopupWindow popupWindow = new PopupWindow(
                 popupView,
-                (int) getResources().getDimension(R.dimen.x100),
+                (int) getResources().getDimension(R.dimen.x130),
                 (int) getResources().getDimension(R.dimen.x100));
 
         txt_TrainerProfileFrag = (AnyTextView) popupView.findViewById(R.id.txt_Trainer);

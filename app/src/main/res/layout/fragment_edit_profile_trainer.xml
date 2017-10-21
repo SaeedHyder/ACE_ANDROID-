@@ -19,7 +19,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/x30"
             android:scaleType="centerCrop"
-            android:background="@drawable/profile_pic_trainer"
+            android:background="@drawable/profile_container"
             android:text="@string/change_profile_photo"
             android:textColor="@color/white"/>
 
@@ -55,7 +55,7 @@
             android:layout_below="@+id/txt_personal_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x15"
+            android:layout_marginStart="@dimen/x15"
             android:layout_marginBottom="@dimen/x3"
             android:text="@string/personal_information"
             android:textColor="@color/black"
@@ -63,7 +63,7 @@
             android:gravity="center"
             android:alpha="0.7"
             android:textStyle="bold"
-            app:typeface="Roboto-Regular.ttf"
+            app:typeface="Roboto-Bold.ttf"
             />
 
         <com.app.ace.ui.views.AnyEditTextView
@@ -72,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/enter_name"
-            android:drawableLeft="@drawable/user_icon"
+            android:drawableStart="@drawable/user_icon"
             android:layout_margin="@dimen/x15"
             android:inputType="textNoSuggestions"
             android:singleLine="true"
@@ -98,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/enter_uni_name"
-            android:drawableLeft="@drawable/university_icon"
+            android:drawableStart="@drawable/university_icon"
             android:layout_margin="@dimen/x15"
             android:inputType="textNoSuggestions"
             android:singleLine="false"
@@ -126,9 +126,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/edit_gym_location"
-            android:drawableLeft="@drawable/location_icon"
+            android:drawableStart="@drawable/location_icon"
             android:layout_margin="@dimen/x15"
-           android:paddingLeft="@dimen/x15"
+           android:paddingStart="@dimen/x15"
             android:inputType="textNoSuggestions"
             android:singleLine="false"
             android:maxLines="2"
@@ -156,7 +156,8 @@
             android:layout_height="@dimen/x1"
             android:layout_marginBottom="@dimen/x10"
             android:alpha="0.6"
-            android:background="@drawable/text"/>
+            android:background="@drawable/text"
+            android:visibility="visible"/>
 
         <!--<Spinner
             android:id="@+id/sp_Certification"
@@ -194,7 +195,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_margin="@dimen/x15">
+            android:layout_margin="@dimen/x15"
+            android:visibility="visible">
 
             <Spinner
                 android:id="@+id/sp_Certification"
@@ -218,7 +220,8 @@
             android:layout_height="@dimen/x1"
             android:layout_marginBottom="@dimen/x10"
             android:alpha="0.6"
-            android:background="@drawable/text"/>
+            android:background="@drawable/text"
+            android:visibility="gone"/>
 
 
        <!-- <com.app.ace.ui.views.AnyTextView
@@ -242,7 +245,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_margin="@dimen/x15">
+            android:layout_margin="@dimen/x15"
+            android:visibility="gone">
 
             <Spinner
                 android:id="@+id/sp_speciality"
@@ -274,7 +278,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/x10"
-            android:layout_marginLeft="@dimen/x15"
+            android:layout_marginStart="@dimen/x15"
             android:layout_marginBottom="@dimen/x3"
             android:text="@string/private_information"
             android:textColor="@color/black"
@@ -282,7 +286,7 @@
             android:gravity="center"
             android:textStyle="bold"
             android:alpha="0.7"
-            app:typeface="Roboto-Regular.ttf"
+            app:typeface="Roboto-Bold.ttf"
             />
 
         <com.app.ace.ui.views.AnyEditTextView
@@ -291,7 +295,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/enter_email"
-            android:drawableLeft="@drawable/email_icon"
+            android:drawableStart="@drawable/email_icon"
             android:layout_margin="@dimen/x15"
             android:inputType="textNoSuggestions"
             android:singleLine="true"
@@ -325,13 +329,13 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/gender_icon"
                 android:layout_centerVertical="true"
-                android:paddingLeft="@dimen/x10"/>
+                android:paddingStart="@dimen/x10"/>
 
             <Spinner
                 android:id="@+id/sp_Gender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/iv_Gender"
+                android:layout_toEndOf="@+id/iv_Gender"
                 android:layout_centerVertical="true"
                 android:hint="@string/Male"
                 android:drawableLeft="@drawable/gender_icon"
@@ -357,7 +361,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/enter_mobile_no"
-            android:drawableLeft="@drawable/phone_icon"
+            android:drawableStart="@drawable/phone_icon"
             android:layout_margin="@dimen/x15"
             android:inputType="number"
             app:testType="numeric"

@@ -1,6 +1,5 @@
 package com.app.ace.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -18,11 +17,10 @@ import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.CameraHelper;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.views.AnyEditTextView;
-import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
-import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
@@ -39,13 +37,11 @@ import retrofit2.Response;
 import roboguice.inject.InjectView;
 
 
-
-
 /**
  * Created by khan_muhammad on 3/22/2017.
  */
 
-public class EditTraineeProfileFragment extends BaseFragment implements View.OnClickListener ,AdapterView.OnItemSelectedListener , MainActivity.ImageSetter{
+public class EditTraineeProfileFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener, MainActivity.ImageSetter {
 
     @InjectView(R.id.btnChangeProfilePhoto)
     private Button btnChangeProfilePhoto;
@@ -69,14 +65,13 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
     @InjectView(R.id.edtMobileNumber)
     AnyEditTextView edtMobileNumber;
 
-    String fullname,firstName,lastName;
+    String fullname, firstName, lastName;
     File profilePic;
     String profilePath;
     ImageLoader imageLoader;
 
 
-
-    public static EditTraineeProfileFragment newInstance(){
+    public static EditTraineeProfileFragment newInstance() {
 
         return new EditTraineeProfileFragment();
 
@@ -91,6 +86,12 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (prefHelper.isLanguageArabic()) {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        } else {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
 
         imageLoader = ImageLoader.getInstance();
         sp_Gender();
@@ -109,73 +110,84 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
         imageLoader.displayImage(prefHelper.getUser().getProfile_image(), civ_profile_pic);
 
 
-
     }
 
     private void EditProfile() {
 
-        fullname=edtUserName.getText().toString();
-        if(fullname.contains(" ")) {
+        fullname = edtUserName.getText().toString();
+        if (fullname.contains(" ")) {
             String[] name = fullname.split(" ");
             firstName = name[0];
             lastName = name[1];
-        }
-        else
-        {
-            firstName=fullname;
-            lastName=" ";
+        } else {
+            firstName = fullname;
+            lastName = " ";
         }
         MultipartBody.Part profile_picture = null;
-        if(profilePic != null) {
+        if (profilePic != null) {
             profile_picture = MultipartBody.Part.createFormData("profile_picture", profilePath,
                     RequestBody.create(MediaType.parse("image/*"), profilePic));
         }
-        if(edtMobileNumber.getText().toString().length() < 11){
-            UIHelper.showShortToastInCenter(getDockActivity(), "Mobile Number should be 11 or more characters long");
-        }
-        else{
-        RegistrationResult result = prefHelper.getUser();
-        result.setUser_status(edtTagLine.getText().toString());
+        if (edtMobileNumber.getText().toString().length() < 11) {
+            UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.phone_should_be_11));
+        } else {
+            RegistrationResult result = prefHelper.getUser();
+            result.setUser_status(edtTagLine.getText().toString());
             result.setPhone_number(edtMobileNumber.getText().toString());
             result.setFirst_name(firstName);
             result.setLast_name(lastName);
-        prefHelper.putUser(result);
-        Call<ResponseWrapper<RegistrationResult>> callBack = webService.UpdateTrainee(
-                RequestBody.create(MediaType.parse("text/plain"),prefHelper.getUserId()),
-                RequestBody.create(MediaType.parse("text/plain"),firstName),
-                RequestBody.create(MediaType.parse("text/plain"),lastName),
-                RequestBody.create(MediaType.parse("text/plain"),edtTagLine.getText().toString()),
-                RequestBody.create(MediaType.parse("text/plain"),edtMobileNumber.getText().toString()),
-                profile_picture
-        );
+            prefHelper.putUser(result);
+            Call<ResponseWrapper<RegistrationResult>> callBack = webService.UpdateTrainee(
+                    RequestBody.create(MediaType.parse("text/plain"), prefHelper.getUserId()),
+                    RequestBody.create(MediaType.parse("text/plain"), firstName),
+                    RequestBody.create(MediaType.parse("text/plain"), lastName),
+                    RequestBody.create(MediaType.parse("text/plain"), edtTagLine.getText().toString()),
+                    RequestBody.create(MediaType.parse("text/plain"), edtMobileNumber.getText().toString()),
+                    profile_picture,
+                    RequestBody.create(MediaType.parse("text,plain"), getMainActivity().selectedLanguage())
+            );
 
-        callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
-            @Override
-            public void onResponse(Call<ResponseWrapper<RegistrationResult>> call,
-                                   Response<ResponseWrapper<RegistrationResult>> response) {
+            callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
+                @Override
+                public void onResponse(Call<ResponseWrapper<RegistrationResult>> call,
+                                       Response<ResponseWrapper<RegistrationResult>> response) {
 
-                loadingFinished();
-                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                    loadingFinished();
+                    if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                   // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-                    getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(), "TrainerProfileFragment");
+                        // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                        if (response.body().getUserDeleted() == 0) {
+                            getDockActivity().addDockableFragment(TrainerProfileFragment.newInstance(), "TrainerProfileFragment");
+                        } else {
+                            final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                            dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    dialogHelper.hideDialog();
+                                    getDockActivity().popBackStackTillEntry(0);
+                                    getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                                }
+                            });
+                            dialogHelper.showDialog();
+                        }
+                    } else {
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    }
+
                 }
-                else {
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+
+                @Override
+                public void onFailure(Call<ResponseWrapper<RegistrationResult>> call, Throwable t) {
+
+                    loadingFinished();
+                    UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+
                 }
+            });
 
-            }
-
-            @Override
-            public void onFailure(Call<ResponseWrapper<RegistrationResult>> call, Throwable t) {
-
-                loadingFinished();
-                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
-
-            }
-        });
-
-}}
+        }
+    }
 
     private void sp_Gender() {
         // Spinner Drop down elements
@@ -227,14 +239,13 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
         titleBar.showSaveButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                // UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
                 EditProfile();
             }
         });
 
         titleBar.setSubHeading(getResources().getString(R.string.edit_profile));
     }
-
 
 
     @Override
@@ -271,9 +282,9 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
 
         if (imagePath != null) {
             profilePic = new File(imagePath);
-            profilePath=imagePath;
+            profilePath = imagePath;
             ImageLoader.getInstance().displayImage(
-                    "file:///" +imagePath, civ_profile_pic);
+                    "file:///" + imagePath, civ_profile_pic);
         }
     }
 
@@ -283,7 +294,7 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
     }
 
     @Override
-    public void setVideo(String videoPath,String videothumb) {
+    public void setVideo(String videoPath, String videothumb) {
 
     }
 
@@ -295,6 +306,7 @@ public class EditTraineeProfileFragment extends BaseFragment implements View.OnC
         // Showing selected spinner item
         //Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
     }
+
     public void onNothingSelected(AdapterView<?> arg0) {
         // TODO Auto-generated method stub
     }

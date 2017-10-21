@@ -50,7 +50,7 @@ public class TrainerClientScheduleListItemBinder extends ViewBinder<Slot> {
             viewHolder.btnName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    context.addDockableFragment(DetailedScreenFragment.newInstance(slotjson), "DetailedScreenFragment");
+                   // context.addDockableFragment(DetailedScreenFragment.newInstance(slotjson), "DetailedScreenFragment");
 
                 }
             });

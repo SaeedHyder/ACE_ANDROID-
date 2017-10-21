@@ -52,7 +52,7 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/x12</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingLeft">@dimen/x10</item>
+        <item name="android:paddingStart">@dimen/x10</item>
         <item name="android:background">@null</item>
         <item name="android:textCursorDrawable">@drawable/color_cursor</item>
     </style>

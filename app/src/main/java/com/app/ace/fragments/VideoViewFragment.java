@@ -110,7 +110,7 @@ public class VideoViewFragment extends BaseFragment {
         super.setTitleBar(titleBar);
         titleBar.hideButtons();
         titleBar.showBackButton();
-        titleBar.setSubHeading("Video");
+        titleBar.setSubHeading(getString(R.string.video));
 
        /* titleBar.showAddButton(new View.OnClickListener() {
             @Override

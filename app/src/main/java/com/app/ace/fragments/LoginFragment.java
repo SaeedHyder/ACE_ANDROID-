@@ -2,13 +2,10 @@ package com.app.ace.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.app.ace.R;
 import com.app.ace.entities.RegistrationResult;
@@ -16,25 +13,20 @@ import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.TwitterUser;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.TokenUpdater;
-import com.app.ace.helpers.TwitterEmailHelper;
 import com.app.ace.helpers.TwitterLoginHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
 import com.google.common.util.concurrent.ExecutionError;
-import com.google.gson.Gson;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Result;
-import com.twitter.sdk.android.core.TwitterAuthToken;
-import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
-import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
-import com.twitter.sdk.android.core.models.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,61 +36,65 @@ import roboguice.inject.InjectView;
 public class LoginFragment extends BaseFragment implements View.OnClickListener {
 
 
-	@InjectView(R.id.btnLogin)
-	private Button btnLogin;
+    @InjectView(R.id.btnLogin)
+    private Button btnLogin;
 
-	@InjectView(R.id.btnSignin_Twitter)
-	private Button btnSignin_Twitter;
+    @InjectView(R.id.btnSignin_Twitter)
+    private Button btnSignin_Twitter;
 
-	@InjectView(R.id.twitterLogin)
-	private TwitterLoginButton twitterLogin;
+    @InjectView(R.id.twitterLogin)
+    private TwitterLoginButton twitterLogin;
 
-	@InjectView(R.id.txtForgotPass)
-	private AnyTextView txtForgotPass;
+    @InjectView(R.id.txtForgotPass)
+    private AnyTextView txtForgotPass;
 
-	@InjectView(R.id.txtCreateAccount)
-	private AnyTextView txtCreateAccount;
+    @InjectView(R.id.txtCreateAccount)
+    private AnyTextView txtCreateAccount;
 
-	@InjectView(R.id.edtEmail)
-	private AnyEditTextView edtEmail;
-
-
-	@InjectView(R.id.edtPassword)
-	private AnyEditTextView edtPassword;
+    @InjectView(R.id.edtEmail)
+    private AnyEditTextView edtEmail;
 
 
-	public static LoginFragment newInstance() {
-		return new LoginFragment();
-	}
+    @InjectView(R.id.edtPassword)
+    private AnyEditTextView edtPassword;
 
-	@Override
-	public View onCreateView( LayoutInflater inflater, ViewGroup container,
-							  Bundle savedInstanceState ) {
-		// TODO Auto-generated method stub
 
-		return inflater.inflate( R.layout.fragment_login, container, false );
+    public static LoginFragment newInstance() {
+        return new LoginFragment();
+    }
 
-	}
-	
-	@Override
-	public void onViewCreated( View view, Bundle savedInstanceState ) {
-		// TODO Auto-generated method stub
-		super.onViewCreated( view, savedInstanceState );
-		
-		setListeners();
-		
-	}
-	
-	private void setListeners() {
-		btnSignin_Twitter.setOnClickListener(this);
-		btnLogin.setOnClickListener(this);
-		txtForgotPass.setOnClickListener(this);
-		txtCreateAccount.setOnClickListener(this);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
 
-		setTwitterLogin();
+        return inflater.inflate(R.layout.fragment_login, container, false);
+
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onViewCreated(view, savedInstanceState);
+        if (prefHelper.isLanguageArabic())
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        else {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
+        setListeners();
+
+    }
+
+    private void setListeners() {
+        btnSignin_Twitter.setOnClickListener(this);
+        btnLogin.setOnClickListener(this);
+        txtForgotPass.setOnClickListener(this);
+        txtCreateAccount.setOnClickListener(this);
+
+        setTwitterLogin();
 
 		/*TwitterCore.getInstance().getApiClient().getAccountService().verifyCredentials(false, false, new com.twitter.sdk.android.core.Callback<User>() {
-			@Override
+            @Override
 			public void success(Result<User> result) {
 
 
@@ -115,286 +111,309 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 		});*/
 
 
-	}
+    }
 
-	private void setTwitterLogin() {
-		TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"android",prefHelper.getFirebase_TOKEN());
-		twitterLogin.setCallback(new TwitterLoginHelper() {
-			@Override
-			public void onSuccess(final TwitterUser user) {
+    private void setTwitterLogin() {
+        TokenUpdater.getInstance().UpdateToken(getDockActivity(), prefHelper.getUserId(), "android", prefHelper.getFirebase_TOKEN());
+        twitterLogin.setCallback(new TwitterLoginHelper() {
+            @Override
+            public void onSuccess(final TwitterUser user) {
 
 
-				TwitterAuthClient authClient = new TwitterAuthClient();
-				authClient.requestEmail(Twitter.getSessionManager().getActiveSession(), new com.twitter.sdk.android.core.Callback<String>() {
-					@Override
-					public void success(Result<String> result) {
+                TwitterAuthClient authClient = new TwitterAuthClient();
+                authClient.requestEmail(Twitter.getSessionManager().getActiveSession(), new com.twitter.sdk.android.core.Callback<String>() {
+                    @Override
+                    public void success(Result<String> result) {
+
+                        TwitterUser twitterUser = user;
+                        twitterUser.setUserEmail(result.data.toString());
+                        sociallogin(twitterUser);
+                        //UIHelper.showLongToastInCenter(getDockActivity(), result.data.toString());
+
+                    }
+
+                    @Override
+                    public void failure(TwitterException exception) {
+
+                        //UIHelper.showLongToastInCenter(getDockActivity(), exception.toString());
+                        try {
+                            TwitterUser twitterUser = user;
+                            twitterUser.setUserEmail("");
+                            sociallogin(twitterUser);
+                        } catch (ExecutionError e) {
+
+                        }
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(TwitterException exception) {
+
+            }
+        });
+    }
+
+    @Override
+    public void setTitleBar(TitleBar titleBar) {
+        // TODO Auto-generated method stub
+        super.setTitleBar(titleBar);
+        titleBar.showTitleBar();
+        titleBar.hideButtons();
+        titleBar.setSubHeading(getActivity().getResources().getString(R.string.login));
+    }
 
-						TwitterUser twitterUser = user;
-						twitterUser.setUserEmail(result.data.toString());
-						sociallogin(twitterUser);
-						//UIHelper.showLongToastInCenter(getDockActivity(), result.data.toString());
+    private void sociallogin(final TwitterUser user) {
 
-					}
+        loadingStarted();
 
-					@Override
-					public void failure(TwitterException exception) {
+        Call<ResponseWrapper<RegistrationResult>> callBack = webService.socialLogin(
+                user.getUserId(),
+                AppConstants.twitter,
+                user.getUserPic(),
+                prefHelper.getFirebase_TOKEN(),
+                "android",
+                getMainActivity().selectedLanguage());
 
-						//UIHelper.showLongToastInCenter(getDockActivity(), exception.toString());
-						try{
-							TwitterUser twitterUser = user;
-							twitterUser.setUserEmail("");
-							sociallogin(twitterUser);
-						}catch (ExecutionError e){
+        callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
 
-						}
+                loadingFinished();
+                TokenUpdater.getInstance().UpdateToken(getDockActivity(), prefHelper.getUserId(), "android", prefHelper.getFirebase_TOKEN());
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-					}
-				});
-			}
+                    if (response.body().getUserDeleted() == 0) {
+                        getDockActivity().popBackStackTillEntry(0);
+                        prefHelper.setLoginStatus(true);
+                        AppConstants.user_id = response.body().getResult().getId();
+                        AppConstants._token = response.body().getResult().get_token();
+                        prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
+                        prefHelper.setUsrId(response.body().getResult().getId());
+                        prefHelper.setToken(response.body().getResult().get_token());
+                        prefHelper.putUser(response.body().getResult());
 
-			@Override
-			public void onFailure(TwitterException exception) {
+                        //prefHelper.setMobileNo(response.body().getResult().getPhone_no());
 
-			}
-		});
-	}
 
-	@Override
-	public void setTitleBar( TitleBar titleBar ) {
-		// TODO Auto-generated method stub
-		super.setTitleBar( titleBar);
-		titleBar.showTitleBar();
-		titleBar.hideButtons();
-		titleBar.setSubHeading(getActivity().getResources().getString(R.string.login));
-	}
+                        if (response.body().getResult().getUser_type().equals(AppConstants.trainee)) {
 
-	private void sociallogin(final TwitterUser user) {
+                            //AppConstants.is_show_trainer = false;
 
-		loadingStarted();
+                        } else {
+                            //AppConstants.is_show_trainer = true;
+                        }
+                        getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
 
-		Call<ResponseWrapper<RegistrationResult>> callBack = webService.socialLogin(
-				user.getUserId(),
-				AppConstants.twitter,
-				user.getUserPic(),
-				prefHelper.getFirebase_TOKEN(),
-				"android");
+                    } else {
+                        //UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
 
-		callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
-			@Override
-			public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
+                        showTwitterSignUpDialog(user);
 
-					loadingFinished();
-					TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"android",prefHelper.getFirebase_TOKEN());
-					if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                    }
+                } else {
+                    final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                    dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-						getDockActivity().popBackStackTillEntry(0);
-						prefHelper.setLoginStatus(true);
+                            dialogHelper.hideDialog();
+                            getDockActivity().popBackStackTillEntry(0);
+                            getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                        }
+                    });
+                    dialogHelper.showDialog();
+                }
+            }
 
-						AppConstants.user_id = response.body().getResult().getId();
-						AppConstants._token = response.body().getResult().get_token();
-						prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
-						prefHelper.setUsrId(response.body().getResult().getId());
-						prefHelper.setToken(response.body().getResult().get_token());
-						prefHelper.putUser(response.body().getResult());
+            @Override
+            public void onFailure(Call<ResponseWrapper<RegistrationResult>> call, Throwable t) {
+                loadingFinished();
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+            }
+        });
 
-						//prefHelper.setMobileNo(response.body().getResult().getPhone_no());
+    }
 
+    private void showTwitterSignUpDialog(final TwitterUser user) {
 
+        final DialogFragment successPopUp = DialogFragment.newInstance();
+        successPopUp.setPopupData(getString(R.string.sign_via_twitter), "", "", "", true, true);
 
-						if(response.body().getResult().getUser_type().equals(AppConstants.trainee)){
+        successPopUp.setbtndialog_1_Listener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-							//AppConstants.is_show_trainer = false;
+                prefHelper.setIsTwitterLogin(true);
+                successPopUp.dismissDialog();
+                getDockActivity().addDockableFragment(TrianeeSignUpFragment.newInstance(user), "TrianeeSignUpFragment");
 
-						}else{
-							//AppConstants.is_show_trainer = true;
-						}
-						getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+            }
+        });
 
-					} else {
-						//UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+        successPopUp.setbtndialog_2_Listener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-						showTwitterSignUpDialog(user);
+                prefHelper.setIsTwitterLogin(true);
+                successPopUp.dismissDialog();
+                getDockActivity().addDockableFragment(TrainerSignUpForm1Fragment.newInstance(user), "TrainerSignUpForm1Fragment");
 
-					}
-			}
+            }
+        });
 
-			@Override
-			public void onFailure(Call<ResponseWrapper<RegistrationResult>> call, Throwable t) {
-				loadingFinished();
-				UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
-			}
-		});
+        successPopUp.show(getDockActivity().getSupportFragmentManager(), "twitterSignUpPopUp");
 
-	}
+    }
 
-	private void showTwitterSignUpDialog(final TwitterUser user) {
+    private void loginUser() {
 
-		final DialogFragment successPopUp = DialogFragment.newInstance();
-		successPopUp.setPopupData(getString(R.string.sign_via_twitter), "", "",  "",true,true);
+        loadingStarted();
 
-		successPopUp.setbtndialog_1_Listener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
+        Call<ResponseWrapper<RegistrationResult>> callBack = webService.loginUser(
+                edtEmail.getText().toString(),
+                edtPassword.getText().toString(),
+                prefHelper.getFirebase_TOKEN(),
+                "android",
+                getMainActivity().selectedLanguage());
 
-				prefHelper.setIsTwitterLogin(true);
-				successPopUp.dismissDialog();
-				getDockActivity().addDockableFragment(TrianeeSignUpFragment.newInstance(user),"TrianeeSignUpFragment");
 
-			}
-		});
+        callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
 
-		successPopUp.setbtndialog_2_Listener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
+                TokenUpdater.getInstance().UpdateToken(getDockActivity(), prefHelper.getUserId(), "android", prefHelper.getFirebase_TOKEN());
+                loadingFinished();
 
-				prefHelper.setIsTwitterLogin(true);
-				successPopUp.dismissDialog();
-				getDockActivity().addDockableFragment(TrainerSignUpForm1Fragment.newInstance(user),"TrainerSignUpForm1Fragment");
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-			}
-		});
+                    if (response.body().getUserDeleted() == 0) {
 
-		successPopUp.show(getDockActivity().getSupportFragmentManager(), "twitterSignUpPopUp");
 
-	}
+                        getDockActivity().popBackStackTillEntry(0);
 
-	private void loginUser() {
+                        prefHelper.setLoginStatus(true);
 
-		loadingStarted();
 
-		Call<ResponseWrapper<RegistrationResult>> callBack = webService.loginUser(
-				edtEmail.getText().toString(),
-				edtPassword.getText().toString(),
-				prefHelper.getFirebase_TOKEN(),
-				"android");
+                        //AppConstants.user_id = response.body().getResult().getId();
+                        //AppConstants._token = response.body().getResult().get_token();
 
 
+                        prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
+                        prefHelper.setUsrId(response.body().getResult().getId());
+                        prefHelper.setToken(response.body().getResult().get_token());
+                        prefHelper.putUser(response.body().getResult());
 
+                        if (response.body().getResult().getUser_type().equals(AppConstants.trainee)) {
 
-		callBack.enqueue(new Callback<ResponseWrapper<RegistrationResult>>() {
-			@Override
-			public void onResponse(Call<ResponseWrapper<RegistrationResult>> call, Response<ResponseWrapper<RegistrationResult>> response) {
+                            //AppConstants.is_show_trainer = false;
 
-					TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"android",prefHelper.getFirebase_TOKEN());
-					loadingFinished();
+                        } else {
+                            //AppConstants.is_show_trainer = true;
+                        }
 
-					if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                        getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
 
-						getDockActivity().popBackStackTillEntry(0);
+                    } else {
 
-						prefHelper.setLoginStatus(true);
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
+                } else {
 
+                    if (response.body().getMessage().equalsIgnoreCase("Account not verified Please check email for verification code")) {
+                        prefHelper.setUsrId(response.body().getResult().getId());
+                        AppConstants.user_id = prefHelper.getUserId();
+                        prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
+                        prefHelper.setUsrId(response.body().getResult().getId());
+                        prefHelper.setToken(response.body().getResult().get_token());
+                        prefHelper.putUser(response.body().getResult());
+                        getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name(), response.body().getResult().getEmail()), "VarificationCodeFragment");
 
-						//AppConstants.user_id = response.body().getResult().getId();
-						//AppConstants._token = response.body().getResult().get_token();
+                    } else {
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    }
 
 
+                }
 
-						prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
-						prefHelper.setUsrId(response.body().getResult().getId());
-						prefHelper.setToken(response.body().getResult().get_token());
-						prefHelper.putUser(response.body().getResult());
+            }
 
-						if(response.body().getResult().getUser_type().equals(AppConstants.trainee)){
+            @Override
+            public void onFailure(Call<ResponseWrapper<RegistrationResult>> call, Throwable t) {
+                loadingFinished();
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
 
-							//AppConstants.is_show_trainer = false;
+            }
+        });
 
-						}else{
-							//AppConstants.is_show_trainer = true;
-						}
+    }
 
-						getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+    private boolean validateFields() {
+        return edtEmail.testValidity() && edtPassword.testValidity();
+    }
 
+    @Override
+    public void onClick(View v) {
+        // TODO Auto-generated method stub
+        switch (v.getId()) {
+            case R.id.btnLogin:
+                if (validateFields()) {
+                    if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()))
+                        loginUser();
+                }
+                break;
 
-					} else {
+            case R.id.txtForgotPass:
 
-						if(response.body().getMessage().equalsIgnoreCase("Account not verified Please check email for verification code"))
-						{
-							prefHelper.setUsrId(response.body().getResult().getId());
-							AppConstants.user_id = prefHelper.getUserId();
-							prefHelper.setUsrName(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
-							prefHelper.setUsrId(response.body().getResult().getId());
-							prefHelper.setToken(response.body().getResult().get_token());
-							prefHelper.putUser(response.body().getResult());
-							getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name() ,response.body().getResult().getEmail()), "VarificationCodeFragment");
+                getDockActivity().addDockableFragment(ForgotPasswordFragment.newInstance(), "ForgotPasswordFragment");
+                break;
 
-						}else{
-							UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-						}
 
+            case R.id.txtCreateAccount:
 
-					}
+                getDockActivity().addDockableFragment(SignUpFragment.newInstance(), "SignUpFragment");
+                break;
 
-			}
+            case R.id.btnSignin_Twitter:
 
-			@Override
-			public void onFailure(Call<ResponseWrapper<RegistrationResult>> call, Throwable t) {
-				loadingFinished();
-				UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+                if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()))
 
-			}
-		});
 
-	}
+                    twitterLogin.performClick();
 
-	private boolean validateFields() {
-		return edtEmail.testValidity() && edtPassword.testValidity();
-	}
-	
-	@Override
-	public void onClick( View v ) {
-		// TODO Auto-generated method stub
-		switch (v.getId()){
-			case R.id.btnLogin:
-				if(validateFields()) {
-					if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()))
-						loginUser();
-				}
-				break;
+                //getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
 
-			case R.id.txtForgotPass:
+                break;
+        }
+    }
 
-				getDockActivity().addDockableFragment(ForgotPasswordFragment.newInstance(),"ForgotPasswordFragment");
-				break;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        try {
+            if (resultCode == 1) {
+                UIHelper.showShortToastInCenter(getDockActivity(), "Twitter App not found");
+            }
 
-			case R.id.txtCreateAccount:
-
-				getDockActivity().addDockableFragment(SignUpFragment.newInstance(),"SignUpFragment");
-				break;
-
-			case R.id.btnSignin_Twitter:
-
-				if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()))
-
-
-
-				twitterLogin.performClick();
-
-				//getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
-
-				break;
-		}
-	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-
-		try{
-			if(resultCode == 1) {
-				UIHelper.showShortToastInCenter(getDockActivity(), "Twitter App not found");
-			}
-
-			twitterLogin.onActivityResult(requestCode, resultCode, data);
-		}
-		catch (Exception e){
-			e.printStackTrace();
-		}
+            twitterLogin.onActivityResult(requestCode, resultCode, data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 		/*try {
-			if(resultCode != 1) {
+            if(resultCode != 1) {
 				twitterLogin.onActivityResult(requestCode, resultCode, data);
 			}
 			else{
@@ -406,6 +425,5 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 		}*/
 
 
-
-	}
+    }
 }

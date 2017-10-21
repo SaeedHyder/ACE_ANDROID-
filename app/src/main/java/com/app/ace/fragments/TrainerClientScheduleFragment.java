@@ -10,14 +10,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.app.ace.R;
-import com.app.ace.entities.Booking;
-import com.app.ace.entities.GetTraineeBookings;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.Slot;
 import com.app.ace.entities.TrainerBooking;
-import com.app.ace.entities.TrainerClientScheduleItem;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.TrainerClientScheduleListItemBinder;
@@ -28,19 +26,14 @@ import com.github.jhonnyx2012.horizontalpicker.HorizontalPicker;
 
 import org.joda.time.DateTime;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
-
-import static com.app.ace.R.id.listView;
 
 
 public class TrainerClientScheduleFragment extends BaseFragment implements DatePickerListener, View.OnClickListener {
@@ -98,8 +91,6 @@ public class TrainerClientScheduleFragment extends BaseFragment implements DateP
         datePicker.setDate(new DateTime());
 
 
-
-
         //  getSearchUserData();
         setTraineeBookings(new DateTime());
         setListener();
@@ -117,7 +108,21 @@ public class TrainerClientScheduleFragment extends BaseFragment implements DateP
             public void onResponse(Call<ResponseWrapper<TrainerBooking>> call, Response<ResponseWrapper<TrainerBooking>> response) {
                 loadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                    setTraineeData(response.body().getResult());
+                    if (response.body().getUserDeleted() == 0) {
+                        setTraineeData(response.body().getResult());
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
                 } else {
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
@@ -168,11 +173,11 @@ public class TrainerClientScheduleFragment extends BaseFragment implements DateP
             lv_trainer_srceen.setVisibility(View.VISIBLE);
         }
 
-      ;
+        ;
 
         slots = result.getSlots();
         for (Slot item : slots) {
-            if (item.getBookings() !=null){
+            if (item.getBookings() != null) {
                 userCollection.add(item);
             }
             //userCollection.add(new TrainerClientScheduleItem(item.getStart_time() + "-" + item.getEnd_time(), item.getTrainer().getFirst_name() + " " + item.getTrainer().getLast_name()));

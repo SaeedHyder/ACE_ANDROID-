@@ -15,6 +15,7 @@ import com.app.ace.entities.UserNotificatoin;
 import com.app.ace.entities.YouDataItem;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
+import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.FollowService;
 import com.app.ace.ui.adapters.ArrayListAdapter;
@@ -82,9 +83,22 @@ public class YouListFragment extends BaseFragment implements FollowService {
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    getDockActivity().onLoadingFinished();
-                    setDataInNOtificationList(response.body().getResult());
+                    if (response.body().getUserDeleted() == 0) {
+                        getDockActivity().onLoadingFinished();
+                        setDataInNOtificationList(response.body().getResult());
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
                 } else {
                     getDockActivity().onLoadingFinished();
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
@@ -116,10 +130,10 @@ public class YouListFragment extends BaseFragment implements FollowService {
             try {
 
                 if (item.getAction_type().contains("post")) {
-                    userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), item.getPost().getPost_image(), getDockActivity().getDate(item.getCreated_at()), item.getSender_id(), null));
+                    userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), item.getPost().getPost_image(), getDockActivity().getDate(item.getCreated_at()), item.getSender_id(), null,item.getPost().getPost_thumb_image()));
 
                 } else {
-                    userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), null, getDockActivity().getDate(item.getCreated_at()), item.getSender_id(), item.getIs_following()));
+                    userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), null, getDockActivity().getDate(item.getCreated_at()), item.getSender_id(), item.getIs_following(),item.getPost().getPost_thumb_image()));
 
                 }
             } catch (Exception e) {
@@ -186,8 +200,21 @@ public class YouListFragment extends BaseFragment implements FollowService {
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    if (response.body().getUserDeleted() == 0) {
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
                 } else {
 
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
@@ -237,7 +264,22 @@ public class YouListFragment extends BaseFragment implements FollowService {
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
 
-                   // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    if (response.body().getUserDeleted() == 0) {
+
+                        // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        });
+                        dialogHelper.showDialog();
+                    }
 
 
                 } else {
@@ -250,7 +292,7 @@ public class YouListFragment extends BaseFragment implements FollowService {
             @Override
             public void onFailure(Call<ResponseWrapper<FollowUser>> call, Throwable t) {
 
-               // UIHelper.showLongToastInCenter(getDockActivity(), "");
+                // UIHelper.showLongToastInCenter(getDockActivity(), "");
 
             }
         });
