@@ -139,7 +139,7 @@
     <string name="cb_1_to_5_years">1 to 5 years</string>
     <string name="cb_5_years_or_more">5 years or more</string>
 
-    <string name="my_gym_timings">My Gym Timings</string>
+    <string name="my_gym_timings">My Timings</string>
     <string name="cb_sun">S</string>
     <string name="cb_mon">M</string>
     <string name="cb_tue">T</string>
@@ -474,7 +474,11 @@
     <string name="enter_current_password">Enter Current Password</string>
     <string name="password_not_matched">Password Not Matched</string>
     <string name="are_you_sure_you_want_to_language">Are you sure you want to change language?</string>
-
+    <string name="enter_fName">Enter First Name</string>
+    <string name="Enter_Lname">Enter Last Name</string>
+    <string name="Enter_password">Enter Password</string>
+    <string name="select_file">Select File</string>
+    <string name="set_file">How do you want to set your file?</string>
 
 
 </resources>

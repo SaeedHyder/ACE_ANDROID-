@@ -45,6 +45,8 @@ public class WelcomeTutorialFragment extends BaseFragment implements BaseSliderV
 
     @InjectView(R.id.iv_text)
     private ImageView iv_text;
+    private int SLIDER_COUNT=4;
+    private int previousPosition = 0;
 
     private static String LANGUAGE = "language";
 
@@ -143,12 +145,16 @@ public class WelcomeTutorialFragment extends BaseFragment implements BaseSliderV
 
     @Override
     public void onPageSelected(int position) {
-       /* if (imageSlider.getCurrentPosition() == 4) {
-            imageSlider.setCurrentPosition(1, false);
+
+        if(previousPosition == SLIDER_COUNT && position == 0) {
+            imageSlider.movePrevPosition();
+            return;
+        } else if(previousPosition == 0 && position == SLIDER_COUNT) {
+            imageSlider.moveNextPosition();
+            return;
         }
-        if (imageSlider.getCurrentPosition() == 0) {
-            imageSlider.setCurrentPosition(3, false); // false will prevent sliding                      animation of view pager
-        }*/
+
+        previousPosition = position;
 
         switch (position) {
 

@@ -140,12 +140,13 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
     private void getSearchUserData() {
 
 
-        Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edtsearch.getText().toString(), AppConstants.trainer, 24.807825187774412, 46.74573140058601, getMainActivity().selectedLanguage());
+        Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edtsearch.getText().toString(), AppConstants.trainer,latitude, longitude, getMainActivity().selectedLanguage());
 
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
 
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), AppConstants.zoomIn));
                 if (response.body() != null)
                     if (response.body().getResult().size() <= 0) {
                         if (response.body().getUserDeleted() == 0) {

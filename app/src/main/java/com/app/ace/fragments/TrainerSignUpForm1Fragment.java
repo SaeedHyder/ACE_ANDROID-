@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.io.File;
 
 import roboguice.inject.InjectView;
+
+import static com.app.ace.R.id.txt_from;
+import static com.app.ace.R.id.txt_to;
 
 /**
  * Created by khan_muhammad on 3/13/2017.
@@ -176,8 +180,26 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
     }
 
     private boolean validateFields() {
-        return edtFName.testValidity() && edtLName.testValidity() && edtEmail.testValidity()  && edtPassword.testValidity() && edtMobileNumber.testValidity();
+        if (edtFName.equals("")) {
+            UIHelper.showLongToastInCenter(getDockActivity(),getString(R.string.enter_fName));
+            return false;
+        } else if (edtLName.equals("")) {
+            UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.Enter_Lname));
+            return false;
+        } else if (edtEmail.equals("") || edtEmail.getText().toString().isEmpty() || (!Patterns.EMAIL_ADDRESS.matcher(edtEmail.getText().toString()).matches())) {
+            UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.enter_email));
+            return false;
+        } else if (edtPassword.equals("")) {
+            UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.Enter_password));
+            return false;
+        } else if (edtMobileNumber.getText().toString().equals("")) {
+            UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.enter_mobile_no));
+            return false;
+        }  else {
+            return true;
+        }
     }
+
 
     @Override
     public void onClick( View v ) {

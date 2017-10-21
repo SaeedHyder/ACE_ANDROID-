@@ -380,10 +380,10 @@ public class CameraHelper {
 
 	public static void uploadFile(final MainActivity activity) {
 		AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(activity);
-		myAlertDialog.setTitle("Select File");
-		myAlertDialog.setMessage("How do you want to set your file?");
+		myAlertDialog.setTitle(R.string.select_file);
+		myAlertDialog.setMessage(R.string.set_file);
 
-		myAlertDialog.setPositiveButton("Select File", new DialogInterface.OnClickListener() {
+		myAlertDialog.setPositiveButton(R.string.select_file, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				activity.pickFile();
