@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:alpha="0.6"
         android:orientation="vertical"
-        android:background="@color/black">
+        android:background="@color/transparent">
     </LinearLayout>
 
     <RelativeLayout
@@ -73,11 +73,11 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/x25"
+                    android:layout_marginTop="@dimen/x15"
                     android:layout_marginLeft="@dimen/x15"
                     android:layout_marginRight="@dimen/x15"
                     android:gravity="center"
-                    android:text="User has been deleted. Sorry for inconvenience."
+                    android:text="@string/user_delete_message"
                     android:textColor="@color/dark_grey"
                     android:visibility="visible"
                     android:textSize="@dimen/x22"
@@ -97,8 +97,8 @@
                         android:id="@+id/btnDeleteOk"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/x10"
-                        android:layout_marginBottom="@dimen/x15"
+                        android:layout_marginTop="@dimen/x15"
+
                         android:visibility="visible"
                         android:background="@drawable/ok_btn"
                         android:textColor="@color/white"

@@ -80,6 +80,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private ArrayListAdapter<ChatDataItem> adapter;
     private ArrayList<ChatDataItem> collection = new ArrayList<>();
     private Integer isReceiver_mute = 0;
+    String messageBtn = "hide";
 
     public static ChatFragment newInstance() {
         return new ChatFragment();
@@ -216,12 +217,46 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (prefHelper.isLanguageArabic()) {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        } else {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
+
+        getTitleBar().hideMessageButton();
 
         getAllMsges();
 
         setListener();
 
+
+        setTitleInfo();
+
         //getChatData();
+    }
+
+    private void setTitleInfo() {
+
+        if (!receiverId.equals(prefHelper.getUserId())) {
+            getMainActivity().titleBar.showHelpButton(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
+                    if (blockReceiverId == null) {
+                        blockReceiverId = receiverId;
+                    }
+                    getDockActivity().addDockableFragment(FriendsInfoFragment.newInstance(
+                            ConversationId,
+                            blockReceiverId,
+                            IsFollowing,
+                            ProfileImage,
+                            UserName,
+                            sender_block,
+                            receiver_block
+                            , String.valueOf(isReceiver_mute)), "FriendsInfoFragment");
+                }
+            });
+        }
     }
 
     private void getAllMsges() {
@@ -234,10 +269,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onResponse(Call<ResponseWrapper<ArrayList<ConversationEnt>>> call,
                                    Response<ResponseWrapper<ArrayList<ConversationEnt>>> response) {
-                loadingFinished();
+
                 if (response.body().getUserDeleted() == 0) {
                     if (response.body().getResult().size() > 0) {
                         if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                            loadingFinished();
                             if (String.valueOf(response.body().getResult().get(0).getConversation().getSenderId()).equals(prefHelper.getUserId())) {
                                 isReceiver_mute = response.body().getResult().get(0).getConversation().getSenderMute();
                             } else if (String.valueOf(response.body().getResult().get(0).getConversation().getReceiverId()).equals(prefHelper.getUserId())) {
@@ -252,10 +288,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                             setUserName(response.body().getResult());
 
                         } else {
+                            loadingFinished();
                             UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                         }
                     }
                 } else {
+                    loadingFinished();
                     final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
                     dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
                         @Override
@@ -265,7 +303,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                             getDockActivity().popBackStackTillEntry(0);
                             getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                         }
-                    });
+                    },response.body().getMessage());
                     dialogHelper.showDialog();
                 }
             }
@@ -356,8 +394,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
         }
 
-
-        getMainActivity().titleBar.invalidate();
+        if (getMainActivity()!= null)
+            getMainActivity().titleBar.invalidate();
         bindData(collection);
 
     }
@@ -485,7 +523,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                 } else {

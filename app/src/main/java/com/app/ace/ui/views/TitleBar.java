@@ -188,6 +188,15 @@ public class TitleBar extends RelativeLayout {
 
     }
 
+    public void hideMessageButton() {
+        btnRight.setVisibility(View.GONE);
+        btnRight.setImageResource(R.drawable.icon);
+        hideBadge();
+
+    }
+
+
+
     public void showCancelButton(View.OnClickListener cancelBtn) {
         btnRight.setVisibility(View.VISIBLE);
         btnRight.setImageResource(R.drawable.cancel_icon);

@@ -64,6 +64,7 @@ public class FollowListItemBinder extends ViewBinder<FollowDataItem> {
         CustomeGridViewAdapter adapterCustomeGridView;
         adapterCustomeGridView = new CustomeGridViewAdapter(activity, R.layout.follow_listitem, entity.getImgChildGrid());
         viewHolder.gridview.setAdapter(adapterCustomeGridView);
+        viewHolder.gridview.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
         viewHolder.gridview.setExpanded(true);
     }
 

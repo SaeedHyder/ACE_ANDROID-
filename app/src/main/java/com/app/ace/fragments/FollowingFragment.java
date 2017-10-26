@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.app.ace.R;
 import com.app.ace.fragments.abstracts.BaseFragment;
+import com.app.ace.helpers.InternetHelper;
 import com.app.ace.ui.views.TitleBar;
 
 import roboguice.inject.InjectView;
@@ -49,9 +50,10 @@ public class FollowingFragment extends BaseFragment{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
         //setListener();
-        getUserData();
+
+        getUserData();}
 
         setListener();
     }

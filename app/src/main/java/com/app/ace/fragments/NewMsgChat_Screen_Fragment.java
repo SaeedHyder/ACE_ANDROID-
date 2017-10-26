@@ -93,6 +93,15 @@ public class NewMsgChat_Screen_Fragment extends BaseFragment implements View.OnC
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        getTitleBar().hideMessageButton();
+
+        getMainActivity().onLoadingFinished();
+        if (prefHelper.isLanguageArabic()) {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        } else {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
+
         edit_sendTo.setText(username);
         edit_msgText.setText(post_path);
 
@@ -145,7 +154,7 @@ public class NewMsgChat_Screen_Fragment extends BaseFragment implements View.OnC
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                 } else {

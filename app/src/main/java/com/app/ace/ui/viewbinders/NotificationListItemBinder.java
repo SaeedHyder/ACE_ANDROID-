@@ -75,7 +75,7 @@ public class NotificationListItemBinder extends ViewBinder<Notification> impleme
                 }
                 else if(entity.getActionType().equals("conversation")){
                     context.addDockableFragment(ChatFragment.newInstance(String.valueOf(entity.getActionId()
-                    ),String.valueOf(entity.getSenderId()),""), "ChatFragment");
+                    ),String.valueOf(entity.getSenderId()),entity.getSender().getFirst_name()+" "+entity.getSender().getLast_name()), "ChatFragment");
                 }
             }
         });

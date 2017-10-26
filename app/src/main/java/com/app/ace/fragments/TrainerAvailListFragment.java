@@ -91,7 +91,7 @@ public class TrainerAvailListFragment extends BaseFragment {
                             getDockActivity().popBackStackTillEntry(0);
                             getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                         }
-                    });
+                    },response.body().getMessage());
                     dialogHelper.showDialog();
                 }
             }

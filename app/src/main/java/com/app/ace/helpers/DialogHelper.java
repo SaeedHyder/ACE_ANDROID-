@@ -29,6 +29,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static com.app.ace.R.id.txt1;
+
 /**
  * Created on 4/27/2017.
  */
@@ -41,7 +43,7 @@ public class DialogHelper {
     CalendarPickerView calendarView;
     Date StartDate;
 
-    public Dialog initLogoutDialog(int layoutID, View.OnClickListener onclicklistenerYes) {
+    public Dialog initLogoutDialog(int layoutID, View.OnClickListener onclicklistenerYes,String message) {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
@@ -49,7 +51,8 @@ public class DialogHelper {
         this.dialog.setContentView(layoutID);
         Button btnDeleteOk = (Button) dialog.findViewById(R.id.btnDeleteOk);
         btnDeleteOk.setOnClickListener(onclicklistenerYes);
-
+        AnyTextView textView = (AnyTextView)dialog.findViewById(txt1);
+        textView.setText(message);
         return this.dialog;
     }
 

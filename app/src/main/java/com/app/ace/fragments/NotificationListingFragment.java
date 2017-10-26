@@ -22,6 +22,7 @@ import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.CameraHelper;
 import com.app.ace.helpers.DialogHelper;
+import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.TraineeSchedule;
 import com.app.ace.retrofit.GsonFactory;
@@ -96,8 +97,9 @@ public class NotificationListingFragment extends BaseFragment implements View.On
         super.onViewCreated(view, savedInstanceState);
         setListener();
 
-
-        notificationService(0, 1000);
+        if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
+            notificationService(0, 1000);
+        }
 
     }
 
@@ -121,7 +123,7 @@ public class NotificationListingFragment extends BaseFragment implements View.On
                             getDockActivity().popBackStackTillEntry(0);
                             getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                         }
-                    });
+                    },response.body().getMessage());
                     dialogHelper.showDialog();
                 }
             }

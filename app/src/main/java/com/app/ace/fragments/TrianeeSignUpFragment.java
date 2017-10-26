@@ -1,6 +1,9 @@
 package com.app.ace.fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -27,8 +30,12 @@ import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Date;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -149,6 +156,7 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
             view_Password.setVisibility(View.GONE);
             edtPassword.setText(AppConstants.fixPassword);
         }
+        InternetHelper.CheckInternetConectivityandShowToast(getDockActivity());
 
         btnSignUp.setVisibility(View.VISIBLE);
         btnNext.setVisibility(View.INVISIBLE);
@@ -160,6 +168,7 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
         if (twitterUser != null) {
             edtFName.setText(twitterUser.getUserName());
             edtEmail.setText(twitterUser.getUserEmail());
+            SetTwitterImage(twitterUser.getUserPic());
         }
 
     }
@@ -330,7 +339,7 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
                                     getDockActivity().popBackStackTillEntry(0);
                                     getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                                 }
-                            });
+                            },response.body().getMessage());
                             dialogHelper.showDialog();
                         }
                     } else {
@@ -373,7 +382,52 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
                     "file:///" + imagePath, iv_profile);
         }
     }
+    private void SetTwitterImage(String imagePath) {
+        if (imagePath != null) {
+            //profilePic = new File(imagePath);
+           /* profilePic = new File(imagePath);
+            profilePath = imagePath;
+            Glide.with(getDockActivity())
+                    .load(imagePath)
+                    .into(CircularImageSharePop);*/
+            Picasso.with(getDockActivity()).load(imagePath).into(new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    try {
+                        iv_profile.setImageBitmap(bitmap);
+                        String root = Environment.getExternalStorageDirectory().toString();
+                        profilePic = new File(root + "/ace");
 
+                        if (!profilePic.exists()) {
+                            profilePic.mkdirs();
+                        }
+
+                        String name = new Date().toString() + ".jpg";
+                        profilePic = new File(profilePic, name);
+                        FileOutputStream out = new FileOutputStream(profilePic);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+
+                        out.flush();
+                        out.close();
+                    } catch (Exception e) {
+                        // some action
+                    }
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
+
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                }
+            });
+            //  ImageLoader.getInstance().displayImage(
+            //     "file:///" +imagePath, CircularImageSharePop);
+        }
+    }
     @Override
     public void setFilePath(String filePath) {
 

@@ -123,7 +123,7 @@ public class CommentSectionFragment extends BaseFragment implements CommentSecti
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                 } else {
@@ -278,7 +278,7 @@ public class CommentSectionFragment extends BaseFragment implements CommentSecti
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                 } else {

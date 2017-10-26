@@ -15,6 +15,7 @@ import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.DialogHelper;
+import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.InboxListItemBinder;
@@ -64,8 +65,9 @@ public class InboxListFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-        setInboxData();
+        if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
+            setInboxData();
+        }
         ListViewItemListner();
         // getUserData();
     }
@@ -93,7 +95,7 @@ public class InboxListFragment extends BaseFragment {
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
 

@@ -15,6 +15,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    dexOptions {
+        incremental = true
+        javaMaxHeapSize "4g"
+        incremental true
+    }
     lintOptions {
           abortOnError false
       }

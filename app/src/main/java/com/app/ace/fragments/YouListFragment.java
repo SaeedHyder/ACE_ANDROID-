@@ -66,7 +66,9 @@ public class YouListFragment extends BaseFragment implements FollowService {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         //setListener();
+        getMainActivity().onLoadingStarted();
         setData();
         // getUserData();
     }
@@ -79,7 +81,7 @@ public class YouListFragment extends BaseFragment implements FollowService {
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserNotificatoin>>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<ArrayList<UserNotificatoin>>> call, Response<ResponseWrapper<ArrayList<UserNotificatoin>>> response) {
-
+                getMainActivity().onLoadingFinished();
 
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
 
@@ -96,10 +98,11 @@ public class YouListFragment extends BaseFragment implements FollowService {
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                 } else {
+                    getMainActivity().onLoadingFinished();
                     getDockActivity().onLoadingFinished();
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
@@ -129,19 +132,20 @@ public class YouListFragment extends BaseFragment implements FollowService {
         for (UserNotificatoin item : result) {
             try {
 
-                if (item.getAction_type().contains("post")) {
-                    userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), item.getPost().getPost_image(), getDockActivity().getDate(item.getCreated_at()), item.getSender_id(), null,item.getPost().getPost_thumb_image()));
+                if (item.getAction_type().equals("post")) {
+                    userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), item.getPost().getPost_image(), getDockActivity().getDate(item.getCreated_at()), item.getSender_id(), null, item.getPost().getPost_thumb_image()));
 
                 } else {
-                    userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), null, getDockActivity().getDate(item.getCreated_at()), item.getSender_id(), item.getIs_following(),item.getPost().getPost_thumb_image()));
+                    userCollection.add(new YouDataItem(item.getSender().getProfile_image(), item.getSender().getFirst_name() + " " + item.getSender().getLast_name(), item.getMessage(), null, getDockActivity().getDate(item.getCreated_at()), item.getSender_id(), item.getIs_following(), null));
 
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            bindData(userCollection);
+
         }
+        bindData(userCollection);
     }
 
    /* private void getUserData() {
@@ -212,7 +216,7 @@ public class YouListFragment extends BaseFragment implements FollowService {
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                 } else {
@@ -277,7 +281,7 @@ public class YouListFragment extends BaseFragment implements FollowService {
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
 

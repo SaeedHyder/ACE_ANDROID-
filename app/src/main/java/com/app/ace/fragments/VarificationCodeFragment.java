@@ -157,7 +157,7 @@ public class VarificationCodeFragment extends BaseFragment implements View.OnCli
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
 
@@ -205,7 +205,7 @@ public class VarificationCodeFragment extends BaseFragment implements View.OnCli
                                     getDockActivity().popBackStackTillEntry(0);
                                     getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                                 }
-                            });
+                            },response.body().getMessage());
                             dialogHelper.showDialog();
                         }
 

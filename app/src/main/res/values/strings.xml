@@ -250,7 +250,7 @@
     <string name="no_data">No Data to show</string>
     <string name="no_internet">Internet Connection Lost</string>
 
-    <string name="password_length_alert">Password should be 6 or more characters long</string>
+    <string name="password_length_alert">Password Length Must be greate than 6 Characters</string>
 
     //Buttons Text
     <string name="ok">OK</string>
@@ -457,18 +457,22 @@
     <string name="gps_yes">Yes</string>
     <string name="gps_no">No</string>
     <string name="deatils">Details</string>
+    <string name="select_image">Select Image</string>
+    <string name="video">Video</string>
+    <string name="select_video">Select Video</string>
+
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="are_you_sure_you_want_to_logout">Are you sure you want to logout?</string>
     <string name="select_photo_video">Select Photo / Video</string>
     <string name="how_do_you_want_photo">How do you want to set your post?</string>
-    <string name="video">Video</string>
-    <string name="select_video">Select Video</string>
+
+
     <string name="how_do_select_video">How do you want to set your video?</string>
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
     <string name="imgae">Image</string>
-    <string name="select_image">Select Image</string>
+
     <string name="how_do_you_want__to_selectphoto">How do you want to set your photo?</string>
     <string name="upload_photo">Upload Photo</string>
     <string name="enter_current_password">Enter Current Password</string>
@@ -479,6 +483,8 @@
     <string name="Enter_password">Enter Password</string>
     <string name="select_file">Select File</string>
     <string name="set_file">How do you want to set your file?</string>
+    <string name="image">Image</string>
+    <string name="user_delete_message">User has been deleted. Sorry for inconvenience.</string>
 
 
 </resources>

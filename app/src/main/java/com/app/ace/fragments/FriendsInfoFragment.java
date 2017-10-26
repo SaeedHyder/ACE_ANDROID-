@@ -221,7 +221,7 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
 
@@ -270,7 +270,7 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                 } else {
@@ -318,7 +318,7 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                 } else {
@@ -373,7 +373,7 @@ public class FriendsInfoFragment extends BaseFragment implements View.OnClickLis
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
 

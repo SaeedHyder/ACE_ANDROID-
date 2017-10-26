@@ -18,6 +18,7 @@ import com.app.ace.entities.UserProfile;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.DialogHelper;
+import com.app.ace.helpers.InternetHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.SearchPeopleListItemBinder;
 import com.app.ace.ui.views.AnyEditTextView;
@@ -82,18 +83,22 @@ public class SearchTrainerFragment extends BaseFragment {
         } else
             language = "en";
 
-        getSearchUserData();
+        if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
+            getSearchUserData();
+        }
 
     }
 
     private void getSearchUserData() {
 
+        getMainActivity().onLoadingStarted();
         Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edtsearch.getText().toString(), AppConstants.trainer, getMainActivity().selectedLanguage());
 
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
                 //  resultuser = response.body().getResult();
+                getMainActivity().onLoadingFinished();
                 if (response.body() != null)
                     if (response.body().getUserDeleted() == 0) {
                         bindview(response.body().getResult());
@@ -107,7 +112,7 @@ public class SearchTrainerFragment extends BaseFragment {
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                 // System.out.println(response.body().getResult().get(0).getId());
@@ -115,6 +120,7 @@ public class SearchTrainerFragment extends BaseFragment {
 
             @Override
             public void onFailure(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Throwable t) {
+                getMainActivity().onLoadingFinished();
                 Log.e("Search", t.toString());
             }
         });

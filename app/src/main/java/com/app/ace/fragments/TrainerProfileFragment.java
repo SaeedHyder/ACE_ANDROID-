@@ -169,6 +169,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     String messageBtn = "hide";
 
     String trainer_name;
+    private TitleBar titlebar;
 
     public static TrainerProfileFragment newInstance() {
         return new TrainerProfileFragment();
@@ -201,7 +202,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         feedbackAdapter = new ArrayListAdapter<TrainerReviews>(getDockActivity(), new FeedbackViewBinder(getDockActivity()));
 
 
-        BaseApplication.getBus().register(this);
+        //BaseApplication.getBus().register(this);
 
 
     }
@@ -218,10 +219,12 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         scrollView.setVisibility(View.INVISIBLE);
+
         loadingFinished();
         setListener();
-        showProfiles();
-
+        if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
+            showProfiles();
+        }
         lv_feedback.setOnTouchListener(null);
         lv_feedback.setScrollContainer(false);
         lv_feedback.setExpanded(true);
@@ -231,7 +234,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
     void showTitleBarIcon() {
         if (messageBtn.equals("show")) {
-            getMainActivity().titleBar.showMessageButton(new View.OnClickListener() {
+            titlebar.showMessageButton(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //    getDockActivity().addDockableFragment(ChatFragment.newInstance("0", user_id,trainer_name), "ChatFragment");
@@ -240,7 +243,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                 }
             });
         } else {
-            getMainActivity().titleBar.showSettingButton(new View.OnClickListener() {
+            titlebar.showSettingButton(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -250,10 +253,11 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             });
         }
     }
-
+    Call<ResponseWrapper<UserProfile>> callBack;
     private void showProfiles() {
+
         RegistrationResult result;
-        Call<ResponseWrapper<UserProfile>> callBack = webService.UserProfile(user_id, prefHelper.getUserId());
+        callBack = webService.UserProfile(user_id, prefHelper.getUserId());
 
         callBack.enqueue(new Callback<ResponseWrapper<UserProfile>>() {
             @Override
@@ -455,7 +459,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                             getDockActivity().popBackStackTillEntry(0);
                             getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                         }
-                    });
+                    },response.body().getMessage());
                     dialogHelper.showDialog();
                 }
             }
@@ -464,11 +468,19 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
             public void onFailure(Call<ResponseWrapper<UserProfile>> call, Throwable t) {
 
                 loadingFinished();
-                UIHelper.showShortToastInCenter(getDockActivity(), t.getMessage());
+              //  UIHelper.showShortToastInCenter(getDockActivity(), t.getMessage());
 
             }
         });
 
+    }
+
+    @Override
+    public void onPause() {
+        if (callBack!=null){
+            callBack.cancel();
+        }
+        super.onPause();
     }
 
     private void setFeedbackData(ArrayList<TrainerReviews> trainer_reviews) {
@@ -614,7 +626,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                 } else {
@@ -631,10 +643,15 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Override
     public void setTitleBar(TitleBar titleBar) {
         super.setTitleBar(titleBar);
+        this.titlebar = titleBar;
         titleBar.hideButtons();
         titleBar.setSubHeading(getString(R.string.profile));
         titleBar.hideSearchBar();
@@ -918,7 +935,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
 
@@ -963,7 +980,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                 } else {
@@ -1010,7 +1027,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                 } else {

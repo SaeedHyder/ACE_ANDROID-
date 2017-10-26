@@ -111,7 +111,7 @@ public class ForgotPasswordFragment extends BaseFragment implements View.OnClick
                                             getDockActivity().popBackStackTillEntry(0);
                                             getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                                         }
-                                    });
+                                    },response.body().getMessage());
                                     dialogHelper.showDialog();
                                 }
                             } else {

@@ -22,11 +22,11 @@ import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
 import com.google.common.util.concurrent.ExecutionError;
-import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
-import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.core.models.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -119,23 +119,17 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
             @Override
             public void onSuccess(final TwitterUser user) {
 
-
-                TwitterAuthClient authClient = new TwitterAuthClient();
-                authClient.requestEmail(Twitter.getSessionManager().getActiveSession(), new com.twitter.sdk.android.core.Callback<String>() {
+                Call<User> userCall = TwitterCore.getInstance().getApiClient().getAccountService().verifyCredentials(true, false);
+                userCall.enqueue(new com.twitter.sdk.android.core.Callback<User>() {
                     @Override
-                    public void success(Result<String> result) {
-
+                    public void success(Result<User> result) {
                         TwitterUser twitterUser = user;
-                        twitterUser.setUserEmail(result.data.toString());
+                        twitterUser.setUserPic(result.data.profileImageUrl.replace("_normal", "_bigger"));
                         sociallogin(twitterUser);
-                        //UIHelper.showLongToastInCenter(getDockActivity(), result.data.toString());
-
                     }
 
                     @Override
                     public void failure(TwitterException exception) {
-
-                        //UIHelper.showLongToastInCenter(getDockActivity(), exception.toString());
                         try {
                             TwitterUser twitterUser = user;
                             twitterUser.setUserEmail("");
@@ -143,9 +137,9 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
                         } catch (ExecutionError e) {
 
                         }
-
                     }
                 });
+
             }
 
             @Override
@@ -222,7 +216,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
                             getDockActivity().popBackStackTillEntry(0);
                             getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                         }
-                    });
+                    }, response.body().getMessage());
                     dialogHelper.showDialog();
                 }
             }
@@ -326,7 +320,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        }, response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                 } else {

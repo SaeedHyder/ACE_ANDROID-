@@ -81,6 +81,11 @@ public class FollowListFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (prefHelper.isLanguageArabic()) {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        } else {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
         //setListener();
         //getUserData();
         setData();
@@ -94,9 +99,9 @@ public class FollowListFragment extends BaseFragment {
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserNotificatoin>>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<ArrayList<UserNotificatoin>>> call, Response<ResponseWrapper<ArrayList<UserNotificatoin>>> response) {
-
+                getDockActivity().onLoadingFinished();
                 if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-                    getDockActivity().onLoadingFinished();
+
                     if (response.body().getUserDeleted() == 0) {
                         setDataInNOtificationList(response.body().getResult());
                     } else {
@@ -109,7 +114,7 @@ public class FollowListFragment extends BaseFragment {
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                 } else {

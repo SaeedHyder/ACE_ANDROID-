@@ -408,7 +408,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
                                         getDockActivity().popBackStackTillEntry(0);
                                         getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                                     }
-                                });
+                                },response.body().getMessage());
                                 dialogHelper.showDialog();
                             }
                         } else {
@@ -616,7 +616,7 @@ public class CalendarFragment extends BaseFragment implements View.OnClickListen
                                     getDockActivity().popBackStackTillEntry(0);
                                     getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                                 }
-                            });
+                            },response.body().getMessage());
                             dialogHelper.showDialog();
                         }
                     } else {

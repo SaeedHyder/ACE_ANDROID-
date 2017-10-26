@@ -97,7 +97,7 @@ public class MapMarkerItemBinder extends MapMarkerBinder<MapScreenItem> {
 
                         }
                 }
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(entity.getUserLat(), entity.getUserLng()), AppConstants.zoomIn));
+             //   googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(entity.getUserLat(), entity.getUserLng()), AppConstants.zoomIn));
 
             }
 

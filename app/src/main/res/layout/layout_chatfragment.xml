@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:paddingBottom="@dimen/x5"
-        android:paddingLeft="@dimen/x8"
+        android:paddingStart="@dimen/x8"
         android:paddingTop="@dimen/x2"
         android:text="@string/no_result_found"
         android:textColor="@color/black"
@@ -24,6 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.9"
+        android:layout_marginBottom="@dimen/x10"
         android:divider="@null">
 
     </ListView>
@@ -45,7 +46,7 @@
             android:hint="@string/write_a_message"
             android:inputType="textNoSuggestions|textMultiLine"
             android:layout_weight="0.85"
-            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginStart="@dimen/x10"
             app:typeface="Roboto-Regular.ttf"/>
         <ImageView
             android:id="@+id/imgSend"
@@ -53,7 +54,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/send_btn"
             android:layout_weight="0.15"
-            android:layout_marginRight="@dimen/x5"/>
+            android:layout_marginEnd="@dimen/x5"/>
     </LinearLayout>
 
    <!-- <LinearLayout

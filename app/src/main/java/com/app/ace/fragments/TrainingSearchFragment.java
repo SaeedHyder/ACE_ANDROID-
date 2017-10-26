@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 
 import com.app.ace.R;
 import com.app.ace.fragments.abstracts.BaseFragment;
+import com.app.ace.helpers.InternetHelper;
 import com.app.ace.ui.views.TitleBar;
 
 import org.apache.commons.lang3.StringUtils;
@@ -124,7 +125,9 @@ public class TrainingSearchFragment extends BaseFragment implements View.OnClick
         switch (view.getId()) {
             case R.id.btn_training_Search_Submit:
                 String list_types = StringUtils.join(checkList, ",");
-                getDockActivity().addDockableFragment(TrainerAvailListFragment.newInstance(list_types), "TrainerAvaliableFragment");
+                if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
+                    getDockActivity().addDockableFragment(TrainerAvailListFragment.newInstance(list_types), "TrainerAvaliableFragment");
+                }
                 break;
 
         }

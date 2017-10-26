@@ -1,9 +1,9 @@
 package com.app.ace.fragments;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -21,26 +21,26 @@ import com.app.ace.global.AppConstants;
 import com.app.ace.global.SignupFormConstants;
 import com.app.ace.global.SignupFormEditTextChangeListener;
 import com.app.ace.helpers.CameraHelper;
-import com.app.ace.helpers.FileHelper;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Date;
 
 import roboguice.inject.InjectView;
-
-import static com.app.ace.R.id.txt_from;
-import static com.app.ace.R.id.txt_to;
 
 /**
  * Created by khan_muhammad on 3/13/2017.
  */
 
-public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnClickListener , MainActivity.ImageSetter {
+public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnClickListener, MainActivity.ImageSetter {
 
 
     @InjectView(R.id.btnSignUp)
@@ -79,7 +79,7 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
     public static String USER_MODEL = "user";
     public TwitterUser twitterUser;
 
-    public File profilePic ;
+    public File profilePic;
 
     public static TrainerSignUpForm1Fragment newInstance() {
 
@@ -99,10 +99,10 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState ) {
+                             Bundle savedInstanceState) {
         // TODO Auto-generated method stub
 
-        return inflater.inflate( R.layout.fragment_signup_form1, container, false );
+        return inflater.inflate(R.layout.fragment_signup_form1, container, false);
 
     }
 
@@ -114,7 +114,7 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
             String jsonString = getArguments().getString(USER_MODEL);
             if (jsonString != null)
                 twitterUser = new Gson().fromJson(jsonString, TwitterUser.class);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -122,9 +122,9 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
     }
 
     @Override
-    public void onViewCreated( View view, Bundle savedInstanceState ) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         // TODO Auto-generated method stub
-        super.onViewCreated( view, savedInstanceState );
+        super.onViewCreated(view, savedInstanceState);
 
         if (prefHelper.isLanguageArabic()) {
             view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
@@ -132,7 +132,7 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
             view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
         }
 
-        if(prefHelper.isTwitterLogin()){
+        if (prefHelper.isTwitterLogin()) {
 
             edtPassword.setVisibility(View.GONE);
             txtPassword.setVisibility(View.GONE);
@@ -141,9 +141,11 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
         }
 
 
-        if(twitterUser != null) {
+        if (twitterUser != null) {
             edtFName.setText(twitterUser.getUserName());
             edtEmail.setText(twitterUser.getUserEmail());
+            SetTwitterImage(twitterUser.getUserPic());
+
         }
 
         btnSignUp.setVisibility(View.INVISIBLE);
@@ -153,11 +155,11 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
 
         setListeners();
 
-        edtFName.addTextChangedListener(new SignupFormEditTextChangeListener(getDockActivity(),edtFName));
-        edtLName.addTextChangedListener(new SignupFormEditTextChangeListener(getDockActivity(),edtLName));
-        edtEmail.addTextChangedListener(new SignupFormEditTextChangeListener(getDockActivity(),edtEmail));
-        edtMobileNumber.addTextChangedListener(new SignupFormEditTextChangeListener(getDockActivity(),edtMobileNumber));
-        edtPassword.addTextChangedListener(new SignupFormEditTextChangeListener(getDockActivity(),edtPassword));
+        edtFName.addTextChangedListener(new SignupFormEditTextChangeListener(getDockActivity(), edtFName));
+        edtLName.addTextChangedListener(new SignupFormEditTextChangeListener(getDockActivity(), edtLName));
+        edtEmail.addTextChangedListener(new SignupFormEditTextChangeListener(getDockActivity(), edtEmail));
+        edtMobileNumber.addTextChangedListener(new SignupFormEditTextChangeListener(getDockActivity(), edtMobileNumber));
+        edtPassword.addTextChangedListener(new SignupFormEditTextChangeListener(getDockActivity(), edtPassword));
 
 
     }
@@ -170,9 +172,9 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
     }
 
     @Override
-    public void setTitleBar( TitleBar titleBar ) {
+    public void setTitleBar(TitleBar titleBar) {
         // TODO Auto-generated method stub
-        super.setTitleBar( titleBar);
+        super.setTitleBar(titleBar);
         titleBar.showTitleBar();
         titleBar.hideButtons();
         titleBar.showBackButton();
@@ -181,7 +183,7 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
 
     private boolean validateFields() {
         if (edtFName.equals("")) {
-            UIHelper.showLongToastInCenter(getDockActivity(),getString(R.string.enter_fName));
+            UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.enter_fName));
             return false;
         } else if (edtLName.equals("")) {
             UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.Enter_Lname));
@@ -195,16 +197,16 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
         } else if (edtMobileNumber.getText().toString().equals("")) {
             UIHelper.showLongToastInCenter(getDockActivity(), getString(R.string.enter_mobile_no));
             return false;
-        }  else {
+        } else {
             return true;
         }
     }
 
 
     @Override
-    public void onClick( View v ) {
+    public void onClick(View v) {
         // TODO Auto-generated method stub
-        switch (v.getId()){
+        switch (v.getId()) {
 
             case R.id.multiImageLayout:
 
@@ -214,15 +216,15 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
 
             case R.id.btnNext:
 
-                if(validateFields()) {
+                if (validateFields()) {
 
-                    if(profilePic == null){
+                    if (profilePic == null) {
                         UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.profile_pic_error));
-                    }else {
+                    } else {
 
                         if (edtPassword.getText().toString().length() < 6) {
                             UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.password_length_alert));
-                        }else if(edtMobileNumber.getText().toString().length() < 11){
+                        } else if (edtMobileNumber.getText().toString().length() < 11) {
                             UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.phone_should_be_11));
                         } else {
 
@@ -283,7 +285,54 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
         if (imagePath != null) {
             profilePic = new File(imagePath);
             ImageLoader.getInstance().displayImage(
-                    "file:///" +imagePath, iv_profile);
+                    "file:///" + imagePath, iv_profile);
+        }
+    }
+
+    private void SetTwitterImage(String imagePath) {
+        if (imagePath != null) {
+            //profilePic = new File(imagePath);
+           /* profilePic = new File(imagePath);
+            profilePath = imagePath;
+            Glide.with(getDockActivity())
+                    .load(imagePath)
+                    .into(CircularImageSharePop);*/
+            Picasso.with(getDockActivity()).load(imagePath).into(new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    try {
+                        iv_profile.setImageBitmap(bitmap);
+                        String root = Environment.getExternalStorageDirectory().toString();
+                        profilePic = new File(root + "/ace");
+
+                        if (!profilePic.exists()) {
+                            profilePic.mkdirs();
+                        }
+
+                        String name = new Date().toString() + ".jpg";
+                        profilePic = new File(profilePic, name);
+                        FileOutputStream out = new FileOutputStream(profilePic);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+
+                        out.flush();
+                        out.close();
+                    } catch (Exception e) {
+                        // some action
+                    }
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
+
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                }
+            });
+            //  ImageLoader.getInstance().displayImage(
+            //     "file:///" +imagePath, CircularImageSharePop);
         }
     }
 
@@ -293,7 +342,7 @@ public class TrainerSignUpForm1Fragment extends BaseFragment implements View.OnC
     }
 
     @Override
-    public void setVideo(String videoPath,String videoTHumb) {
+    public void setVideo(String videoPath, String videoTHumb) {
 
     }
 

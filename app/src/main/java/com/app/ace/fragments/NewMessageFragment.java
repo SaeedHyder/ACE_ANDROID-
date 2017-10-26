@@ -19,6 +19,7 @@ import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.helpers.DialogHelper;
+import com.app.ace.helpers.InternetHelper;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.NewMessageListItemBinder;
 import com.app.ace.ui.views.AnyEditTextView;
@@ -74,12 +75,20 @@ public class NewMessageFragment extends BaseFragment implements TextWatcher {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (prefHelper.isLanguageArabic()) {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        } else {
+            view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
+
         // edit_sendTo.addTextChangedListener(this);
         edit_sendTo.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    getNewMsgUserData();
+                    if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
+                        getNewMsgUserData();
+                    }
                 }
                 return false;
             }
@@ -92,11 +101,13 @@ public class NewMessageFragment extends BaseFragment implements TextWatcher {
 
     private void getNewMsgUserData() {
         if (edit_sendTo != null) {
+            getMainActivity().onLoadingStarted();
             Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchAllUsers(edit_sendTo.getText().toString(), getMainActivity().selectedLanguage());
 
             callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
                 @Override
                 public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
+                    getMainActivity().onLoadingFinished();
                     if (response.body().getUserDeleted() == 0) {
                         hideKeyboard();
                         bindview(response.body().getResult());
@@ -110,13 +121,14 @@ public class NewMessageFragment extends BaseFragment implements TextWatcher {
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Throwable t) {
+                    getMainActivity().onLoadingFinished();
                     Log.e("Search", t.toString());
                 }
             });

@@ -648,21 +648,22 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
                         getDockActivity().showHome();*/
 
                         } else {
-                            UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                            final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                            dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    dialogHelper.hideDialog();
+                                    getDockActivity().popBackStackTillEntry(0);
+                                    getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                                }
+                            },response.body().getMessage());
+                            dialogHelper.showDialog();
+
                         }
                     } else {
 
-                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
-                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                dialogHelper.hideDialog();
-                                getDockActivity().popBackStackTillEntry(0);
-                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
-                            }
-                        });
-                        dialogHelper.showDialog();
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

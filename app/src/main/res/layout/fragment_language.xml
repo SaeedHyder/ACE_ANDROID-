@@ -50,11 +50,12 @@
 
 
     <com.app.ace.ui.views.AnyTextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/x25"
-        android:layout_marginLeft="@dimen/x20"
-        android:gravity="left"
+        android:layout_marginStart="@dimen/x25"
+        android:layout_marginEnd="@dimen/x25"
+        android:gravity="start"
         android:text="@string/select_language"
         android:textColor="@color/red"
         android:alpha="0.7"

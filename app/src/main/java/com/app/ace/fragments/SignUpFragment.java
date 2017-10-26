@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import com.app.ace.R;
@@ -19,11 +18,15 @@ import com.app.ace.helpers.UIHelper;
 import com.app.ace.ui.views.TitleBar;
 import com.google.common.util.concurrent.ExecutionError;
 import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.core.models.User;
 
+import retrofit2.Call;
 import roboguice.inject.InjectView;
 
 /**
@@ -90,51 +93,73 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
     public void onSaveInstanceState(Bundle outState) {
     }
 
+    TwitterUser twitterUser;
+
     private void setTwitterLogin() {
         twitterLogin.setCallback(new TwitterLoginHelper() {
             @Override
             public void onSuccess(final TwitterUser user) {
-
-                TwitterAuthClient authClient = new TwitterAuthClient();
-                authClient.requestEmail(Twitter.getSessionManager().getActiveSession(), new com.twitter.sdk.android.core.Callback<String>() {
+                Call<User> userCall = TwitterCore.getInstance().getApiClient().getAccountService().verifyCredentials(true, false);
+                userCall.enqueue(new Callback<User>() {
                     @Override
-                    public void success(Result<String> result) {
+                    public void success(final Result<User> result) {
+                        TwitterAuthClient authClient = new TwitterAuthClient();
+                        authClient.requestEmail(Twitter.getSessionManager().getActiveSession(), new com.twitter.sdk.android.core.Callback<String>() {
+                            @Override
+                            public void success(Result<String> email) {
+                                twitterUser = new TwitterUser(result.data.profileImageUrl.replace("_normal", "_bigger"), user.getUserId(), user.getUserName(), result.data.email, user.getToken(), user.getToken());
+                                twitterUser.setUserEmail(email.data.toString());
+                                startFragment(twitterUser);
 
-                        TwitterUser twitterUser = user;
-                        twitterUser.setUserEmail(result.data.toString());
 
-                        startFragment(twitterUser);
+                            }
+
+                            @Override
+                            public void failure(TwitterException exception) {
+                                try {
+                                    twitterUser = user;
+                                    twitterUser.setUserEmail("");
+
+                                    startFragment(twitterUser);
+
+                                } catch (ExecutionError e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        });
 
                     }
 
                     @Override
                     public void failure(TwitterException exception) {
-
-                      try{
-                            final TwitterUser twitterUser = user;
+                        try {
+                            twitterUser = user;
                             twitterUser.setUserEmail("");
 
                             startFragment(twitterUser);
 
-                      }catch (ExecutionError e){
+                        } catch (ExecutionError e) {
                             e.printStackTrace();
-                      }
+                        }
                     }
                 });
+
+
             }
 
             @Override
             public void onFailure(TwitterException exception) {
-
+               
             }
         });
     }
 
     private void startFragment(TwitterUser twitterUser) {
-        if(isTrainee){
-            getDockActivity().addDockableFragment(TrianeeSignUpFragment.newInstance(twitterUser),"TrianeeSignUpFragment");
-        }else{
-            getDockActivity().addDockableFragment(TrainerSignUpForm1Fragment.newInstance(twitterUser),"TrainerSignUpForm1Fragment");
+        if (isTrainee) {
+            getDockActivity().addDockableFragment(TrianeeSignUpFragment.newInstance(twitterUser), "TrianeeSignUpFragment");
+        } else {
+            getDockActivity().addDockableFragment(TrainerSignUpForm1Fragment.newInstance(twitterUser), "TrainerSignUpForm1Fragment");
         }
 
     }
@@ -142,15 +167,15 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
     private void showTwitterSignUpDialog() {
 
         final DialogFragment successPopUp = DialogFragment.newInstance();
-        successPopUp.setPopupData(getString(R.string.sign_via_twitter), "", "",  "",true,true);
-        TokenUpdater.getInstance().UpdateToken(getDockActivity(),prefHelper.getUserId(),"android",prefHelper.getFirebase_TOKEN());
+        successPopUp.setPopupData(getString(R.string.sign_via_twitter), "", "", "", true, true);
+        TokenUpdater.getInstance().UpdateToken(getDockActivity(), prefHelper.getUserId(), "android", prefHelper.getFirebase_TOKEN());
         successPopUp.setbtndialog_1_Listener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 twitterLogin.performClick();
 
-                if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
+                if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
                     prefHelper.setIsTwitterLogin(true);
                     isTrainee = true;
                 }
@@ -169,7 +194,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
 
                 twitterLogin.performClick();
 
-                if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
+                if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
                     prefHelper.setIsTwitterLogin(true);
                     isTrainee = false;
                 }
@@ -186,25 +211,25 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
     }
 
     @Override
-    public void onClick( View v ) {
+    public void onClick(View v) {
         // TODO Auto-generated method stub
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btnSignup_Trainee:
 
                 prefHelper.setIsTwitterLogin(false);
-                getDockActivity().addDockableFragment(TrianeeSignUpFragment.newInstance(),"TrianeeSignUpFragment");
+                getDockActivity().addDockableFragment(TrianeeSignUpFragment.newInstance(), "TrianeeSignUpFragment");
                 break;
 
             case R.id.btnSignup_Trainer:
 
                 prefHelper.setIsTwitterLogin(false);
-                getDockActivity().addDockableFragment(TrainerSignUpForm1Fragment.newInstance(),"TrainerSignUpForm1Fragment");
+                getDockActivity().addDockableFragment(TrainerSignUpForm1Fragment.newInstance(), "TrainerSignUpForm1Fragment");
                 break;
 
 
             case R.id.btnSignup_Twitter:
 
-                if(InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()))
+                if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()))
                     showTwitterSignUpDialog();
 
                 break;
@@ -215,14 +240,13 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        try{
-            if(resultCode == 1) {
+        try {
+            if (resultCode == 1) {
                 UIHelper.showShortToastInCenter(getDockActivity(), "Twitter App not found");
             }
 
             twitterLogin.onActivityResult(requestCode, resultCode, data);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

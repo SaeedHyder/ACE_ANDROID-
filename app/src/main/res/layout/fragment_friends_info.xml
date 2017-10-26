@@ -66,37 +66,38 @@
             android:textColor="@color/black"
             app:typeface="Roboto-Bold.ttf"/>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/x50"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/x10"
+        android:layout_marginBottom="@dimen/x10"
         android:layout_marginLeft="@dimen/x15"
         android:layout_marginRight="@dimen/x15"
-        android:layout_marginBottom="@dimen/x10">
+        android:layout_marginTop="@dimen/x10"
+        android:orientation="horizontal">
 
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ProfileImage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/profile_pic_trainer"
             android:layout_weight="0.15"
-            android:gravity="start"/>
+            android:gravity="start"
+            android:src="@drawable/profile_pic_trainer" />
 
         <com.app.ace.ui.views.AnyTextView
             android:id="@+id/txt_UserName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/james_blunt"
+            android:layout_marginTop="@dimen/x8"
             android:layout_weight="0.3"
-            android:textSize="@dimen/x18"
             android:gravity="start"
+
             android:maxLength="12"
             android:maxLines="1"
-            android:layout_marginTop="@dimen/x8"
             android:textColor="@color/black"
-            app:typeface="Roboto-Bold.ttf"/>
+            android:textSize="@dimen/x18"
+            app:typeface="Roboto-Bold.ttf" />
 
         <Button
             android:id="@+id/btn_follow"
@@ -115,15 +116,16 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/x35"
             android:layout_marginRight="@dimen/x5"
+            android:layout_marginTop="@dimen/x8"
             android:layout_weight="0.3"
             android:background="@drawable/rectangle_buton"
             android:gravity="center"
-            android:layout_marginTop="@dimen/x8"
             android:text="@string/UnFollow"
-            android:visibility="gone"
-            android:textColor="@color/txtview_title_color" />
+            android:textColor="@color/txtview_title_color"
+            android:visibility="gone" />
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

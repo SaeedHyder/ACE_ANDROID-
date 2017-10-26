@@ -22,7 +22,7 @@
             android:id="@+id/userImage"
             android:layout_width="@dimen/x40"
             android:layout_height="@dimen/x40"
-            android:src="@drawable/profile_pic"
+            android:background="@drawable/profile_container"
 
             />
 
@@ -38,15 +38,15 @@
 
             <com.app.ace.ui.views.AnyTextView
                 android:id="@+id/txtUserName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.8"
+                android:gravity="left"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/x10"
+                android:layout_marginLeft="@dimen/x10"
                 android:text="@string/james_blunt"
                 android:textColor="@color/black"
                 android:textSize="@dimen/x14"
-                android:textAlignment="viewStart"
                 app:typeface="Roboto-Bold.ttf" />
 
             <com.app.ace.ui.views.AnyTextView
@@ -97,7 +97,7 @@
         android:layout_height="@dimen/x70"
         android:layout_marginLeft="@dimen/x60"
         android:gravity="start"
-        android:src="@drawable/profile_pic"
+
         />
     <Button
         android:id="@+id/btn_follow"

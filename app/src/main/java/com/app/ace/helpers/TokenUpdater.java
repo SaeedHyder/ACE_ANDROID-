@@ -57,7 +57,7 @@ public class TokenUpdater {
                             dockActivity.popBackStackTillEntry(0);
                             dockActivity.addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                         }
-                    });
+                    },response.body().getMessage());
                     dialogHelper.showDialog();
                 }
             }

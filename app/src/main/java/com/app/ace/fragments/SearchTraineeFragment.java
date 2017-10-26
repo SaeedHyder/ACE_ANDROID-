@@ -97,7 +97,7 @@ public class SearchTraineeFragment extends BaseFragment {
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                     // System.out.println(response.body().getResult().get(0).getId());

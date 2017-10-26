@@ -23,6 +23,7 @@ public abstract class TwitterLoginHelper extends com.twitter.sdk.android.core.Ca
         String userId = String.valueOf(result.data.getUserId());
         String userName = result.data.getUserName();
 
+
         TwitterUser user = new TwitterUser();
 
         user.setUserId(userId);

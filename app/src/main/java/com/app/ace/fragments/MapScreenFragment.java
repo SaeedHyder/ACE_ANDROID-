@@ -52,8 +52,8 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
 
     private GoogleMap mMap;
     private AnyEditTextView edtsearch;
-    double latitude;
-    double longitude;
+    double latitude=0.0;
+    double longitude=0.0;
     String language = "";
     //@InjectView(R.id.txt_noresult)
     private TextView txt_noresult;
@@ -123,6 +123,7 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
                 .addApi(LocationServices.API)
                 .build();
 
+
     }
 
     @Override
@@ -140,12 +141,13 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
     private void getSearchUserData() {
 
 
-        Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edtsearch.getText().toString(), AppConstants.trainer,latitude, longitude, getMainActivity().selectedLanguage());
+        Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edtsearch.getText().toString(), AppConstants.trainer, latitude, longitude, getMainActivity().selectedLanguage());
 
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
             @Override
             public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
 
+                loadingFinished();
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), AppConstants.zoomIn));
                 if (response.body() != null)
                     if (response.body().getResult().size() <= 0) {
@@ -161,18 +163,19 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
                                     getDockActivity().popBackStackTillEntry(0);
                                     getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                                 }
-                            });
+                            },response.body().getMessage());
                             dialogHelper.showDialog();
                         }
                     } else {
                         txt_noresult.setVisibility(View.GONE);
                         bindview(response.body().getResult());
-                        addMarker();
+                         addMarker();
                     }
             }
 
             @Override
             public void onFailure(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Throwable t) {
+                loadingFinished();
                 Log.e("Search", t.toString());
             }
         });
@@ -208,16 +211,8 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
             }
         });
 
-       /* if (!edtsearch.getText().toString().equals("")) {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(userCollection.get(userCollection.size() - 1).getLat()), Double.valueOf(userCollection.get(userCollection.size() - 1).getLng())), AppConstants.zoomInToTrainer));
-        }*/
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(userCollection.get(userCollection.size() - 1).getLat()), Double.valueOf(userCollection.get(userCollection.size() - 1).getLng())), AppConstants.zoomInToTrainer));
 
-        if (edtsearch.getText().toString().equals("")) {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), AppConstants.zoomIn));
-        } else {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(userCollection.get(userCollection.size() - 1).getLat()), Double.valueOf(userCollection.get(userCollection.size() - 1).getLng())), AppConstants.zoomInToTrainer));
-
-        }
 
     }
 
@@ -265,7 +260,11 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
                         longitude = Mylocation.getLongitude();
                         latitude = Mylocation.getLatitude();
 
-                        getSearchUserData();
+                        if (latitude != 0.0 && longitude!=0.0 && edtsearch.getText()!=null && edtsearch.getText().toString()!=""){
+                            loadingStarted();
+                            getSearchUserData();
+                        }
+
 
                     } else {
                         UIHelper.showShortToastInCenter(getDockActivity(), "Can't get your Location Try getting using Location Button");
@@ -310,9 +309,51 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    getSearchUserData();
+                    loadingStarted();
+                    getSearchUser();
                 }
                 return false;
+            }
+        });
+
+    }
+
+    private void getSearchUser() {
+
+        Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edtsearch.getText().toString(), AppConstants.trainer, getMainActivity().selectedLanguage());
+
+        callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
+                loadingFinished();
+                if (response.body() != null)
+                    if (response.body().getResult().size() <= 0) {
+                        if (response.body().getUserDeleted() == 0) {
+                            txt_noresult.setVisibility(View.VISIBLE);
+                        } else {
+                            final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                            dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    dialogHelper.hideDialog();
+                                    getDockActivity().popBackStackTillEntry(0);
+                                    getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                                }
+                            },response.body().getMessage());
+                            dialogHelper.showDialog();
+                        }
+                    } else {
+                        txt_noresult.setVisibility(View.GONE);
+                        bindview(response.body().getResult());
+                        // addMarker();
+                    }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Throwable t) {
+                loadingFinished();
+                Log.e("Search", t.toString());
             }
         });
 

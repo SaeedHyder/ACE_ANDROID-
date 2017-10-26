@@ -1,11 +1,23 @@
 package com.app.ace.entities;
 
 
-
 public class TwitterUser {
 
     private String userPic;
     private String userId;
+
+    public TwitterUser() {
+    }
+
+    public TwitterUser(String userPic, String userId, String userName, String userEmail, String token, String secret) {
+        this.userPic = userPic;
+        this.userId = userId;
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.token = token;
+        this.secret = secret;
+    }
+
     private String userName;
     private String userEmail;
 

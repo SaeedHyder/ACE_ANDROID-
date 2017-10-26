@@ -250,7 +250,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                                         getDockActivity().popBackStackTillEntry(0);
                                         getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                                     }
-                                });
+                                },response.body().getMessage());
                                 dialogHelper.showDialog();
                             }
                             loadingFinished();
@@ -294,7 +294,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                                     getDockActivity().popBackStackTillEntry(0);
                                     getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                                 }
-                            });
+                            },response.body().getMessage());
                             dialogHelper.showDialog();
                         }
                     } else {
@@ -345,7 +345,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        });
+                        },response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                     // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());

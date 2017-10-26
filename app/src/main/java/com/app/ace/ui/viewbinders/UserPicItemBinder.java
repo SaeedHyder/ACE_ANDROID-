@@ -9,6 +9,7 @@ import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
 import com.app.ace.entities.profilePostEnt;
 import com.app.ace.fragments.HomeFragment;
+import com.app.ace.fragments.PostImageFragment;
 import com.app.ace.fragments.VideoViewFragment;
 import com.app.ace.helpers.DialogHelper;
 import com.app.ace.interfaces.ImageClickListener;
@@ -71,6 +72,8 @@ public class UserPicItemBinder extends ViewBinder<profilePostEnt> {
             viewHolder.iv_pic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                  //  dockActivity.addDockableFragment(PostImageFragment.newInstance(picpath.getPost_image()), "PostImageFragment");
 
                     DialogHelper postImage=new DialogHelper(dockActivity);
                     postImage.postImage(R.layout.postimage_dialog,dockActivity,picpath.getPost_image());
