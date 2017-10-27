@@ -1,760 +1,529 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg">
+    android:layout_height="match_parent">
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/x25"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg"
         android:orientation="vertical">
 
-        <com.app.ace.ui.views.AnyTextView
-            android:id="@+id/txt_types_of_tra"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/types_of_training"
-            android:textColor="@color/darkRed"
-            android:textSize="@dimen/x17"
-            android:paddingBottom="@dimen/x10"
-            android:gravity="center"
-            android:textStyle="normal"
-            app:typeface="Roboto-Regular.ttf"
-            />
-        <com.app.ace.ui.views.AnyTextView
-            android:id="@+id/txt_select_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/select_the_type"
-            android:textColor="@color/darkGray"
-            android:textSize="@dimen/x17"
-            android:gravity="center"
-            android:textStyle="normal"
-            app:typeface="Roboto-Regular.ttf"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_checkboxes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:orientation="vertical">
-
-
         <LinearLayout
-            android:id="@+id/ll_Checkbox_Field1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x15"
-            android:layout_marginRight="@dimen/x15"
-            android:orientation="horizontal">
+            android:layout_margin="@dimen/x25"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/ll_checkBox_Mathematics"
+            <com.app.ace.ui.views.AnyTextView
+                android:id="@+id/txt_types_of_tra"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/x12"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:gravity="center"
+                android:paddingBottom="@dimen/x10"
+                android:text="@string/types_of_training"
+                android:textColor="@color/darkRed"
+                android:textSize="@dimen/x17"
+                android:textStyle="normal"
+                app:typeface="Roboto-Regular.ttf" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/cb_Mathematics"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:button="@drawable/selector_chkbox"
-                        android:checked="false"
-                        android:paddingBottom="@dimen/x2"
-                        android:paddingLeft="@dimen/x7"
-                        android:paddingRight="@dimen/x7"
-                        android:text="@string/mathematics"
-                        android:textColor="@color/lightGray"
-                        android:textSize="@dimen/x14" />
-
-                    <!-- <ImageView
-                    android:id="@+id/iv_selectAllcheckBx"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/x3"
-                    android:layout_weight="0.1"
-                    android:src="@drawable/checkbox"
-                    />
-
-                <com.app.ace.ui.views.AnyTextView
-                    android:id="@+id/txt_selectAllchkbx"
-                    android:layout_weight="0.9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x8"
-                    android:text="@string/select_all"
-                    app:typeface="Roboto-Regular.ttf"/>-->
-
-                </LinearLayout>
-
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/x1"
-                    android:layout_marginLeft="@dimen/x3"
-                    android:layout_marginTop="@dimen/x10"
-                    android:alpha="0.6"
-                    android:background="@drawable/text" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_checkBox_Fitness_health"
+            <com.app.ace.ui.views.AnyTextView
+                android:id="@+id/txt_select_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/cb_Fitness_health"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:button="@drawable/selector_chkbox"
-                        android:checked="false"
-                        android:paddingBottom="@dimen/x2"
-                        android:paddingLeft="@dimen/x7"
-                        android:paddingRight="@dimen/x7"
-                        android:text="@string/fitnes_health"
-                        android:textColor="@color/lightGray"
-                        android:textSize="@dimen/x14" />
-
-                    <!--<ImageView
-                    android:id="@+id/iv_flexcheckBx"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/x3"
-                    android:layout_weight="0.1"
-                    android:src="@drawable/checkbox"
-                    />
-
-                <com.app.ace.ui.views.AnyTextView
-                    android:id="@+id/txt_FLexibilitychkbx"
-                    android:layout_weight="0.9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x8"
-                    android:text="@string/flexibility_training"
-                    app:typeface="Roboto-Regular.ttf"/>-->
-
-                </LinearLayout>
-
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/x1"
-                    android:layout_marginLeft="@dimen/x3"
-                    android:layout_marginTop="@dimen/x10"
-                    android:alpha="0.6"
-                    android:background="@drawable/text" />
-
-            </LinearLayout>
+                android:gravity="center"
+                android:text="@string/select_the_type"
+                android:textColor="@color/darkGray"
+                android:textSize="@dimen/x17"
+                android:textStyle="normal"
+                app:typeface="Roboto-Regular.ttf" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ll_Checkbox_Field2"
+            android:id="@+id/ll_checkboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x15"
-            android:layout_marginRight="@dimen/x15"
-            android:layout_marginTop="@dimen/x15"
-            android:orientation="horizontal">
+
+            android:orientation="vertical">
+
 
             <LinearLayout
-                android:id="@+id/ll_checkBox_Islamic_studies"
-                android:layout_width="wrap_content"
+                android:id="@+id/ll_Checkbox_Field1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/x12"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_marginLeft="@dimen/x15"
+                android:layout_marginRight="@dimen/x15"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/ll_checkBox_Mathematics"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginRight="@dimen/x12"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <CheckBox
-                        android:id="@+id/cb_Islamic_studies"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:button="@drawable/selector_chkbox"
-                        android:checked="false"
-                        android:paddingBottom="@dimen/x2"
-                        android:paddingLeft="@dimen/x7"
-                        android:paddingRight="@dimen/x7"
-                        android:text="@string/islamic_studies"
-                        android:textColor="@color/lightGray"
-                        android:textSize="@dimen/x14" />
+                        android:orientation="horizontal">
 
-                    <!--  <ImageView
-                    android:id="@+id/iv_StaticStrencheckBx"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/x3"
-                    android:layout_weight="0.1"
-                    android:src="@drawable/checkbox"
-                    />
+                        <CheckBox
+                            android:id="@+id/cb_Mathematics"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/selector_chkbox"
+                            android:checked="false"
+                            android:paddingBottom="@dimen/x2"
+                            android:paddingLeft="@dimen/x7"
+                            android:paddingRight="@dimen/x7"
+                            android:text="@string/mathematics"
+                            android:textColor="@color/lightGray"
+                            android:textSize="@dimen/x14" />
 
-                <com.app.ace.ui.views.AnyTextView
-                    android:id="@+id/txt_StaticStrengchkbx"
-                    android:layout_weight="0.9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x8"
-                    android:text="@string/static_strength_training"
-                    app:typeface="Roboto-Regular.ttf"/>-->
+                        <!-- <ImageView
+                        android:id="@+id/iv_selectAllcheckBx"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/x3"
+                        android:layout_weight="0.1"
+                        android:src="@drawable/checkbox"
+                        />
+
+                    <com.app.ace.ui.views.AnyTextView
+                        android:id="@+id/txt_selectAllchkbx"
+                        android:layout_weight="0.9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x8"
+                        android:text="@string/select_all"
+                        app:typeface="Roboto-Regular.ttf"/>-->
+
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/x1"
+                        android:layout_marginLeft="@dimen/x3"
+                        android:layout_marginTop="@dimen/x10"
+                        android:alpha="0.6"
+                        android:background="@drawable/text" />
 
                 </LinearLayout>
 
-
-                <View
+                <LinearLayout
+                    android:id="@+id/ll_checkBox_Fitness_health"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/x1"
-                    android:layout_marginLeft="@dimen/x3"
-                    android:layout_marginTop="@dimen/x10"
-                    android:alpha="0.6"
-                    android:background="@drawable/text" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/cb_Fitness_health"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/selector_chkbox"
+                            android:checked="false"
+                            android:paddingBottom="@dimen/x2"
+                            android:paddingLeft="@dimen/x7"
+                            android:paddingRight="@dimen/x7"
+                            android:text="@string/fitnes_health"
+                            android:textColor="@color/lightGray"
+                            android:textSize="@dimen/x14" />
+
+                        <!--<ImageView
+                        android:id="@+id/iv_flexcheckBx"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/x3"
+                        android:layout_weight="0.1"
+                        android:src="@drawable/checkbox"
+                        />
+
+                    <com.app.ace.ui.views.AnyTextView
+                        android:id="@+id/txt_FLexibilitychkbx"
+                        android:layout_weight="0.9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x8"
+                        android:text="@string/flexibility_training"
+                        app:typeface="Roboto-Regular.ttf"/>-->
+
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/x1"
+                        android:layout_marginLeft="@dimen/x3"
+                        android:layout_marginTop="@dimen/x10"
+                        android:alpha="0.6"
+                        android:background="@drawable/text" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/ll_checkBox_English"
-                android:layout_width="wrap_content"
+                android:id="@+id/ll_Checkbox_Field2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_marginLeft="@dimen/x15"
+                android:layout_marginRight="@dimen/x15"
+                android:layout_marginTop="@dimen/x15"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/ll_checkBox_Islamic_studies"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginRight="@dimen/x12"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <CheckBox
-                        android:id="@+id/cb_English"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:button="@drawable/selector_chkbox"
-                        android:checked="false"
-                        android:paddingBottom="@dimen/x2"
-                        android:paddingLeft="@dimen/x7"
-                        android:paddingRight="@dimen/x7"
-                        android:text="@string/englishh"
-                        android:textColor="@color/lightGray"
-                        android:textSize="@dimen/x14" />
+                        android:orientation="horizontal">
 
-                    <!--<ImageView
-                    android:id="@+id/iv_dynamicStrengBx"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/x3"
-                    android:layout_weight="0.1"
-                    android:src="@drawable/checkbox"
-                    />
+                        <CheckBox
+                            android:id="@+id/cb_Islamic_studies"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/selector_chkbox"
+                            android:checked="false"
+                            android:paddingBottom="@dimen/x2"
+                            android:paddingLeft="@dimen/x7"
+                            android:paddingRight="@dimen/x7"
+                            android:text="@string/islamic_studies"
+                            android:textColor="@color/lightGray"
+                            android:textSize="@dimen/x14" />
 
-                <com.app.ace.ui.views.AnyTextView
-                    android:id="@+id/txt_DynamicStrengchkbx"
-                    android:layout_weight="0.9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x8"
-                    android:text="@string/dynamic_strength_training"
-                    app:typeface="Roboto-Regular.ttf"/>-->
+                        <!--  <ImageView
+                        android:id="@+id/iv_StaticStrencheckBx"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/x3"
+                        android:layout_weight="0.1"
+                        android:src="@drawable/checkbox"
+                        />
+
+                    <com.app.ace.ui.views.AnyTextView
+                        android:id="@+id/txt_StaticStrengchkbx"
+                        android:layout_weight="0.9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x8"
+                        android:text="@string/static_strength_training"
+                        app:typeface="Roboto-Regular.ttf"/>-->
+
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/x1"
+                        android:layout_marginLeft="@dimen/x3"
+                        android:layout_marginTop="@dimen/x10"
+                        android:alpha="0.6"
+                        android:background="@drawable/text" />
 
                 </LinearLayout>
 
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/x1"
-                    android:layout_marginLeft="@dimen/x3"
-                    android:layout_marginTop="@dimen/x10"
-                    android:alpha="0.6"
-                    android:background="@drawable/text" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_Checkbox_Field3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x15"
-            android:layout_marginRight="@dimen/x15"
-            android:layout_marginTop="@dimen/x15"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/ll_checkBox_chemistry"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/x12"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/ll_checkBox_English"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <CheckBox
-                        android:id="@+id/cb_chemistry"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:button="@drawable/selector_chkbox"
-                        android:checked="false"
-                        android:paddingBottom="@dimen/x2"
-                        android:paddingLeft="@dimen/x7"
-                        android:paddingRight="@dimen/x7"
-                        android:text="@string/chemistry"
-                        android:textColor="@color/lightGray"
-                        android:textSize="@dimen/x14" />
-                    <!-- <ImageView
-                    android:id="@+id/iv_circuitTraincheckBx"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/x3"
-                    android:layout_weight="0.1"
-                    android:src="@drawable/checkbox"
-                    />
+                        android:orientation="horizontal">
 
-                <com.app.ace.ui.views.AnyTextView
-                    android:id="@+id/txt_CircuitTrainchkbx"
-                    android:layout_weight="0.9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x8"
-                    android:text="@string/circuit_training"
-                    app:typeface="Roboto-Regular.ttf"/>-->
+                        <CheckBox
+                            android:id="@+id/cb_English"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/selector_chkbox"
+                            android:checked="false"
+                            android:paddingBottom="@dimen/x2"
+                            android:paddingLeft="@dimen/x7"
+                            android:paddingRight="@dimen/x7"
+                            android:text="@string/englishh"
+                            android:textColor="@color/lightGray"
+                            android:textSize="@dimen/x14" />
 
-                </LinearLayout>
-
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/x1"
-                    android:layout_marginLeft="@dimen/x3"
-                    android:layout_marginTop="@dimen/x10"
-                    android:alpha="0.6"
-                    android:background="@drawable/text" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_checkBox_physics"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/cb_physics"
-                        android:layout_width="match_parent"
+                        <!--<ImageView
+                        android:id="@+id/iv_dynamicStrengBx"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:button="@drawable/selector_chkbox"
-                        android:checked="false"
-                        android:paddingBottom="@dimen/x2"
-                        android:paddingLeft="@dimen/x7"
-                        android:paddingRight="@dimen/x7"
-                        android:text="@string/physics"
-                        android:textColor="@color/lightGray"
-                        android:textSize="@dimen/x14" />
+                        android:layout_marginTop="@dimen/x3"
+                        android:layout_weight="0.1"
+                        android:src="@drawable/checkbox"
+                        />
 
-                    <!-- <ImageView
-                    android:id="@+id/iv_AerobicTraincheckBx"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/x3"
-                    android:layout_weight="0.1"
-                    android:src="@drawable/checkbox"
-                    />
-
-                <com.app.ace.ui.views.AnyTextView
-                    android:id="@+id/txt_AerobicTrainchkbx"
-                    android:layout_weight="0.9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x8"
-                    android:text="@string/aerobic_training"
-                    app:typeface="Roboto-Regular.ttf"/>-->
-
-                </LinearLayout>
-
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/x1"
-                    android:layout_marginLeft="@dimen/x3"
-                    android:layout_marginTop="@dimen/x10"
-                    android:alpha="0.6"
-                    android:background="@drawable/text" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_Checkbox_Field4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x15"
-            android:layout_marginRight="@dimen/x15"
-            android:layout_marginTop="@dimen/x15"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/ll_checkBox_human_resources"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/x12"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/cb_human_resources"
-                        android:layout_width="match_parent"
+                    <com.app.ace.ui.views.AnyTextView
+                        android:id="@+id/txt_DynamicStrengchkbx"
+                        android:layout_weight="0.9"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:button="@drawable/selector_chkbox"
-                        android:checked="false"
-                        android:paddingBottom="@dimen/x2"
-                        android:paddingLeft="@dimen/x7"
-                        android:paddingRight="@dimen/x7"
-                        android:text="@string/human_resources"
-                        android:textColor="@color/lightGray"
-                        android:textSize="@dimen/x14" />
+                        android:layout_marginLeft="@dimen/x8"
+                        android:text="@string/dynamic_strength_training"
+                        app:typeface="Roboto-Regular.ttf"/>-->
 
-                    <!-- <ImageView
-                    android:id="@+id/iv_bodyBuildingcheckBx"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/x3"
-                    android:layout_weight="0.1"
-                    android:src="@drawable/checkbox"
-                    />
+                    </LinearLayout>
 
-                <com.app.ace.ui.views.AnyTextView
-                    android:id="@+id/txt_bodyBuildingchkbx"
-                    android:layout_weight="0.9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x8"
-                    android:text="@string/body_building"
-                    app:typeface="Roboto-Regular.ttf"/>-->
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/x1"
+                        android:layout_marginLeft="@dimen/x3"
+                        android:layout_marginTop="@dimen/x10"
+                        android:alpha="0.6"
+                        android:background="@drawable/text" />
 
                 </LinearLayout>
-
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/x1"
-                    android:layout_marginLeft="@dimen/x3"
-                    android:layout_marginTop="@dimen/x10"
-                    android:alpha="0.6"
-                    android:background="@drawable/text" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/ll_checkBox_project_managment"
-                android:layout_width="wrap_content"
+                android:id="@+id/ll_Checkbox_Field3"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-
-                android:orientation="vertical">
+                android:layout_marginLeft="@dimen/x15"
+                android:layout_marginRight="@dimen/x15"
+                android:layout_marginTop="@dimen/x15"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/ll_checkBox_chemistry"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginRight="@dimen/x12"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <CheckBox
-                        android:id="@+id/cb_project_managment"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:button="@drawable/selector_chkbox"
-                        android:checked="false"
-                        android:paddingBottom="@dimen/x2"
-                        android:paddingLeft="@dimen/x7"
-                        android:paddingRight="@dimen/x7"
-                        android:text="@string/project_managment"
-                        android:textColor="@color/lightGray"
-                        android:textSize="@dimen/x14" />
+                        android:orientation="horizontal">
 
-                    <!--<ImageView
-                    android:id="@+id/iv_loseWeightcheckBx"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/x3"
-                    android:layout_weight="0.1"
-                    android:src="@drawable/checkbox"
-                    />
-
-                <com.app.ace.ui.views.AnyTextView
-                    android:id="@+id/txt_LoseWeightchkbx"
-                    android:layout_weight="0.9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x8"
-                    android:text="@string/lose_weight"
-                    app:typeface="Roboto-Regular.ttf"/>
--->
-                </LinearLayout>
-
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/x1"
-                    android:layout_marginLeft="@dimen/x3"
-                    android:layout_marginTop="@dimen/x10"
-                    android:alpha="0.6"
-                    android:background="@drawable/text" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_Checkbox_Field5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x15"
-            android:layout_marginRight="@dimen/x15"
-            android:layout_marginTop="@dimen/x15"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/ll_checkBox_biology"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/x12"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/cb_biology"
-                        android:layout_width="match_parent"
+                        <CheckBox
+                            android:id="@+id/cb_chemistry"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/selector_chkbox"
+                            android:checked="false"
+                            android:paddingBottom="@dimen/x2"
+                            android:paddingLeft="@dimen/x7"
+                            android:paddingRight="@dimen/x7"
+                            android:text="@string/chemistry"
+                            android:textColor="@color/lightGray"
+                            android:textSize="@dimen/x14" />
+                        <!-- <ImageView
+                        android:id="@+id/iv_circuitTraincheckBx"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:button="@drawable/selector_chkbox"
-                        android:checked="false"
-                        android:paddingBottom="@dimen/x2"
-                        android:paddingLeft="@dimen/x7"
-                        android:paddingRight="@dimen/x7"
-                        android:text="@string/biology"
-                        android:textColor="@color/lightGray"
-                        android:textSize="@dimen/x14" />
+                        android:layout_marginTop="@dimen/x3"
+                        android:layout_weight="0.1"
+                        android:src="@drawable/checkbox"
+                        />
 
-                    <!-- <ImageView
-                         android:id="@+id/iv_bodyBuildingcheckBx"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:layout_marginTop="@dimen/x3"
-                         android:layout_weight="0.1"
-                         android:src="@drawable/checkbox"
-                         />
+                    <com.app.ace.ui.views.AnyTextView
+                        android:id="@+id/txt_CircuitTrainchkbx"
+                        android:layout_weight="0.9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x8"
+                        android:text="@string/circuit_training"
+                        app:typeface="Roboto-Regular.ttf"/>-->
 
-                     <com.app.ace.ui.views.AnyTextView
-                         android:id="@+id/txt_bodyBuildingchkbx"
-                         android:layout_weight="0.9"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:layout_marginLeft="@dimen/x8"
-                         android:text="@string/body_building"
-                         app:typeface="Roboto-Regular.ttf"/>-->
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/x1"
+                        android:layout_marginLeft="@dimen/x3"
+                        android:layout_marginTop="@dimen/x10"
+                        android:alpha="0.6"
+                        android:background="@drawable/text" />
 
                 </LinearLayout>
 
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/x1"
-                    android:layout_marginLeft="@dimen/x3"
-                    android:layout_marginTop="@dimen/x10"
-                    android:alpha="0.6"
-                    android:background="@drawable/text" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_checkBox_java"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-
-                android:orientation="vertical">
-
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/ll_checkBox_physics"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_weight="1"
 
-                    <CheckBox
-                        android:id="@+id/cb_java"
+                    android:orientation="vertical">
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:button="@drawable/selector_chkbox"
-                        android:checked="false"
-                        android:paddingBottom="@dimen/x2"
-                        android:paddingLeft="@dimen/x7"
-                        android:paddingRight="@dimen/x7"
-                        android:text="@string/java"
-                        android:textColor="@color/lightGray"
-                        android:textSize="@dimen/x14" />
+                        android:orientation="horizontal">
 
+                        <CheckBox
+                            android:id="@+id/cb_physics"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/selector_chkbox"
+                            android:checked="false"
+                            android:paddingBottom="@dimen/x2"
+                            android:paddingLeft="@dimen/x7"
+                            android:paddingRight="@dimen/x7"
+                            android:text="@string/physics"
+                            android:textColor="@color/lightGray"
+                            android:textSize="@dimen/x14" />
 
-                </LinearLayout>
-
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/x1"
-                    android:layout_marginLeft="@dimen/x3"
-                    android:layout_marginTop="@dimen/x10"
-                    android:alpha="0.6"
-                    android:background="@drawable/text" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_Checkbox_Field6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x15"
-            android:layout_marginRight="@dimen/x15"
-            android:layout_marginTop="@dimen/x15"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/ll_checkBox_graduation_project"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/x12"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/cb_graduation_project"
-                        android:layout_width="match_parent"
+                        <!-- <ImageView
+                        android:id="@+id/iv_AerobicTraincheckBx"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:button="@drawable/selector_chkbox"
-                        android:checked="false"
-                        android:paddingBottom="@dimen/x2"
-                        android:paddingLeft="@dimen/x7"
-                        android:paddingRight="@dimen/x7"
-                        android:text="@string/graduation_project"
-                        android:textColor="@color/lightGray"
-                        android:textSize="@dimen/x14" />
+                        android:layout_marginTop="@dimen/x3"
+                        android:layout_weight="0.1"
+                        android:src="@drawable/checkbox"
+                        />
 
-                    <!-- <ImageView
-                         android:id="@+id/iv_bodyBuildingcheckBx"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:layout_marginTop="@dimen/x3"
-                         android:layout_weight="0.1"
-                         android:src="@drawable/checkbox"
-                         />
+                    <com.app.ace.ui.views.AnyTextView
+                        android:id="@+id/txt_AerobicTrainchkbx"
+                        android:layout_weight="0.9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x8"
+                        android:text="@string/aerobic_training"
+                        app:typeface="Roboto-Regular.ttf"/>-->
 
-                     <com.app.ace.ui.views.AnyTextView
-                         android:id="@+id/txt_bodyBuildingchkbx"
-                         android:layout_weight="0.9"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:layout_marginLeft="@dimen/x8"
-                         android:text="@string/body_building"
-                         app:typeface="Roboto-Regular.ttf"/>-->
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/x1"
+                        android:layout_marginLeft="@dimen/x3"
+                        android:layout_marginTop="@dimen/x10"
+                        android:alpha="0.6"
+                        android:background="@drawable/text" />
 
                 </LinearLayout>
-
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/x1"
-                    android:layout_marginLeft="@dimen/x3"
-                    android:layout_marginTop="@dimen/x10"
-                    android:alpha="0.6"
-                    android:background="@drawable/text" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/ll_Checkbox_Field4"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:visibility="invisible">
+                android:layout_marginLeft="@dimen/x15"
+                android:layout_marginRight="@dimen/x15"
+                android:layout_marginTop="@dimen/x15"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/ll_checkBox_human_resources"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginRight="@dimen/x12"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <CheckBox
-
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:button="@drawable/selector_chkbox"
-                        android:checked="false"
-                        android:paddingBottom="@dimen/x2"
-                        android:paddingLeft="@dimen/x7"
-                        android:paddingRight="@dimen/x7"
-                        android:text="@string/project_managment"
-                        android:textColor="@color/lightGray"
-                        android:textSize="@dimen/x14" />
+                        android:orientation="horizontal">
 
-                    <!--<ImageView
+                        <CheckBox
+                            android:id="@+id/cb_human_resources"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/selector_chkbox"
+                            android:checked="false"
+                            android:paddingBottom="@dimen/x2"
+                            android:paddingLeft="@dimen/x7"
+                            android:paddingRight="@dimen/x7"
+                            android:text="@string/human_resources"
+                            android:textColor="@color/lightGray"
+                            android:textSize="@dimen/x14" />
+
+                        <!-- <ImageView
+                        android:id="@+id/iv_bodyBuildingcheckBx"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/x3"
+                        android:layout_weight="0.1"
+                        android:src="@drawable/checkbox"
+                        />
+
+                    <com.app.ace.ui.views.AnyTextView
+                        android:id="@+id/txt_bodyBuildingchkbx"
+                        android:layout_weight="0.9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x8"
+                        android:text="@string/body_building"
+                        app:typeface="Roboto-Regular.ttf"/>-->
+
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/x1"
+                        android:layout_marginLeft="@dimen/x3"
+                        android:layout_marginTop="@dimen/x10"
+                        android:alpha="0.6"
+                        android:background="@drawable/text" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_checkBox_project_managment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/cb_project_managment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/selector_chkbox"
+                            android:checked="false"
+                            android:paddingBottom="@dimen/x2"
+                            android:paddingLeft="@dimen/x7"
+                            android:paddingRight="@dimen/x7"
+                            android:text="@string/project_managment"
+                            android:textColor="@color/lightGray"
+                            android:textSize="@dimen/x14" />
+
+                        <!--<ImageView
                         android:id="@+id/iv_loseWeightcheckBx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -772,47 +541,283 @@
                         android:text="@string/lose_weight"
                         app:typeface="Roboto-Regular.ttf"/>
     -->
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/x1"
+                        android:layout_marginLeft="@dimen/x3"
+                        android:layout_marginTop="@dimen/x10"
+                        android:alpha="0.6"
+                        android:background="@drawable/text" />
+
                 </LinearLayout>
 
+            </LinearLayout>
 
-                <View
+            <LinearLayout
+                android:id="@+id/ll_Checkbox_Field5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x15"
+                android:layout_marginRight="@dimen/x15"
+                android:layout_marginTop="@dimen/x15"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ll_checkBox_biology"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/x1"
-                    android:layout_marginLeft="@dimen/x3"
-                    android:layout_marginTop="@dimen/x10"
-                    android:alpha="0.6"
-                    android:background="@drawable/text" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/x12"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/cb_biology"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/selector_chkbox"
+                            android:checked="false"
+                            android:paddingBottom="@dimen/x2"
+                            android:paddingLeft="@dimen/x7"
+                            android:paddingRight="@dimen/x7"
+                            android:text="@string/biology"
+                            android:textColor="@color/lightGray"
+                            android:textSize="@dimen/x14" />
+
+                        <!-- <ImageView
+                             android:id="@+id/iv_bodyBuildingcheckBx"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:layout_marginTop="@dimen/x3"
+                             android:layout_weight="0.1"
+                             android:src="@drawable/checkbox"
+                             />
+
+                         <com.app.ace.ui.views.AnyTextView
+                             android:id="@+id/txt_bodyBuildingchkbx"
+                             android:layout_weight="0.9"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:layout_marginLeft="@dimen/x8"
+                             android:text="@string/body_building"
+                             app:typeface="Roboto-Regular.ttf"/>-->
+
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/x1"
+                        android:layout_marginLeft="@dimen/x3"
+                        android:layout_marginTop="@dimen/x10"
+                        android:alpha="0.6"
+                        android:background="@drawable/text" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_checkBox_java"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/cb_java"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/selector_chkbox"
+                            android:checked="false"
+                            android:paddingBottom="@dimen/x2"
+                            android:paddingLeft="@dimen/x7"
+                            android:paddingRight="@dimen/x7"
+                            android:text="@string/java"
+                            android:textColor="@color/lightGray"
+                            android:textSize="@dimen/x14" />
+
+
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/x1"
+                        android:layout_marginLeft="@dimen/x3"
+                        android:layout_marginTop="@dimen/x10"
+                        android:alpha="0.6"
+                        android:background="@drawable/text" />
+
+                </LinearLayout>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_Checkbox_Field6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x15"
+                android:layout_marginRight="@dimen/x15"
+                android:layout_marginTop="@dimen/x15"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ll_checkBox_graduation_project"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/x12"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/cb_graduation_project"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/selector_chkbox"
+                            android:checked="false"
+                            android:paddingBottom="@dimen/x2"
+                            android:paddingLeft="@dimen/x7"
+                            android:paddingRight="@dimen/x7"
+                            android:text="@string/graduation_project"
+                            android:textColor="@color/lightGray"
+                            android:textSize="@dimen/x14" />
+
+                        <!-- <ImageView
+                             android:id="@+id/iv_bodyBuildingcheckBx"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:layout_marginTop="@dimen/x3"
+                             android:layout_weight="0.1"
+                             android:src="@drawable/checkbox"
+                             />
+
+                         <com.app.ace.ui.views.AnyTextView
+                             android:id="@+id/txt_bodyBuildingchkbx"
+                             android:layout_weight="0.9"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:layout_marginLeft="@dimen/x8"
+                             android:text="@string/body_building"
+                             app:typeface="Roboto-Regular.ttf"/>-->
+
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/x1"
+                        android:layout_marginLeft="@dimen/x3"
+                        android:layout_marginTop="@dimen/x10"
+                        android:alpha="0.6"
+                        android:background="@drawable/text" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:visibility="invisible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/selector_chkbox"
+                            android:checked="false"
+                            android:paddingBottom="@dimen/x2"
+                            android:paddingLeft="@dimen/x7"
+                            android:paddingRight="@dimen/x7"
+                            android:text="@string/project_managment"
+                            android:textColor="@color/lightGray"
+                            android:textSize="@dimen/x14" />
+
+                        <!--<ImageView
+                            android:id="@+id/iv_loseWeightcheckBx"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/x3"
+                            android:layout_weight="0.1"
+                            android:src="@drawable/checkbox"
+                            />
+
+                        <com.app.ace.ui.views.AnyTextView
+                            android:id="@+id/txt_LoseWeightchkbx"
+                            android:layout_weight="0.9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x8"
+                            android:text="@string/lose_weight"
+                            app:typeface="Roboto-Regular.ttf"/>
+        -->
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/x1"
+                        android:layout_marginLeft="@dimen/x3"
+                        android:layout_marginTop="@dimen/x10"
+                        android:alpha="0.6"
+                        android:background="@drawable/text" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x15"
+            android:layout_marginRight="@dimen/x15"
+            android:layout_marginTop="@dimen/x20">
+
+            <Button
+                android:id="@+id/btn_training_Search_Submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="@dimen/x10"
+                android:background="@drawable/next_bttn_plain"
+                android:gravity="center"
+                android:text="@string/submit"
+                android:textColor="@color/white"
+                android:textSize="@dimen/x16" />
 
         </LinearLayout>
 
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_submit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/x15"
-        android:layout_marginRight="@dimen/x15"
-        android:layout_marginTop="@dimen/x20">
-
-        <Button
-            android:id="@+id/btn_training_Search_Submit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginTop="@dimen/x10"
-            android:background="@drawable/next_bttn_plain"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/x16"
-            android:text="@string/submit"
-            />
-
-    </LinearLayout>
-
-
-</LinearLayout>
-
+</ScrollView>
