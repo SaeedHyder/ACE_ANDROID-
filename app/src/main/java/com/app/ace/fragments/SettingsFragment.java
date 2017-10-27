@@ -200,18 +200,24 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                     if (!edit_newPassword.getText().toString().equals("") || !txt_CurrentPassword.getText().toString().equals("") || !edit_conNewPassword.getText().toString().equals("")) {
                         updateSetting();
                     } else {
-                        contactUs();
-                        getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                        if (!txt_contact_us_disc.getText().toString().equals("")) {
+                            contactUs();
+                            getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                        }
                     }
                 } else {
                     if (!edit_newPassword.getText().toString().equals("") || !txt_CurrentPassword.getText().toString().equals("") || !edit_conNewPassword.getText().toString().equals("")) {
-                      UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.twitter_password_error));
+                        UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.twitter_password_error));
+                        if (!txt_contact_us_disc.getText().toString().equals("")) {
+                            contactUs();
+                            getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                        }
+                    } else {
+                        if (!txt_contact_us_disc.getText().toString().equals("")) {
+                            contactUs();
+                            getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                        }
                     }
-                    else{
-                        contactUs();
-                        getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
-                    }
-
 
 
                 }

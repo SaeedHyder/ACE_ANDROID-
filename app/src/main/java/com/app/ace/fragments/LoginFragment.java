@@ -187,6 +187,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
                         prefHelper.setUsrId(response.body().getResult().getId());
                         prefHelper.setToken(response.body().getResult().get_token());
                         prefHelper.putUser(response.body().getResult());
+                        prefHelper.setIsTwitterLogin(true);
 
                         //prefHelper.setMobileNo(response.body().getResult().getPhone_no());
 
