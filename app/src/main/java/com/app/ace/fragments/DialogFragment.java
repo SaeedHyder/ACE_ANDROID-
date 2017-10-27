@@ -98,10 +98,10 @@ public class DialogFragment extends RoboDialogFragment implements View.OnClickLi
 
     public void showBtndialog_2(){
         btndialog_2.setVisibility(View.VISIBLE);
-        btndialog_2.setBackgroundResource(R.drawable.next_bttn_plain);
+        btndialog_2.setBackgroundResource(R.drawable.done);
         btndialog_2.setText(getString(R.string.sign_up_as_trainer));
 
-        btndialog_1.setBackgroundResource(R.drawable.next_bttn_plain);
+        btndialog_1.setBackgroundResource(R.drawable.done);
         btndialog_1.setText(getString(R.string.sign_up_as_trainee));
 
     }

@@ -526,6 +526,7 @@
     <string name="how_do_select_video">كيف تريد تعيين الفيديو الخاص بك؟</string>
     <string name="how_do_you_want__to_selectphoto">كيف تريد تعيين صورتك؟</string>
     <string name="set_file">كيف تريد تعيين الملف الخاص بك؟</string>
+    <string name="twitter_password_error">يتعذر تغيير كلمة المرور أثناء تسجيل الدخول باستخدام تويتر</string>
 
 
 

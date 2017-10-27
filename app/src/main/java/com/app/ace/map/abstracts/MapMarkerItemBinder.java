@@ -11,9 +11,7 @@ import com.app.ace.R;
 import com.app.ace.activities.DockActivity;
 import com.app.ace.activities.MainActivity;
 import com.app.ace.entities.MapScreenItem;
-import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.BitmapHelper;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -84,7 +82,8 @@ public class MapMarkerItemBinder extends MapMarkerBinder<MapScreenItem> {
                                 Marker marker = googleMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(Double.valueOf(entity.getLat()), Double.valueOf(entity.getLng())))
                                         //.icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
-                                        .icon(BitmapDescriptorFactory.fromBitmap(BitmapHelper.getRoundCircleImage(BitmapHelper.getResizedBitmap(decoded, 230)))));
+                                        .icon(BitmapDescriptorFactory.fromBitmap(BitmapHelper.getRoundCircleImage(BitmapHelper.getResizedBitmap(decoded,
+                                                (int) activity.getResources().getDimension(R.dimen.x60)), activity))));
                                 //  .icon(BitmapDescriptorFactory.fromBitmap(loadedImage)));
                                 //.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher)));
                                 //.icon(BitmapDescriptorFactory.fromResource(R.drawable.profile_container1)));
@@ -97,7 +96,7 @@ public class MapMarkerItemBinder extends MapMarkerBinder<MapScreenItem> {
 
                         }
                 }
-             //   googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(entity.getUserLat(), entity.getUserLng()), AppConstants.zoomIn));
+                //   googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(entity.getUserLat(), entity.getUserLng()), AppConstants.zoomIn));
 
             }
 
@@ -114,7 +113,7 @@ public class MapMarkerItemBinder extends MapMarkerBinder<MapScreenItem> {
 
                                 Marker marker = googleMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(Double.valueOf(entity.getLat()), Double.valueOf(entity.getLng())))
-                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.profile_container)));
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.profile_picc)));
                                 marker.setTag(entity.getUserId());
                             } catch (Exception e) {
                                 e.printStackTrace();

@@ -15,6 +15,8 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.ExifInterface;
 
+import com.app.ace.R;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -153,12 +155,12 @@ public class BitmapHelper {
 		return output;
 		
 	}
-	public static Bitmap getRoundCircleImage( Bitmap bitmap ) {
+	public static Bitmap getRoundCircleImage( Bitmap bitmap,Context context ) {
 		//int w = bitmap.getWidth();
 		//int h = bitmap.getHeight();
 
-		int w=220;
-		int h=220;
+		int w=(int)context.getResources().getDimension(R.dimen.x50);
+		int h=(int)context.getResources().getDimension(R.dimen.x50);
 
 
 

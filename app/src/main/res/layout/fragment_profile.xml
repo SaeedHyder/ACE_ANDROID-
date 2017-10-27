@@ -38,8 +38,8 @@
                     android:id="@+id/riv_profile_pic"
                     android:layout_width="@dimen/x70"
                     android:layout_height="@dimen/x70"
-                    android:background="@drawable/profile_container"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:background="@drawable/profile_container" />
 
                 <!--<android.support.v4.widget.CircleImageView
                     android:layout_width="@dimen/x70"
@@ -60,8 +60,8 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:layout_marginBottom="@dimen/x5"
+                            android:layout_weight="1"
                             android:orientation="vertical">
 
                             <com.app.ace.ui.views.AnyTextView
@@ -91,8 +91,8 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:layout_marginBottom="@dimen/x5"
+                            android:layout_weight="1"
                             android:orientation="vertical">
 
                             <com.app.ace.ui.views.AnyTextView
@@ -123,8 +123,8 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:layout_marginBottom="@dimen/x5"
+                            android:layout_weight="1"
 
                             android:orientation="vertical">
 
@@ -262,8 +262,8 @@
                                 android:id="@+id/btn_request"
                                 android:layout_width="0dp"
                                 android:layout_height="@dimen/x35"
-                                android:layout_weight="1"
                                 android:layout_marginRight="@dimen/x8"
+                                android:layout_weight="1"
                                 android:background="@drawable/rectangle_buton"
                                 android:gravity="center"
                                 android:text="@string/request"
@@ -316,51 +316,59 @@
                 android:id="@+id/ll_profileInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-
-                <com.app.ace.ui.views.AnyTextView
-                    android:id="@+id/txt_profileName"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/x15"
-                    android:gravity="center"
-                    android:maxLength="25"
-                    android:maxLines="1"
-                    android:text="Charlie Hunnum"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/x15"
-                    app:typeface="Roboto-Bold.ttf" />
-
-                <View
-                    android:id="@+id/ll_separator"
-                    android:layout_width="@dimen/x1"
-                    android:layout_height="@dimen/x15"
-                    android:layout_marginLeft="@dimen/x5"
-                    android:background="@color/gray_dark"
-                    android:orientation="vertical"
-                    android:paddingBottom="@dimen/x5">
-
-                </View>
+                    android:layout_weight="0.6"
+                    android:orientation="horizontal">
 
 
-                <com.app.ace.ui.views.AnyTextView
-                    android:id="@+id/txt_Trainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/x5"
-                    android:text="@string/Trainer"
-                    android:textColor="@color/dark_grey"
-                    android:textSize="@dimen/x12"
-                    android:textStyle="bold"
-                    android:visibility="visible"
-                    app:typeface="Roboto-Regular.ttf" />
+                    <com.app.ace.ui.views.AnyTextView
+                        android:id="@+id/txt_profileName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/x15"
+                        android:layout_weight="0.7"
+                        android:gravity="start"
+                        android:maxLength="25"
+                        android:text="Charlie Hunnum"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/x15"
+                        app:typeface="Roboto-Bold.ttf" />
+
+                    <View
+                        android:id="@+id/ll_separator"
+                        android:layout_width="@dimen/x1"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/x5"
+                        android:background="@color/gray_dark"
+                        android:orientation="vertical"
+                        android:layout_gravity="center_vertical"
+                        android:paddingBottom="@dimen/x5">
+
+                    </View>
 
 
+                    <com.app.ace.ui.views.AnyTextView
+                        android:id="@+id/txt_Trainer"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/x5"
+                        android:maxLines="1"
+                        android:text="@string/Trainer"
+                        android:layout_weight="0.3"
+                        android:textColor="@color/dark_grey"
+                        android:textSize="@dimen/x12"
+                        android:textStyle="bold"
+                        android:visibility="visible"
+                        app:typeface="Roboto-Regular.ttf" />
+
+                </LinearLayout>
                 <!--<RatingBar
                     android:id="@+id/rbAddRating"
                     style="?android:attr/ratingBarStyleSmall"
@@ -404,9 +412,10 @@
                     app:stars="3" />-->
                 <LinearLayout
                     android:id="@+id/ll_review_count"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/x15"
+                    android:layout_marginEnd="@dimen/x15"
+                    android:layout_weight="0.4"
                     android:gravity="right"
                     android:orientation="horizontal">
 
@@ -591,7 +600,6 @@
                 </LinearLayout>
 
 
-
             </LinearLayout>
 
             <View
@@ -618,8 +626,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:visibility="visible"
-                    >
+                    android:visibility="visible">
 
                     <ImageView
                         android:id="@+id/iv_feedback"
@@ -634,8 +641,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    >
+                    android:gravity="center">
 
                     <ImageView
                         android:id="@+id/iv_grid"
@@ -688,7 +694,7 @@
                 android:numColumns="3"
                 android:padding="@dimen/x10"
                 android:verticalSpacing="@dimen/x10"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <com.app.ace.ui.adapters.ExpandedListView
                 android:id="@+id/lv_feedback"
@@ -696,7 +702,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_grid_list_buttons"
                 android:divider="@null"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
 
         </LinearLayout>

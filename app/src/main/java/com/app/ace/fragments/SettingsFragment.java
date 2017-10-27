@@ -140,12 +140,11 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 }, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       if(prefHelper.isLanguageArabic()){
-                           cb_arabic.setChecked(true);
-                       }
-                       else{
-                           cb_english.setChecked(true);
-                       }
+                        if (prefHelper.isLanguageArabic()) {
+                            cb_arabic.setChecked(true);
+                        } else {
+                            cb_english.setChecked(true);
+                        }
 
                         dialog.hideDialog();
                     }
@@ -168,10 +167,9 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 }, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(prefHelper.isLanguageArabic()){
+                        if (prefHelper.isLanguageArabic()) {
                             cb_arabic.setChecked(true);
-                        }
-                        else{
+                        } else {
                             cb_english.setChecked(true);
                         }
                         dialog.hideDialog();
@@ -198,11 +196,24 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onClick(View v) {
 
-                if (!edit_newPassword.getText().toString().equals("") || !txt_CurrentPassword.getText().toString().equals("") || !edit_conNewPassword.getText().toString().equals("")) {
-                    updateSetting();
+                if (!prefHelper.isTwitterLogin()) {
+                    if (!edit_newPassword.getText().toString().equals("") || !txt_CurrentPassword.getText().toString().equals("") || !edit_conNewPassword.getText().toString().equals("")) {
+                        updateSetting();
+                    } else {
+                        contactUs();
+                        getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                    }
                 } else {
-                    contactUs();
-                    getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                    if (!edit_newPassword.getText().toString().equals("") || !txt_CurrentPassword.getText().toString().equals("") || !edit_conNewPassword.getText().toString().equals("")) {
+                      UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.twitter_password_error));
+                    }
+                    else{
+                        contactUs();
+                        getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+                    }
+
+
+
                 }
 
 
@@ -250,7 +261,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                                         getDockActivity().popBackStackTillEntry(0);
                                         getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                                     }
-                                },response.body().getMessage());
+                                }, response.body().getMessage());
                                 dialogHelper.showDialog();
                             }
                             loadingFinished();
@@ -294,7 +305,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                                     getDockActivity().popBackStackTillEntry(0);
                                     getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                                 }
-                            },response.body().getMessage());
+                            }, response.body().getMessage());
                             dialogHelper.showDialog();
                         }
                     } else {
@@ -345,7 +356,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        },response.body().getMessage());
+                        }, response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                     // UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
@@ -392,7 +403,6 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                     }
                 });
                 dialog.showDialog();
-
 
 
                 break;

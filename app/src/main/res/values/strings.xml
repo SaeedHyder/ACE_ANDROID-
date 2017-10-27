@@ -485,6 +485,7 @@
     <string name="set_file">How do you want to set your file?</string>
     <string name="image">Image</string>
     <string name="user_delete_message">User has been deleted. Sorry for inconvenience.</string>
+    <string name="twitter_password_error">Unable to change your password as you log in with twitter</string>
 
 
 </resources>

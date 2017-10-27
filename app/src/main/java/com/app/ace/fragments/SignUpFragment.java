@@ -150,7 +150,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
 
             @Override
             public void onFailure(TwitterException exception) {
-               
+
             }
         });
     }
