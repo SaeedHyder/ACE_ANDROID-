@@ -3,12 +3,14 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:fillViewport="true"
     android:layout_height="match_parent">
 
 
     <LinearLayout
+        android:id="@+id/mainframe"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/bg"
         android:orientation="vertical">
 
@@ -43,7 +45,29 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <com.app.ace.ui.views.AnyTextView
+            android:id="@+id/txt_no_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/no_data"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x15"
+            android:visibility="gone"
+            app:typeface="Roboto-Regular.ttf" />
+
+        <com.app.ace.ui.views.ExpandableGridView
+            android:id="@+id/gv_speciality"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent"
+            android:horizontalSpacing="@dimen/x10"
+            android:verticalSpacing="@dimen/x10"
+            android:numColumns="2"
+            android:padding="@dimen/x10"
+            android:visibility="visible" />
+
+     <!--   <LinearLayout
             android:id="@+id/ll_checkboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -86,7 +110,7 @@
                             android:textColor="@color/lightGray"
                             android:textSize="@dimen/x14" />
 
-                        <!-- <ImageView
+                        &lt;!&ndash; <ImageView
                         android:id="@+id/iv_selectAllcheckBx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -102,7 +126,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/x8"
                         android:text="@string/select_all"
-                        app:typeface="Roboto-Regular.ttf"/>-->
+                        app:typeface="Roboto-Regular.ttf"/>&ndash;&gt;
 
                     </LinearLayout>
 
@@ -144,7 +168,7 @@
                             android:textColor="@color/lightGray"
                             android:textSize="@dimen/x14" />
 
-                        <!--<ImageView
+                        &lt;!&ndash;<ImageView
                         android:id="@+id/iv_flexcheckBx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -160,7 +184,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/x8"
                         android:text="@string/flexibility_training"
-                        app:typeface="Roboto-Regular.ttf"/>-->
+                        app:typeface="Roboto-Regular.ttf"/>&ndash;&gt;
 
                     </LinearLayout>
 
@@ -213,7 +237,7 @@
                             android:textColor="@color/lightGray"
                             android:textSize="@dimen/x14" />
 
-                        <!--  <ImageView
+                        &lt;!&ndash;  <ImageView
                         android:id="@+id/iv_StaticStrencheckBx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -229,7 +253,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/x8"
                         android:text="@string/static_strength_training"
-                        app:typeface="Roboto-Regular.ttf"/>-->
+                        app:typeface="Roboto-Regular.ttf"/>&ndash;&gt;
 
                     </LinearLayout>
 
@@ -270,7 +294,7 @@
                             android:textColor="@color/lightGray"
                             android:textSize="@dimen/x14" />
 
-                        <!--<ImageView
+                        &lt;!&ndash;<ImageView
                         android:id="@+id/iv_dynamicStrengBx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -286,7 +310,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/x8"
                         android:text="@string/dynamic_strength_training"
-                        app:typeface="Roboto-Regular.ttf"/>-->
+                        app:typeface="Roboto-Regular.ttf"/>&ndash;&gt;
 
                     </LinearLayout>
 
@@ -338,7 +362,7 @@
                             android:text="@string/chemistry"
                             android:textColor="@color/lightGray"
                             android:textSize="@dimen/x14" />
-                        <!-- <ImageView
+                        &lt;!&ndash; <ImageView
                         android:id="@+id/iv_circuitTraincheckBx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -354,7 +378,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/x8"
                         android:text="@string/circuit_training"
-                        app:typeface="Roboto-Regular.ttf"/>-->
+                        app:typeface="Roboto-Regular.ttf"/>&ndash;&gt;
 
                     </LinearLayout>
 
@@ -396,7 +420,7 @@
                             android:textColor="@color/lightGray"
                             android:textSize="@dimen/x14" />
 
-                        <!-- <ImageView
+                        &lt;!&ndash; <ImageView
                         android:id="@+id/iv_AerobicTraincheckBx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -412,7 +436,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/x8"
                         android:text="@string/aerobic_training"
-                        app:typeface="Roboto-Regular.ttf"/>-->
+                        app:typeface="Roboto-Regular.ttf"/>&ndash;&gt;
 
                     </LinearLayout>
 
@@ -465,7 +489,7 @@
                             android:textColor="@color/lightGray"
                             android:textSize="@dimen/x14" />
 
-                        <!-- <ImageView
+                        &lt;!&ndash; <ImageView
                         android:id="@+id/iv_bodyBuildingcheckBx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -481,7 +505,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/x8"
                         android:text="@string/body_building"
-                        app:typeface="Roboto-Regular.ttf"/>-->
+                        app:typeface="Roboto-Regular.ttf"/>&ndash;&gt;
 
                     </LinearLayout>
 
@@ -523,7 +547,7 @@
                             android:textColor="@color/lightGray"
                             android:textSize="@dimen/x14" />
 
-                        <!--<ImageView
+                        &lt;!&ndash;<ImageView
                         android:id="@+id/iv_loseWeightcheckBx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -540,7 +564,7 @@
                         android:layout_marginLeft="@dimen/x8"
                         android:text="@string/lose_weight"
                         app:typeface="Roboto-Regular.ttf"/>
-    -->
+    &ndash;&gt;
                     </LinearLayout>
 
 
@@ -592,7 +616,7 @@
                             android:textColor="@color/lightGray"
                             android:textSize="@dimen/x14" />
 
-                        <!-- <ImageView
+                        &lt;!&ndash; <ImageView
                              android:id="@+id/iv_bodyBuildingcheckBx"
                              android:layout_width="wrap_content"
                              android:layout_height="wrap_content"
@@ -608,7 +632,7 @@
                              android:layout_height="wrap_content"
                              android:layout_marginLeft="@dimen/x8"
                              android:text="@string/body_building"
-                             app:typeface="Roboto-Regular.ttf"/>-->
+                             app:typeface="Roboto-Regular.ttf"/>&ndash;&gt;
 
                     </LinearLayout>
 
@@ -702,7 +726,7 @@
                             android:textColor="@color/lightGray"
                             android:textSize="@dimen/x14" />
 
-                        <!-- <ImageView
+                        &lt;!&ndash; <ImageView
                              android:id="@+id/iv_bodyBuildingcheckBx"
                              android:layout_width="wrap_content"
                              android:layout_height="wrap_content"
@@ -718,7 +742,7 @@
                              android:layout_height="wrap_content"
                              android:layout_marginLeft="@dimen/x8"
                              android:text="@string/body_building"
-                             app:typeface="Roboto-Regular.ttf"/>-->
+                             app:typeface="Roboto-Regular.ttf"/>&ndash;&gt;
 
                     </LinearLayout>
 
@@ -759,7 +783,7 @@
                             android:textColor="@color/lightGray"
                             android:textSize="@dimen/x14" />
 
-                        <!--<ImageView
+                        &lt;!&ndash;<ImageView
                             android:id="@+id/iv_loseWeightcheckBx"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -776,7 +800,7 @@
                             android:layout_marginLeft="@dimen/x8"
                             android:text="@string/lose_weight"
                             app:typeface="Roboto-Regular.ttf"/>
-        -->
+        &ndash;&gt;
                     </LinearLayout>
 
 
@@ -793,7 +817,7 @@
             </LinearLayout>
 
 
-        </LinearLayout>
+        </LinearLayout>-->
 
         <LinearLayout
             android:id="@+id/ll_submit"

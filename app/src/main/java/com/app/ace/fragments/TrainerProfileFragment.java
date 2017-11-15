@@ -19,6 +19,7 @@ import com.app.ace.activities.DockActivity;
 import com.app.ace.entities.FollowUser;
 import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.Specialities;
 import com.app.ace.entities.TrainerReviews;
 import com.app.ace.entities.User;
 import com.app.ace.entities.UserProfile;
@@ -40,6 +41,8 @@ import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.ExpandableGridView;
 import com.app.ace.ui.views.TitleBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -153,6 +156,9 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
     @InjectView(R.id.btn_feedback)
     private Button btn_feedback;
 
+    ArrayList<Specialities> specialityResponseArray=new ArrayList<>();
+    ArrayList<String> specialtyArray = new ArrayList<>();
+    String Specialities = "";
 
     private ArrayListAdapter<profilePostEnt> adapter;
     private List<profilePostEnt> dataCollection = new ArrayList<>();
@@ -373,7 +379,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                                     TrainerGymAddress = response.body().getResult().getGym_address();
                                     txt_profileName.setText(response.body().getResult().getFirst_name() + " " + response.body().getResult().getLast_name());
                                     imageLoader.displayImage(response.body().getResult().getProfile_image(), riv_profile_pic);
-                                    txt_education_cirtification_dis.setText(response.body().getResult().getEducation() + " " + response.body().getResult().getUniversity());
+                                  //  txt_education_cirtification_dis.setText(response.body().getResult().getEducation() + " " + response.body().getResult().getUniversity());
                                     txt_preffered_training_loc_dis.setText(response.body().getResult().getGym_address());
                                     txt_postCount.setText(response.body().getResult().getPosts_count());
                                     txt_FollowersCount.setText(response.body().getResult().getFollowers_count());
@@ -384,6 +390,15 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                                     ShowUserPosts(response.body().getResult().getPosts(), response.body().getResult().getUser_type());
                                     gv_pics.setVisibility(View.GONE);
                                     setFeedbackData(response.body().getResult().getTrainer_reviews());
+
+
+                                    specialityResponseArray=response.body().getResult().getSpecialities();
+                                    for(Specialities item: specialityResponseArray){
+                                        specialtyArray.add(item.getSpeciality().getTitle());
+                                    }
+                                    Specialities = StringUtils.join(specialtyArray, ",");
+                                    txt_education_cirtification_dis.setText(Specialities + " " + response.body().getResult().getUniversity());
+
 
                                 }
                             } else {
@@ -774,7 +789,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
 
                 //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
 
-                // getDockActivity().addDockableFragment(CalendarFragment.newInstance(user_id, TrainerGymAddress, Speciality), "CalendarFragment");
+                // getDockActivity().addDockableFragment(CalendarFragment.newInstance(user_id, TrainerGymAddress, SpecialityEnt), "CalendarFragment");
 
                 break;
 

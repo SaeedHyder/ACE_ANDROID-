@@ -1,6 +1,10 @@
 package com.app.ace.entities;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by saeedhyder on 4/25/2017.
@@ -64,6 +68,9 @@ public class UserProfile {
     int negative_review;
     ArrayList<post> posts;
     ArrayList<TrainerReviews> trainer_reviews;
+    @SerializedName("specialities")
+    @Expose
+    private ArrayList<Specialities> specialities = null;
 
     public String getPrivate_account() {
         return private_account;
@@ -81,6 +88,13 @@ public class UserProfile {
         this.mute_conversation = mute_conversation;
     }
 
+    public ArrayList<Specialities> getSpecialities() {
+        return specialities;
+    }
+
+    public void setSpecialities(ArrayList<Specialities> specialities) {
+        this.specialities = specialities;
+    }
 
     public int getId() {
         return id;
@@ -513,4 +527,6 @@ public class UserProfile {
     public void setNegative_review(int negative_review) {
         this.negative_review = negative_review;
     }
+
+
 }

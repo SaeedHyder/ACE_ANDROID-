@@ -2,8 +2,10 @@ package com.app.ace.global;
 
 public class WebServiceConstants {
 
-    public static final String SERVICE_BASE_URL = "http://365ace.net/mobileapp/api/";
+   // public static final String SERVICE_BASE_URL = "http://365ace.net/mobileapp/api/";
     //public static final String SERVICE_BASE_URL = "http://35.160.175.165/portfolio/ace/api/";
+    public static final String SERVICE_BASE_URL = "https://www.stagingic.com/portfolio/ace/api/";
+
     //public static final String IMAGE_BASE_URL = "http://35.160.175.165/portfolio/badal/public/images/profile_images/";
 
   /*  public static final String SERVICE_REGISTER_URL = "http://10.1.18.234/ace/api/user/register/";

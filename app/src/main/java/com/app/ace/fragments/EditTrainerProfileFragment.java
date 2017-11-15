@@ -2,6 +2,7 @@ package com.app.ace.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import com.app.ace.R;
 import com.app.ace.activities.MainActivity;
 import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.SpecialityEnt;
+import com.app.ace.entities.SpecialityResultEnt;
 import com.app.ace.entities.SpinnerDataItem;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
@@ -126,6 +129,8 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         } else {
             view.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
         }
+
+        getSpecialityData();
         // Spinner Drop down elements
         List<String> categories = new ArrayList<>();
         categories.add(getString(R.string.male));
@@ -149,7 +154,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         ShowProfile();
 
         setListener();
-        setSpCertification();
+        //setSpCertification();
         setSpSpeciality();
 
 
@@ -389,19 +394,64 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         // TODO Auto-generated method stub
     }
 
-    private void setSpCertification() {
+    private void getSpecialityData() {
+        loadingStarted();
+
+        Call<ResponseWrapper<SpecialityResultEnt>> call = webService.specialityData(getMainActivity().selectedLanguage());
+
+        call.enqueue(new Callback<ResponseWrapper<SpecialityResultEnt>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<SpecialityResultEnt>> call, Response<ResponseWrapper<SpecialityResultEnt>> response) {
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                    loadingFinished();
+
+                    if (response.body().getUserDeleted() == 0) {
+                        loadingFinished();
+
+                        setSpCertification(response.body().getResult().getSpecialities());
+
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        },response.body().getMessage());
+                        dialogHelper.showDialog();
+                    }}
+                else
+                {
+                    loadingFinished();
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<SpecialityResultEnt>> call, Throwable t) {
+                loadingFinished();
+                Log.e("TrainingSeaarchFragment", t.toString());
+            }
+        });
+
+    }
+
+    private void setSpCertification(List<SpecialityEnt> specialities) {
 
         ArrayList<String> Certification = new ArrayList<String>();
-
-       /* Certification.add(getString(R.string.Select_Certification));
-        Certification.add(getString(R.string.Degree));
-        Certification.add(getString(R.string.NASM));
-        Certification.add(getString(R.string.NCSA));
-        Certification.add(getString(R.string.ACSM));
-        Certification.add(getString(R.string.CHECK));
-        Certification.add(getString(R.string.ACE));*/
+        ArrayList<String> CertificationID = new ArrayList<String>();
 
         Certification.add(getString(R.string.Select_Speciality));
+        CertificationID.add("-1");
+        for(SpecialityEnt item : specialities){
+            Certification.add(item.getTitle());
+            CertificationID.add(item.getId()+"");
+        }
+
+      /*  Certification.add(getString(R.string.Select_Speciality));
         Certification.add(getString(R.string.mathematics));
         Certification.add(getString(R.string.fitnes_health));
         Certification.add(getString(R.string.islamic_studies));
@@ -412,14 +462,15 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         Certification.add(getString(R.string.project_managment));
         Certification.add(getString(R.string.biology));
         Certification.add(getString(R.string.java));
-        Certification.add(getString(R.string.graduation_project));
-
+        Certification.add(getString(R.string.graduation_project));*/
 
         ArrayList<SpinnerDataItem> listVOs = new ArrayList<>();
 
         for (int i = 0; i < Certification.size(); i++) {
             SpinnerDataItem stateVO = new SpinnerDataItem();
             stateVO.setTitle(Certification.get(i));
+            stateVO.setId(CertificationID.get(i));
+
             if (prefHelper.getUser().getEducation().contains(Certification.get(i))) {
                 stateVO.setSelected(true);
             }
@@ -466,6 +517,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
     public void updateEducationData(ArrayList<SpinnerDataItem> listState) {
 
         EducationArray.clear();
+        SpecialityArray.clear();
 
 
         for (SpinnerDataItem item : listState)
@@ -473,6 +525,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         {
             if (item.isSelected()) {
                 EducationArray.add(item.getTitle());
+                SpecialityArray.add(item.getId());
             }
 
         }
@@ -483,17 +536,17 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
     @Override
     public void updateSpecialtyData(ArrayList<SpinnerDataItem> listState) {
 
-        SpecialityArray.clear();
+      //  SpecialityArray.clear();
 
 
-        for (SpinnerDataItem item : listState)
+      /*  for (SpinnerDataItem item : listState)
 
         {
             if (item.isSelected()) {
                 SpecialityArray.add(item.getTitle());
             }
 
-        }
+        }*/
 
 
     }

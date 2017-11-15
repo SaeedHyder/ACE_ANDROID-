@@ -88,6 +88,7 @@ public class SpinerAdapter extends ArrayAdapter<SpinnerDataItem> {
             public void onCheckedChanged(CompoundButton buttonView, boolean ischeck) {
                 int getPosition = (Integer) buttonView.getTag();
 
+
                 listState.get(getPosition).setSelected(buttonView.isChecked());
 
                 if (listState.get(0).getTitle().contains(buttonView.getContext().getString(R.string.Select_Speciality))) {

@@ -3,6 +3,7 @@ package com.app.ace.fragments;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
@@ -18,6 +21,9 @@ import com.app.ace.R;
 import com.app.ace.activities.MainActivity;
 import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.SpecialityEnt;
+import com.app.ace.entities.SpecialityResultEnt;
+import com.app.ace.entities.SpinnerDataItem;
 import com.app.ace.fragments.abstracts.BaseFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.global.SignupFormConstants;
@@ -27,8 +33,12 @@ import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.TokenUpdater;
 import com.app.ace.helpers.UIHelper;
+import com.app.ace.interfaces.EditTrainerData;
 import com.app.ace.interfaces.IGetLocation;
+import com.app.ace.ui.adapters.ArrayListAdapter;
+import com.app.ace.ui.adapters.ExpandedListView;
 import com.app.ace.ui.dialogs.DialogFactory;
+import com.app.ace.ui.viewbinders.specialityItemBinder;
 import com.app.ace.ui.views.AnyEditTextView;
 import com.app.ace.ui.views.AnyTextView;
 import com.app.ace.ui.views.TitleBar;
@@ -55,7 +65,7 @@ import roboguice.inject.InjectView;
  */
 
 public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnClickListener,
-        CompoundButton.OnCheckedChangeListener, MainActivity.ImageSetter, IGetLocation {
+        CompoundButton.OnCheckedChangeListener, MainActivity.ImageSetter, IGetLocation,EditTrainerData {
 
 
     @InjectView(R.id.btnSignUp)
@@ -80,40 +90,6 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
     @InjectView(R.id.txt_browse_cv)
     private AnyTextView txt_browse_cv;
 
-
-    //Education
-    @InjectView(R.id.cb_Mathematics)
-    private CheckBox cb_Mathematics;
-
-    @InjectView(R.id.cb_Fitness_health)
-    private CheckBox cb_Fitness_health;
-
-    @InjectView(R.id.cb_Islamic_studies)
-    private CheckBox cb_Islamic_studies;
-
-    @InjectView(R.id.cb_english)
-    private CheckBox cb_english;
-
-    @InjectView(R.id.cb_chemistry)
-    private CheckBox cb_chemistry;
-
-    @InjectView(R.id.cb_physics)
-    private CheckBox cb_physics;
-
-    @InjectView(R.id.cb_human_resources)
-    private CheckBox cb_human_resources;
-
-    @InjectView(R.id.cb_project_managment)
-    private CheckBox cb_project_managment;
-
-    @InjectView(R.id.cb_biology)
-    private CheckBox cb_biology;
-
-    @InjectView(R.id.cb_java)
-    private CheckBox cb_java;
-
-    @InjectView(R.id.cb_graduation_project)
-    private CheckBox cb_graduation_project;
 
     @InjectView(R.id.sp_Gender)
     private Spinner sp_Gender;
@@ -146,9 +122,13 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
     @InjectView(R.id.cb_1_to_5_years)
     private CheckBox cb_1_to_5_years;
 
-
     @InjectView(R.id.cb_5_years_or_more)
     private CheckBox cb_5_years_or_more;
+
+    @InjectView(R.id.sp_Certification)
+    private Spinner sp_Certification;
+
+    ArrayList<String> EducationArray = new ArrayList<>();
 
     public File resume;
     public String resumePath;
@@ -158,6 +138,7 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
 
     public String Education = "", Speciality = "", Years_of_Exp = "", Gym_days = "", gym_time_from = "", gym_time_to = "";
+    private String SpecialityString="";
 
     ArrayList<String> TrainerSpeciality = new ArrayList<>();
     ArrayList<String> SpecialityArray = new ArrayList<>();
@@ -184,6 +165,8 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
 
         String jsonString = getArguments().getString(SIGNUP_MODEL);
         if (jsonString != null)
@@ -217,7 +200,81 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
         spGender();
 
+        getSpecialityData();
+
+
         TrainerSpeciality = new ArrayList<>();
+    }
+
+    private void getSpecialityData() {
+        loadingStarted();
+
+        Call<ResponseWrapper<SpecialityResultEnt>> call = webService.specialityData(getMainActivity().selectedLanguage());
+
+        call.enqueue(new Callback<ResponseWrapper<SpecialityResultEnt>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<SpecialityResultEnt>> call, Response<ResponseWrapper<SpecialityResultEnt>> response) {
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                    loadingFinished();
+
+                    if (response.body().getUserDeleted() == 0) {
+                        loadingFinished();
+
+                        setSpCertification(response.body().getResult().getSpecialities());
+
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        },response.body().getMessage());
+                        dialogHelper.showDialog();
+                    }}
+                else
+                {
+                    loadingFinished();
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<SpecialityResultEnt>> call, Throwable t) {
+                loadingFinished();
+                Log.e("TrainingSeaarchFragment", t.toString());
+            }
+        });
+
+    }
+
+    private void setSpCertification(List<SpecialityEnt> specialities) {
+
+        ArrayList<String> Certification = new ArrayList<String>();
+        ArrayList<String> CertificationID = new ArrayList<String>();
+
+        Certification.add(getString(R.string.Select_Speciality));
+        CertificationID.add("-1");
+        for(SpecialityEnt item : specialities){
+            Certification.add(item.getTitle());
+            CertificationID.add(item.getId()+"");
+        }
+
+        ArrayList<SpinnerDataItem> listVOs = new ArrayList<>();
+
+        for (int i = 0; i < Certification.size(); i++) {
+            SpinnerDataItem stateVO = new SpinnerDataItem();
+            stateVO.setTitle(Certification.get(i));
+            stateVO.setId(CertificationID.get(i));
+
+            listVOs.add(stateVO);
+        }
+        SpinerAdapter myAdapter = new SpinerAdapter(getDockActivity(), 0, listVOs, this);
+        myAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        sp_Certification.setAdapter(myAdapter);
     }
 
     private void spGender() {
@@ -237,24 +294,15 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
         sp_Gender.setSelection(0);
     }
 
+
+
+
     private void setListeners() {
         btnSignUp.setOnClickListener(this);
         txt_from.setOnClickListener(this);
         txt_to.setOnClickListener(this);
         txt_Location.setOnClickListener(this);
         txt_browse_cv.setOnClickListener(this);
-
-        cb_Mathematics.setOnCheckedChangeListener(this);
-        cb_Fitness_health.setOnCheckedChangeListener(this);
-        cb_Islamic_studies.setOnCheckedChangeListener(this);
-        cb_english.setOnCheckedChangeListener(this);
-        cb_chemistry.setOnCheckedChangeListener(this);
-        cb_physics.setOnCheckedChangeListener(this);
-        cb_human_resources.setOnCheckedChangeListener(this);
-        cb_project_managment.setOnCheckedChangeListener(this);
-        cb_biology.setOnCheckedChangeListener(this);
-        cb_java.setOnCheckedChangeListener(this);
-        cb_graduation_project.setOnCheckedChangeListener(this);
 
 
         cb_less_then_1.setOnCheckedChangeListener(this);
@@ -496,8 +544,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
         switch (v.getId()) {
             case R.id.btnSignUp:
 
-                Education = StringUtils.join(TrainerSpeciality, ",");
-                //Speciality = StringUtils.join(SpecialityArray, ",");
+
+                Education = StringUtils.join(EducationArray, ",");
+                SpecialityString = StringUtils.join(SpecialityArray, ",");
                 Speciality = "dummy";
                 Gym_days = StringUtils.join(GymDaysArray, ",");
 
@@ -610,7 +659,7 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
                 RequestBody.create(MediaType.parse("text/plain"), gymLocation),
                 RequestBody.create(MediaType.parse("text/plain"), lat),
                 RequestBody.create(MediaType.parse("text/plain"), log),
-                RequestBody.create(MediaType.parse("text/plain"), ""),
+                RequestBody.create(MediaType.parse("text/plain"), SpecialityString),
                 RequestBody.create(MediaType.parse("text/plain"), Years_of_Exp),
                 RequestBody.create(MediaType.parse("text/plain"), edtPrimaryReason.getText().toString()),
                 RequestBody.create(MediaType.parse("text/plain"), Gym_days),
@@ -691,9 +740,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
         switch (buttonView.getId()) {
 
             //Education
-            case R.id.cb_Mathematics:
+           /* case R.id.cb_Mathematics:*/
 
-                if (isChecked) {
+               /* if (isChecked) {
 
                     TrainerSpeciality.add(cb_Mathematics.getText().toString());
 
@@ -833,8 +882,8 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
                 break;
 
-
-            //Speciality
+*/
+            //SpecialityEnt
 
             /*case R.id.cb_select_all:
 
@@ -1078,6 +1127,27 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
         // Toast.makeText(getDockActivity(),location.toString(),Toast.LENGTH_LONG).show();
         // Toast.makeText(getDockActivity(),formattedAddress,Toast.LENGTH_LONG).show();
 
+
+    }
+
+    @Override
+    public void updateEducationData(ArrayList<SpinnerDataItem> listState) {
+        EducationArray.clear();
+        SpecialityArray.clear();
+
+        for (SpinnerDataItem item : listState)
+
+        {
+            if (item.isSelected()) {
+                EducationArray.add(item.getTitle());
+                SpecialityArray.add(item.getId());
+            }
+
+        }
+    }
+
+    @Override
+    public void updateSpecialtyData(ArrayList<SpinnerDataItem> listState) {
 
     }
 }

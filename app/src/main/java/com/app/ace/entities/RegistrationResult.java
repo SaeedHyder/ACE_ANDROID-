@@ -1,6 +1,10 @@
 package com.app.ace.entities;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class RegistrationResult {
 
@@ -60,6 +64,11 @@ public class RegistrationResult {
     String following_count;
     String posts_count;
     String user_status;
+    @SerializedName("specialities")
+    @Expose
+    private List<Specialities> specialities = null;
+
+
 
     ArrayList<FollowUser> follower;
     ArrayList<FollowUser> followings;
@@ -528,4 +537,13 @@ public class RegistrationResult {
     public void setGym_address(String gym_address) {
         this.gym_address = gym_address;
     }
+
+    public List<Specialities> getSpecialities() {
+        return specialities;
+    }
+
+    public void setSpecialities(List<Specialities> specialities) {
+        this.specialities = specialities;
+    }
+
 }

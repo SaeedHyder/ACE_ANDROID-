@@ -20,6 +20,7 @@ import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
 import com.app.ace.entities.ScheduleEnt;
 import com.app.ace.entities.ShowComments;
+import com.app.ace.entities.SpecialityResultEnt;
 import com.app.ace.entities.TraineeScheduleEnt;
 import com.app.ace.entities.TrainerBooking;
 import com.app.ace.entities.TrainerBookingCalendarJson;
@@ -574,6 +575,11 @@ public interface WebService {
             @Query("user_id") String user_id,
             @Query("request_id") int request_id
             //language not required
+    );
+
+    @GET("specialities")
+    Call<ResponseWrapper<SpecialityResultEnt>> specialityData(
+            @Query("language") String language
     );
 
 
