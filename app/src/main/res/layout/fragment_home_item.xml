@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/home_post_bg"
-    android:layout_gravity="top"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="top"
+              android:background="@drawable/home_post_bg"
+              android:orientation="vertical">
 
 
     <LinearLayout
@@ -18,8 +18,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
             android:layout_gravity="top"
+            android:background="@color/white"
             android:orientation="horizontal">
 
 
@@ -30,118 +30,128 @@
                 android:layout_gravity="center_vertical"
                 android:layout_margin="@dimen/x10"
                 android:background="@drawable/profile_container"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"/>
 
 
             <com.app.ace.ui.views.AnyTextView
                 android:id="@+id/txt_profileName"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/x3"
-                android:gravity="center"
-                android:text="Charlie Hunnum"
-                android:maxLength="40"
-                android:maxLines="1"
                 android:layout_gravity="center_vertical"
+                android:layout_marginBottom="@dimen/x3"
+                android:gravity="start"
+                android:maxLength="40"
+                android:layout_weight="0.8"
+                android:maxLines="1"
+                android:text="Charlie Hunnum"
                 android:textColor="@color/black"
                 android:textSize="@dimen/x14"
-                app:typeface="Roboto-Bold.ttf" />
+                app:typeface="Roboto-Bold.ttf"/>
 
-
-        </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/iv_post_pic"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/x200"
-            android:scaleType="centerCrop"
-            android:visibility="visible"
-            android:src="@drawable/pic1" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/x200"
-            android:orientation="vertical"
-            >
-
-
-        <VideoView
-            android:id="@+id/vv_post_video"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/pic1"
-            android:visibility="visible"
-            android:layout_gravity="center"
-            android:scaleType="fitXY"
-
-            />
-
-
+            <ImageView
+                android:id="@+id/img_follower_post"
+                android:layout_width="@dimen/x25"
+                android:layout_height="@dimen/x25"
+                android:layout_margin="@dimen/x10"
+                android:layout_gravity="end|center_vertical"
+                android:visibility="gone"
+                android:src="@drawable/heart_icon3"/>
         </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/rl_videoThumb"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/x200"
-            >
+            android:layout_height="wrap_content">
+
             <ImageView
-                android:id="@+id/iv_videoThumb"
+                android:id="@+id/iv_post_pic"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/x200"
                 android:scaleType="centerCrop"
-              />
+                android:src="@drawable/pic1"
+                android:visibility="visible"/>
 
-            <ImageView
-                android:id="@+id/iv_loading"
-                android:layout_width="@dimen/x60"
-                android:layout_height="@dimen/x60"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x200"
+                android:orientation="vertical"
+                >
+
+
+                <VideoView
+                    android:id="@+id/vv_post_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/pic1"
+                    android:visibility="visible"
+
+                    />
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_videoThumb"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x200"
+                >
+
+                <ImageView
+                    android:id="@+id/iv_videoThumb"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/x200"
+                    android:scaleType="centerCrop"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_loading"
+                    android:layout_width="@dimen/x60"
+                    android:layout_height="@dimen/x60"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:indeterminate="true"
+                    android:src="@drawable/loadingvideo"
+                    android:visibility="gone"/>
+
+                <com.app.ace.ui.views.AnyTextView
+                    android:id="@+id/txt_loading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerInParent="true"
+                    android:text="Loading....."
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/x18"
+                    android:visibility="gone"
+                    app:typeface="Roboto-Bold.ttf"/>
+
+                <ImageView
+                    android:id="@+id/iv_playBtn"
+                    android:layout_width="@dimen/x100"
+                    android:layout_height="@dimen/x100"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:indeterminate="true"
+                    android:src="@drawable/playbutton"
+                    android:visibility="gone"/>
+
+
+            </RelativeLayout>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:indeterminate="true"
-                android:visibility="gone"
-                android:src="@drawable/loadingvideo"/>
 
-            <com.app.ace.ui.views.AnyTextView
-                android:id="@+id/txt_loading"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Loading....."
-                android:textColor="@color/white"
-                android:textSize="@dimen/x18"
-             android:layout_centerInParent="true"
-                android:layout_centerHorizontal="true"
-                android:textAlignment="center"
-                android:visibility="gone"
-                app:typeface="Roboto-Bold.ttf"/>
-
-        <ImageView
-            android:id="@+id/iv_playBtn"
-            android:layout_width="@dimen/x100"
-            android:layout_height="@dimen/x100"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:indeterminate="true"
-            android:visibility="gone"
-            android:src="@drawable/playbutton"/>
+                android:visibility="gone"/>
 
         </RelativeLayout>
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:indeterminate="true"
-
-            android:visibility="gone" />
-
-    </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -154,21 +164,21 @@
                 android:id="@+id/iv_like"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/heart_icon2" />
+                android:src="@drawable/heart_icon2"/>
 
             <ImageView
                 android:id="@+id/iv_do_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/x15"
-                android:src="@drawable/comment_icon2" />
+                android:src="@drawable/comment_icon2"/>
 
             <ImageView
                 android:id="@+id/iv_sendto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/x15"
-                android:src="@drawable/arrow_icon" />
+                android:src="@drawable/arrow_icon"/>
 
         </LinearLayout>
 
@@ -178,7 +188,7 @@
             android:layout_height="@dimen/x1"
             android:layout_marginBottom="@dimen/x3"
             android:alpha="0.6"
-            android:background="@drawable/text" />
+            android:background="@drawable/text"/>
 
 
         <LinearLayout
@@ -187,15 +197,15 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/x10"
-            android:paddingStart="@dimen/x15"
             android:paddingEnd="@dimen/x10"
+            android:paddingStart="@dimen/x15"
             android:paddingTop="@dimen/x10">
 
             <ImageView
                 android:id="@+id/iv_likes"
                 android:layout_width="@dimen/x17"
                 android:layout_height="@dimen/x17"
-                android:src="@drawable/mini_heart_icon" />
+                android:src="@drawable/mini_heart_icon"/>
 
             <com.app.ace.ui.views.AnyTextView
                 android:id="@+id/txt_likes_count"
@@ -207,59 +217,59 @@
                 android:textColor="@color/dark_grey"
                 android:textSize="@dimen/x14"
                 android:textStyle="normal"
-                app:typeface="Roboto-Regular.ttf" />
+                app:typeface="Roboto-Regular.ttf"/>
 
         </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-
-        android:paddingStart="@dimen/x15"
-        android:paddingEnd="@dimen/x10">
-
-        <com.app.ace.ui.views.AnyTextView
-            android:id="@+id/txt_commenter_Name"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Tim Jhones"
-            android:textColor="@color/black"
-            android:textSize="@dimen/x14"
-            android:visibility="gone"
-            android:maxLength="20"
-            android:maxLines="1"
-            app:typeface="Roboto-Bold.ttf" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+
+            android:paddingEnd="@dimen/x10"
+            android:paddingStart="@dimen/x15">
+
+            <com.app.ace.ui.views.AnyTextView
+                android:id="@+id/txt_commenter_Name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:maxLength="20"
+                android:maxLines="1"
+                android:text="Tim Jhones"
+                android:textColor="@color/black"
+                android:textSize="@dimen/x14"
+                android:visibility="gone"
+                app:typeface="Roboto-Bold.ttf"/>
 
 
-        <com.app.ace.ui.views.AnyTextView
-            android:id="@+id/txt_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/x5"
-            android:gravity="center"
-            android:text="Hi nice"
-            android:textColor="@color/black"
-            android:textSize="@dimen/x14"
-            android:maxLength="25"
-            android:maxLines="1"
-            android:visibility="gone"
+            <com.app.ace.ui.views.AnyTextView
+                android:id="@+id/txt_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/x5"
+                android:gravity="center"
+                android:maxLength="25"
+                android:maxLines="1"
+                android:text="Hi nice"
+                android:textColor="@color/black"
+                android:textSize="@dimen/x14"
+                android:visibility="gone"
 
-            app:typeface="Roboto-Regular.ttf" />
+                app:typeface="Roboto-Regular.ttf"/>
 
 
-    </LinearLayout>
+        </LinearLayout>
 
-    <LinearLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/x20"
-            android:paddingStart="@dimen/x16"
-            android:paddingEnd="@dimen/x10">
+            android:paddingEnd="@dimen/x10"
+            android:paddingStart="@dimen/x16">
 
 
             <com.app.ace.ui.views.AnyTextView
@@ -272,7 +282,7 @@
                 android:textColor="@color/dark_grey"
                 android:textSize="@dimen/x14"
                 android:textStyle="normal"
-                app:typeface="Roboto-Regular.ttf" />
+                app:typeface="Roboto-Regular.ttf"/>
 
 
         </LinearLayout>
@@ -280,4 +290,4 @@
     </LinearLayout>
 
 
-    </LinearLayout>
+</LinearLayout>

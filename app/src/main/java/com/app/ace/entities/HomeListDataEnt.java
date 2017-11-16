@@ -10,27 +10,16 @@ public class HomeListDataEnt {
 
     int totoal_likes, total_comments;
 
-    String profile_pic_path, profile_name, profile_post_pic_path, friend_name,friend_comment;
+    String profile_pic_path, profile_name, profile_post_pic_path, friend_name, friend_comment;
 
     int user_id;
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     int id;
     String is_liked;
     String videoThumbnail;
     ArrayList<PostComment> commentsArray;
     int is_approved_user;
-
-
-    public HomeListDataEnt(int totoal_likes, int total_comments, String profile_pic_path, String profile_name, String profile_post_pic_path, String friend_name, String friend_comment, int user_id, int id, ArrayList<PostComment> commentsArray, String is_liked, String videoThumb, int is_approved_user){
+    int follower_post;
+    public HomeListDataEnt(int totoal_likes, int total_comments, String profile_pic_path, String profile_name, String profile_post_pic_path, String friend_name, String friend_comment, int user_id, int id, ArrayList<PostComment> commentsArray, String is_liked, String videoThumb, int is_approved_user,int FollowerPost) {
 
         setTotoal_likes(totoal_likes);
         setTotal_comments(total_comments);
@@ -45,9 +34,25 @@ public class HomeListDataEnt {
         setIs_liked(is_liked);
         setVideoThumbnail(videoThumb);
         setIs_approved_user(is_approved_user);
+        setFollower_post(FollowerPost);
 
 
+    }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getFollower_post() {
+        return follower_post;
+    }
+
+    public void setFollower_post(int follower_post) {
+        this.follower_post = follower_post;
     }
 
     public String getIs_liked() {
@@ -62,6 +67,9 @@ public class HomeListDataEnt {
         return totoal_likes;
     }
 
+    public void setTotoal_likes(int totoal_likes) {
+        this.totoal_likes = totoal_likes;
+    }
 
     public int getIs_approved_user() {
         return is_approved_user;
@@ -69,10 +77,6 @@ public class HomeListDataEnt {
 
     public void setIs_approved_user(int is_approved_user) {
         this.is_approved_user = is_approved_user;
-    }
-
-    public void setTotoal_likes(int totoal_likes) {
-        this.totoal_likes = totoal_likes;
     }
 
     public int getTotal_comments() {
@@ -146,9 +150,6 @@ public class HomeListDataEnt {
     public void setCommentsArray(ArrayList<PostComment> commentsArray) {
         this.commentsArray = commentsArray;
     }
-
-
-
 
 
 }
