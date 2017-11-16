@@ -3,6 +3,7 @@ package com.app.ace.fragments;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -45,7 +46,7 @@ import com.app.ace.ui.views.TitleBar;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
-import org.apache.commons.lang3.StringUtils;
+
 
 import java.io.File;
 import java.util.ArrayList;
@@ -545,10 +546,10 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
             case R.id.btnSignUp:
 
 
-                Education = StringUtils.join(EducationArray, ",");
-                SpecialityString = StringUtils.join(SpecialityArray, ",");
+                Education = TextUtils.join( ",",EducationArray);
+                SpecialityString = TextUtils.join( ",",SpecialityArray);
                 Speciality = "dummy";
-                Gym_days = StringUtils.join(GymDaysArray, ",");
+                Gym_days = TextUtils.join( ",",GymDaysArray);
 
                 if (validateOtherData() && validateEditText()) {
                     if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()))
@@ -692,8 +693,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
                                 //AppConstants.is_show_trainer = true;
                             }
 
-                            getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(signupFormConstants.getUserName(), signupFormConstants.getEmail()), "VarificationCodeFragment");
-                        /*showSuccessDialog();
+                           // getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(signupFormConstants.getUserName(), signupFormConstants.getEmail()), "VarificationCodeFragment");
+                            showSignUpDialog(signupFormConstants.getUserName());
+                            /*showSuccessDialog();
                         getDockActivity().showHome();*/
 
                         } else {
@@ -728,6 +730,24 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
 
     }
 
+    private void showSignUpDialog(String userName) {
+
+        final DialogFragment successPopUp = DialogFragment.newInstance();
+        successPopUp.setPopupData(getString(R.string.imgdesc_signup), getString(R.string.you_all_sign), userName, getString(R.string.we_glad_you_here), true, false);
+
+        successPopUp.setbtndialog_1_Listener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                successPopUp.dismissDialog();
+                getDockActivity().popBackStackTillEntry(0);
+                prefHelper.setLoginStatus(true);
+                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+            }
+        });
+
+        successPopUp.show(getDockActivity().getSupportFragmentManager(), "signUpPopUp");
+
+    }
     private void unselectSelectAll() {
        /* cb_select_all.setOnCheckedChangeListener(null);
         cb_select_all.setChecked(false);

@@ -14,6 +14,7 @@ import com.app.ace.fragments.TrainerProfileFragment;
 import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.BasePreferenceHelper;
 import com.app.ace.helpers.DialogHelper;
+import com.app.ace.interfaces.DeleteChatInterface;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 import com.app.ace.ui.views.AnyTextView;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -32,14 +33,16 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
     private ImageLoader imageLoader;
 
     private DockActivity context;
+    private DeleteChatInterface deleteChatInterface;
 
     private BasePreferenceHelper prefHelper;
 
-    public ChatListBinder(DockActivity context) {
+    public ChatListBinder(DockActivity context,DeleteChatInterface deleteChatInterface) {
         super(R.layout.list_chat_item);
 
         this.context = context;
         imageLoader = ImageLoader.getInstance();
+        this.deleteChatInterface=deleteChatInterface;
     }
 
     @Override
@@ -49,9 +52,16 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
     }
 
     @Override
-    public void bindView(final ChatDataItem entity, int position, int grpPosition,
+    public void bindView(final ChatDataItem entity, final int position, int grpPosition,
                          View view, Activity activity) {
 
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                deleteChatInterface.deleteMessage(position);
+                return true;
+            }
+        });
 
         ChatListBinder.ViewHolder viewHolder = (ChatListBinder.ViewHolder) view.getTag();
 

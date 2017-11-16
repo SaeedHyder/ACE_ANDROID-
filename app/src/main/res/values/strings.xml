@@ -478,6 +478,7 @@
     <string name="enter_current_password">Enter Current Password</string>
     <string name="password_not_matched">Password Not Matched</string>
     <string name="are_you_sure_you_want_to_language">Are you sure you want to change language?</string>
+
     <string name="enter_fName">Enter First Name</string>
     <string name="Enter_Lname">Enter Last Name</string>
     <string name="Enter_password">Enter Password</string>
@@ -486,6 +487,10 @@
     <string name="image">Image</string>
     <string name="user_delete_message">User has been deleted. Sorry for inconvenience.</string>
     <string name="twitter_password_error">Unable to change your password as you log in with twitter</string>
+    <string name="delete_chat">Delete Chat</string>
+    <string name="are_you_sure_you_want_to_delete_chat">Are you sure you want to delete chat?</string>
+    <string name="delete_message">Delete Message</string>
+    <string name="are_you_sure_you_want_to_delete_message">Are you sure you want to delete message?</string>
 
 
 </resources>

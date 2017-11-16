@@ -10,13 +10,14 @@ public class ChatDataItem {
     private String receiverMessage;
     private String receiverMessageTime;
     private String postPath;
+    private int id;
 
 
 
     private int UserId;
     private boolean isSender;
 
-    public ChatDataItem(String senderImage, String senderMessage, String senderMessageTime,String receiverImage, String receiverMessage, String receiverMessageTime, boolean isSender,int UserId ){
+    public ChatDataItem(String senderImage, String senderMessage, String senderMessageTime,String receiverImage, String receiverMessage, String receiverMessageTime, boolean isSender,int UserId ,int id){
         setSenderImage(senderImage);
         setSenderMessage(senderMessage);
         setSenderMessageTime(senderMessageTime);
@@ -25,7 +26,16 @@ public class ChatDataItem {
         setReceiverMessageTime(receiverMessageTime);
         setSender(isSender);
         setUserId(UserId);
+        this.id=id;
 
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getReceiverImage() {

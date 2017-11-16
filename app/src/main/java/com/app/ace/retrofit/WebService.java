@@ -583,18 +583,19 @@ public interface WebService {
     );
 
 
+    @FormUrlEncoded
+    @POST("remove/conversation")
+    Call<ResponseWrapper> deleteConversation(
+            @Field("user_id") String user_id,
+            @Field("conversation_id") int conversation_id,
+            @Field("language") String language);
 
-
-
-
-
-
-
-
-
-
-
-
+    @FormUrlEncoded
+    @POST("remove/message")
+    Call<ResponseWrapper> deleteMessage(
+            @Field("user_id") String user_id,
+            @Field("message_id") int message_id,
+            @Field("language") String language);
 
 
    /* @Multipart

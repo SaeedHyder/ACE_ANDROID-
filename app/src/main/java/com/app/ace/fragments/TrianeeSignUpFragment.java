@@ -325,8 +325,9 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
                                 // AppConstants.is_show_trainer = true;
                             }
 
-                            getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(UserName, edtEmail.getText().toString()), "VarificationCodeFragment");
-                        /*showSuccessDialog();
+                           // getDockActivity().addDockableFragment(VarificationCodeFragment.newInstance(UserName, edtEmail.getText().toString()), "VarificationCodeFragment");
+                            showSignUpDialog(UserName);
+                            /*showSuccessDialog();
                         getDockActivity().showHome();*/
                         } else {
 
@@ -356,6 +357,25 @@ public class TrianeeSignUpFragment extends BaseFragment implements View.OnClickL
                 UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
             }
         });
+
+    }
+
+    private void showSignUpDialog(String userName) {
+
+        final DialogFragment successPopUp = DialogFragment.newInstance();
+        successPopUp.setPopupData(getString(R.string.imgdesc_signup), getString(R.string.you_all_sign), userName, getString(R.string.we_glad_you_here), true, false);
+
+        successPopUp.setbtndialog_1_Listener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                successPopUp.dismissDialog();
+                getDockActivity().popBackStackTillEntry(0);
+                prefHelper.setLoginStatus(true);
+                getDockActivity().addDockableFragment(HomeFragment.newInstance(), "HomeFragment");
+            }
+        });
+
+        successPopUp.show(getDockActivity().getSupportFragmentManager(), "signUpPopUp");
 
     }
 

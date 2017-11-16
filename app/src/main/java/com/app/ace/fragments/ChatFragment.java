@@ -19,6 +19,7 @@ import com.app.ace.global.AppConstants;
 import com.app.ace.global.CommentToChatMsgConstants;
 import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.UIHelper;
+import com.app.ace.interfaces.DeleteChatInterface;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.ChatListBinder;
 import com.app.ace.ui.views.AnyEditTextView;
@@ -36,7 +37,7 @@ import roboguice.inject.InjectView;
  * Created by khan_muhammad on 3/20/2017.
  */
 
-public class ChatFragment extends BaseFragment implements View.OnClickListener {
+public class ChatFragment extends BaseFragment implements View.OnClickListener, DeleteChatInterface {
 
     public static String SIGNUP_MODEL = "signup_model";
     public static String CONVERSATION_ID = "conversation_id";
@@ -81,6 +82,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private ArrayList<ChatDataItem> collection = new ArrayList<>();
     private Integer isReceiver_mute = 0;
     String messageBtn = "hide";
+    ArrayList<MsgEnt> newCollection = new ArrayList<>();
 
     public static ChatFragment newInstance() {
         return new ChatFragment();
@@ -172,6 +174,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        adapter = new ArrayListAdapter<ChatDataItem>(getDockActivity(), new ChatListBinder(getDockActivity(), this));
+
         if (getArguments() != null) {
             ConversationId = getArguments().getString(CONVERSATION_ID);
             receiverId = getArguments().getString(Receiver_ID);
@@ -209,7 +213,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             if (jsonString != null)
                 commentToChatMsgConstants = new Gson().fromJson(jsonString, CommentToChatMsgConstants.class);
         }
-        adapter = new ArrayListAdapter<ChatDataItem>(getDockActivity(), new ChatListBinder(getDockActivity()));
+
         return inflater.inflate(R.layout.layout_chatfragment, container, false);
     }
 
@@ -229,10 +233,69 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
         setListener();
 
-
         setTitleInfo();
 
+
         //getChatData();
+    }
+
+
+    private void deleteService(final int position) {
+        loadingStarted();
+
+        Call<ResponseWrapper> callBack = webService.deleteMessage(prefHelper.getUserId(), newCollection.get(position).getMessage().getId(), getMainActivity().selectedLanguage());
+
+        callBack.enqueue(new Callback<ResponseWrapper>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
+                loadingFinished();
+                //   if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+
+                if (response.body().getUserDeleted() == 0) {
+                    if (response.body().getMessage().equals("Success")) {
+                        UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                        collection.remove(position);
+                        adapter.clearList();
+                        adapter.addAll(collection);
+                        adapter.notifyDataSetChanged();
+
+                       /* if (collection.size() <= 0) {
+                            txt_noresult.setVisibility(View.VISIBLE);
+                            listView.setVisibility(View.GONE);
+                        } else {
+                            txt_noresult.setVisibility(View.GONE);
+                            listView.setVisibility(View.VISIBLE);
+                        }*/
+                    }
+
+                } else {
+                    final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                    dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            dialogHelper.hideDialog();
+                            getDockActivity().popBackStackTillEntry(0);
+                            getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                        }
+                    }, response.body().getMessage());
+                    dialogHelper.showDialog();
+                }
+
+               /* } else {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }*/
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper> call, Throwable t) {
+                loadingFinished();
+                System.out.println(t.getMessage());
+                System.out.println(t.getCause());
+            }
+        });
+
     }
 
     private void setTitleInfo() {
@@ -274,6 +337,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     if (response.body().getResult().size() > 0) {
                         if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
                             loadingFinished();
+                            newCollection = response.body().getResult().get(0).getMessages();
                             if (String.valueOf(response.body().getResult().get(0).getConversation().getSenderId()).equals(prefHelper.getUserId())) {
                                 isReceiver_mute = response.body().getResult().get(0).getConversation().getSenderMute();
                             } else if (String.valueOf(response.body().getResult().get(0).getConversation().getReceiverId()).equals(prefHelper.getUserId())) {
@@ -303,7 +367,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                             getDockActivity().popBackStackTillEntry(0);
                             getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                         }
-                    },response.body().getMessage());
+                    }, response.body().getMessage());
                     dialogHelper.showDialog();
                 }
             }
@@ -331,7 +395,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             //  ProfileImage = result.get(0).getMessages().get(0).getSender().getProfile_image();
         }
 
-        getMainActivity().titleBar.setSubHeading(USERNAME);
+        if (getMainActivity().titleBar != null)
+            getMainActivity().titleBar.setSubHeading(USERNAME);
 
 
     }
@@ -371,7 +436,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     collection.add(new ChatDataItem(msgEnt.getSender().getProfile_image(),
                             PostPath, getDockActivity().getDate(msgEnt.getMessage().getCreated_at()),
                             msgEnt.getReceiver().getProfile_image(), msgEnt.getMessage().getMessage_text(),
-                            getDockActivity().getDate(msgEnt.getMessage().getCreated_at()), isSender, msgEnt.getSender().getId()));
+                            getDockActivity().getDate(msgEnt.getMessage().getCreated_at()), isSender, msgEnt.getSender().getId(), msgEnt.getId()));
                 }
 
             } else {
@@ -381,7 +446,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     collection.add(new ChatDataItem(msgEnt.getSender().getProfile_image(),
                             msgEnt.getMessage().getMessage_text(), getDockActivity().getDate(msgEnt.getMessage().getCreated_at()),
                             msgEnt.getReceiver().getProfile_image(), msgEnt.getMessage().getMessage_text(),
-                            getDockActivity().getDate(msgEnt.getMessage().getCreated_at()), isSender, msgEnt.getSender().getId()));
+                            getDockActivity().getDate(msgEnt.getMessage().getCreated_at()), isSender, msgEnt.getSender().getId(), msgEnt.getId()));
                 }
             }
 
@@ -394,7 +459,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
         }
 
-        if (getMainActivity()!= null)
+        if (getMainActivity() != null)
             getMainActivity().titleBar.invalidate();
         bindData(collection);
 
@@ -510,7 +575,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                             });
 
 
-                            collection.add(new ChatDataItem(msg.get(msg.size() - 1).getSender().getProfile_image(), msg.get(msg.size() - 1).getMessage().getMessage_text(), getDockActivity().getDate(msg.get(msg.size() - 1).getMessage().getCreated_at()), msg.get(msg.size() - 1).getReceiver().getProfile_image(), msg.get(msg.size() - 1).getMessage().getMessage_text(), getDockActivity().getDate(msg.get(msg.size() - 1).getMessage().getCreated_at()), false, msg.get(msg.size() - 1).getSender_id()));
+                            collection.add(new ChatDataItem(msg.get(msg.size() - 1).getSender().getProfile_image(), msg.get(msg.size() - 1).getMessage().getMessage_text(), getDockActivity().getDate(msg.get(msg.size() - 1).getMessage().getCreated_at()), msg.get(msg.size() - 1).getReceiver().getProfile_image(), msg.get(msg.size() - 1).getMessage().getMessage_text(), getDockActivity().getDate(msg.get(msg.size() - 1).getMessage().getCreated_at()), false, msg.get(msg.size() - 1).getSender_id(), msg.get(0).getId()));
                             bindData(collection);
                         }
                     } else {
@@ -523,7 +588,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        },response.body().getMessage());
+                        }, response.body().getMessage());
                         dialogHelper.showDialog();
                     }
                 } else {
@@ -546,4 +611,27 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
+    @Override
+    public void deleteMessage(final int Position) {
+        final DialogHelper dialog = new DialogHelper(getDockActivity());
+        dialog.initDeleteChat(R.layout.delete_message_dialoge, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteService(Position);
+                dialog.hideDialog();
+            }
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.hideDialog();
+            }
+        });
+        dialog.showDialog();
+    }
+
+    @Override
+    public void deleteChat(int Position) {
+
+    }
 }
