@@ -77,6 +77,9 @@ public class HomeFragmentItemBinder extends RecyclerViewBinder<HomeListDataEnt> 
         if (homeListDataEnt.getFollower_post()==1){
             viewHolder.FollowerPost.setVisibility(View.VISIBLE);
         }
+        else {
+            viewHolder.FollowerPost.setVisibility(View.GONE);
+        }
         if (homeListDataEnt.getProfile_post_pic_path().contains(".mp4")) {
             imageLoader.displayImage(homeListDataEnt.getVideoThumbnail(), viewHolder.iv_videoThumb);
             viewHolder.vv_post_video.setVisibility(View.GONE);
