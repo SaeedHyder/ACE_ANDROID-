@@ -2,6 +2,7 @@ package com.app.ace.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.app.ace.R;
 import com.app.ace.activities.MainActivity;
 import com.app.ace.entities.RegistrationResult;
 import com.app.ace.entities.ResponseWrapper;
+import com.app.ace.entities.Specialities;
 import com.app.ace.entities.SpecialityEnt;
 import com.app.ace.entities.SpecialityResultEnt;
 import com.app.ace.entities.SpinnerDataItem;
@@ -32,7 +34,6 @@ import com.app.ace.ui.views.TitleBar;
 import com.google.android.gms.maps.model.LatLng;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
+import roboguice.util.Strings;
 
 
 /**
@@ -100,6 +102,9 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
     ArrayList<String> EducationArray = new ArrayList<>();
     ArrayList<String> SpecialityArray = new ArrayList<>();
 
+    private ArrayList<String> specialtyArray = new ArrayList<>();
+    private String Specialities = "";
+
 
     public static EditTrainerProfileFragment newInstance() {
 
@@ -150,6 +155,11 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
             sp_Gender.setSelection(1);
         }
 
+        for (Specialities item : prefHelper.getUser().getSpecialities()) {
+            specialtyArray.add(item.getSpeciality().getTitle());
+        }
+        Specialities = TextUtils.join(",",specialtyArray);
+
 
         ShowProfile();
 
@@ -196,10 +206,11 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         }
 
         if (Education.isEmpty()) {
-            Education = prefHelper.getUser().getEducation();
+            //Education = prefHelper.getUser().getEducation();
+           // Education = Specialities;
         }
         if (Speciality.isEmpty()) {
-            Speciality = prefHelper.getUser().getSpeciality();
+        //    Speciality = prefHelper.getUser().getSpeciality();
         }
         if (edtMobileNumber.getText().toString().length() < 11) {
             UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.phone_should_be_11));
@@ -299,8 +310,10 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
                 // setSpCertification();
                 //setSpSpeciality();
 
-                Education = StringUtils.join(EducationArray, ",");
-                Speciality = StringUtils.join(SpecialityArray, ",");
+                Education =TextUtils.join(",",EducationArray);
+                Speciality = TextUtils.join(",",SpecialityArray);
+
+               // Speciality = StringUtils.join(SpecialityArray, ",");
                 //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
                 EditProfile();
             }
@@ -451,19 +464,6 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
             CertificationID.add(item.getId()+"");
         }
 
-      /*  Certification.add(getString(R.string.Select_Speciality));
-        Certification.add(getString(R.string.mathematics));
-        Certification.add(getString(R.string.fitnes_health));
-        Certification.add(getString(R.string.islamic_studies));
-        Certification.add(getString(R.string.englishh));
-        Certification.add(getString(R.string.chemistry));
-        Certification.add(getString(R.string.physics));
-        Certification.add(getString(R.string.human_resources));
-        Certification.add(getString(R.string.project_managment));
-        Certification.add(getString(R.string.biology));
-        Certification.add(getString(R.string.java));
-        Certification.add(getString(R.string.graduation_project));*/
-
         ArrayList<SpinnerDataItem> listVOs = new ArrayList<>();
 
         for (int i = 0; i < Certification.size(); i++) {
@@ -471,9 +471,13 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
             stateVO.setTitle(Certification.get(i));
             stateVO.setId(CertificationID.get(i));
 
-            if (prefHelper.getUser().getEducation().contains(Certification.get(i))) {
+          /*  if (prefHelper.getUser().getEducation().contains(Certification.get(i))) {
+                stateVO.setSelected(true);
+            }*/
+            if (Specialities.contains(Certification.get(i))) {
                 stateVO.setSelected(true);
             }
+
             listVOs.add(stateVO);
         }
         SpinerAdapter myAdapter = new SpinerAdapter(getDockActivity(), 0, listVOs, this);

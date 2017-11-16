@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,7 @@ import com.app.ace.ui.views.ExpandableGridView;
 import com.app.ace.ui.views.TitleBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import org.apache.commons.lang3.StringUtils;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -396,8 +397,12 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                                     for(Specialities item: specialityResponseArray){
                                         specialtyArray.add(item.getSpeciality().getTitle());
                                     }
-                                    Specialities = StringUtils.join(specialtyArray, ",");
+                                    Specialities = TextUtils.join( ",",specialtyArray);
                                     txt_education_cirtification_dis.setText(Specialities + " " + response.body().getResult().getUniversity());
+
+                                    RegistrationResult registrationResult=prefHelper.getUser();
+                                    registrationResult.setSpecialities(response.body().getResult().getSpecialities());
+                                    prefHelper.putUser(registrationResult);
 
 
                                 }
