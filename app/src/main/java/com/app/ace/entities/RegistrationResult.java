@@ -66,7 +66,7 @@ public class RegistrationResult {
     String user_status;
     @SerializedName("specialities")
     @Expose
-    private List<Specialities> specialities = null;
+    private ArrayList<Specialities> specialities = null;
 
 
 
@@ -538,11 +538,11 @@ public class RegistrationResult {
         this.gym_address = gym_address;
     }
 
-    public List<Specialities> getSpecialities() {
+    public ArrayList<Specialities> getSpecialities() {
         return specialities;
     }
 
-    public void setSpecialities(List<Specialities> specialities) {
+    public void setSpecialities(ArrayList<Specialities> specialities) {
         this.specialities = specialities;
     }
 

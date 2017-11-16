@@ -1,14 +1,17 @@
 package com.app.ace.ui.viewbinders;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.app.ace.R;
-import com.app.ace.entities.TrainerAvailDataItem;
+import com.app.ace.entities.Specialities;
 import com.app.ace.entities.UserProfile;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 import com.app.ace.ui.views.AnyTextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -18,6 +21,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TraineravaialListItemBinder extends ViewBinder<UserProfile> {
     private ImageLoader imageLoader;
+    private ArrayList<String> specialtyArray = new ArrayList<>();
+    private String Specialities = "";
+
     public TraineravaialListItemBinder() {
         super(R.layout.trainer_avail_listitem);
 
@@ -35,8 +41,14 @@ public class TraineravaialListItemBinder extends ViewBinder<UserProfile> {
         TraineravaialListItemBinder.ViewHolder viewHolder = (TraineravaialListItemBinder.ViewHolder) view.getTag();
 
         imageLoader.displayImage(entity.getProfile_image(), viewHolder.userImage);
-        viewHolder.txtUserName.setText(entity.getFirst_name()+" "+entity.getLast_name());
-        viewHolder.txtUserDetail.setText(entity.getSpeciality());
+        viewHolder.txtUserName.setText(entity.getFirst_name() + " " + entity.getLast_name());
+
+        specialtyArray=new ArrayList<>();
+        for (Specialities item : entity.getSpecialities()) {
+            specialtyArray.add(item.getSpeciality().getTitle());
+        }
+        Specialities = TextUtils.join(",",specialtyArray);
+        viewHolder.txtUserDetail.setText(Specialities);
 
     }
 

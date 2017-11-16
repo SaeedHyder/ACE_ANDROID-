@@ -141,7 +141,7 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
     private void getSearchUserData() {
 
 
-        Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edtsearch.getText().toString(), AppConstants.trainer, latitude, longitude, getMainActivity().selectedLanguage());
+        Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edtsearch.getText().toString(), AppConstants.trainer, getMainActivity().selectedLanguage());
 
         callBack.enqueue(new Callback<ResponseWrapper<ArrayList<UserProfile>>>() {
             @Override
