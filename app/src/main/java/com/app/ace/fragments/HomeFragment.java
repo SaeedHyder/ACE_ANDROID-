@@ -9,13 +9,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 
 import com.app.ace.BaseApplication;
@@ -36,10 +38,9 @@ import com.app.ace.helpers.TokenUpdater;
 import com.app.ace.helpers.UIHelper;
 import com.app.ace.interfaces.IOnLike;
 import com.app.ace.interfaces.SetHomeUpdatedData;
-import com.app.ace.ui.adapters.ArrayListAdapter;
+import com.app.ace.ui.adapters.RecyclerViewAdapter;
 import com.app.ace.ui.viewbinders.HomeFragmentItemBinder;
 import com.app.ace.ui.views.AnyTextView;
-import com.app.ace.ui.views.LoadMoreListView;
 import com.app.ace.ui.views.TitleBar;
 import com.app.ace.videocompression.MediaController;
 
@@ -69,8 +70,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     HomeFragmentItemBinder homeFragmentItemBinder;
     String Lastcomment;
     String NameCommentor;
+    @InjectView(R.id.ll_UnApproved)
+    LinearLayout ll_UnApproved;
+    int onload;
     @InjectView(R.id.gridView)
-    private ListView ListView;
+    private RecyclerView ListView;
     @InjectView(R.id.iv_Home)
     private ImageView iv_Home;
     @InjectView(R.id.iv_Calander)
@@ -83,18 +87,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     private ImageView iv_profile;
     @InjectView(R.id.txt_no_data)
     private AnyTextView txt_no_data;
-    @InjectView(R.id.ll_UnApproved)
-    LinearLayout ll_UnApproved;
-    private ArrayListAdapter<HomeListDataEnt> adapter;
+    private RecyclerViewAdapter<HomeListDataEnt> adapter;
     private List<HomeListDataEnt> dataCollection;
     private DockActivity activity;
     private TitleBar titleBar;
     private CountBadge badge;
     private int offset = 0;
     private int limit = 5;
-    private int totalCount = 100;
-    int onload;
-
+    private int totalCount = 0;
+    private boolean isOnCall;
+    private LinearLayoutManager linearmanager;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -104,89 +106,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadingStarted();
-        adapter = new ArrayListAdapter<HomeListDataEnt>(getDockActivity(),
-                new HomeFragmentItemBinder(getDockActivity(), this, this, prefHelper));
+        /*adapter = new RecyclerViewAdapter<HomeListDataEnt>(getDockActivity(),
+                new HomeFragmentItemBinder(getDockActivity(), this, this, prefHelper));*/
 
 
         BaseApplication.getBus().register(this);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.fragment_home, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        loadingFinished();
-
-       if( InternetHelper.CheckInternetConectivityandShowToast(getDockActivity()) ) {
-           getAllHomePosts(offset, limit);
-       }
-           System.out.println(prefHelper.getBadgeCount());
-
-           setListener();
-           if (getMainActivity().isNotificationTap) {
-               getMainActivity().isNotificationTap = false;
-               showNotification();
-           }
-           onNotificationReceived();
-
-           //  handler.removeCallbacks(fakeCallback);
-
-
-    }
-
-    private void setListener() {
-
-        iv_Home.setOnClickListener(this);
-        iv_Calander.setOnClickListener(this);
-        iv_Camera.setOnClickListener(this);
-        iv_Fav.setOnClickListener(this);
-        iv_profile.setOnClickListener(this);
-        getMainActivity().setImageSetter(this);
-
-    }
-
-
-    private void onNotificationReceived() {
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                // checking for type intent filter
-                if (intent.getAction().equals(AppConstants.REGISTRATION_COMPLETE)) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-                    System.out.println("registration complete");
-                    // FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
-                    System.out.println(prefHelper.getFirebase_TOKEN());
-
-                } else if (intent.getAction().equals(AppConstants.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-                    isNotificationTap = true;
-                    showCountOnNotificationReceived();
-                    System.out.println(prefHelper.getFirebase_TOKEN());
-
-
-                }
-            }
-        };
-    }
-
-    private void showCountOnNotificationReceived() {
-
-        titleBar.showBadge();
-        titleBar.addtoBadge(prefHelper.getBadgeCount());
-        titleBar.getImgNotificationCounter().invalidate();
-    }
-
-    @Override
-    public void onPause() {
-        LocalBroadcastManager.getInstance(getDockActivity()).unregisterReceiver(broadcastReceiver);
-        super.onPause();
     }
 
     @Override
@@ -207,42 +131,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
                 new IntentFilter(AppConstants.PUSH_NOTIFICATION));
     }
 
-    private void setHomePostsData(ArrayList<PostsEnt> postsEntArrayList, int is_approved_user) {
-
-
-        dataCollection = new ArrayList<HomeListDataEnt>();
-
-        if (postsEntArrayList.size() <= 0) {
-            txt_no_data.setVisibility(View.VISIBLE);
-            ListView.setVisibility(View.GONE);
-        } else {
-            txt_no_data.setVisibility(View.GONE);
-            ListView.setVisibility(View.VISIBLE);
-        }
-
-        for (PostsEnt postsEnt : postsEntArrayList) {
-            try {
-                dataCollection.add(new HomeListDataEnt(Integer.parseInt(postsEnt.getLike_count()),
-                        Integer.parseInt(postsEnt.getComment_count()), postsEnt.getCreator().getProfile_image(),
-                        postsEnt.getCreator().getFirst_name() + " " + postsEnt.getCreator().getLast_name(), postsEnt.getPost_image(), "Time Joe", "Hi nice", postsEnt.getUser_id(), postsEnt.getId(), postsEnt.getComment(), postsEnt.getIs_liked(), postsEnt.getPost_thumb_image(), is_approved_user));
-            } catch (Exception e) {
-                bindData(dataCollection);
-                e.printStackTrace();
-            }
-
-        }
-
-        bindData(dataCollection);
+    @Override
+    public void onPause() {
+        LocalBroadcastManager.getInstance(getDockActivity()).unregisterReceiver(broadcastReceiver);
+        super.onPause();
     }
-
-
-    private void bindData(final List<HomeListDataEnt> dataCollection) {
-        adapter.clearList();
-        ListView.setAdapter(adapter);
-        adapter.addAll(dataCollection);
-        adapter.notifyDataSetChanged();
-    }
-
 
     @Override
     public void setTitleBar(TitleBar titleBar) {
@@ -292,6 +185,223 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         });
 
 
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        ListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                int lastVisibleItem = linearmanager.findLastVisibleItemPosition();
+                Log.i("testing", lastVisibleItem + "-" + linearmanager.findLastVisibleItemPosition());
+                if (lastVisibleItem == adapter.getItemCount() - 1)
+                    if (adapter.getItemCount() < totalCount - 1) {
+                        if (!isOnCall) {
+                            offset = offset + limit;
+                            //  progressBar.setVisibility(View.VISIBLE);
+                            getPendindPost(offset, limit);
+                        }
+                    }
+            }
+        });
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        loadingFinished();
+
+        if (InternetHelper.CheckInternetConectivityandShowToast(getDockActivity())) {
+            offset = 0;
+            getAllHomePosts(offset, limit);
+        }
+        System.out.println(prefHelper.getBadgeCount());
+
+        setListener();
+        if (getMainActivity().isNotificationTap) {
+            getMainActivity().isNotificationTap = false;
+            showNotification();
+        }
+        onNotificationReceived();
+
+        //  handler.removeCallbacks(fakeCallback);
+
+
+    }
+
+    private void setListener() {
+
+        iv_Home.setOnClickListener(this);
+        iv_Calander.setOnClickListener(this);
+        iv_Camera.setOnClickListener(this);
+        iv_Fav.setOnClickListener(this);
+        iv_profile.setOnClickListener(this);
+        getMainActivity().setImageSetter(this);
+
+    }
+
+    private void onNotificationReceived() {
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // checking for type intent filter
+                if (intent.getAction().equals(AppConstants.REGISTRATION_COMPLETE)) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+                    System.out.println("registration complete");
+                    // FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
+                    System.out.println(prefHelper.getFirebase_TOKEN());
+
+                } else if (intent.getAction().equals(AppConstants.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+                    isNotificationTap = true;
+                    showCountOnNotificationReceived();
+                    System.out.println(prefHelper.getFirebase_TOKEN());
+
+
+                }
+            }
+        };
+    }
+
+    private void showCountOnNotificationReceived() {
+
+        titleBar.showBadge();
+        titleBar.addtoBadge(prefHelper.getBadgeCount());
+        titleBar.getImgNotificationCounter().invalidate();
+    }
+
+    private void getPendindPost(int offset, int limit) {
+        if (totalCount != dataCollection.size()) {
+            loadingStarted();
+            isOnCall = true;
+            Call<ResponseWrapper<HomeResultEnt>> callBack = webService.getAllHomePosts(prefHelper.getUserId(), offset, limit, getMainActivity().selectedLanguage());
+
+            callBack.enqueue(new Callback<ResponseWrapper<HomeResultEnt>>() {
+                @Override
+                public void onResponse(Call<ResponseWrapper<HomeResultEnt>> call, Response<ResponseWrapper<HomeResultEnt>> response) {
+
+                    isOnCall = false;
+                    if (response.body() != null) {
+
+                        if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+                            {
+                                loadingFinished();
+                                if (response.body().getUserDeleted() == 0) {
+
+                                    setPendingHomePostsData(response.body().getResult().getPosts(), response.body().getResult().getIs_approved_user());
+
+                                    totalCount = response.body().getResult().getTotal_records();
+                                    if (response.body().getResult().getIs_approved_user() == 1) {
+                                        ll_UnApproved.setVisibility(View.GONE);
+                                    } else {
+                                        ll_UnApproved.setVisibility(View.VISIBLE);
+                                    }
+                                } else {
+
+
+                                    final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                                    dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+
+                                            dialogHelper.hideDialog();
+                                            getDockActivity().popBackStackTillEntry(0);
+                                            getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                                        }
+                                    }, response.body().getMessage());
+                                    dialogHelper.showDialog();
+                                }
+                            }
+                        } else {
+                            loadingFinished();
+                            ListView.setVisibility(View.INVISIBLE);
+                            txt_no_data.setVisibility(View.VISIBLE);
+                            UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                        }
+                    } else {
+                        txt_no_data.setVisibility(View.VISIBLE);
+                        txt_no_data.setText(getString(R.string.no_internet));
+                        loadingFinished();
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<ResponseWrapper<HomeResultEnt>> call, Throwable t) {
+                    loadingFinished();
+                    isOnCall = false;
+                    ListView.setVisibility(View.INVISIBLE);
+                    txt_no_data.setVisibility(View.VISIBLE);
+                    txt_no_data.setText(getString(R.string.no_internet));
+                    UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+                }
+            });
+        }
+    }
+
+    private void setPendingHomePostsData(ArrayList<PostsEnt> postsEntArrayList, int is_approved_user) {
+        int currentPosition = dataCollection.size() - 1;
+        for (PostsEnt postsEnt : postsEntArrayList) {
+            try {
+                dataCollection.add(new HomeListDataEnt(Integer.parseInt(postsEnt.getLike_count()),
+                        Integer.parseInt(postsEnt.getComment_count()), postsEnt.getCreator().getProfile_image(),
+                        postsEnt.getCreator().getFirst_name() + " " + postsEnt.getCreator().getLast_name(), postsEnt.getPost_image(), "Time Joe", "Hi nice", postsEnt.getUser_id(), postsEnt.getId(), postsEnt.getComment(), postsEnt.getIs_liked(), postsEnt.getPost_thumb_image(), is_approved_user,postsEnt.getFollower_post()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        adapter.notifyItemRangeChanged(linearmanager.findLastVisibleItemPosition(), postsEntArrayList.size() - 1);
+    }
+
+    private void setHomePostsData(ArrayList<PostsEnt> postsEntArrayList, int is_approved_user) {
+
+        dataCollection = new ArrayList<HomeListDataEnt>();
+
+        if (postsEntArrayList.size() <= 0) {
+            txt_no_data.setVisibility(View.VISIBLE);
+            ListView.setVisibility(View.GONE);
+        } else {
+            txt_no_data.setVisibility(View.GONE);
+            ListView.setVisibility(View.VISIBLE);
+        }
+
+        for (PostsEnt postsEnt : postsEntArrayList) {
+            try {
+                dataCollection.add(new HomeListDataEnt(Integer.parseInt(postsEnt.getLike_count()),
+                        Integer.parseInt(postsEnt.getComment_count()), postsEnt.getCreator().getProfile_image(),
+                        postsEnt.getCreator().getFirst_name() + " " + postsEnt.getCreator().getLast_name(), postsEnt.getPost_image(), "Time Joe", "Hi nice", postsEnt.getUser_id(), postsEnt.getId(), postsEnt.getComment(), postsEnt.getIs_liked(), postsEnt.getPost_thumb_image(), is_approved_user,postsEnt.getFollower_post()));
+            } catch (Exception e) {
+                bindData(dataCollection);
+                e.printStackTrace();
+            }
+
+        }
+
+        bindData(dataCollection);
+    }
+
+    private void bindData(final List<HomeListDataEnt> dataCollection) {
+        adapter = new RecyclerViewAdapter<HomeListDataEnt>(dataCollection,
+                new HomeFragmentItemBinder(getDockActivity(), this, this, prefHelper),
+                getDockActivity());
+//        adapter.clearList();
+        linearmanager = new LinearLayoutManager(getDockActivity(), LinearLayoutManager.VERTICAL, false);
+        ListView.setLayoutManager(linearmanager);
+        ListView.setItemAnimator(new DefaultItemAnimator());
+        ListView.setAdapter(adapter);
+        // adapter.addAll(dataCollection);
+        adapter.notifyDataSetChanged();
     }
 
     private void createPost(boolean isImage) {
@@ -349,7 +459,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
                                     getDockActivity().popBackStackTillEntry(0);
                                     getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                                 }
-                            },response.body().getMessage());
+                            }, response.body().getMessage());
                             dialogHelper.showDialog();
                         }
                     } else {
@@ -369,11 +479,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
     }
 
+
     private void getAllHomePosts(int offset, int limit) {
 
         loadingStarted();
 
-        Call<ResponseWrapper<HomeResultEnt>> callBack = webService.getAllHomePosts(prefHelper.getUserId(), getMainActivity().selectedLanguage());
+        Call<ResponseWrapper<HomeResultEnt>> callBack = webService.getAllHomePosts(prefHelper.getUserId(), offset, limit, getMainActivity().selectedLanguage());
 
         callBack.enqueue(new Callback<ResponseWrapper<HomeResultEnt>>() {
             @Override
@@ -407,7 +518,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
                                         getDockActivity().popBackStackTillEntry(0);
                                         getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                                     }
-                                },response.body().getMessage());
+                                }, response.body().getMessage());
                                 dialogHelper.showDialog();
                             }
                         }
@@ -437,9 +548,77 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
     }
 
+    void popUpDropdown(View v) {
+        LayoutInflater layoutInflater = (LayoutInflater) getDockActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = layoutInflater.inflate(R.layout.home_search_items, null);
 
+        final PopupWindow popupWindow = new PopupWindow(
+                popupView,
+                (int) getResources().getDimension(R.dimen.x130),
+                (int) getResources().getDimension(R.dimen.x100));
+
+        txt_Trainer = (AnyTextView) popupView.findViewById(R.id.txt_Trainer);
+        txt_Training = (AnyTextView) popupView.findViewById(R.id.txt_Training);
+        txt_Location = (AnyTextView) popupView.findViewById(R.id.txt_Location);
+
+               /* txt_Trainer.setOnClickListener(this);
+                txt_Training.setOnClickListener(this);
+                txt_Location.setOnClickListener(this);*/
+
+
+        txt_Trainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDockActivity().addDockableFragment(SearchTrainerFragment.newInstance(), "SearchTraineeFragment");
+                popupWindow.dismiss();
+            }
+        });
+
+        txt_Training.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDockActivity().addDockableFragment(TrainingSearchFragment.newInstance(), "TrainingSearchFragment");
+                popupWindow.dismiss();
+            }
+        });
+
+        txt_Location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDockActivity().addDockableFragment(MapScreenFragment.newInstance(), "MapScreenFragment");
+                popupWindow.dismiss();
+            }
+        });
+
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setTouchable(true);
+
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                //TODO do sth here on dismiss
+            }
+        });
+
+        popupWindow.showAsDropDown(v);
+
+    }
 
     @Override
+    public void setImage(String imagePath) {
+
+        if (imagePath != null) {
+            postImage = new File(imagePath);
+            createPost(true);
+        }
+
+    }
+
+    @Override
+    public void setFilePath(String filePath) {
+
+    }    @Override
     public void onClick(View v) {
         // TODO Auto-generated method stub
         switch (v.getId()) {
@@ -557,80 +736,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         }
     }*/
 
-
-    void popUpDropdown(View v) {
-        LayoutInflater layoutInflater = (LayoutInflater) getDockActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View popupView = layoutInflater.inflate(R.layout.home_search_items, null);
-
-        final PopupWindow popupWindow = new PopupWindow(
-                popupView,
-                (int) getResources().getDimension(R.dimen.x130),
-                (int) getResources().getDimension(R.dimen.x100));
-
-        txt_Trainer = (AnyTextView) popupView.findViewById(R.id.txt_Trainer);
-        txt_Training = (AnyTextView) popupView.findViewById(R.id.txt_Training);
-        txt_Location = (AnyTextView) popupView.findViewById(R.id.txt_Location);
-
-               /* txt_Trainer.setOnClickListener(this);
-                txt_Training.setOnClickListener(this);
-                txt_Location.setOnClickListener(this);*/
-
-
-        txt_Trainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getDockActivity().addDockableFragment(SearchTrainerFragment.newInstance(), "SearchTraineeFragment");
-                popupWindow.dismiss();
-            }
-        });
-
-        txt_Training.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getDockActivity().addDockableFragment(TrainingSearchFragment.newInstance(), "TrainingSearchFragment");
-                popupWindow.dismiss();
-            }
-        });
-
-        txt_Location.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getDockActivity().addDockableFragment(MapScreenFragment.newInstance(), "MapScreenFragment");
-                popupWindow.dismiss();
-            }
-        });
-
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setTouchable(true);
-
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                //TODO do sth here on dismiss
-            }
-        });
-
-        popupWindow.showAsDropDown(v);
-
-    }
-
-
-    @Override
-    public void setImage(String imagePath) {
-
-        if (imagePath != null) {
-            postImage = new File(imagePath);
-            createPost(true);
-        }
-
-    }
-
-    @Override
-    public void setFilePath(String filePath) {
-
-    }
-
     @Override
     public void setVideo(String videoPath, String videoThumbnail) {
 
@@ -646,6 +751,78 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
 
     }
 
+    @Override
+    public void setLikeHit(final int postId) {
+
+        Call<ResponseWrapper<PostsEnt>> callBack = webService.likePost(
+                prefHelper.getUserId(),
+                postId);
+
+        callBack.enqueue(new Callback<ResponseWrapper<PostsEnt>>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper<PostsEnt>> call, Response<ResponseWrapper<PostsEnt>> response) {
+
+                int i = 1;
+
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+
+                    if (response.body().getUserDeleted() == 0) {
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        }, response.body().getMessage());
+                        dialogHelper.showDialog();
+                    }
+
+                    //UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+
+                } else {
+
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper<PostsEnt>> call, Throwable t) {
+
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+
+            }
+        });
+
+
+    }
+
+    @Override
+    public void setUpdatedData(int position, String data, int likes, int comments) {
+
+
+        HomeListDataEnt updatedItem = (HomeListDataEnt) adapter.getItemFromList(position);
+        updatedItem.setIs_liked(data);
+        updatedItem.setTotoal_likes(likes);
+        updatedItem.setTotal_comments(comments);
+
+        dataCollection.remove(position);
+        dataCollection.add(position, updatedItem);
+        adapter.clearList();
+        adapter.addAll(dataCollection);
+        adapter.notifyDataSetChanged();
+
+
+    }
+
+    public void showNotification() {
+        getDockActivity().addDockableFragment(NotificationListingFragment.newInstance(), "NotificationListingFragment");
+    }
 
     private class VideoCompressor extends AsyncTask<Void, Void, Boolean> {
 
@@ -656,13 +833,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+        protected Boolean doInBackground(Void... voids) {
+            return MediaController.getInstance().convertVideo(filePath);
         }
 
         @Override
-        protected Boolean doInBackground(Void... voids) {
-            return MediaController.getInstance().convertVideo(filePath);
+        protected void onPreExecute() {
+            super.onPreExecute();
         }
 
         @Override
@@ -692,79 +869,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,
     }
 
 
-    @Override
-    public void setLikeHit(final int postId) {
-
-        Call<ResponseWrapper<PostsEnt>> callBack = webService.likePost(
-                prefHelper.getUserId(),
-                postId);
-
-        callBack.enqueue(new Callback<ResponseWrapper<PostsEnt>>() {
-            @Override
-            public void onResponse(Call<ResponseWrapper<PostsEnt>> call, Response<ResponseWrapper<PostsEnt>> response) {
-
-                int i = 1;
-
-                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
-
-                    if (response.body().getUserDeleted() == 0) {
-                    } else {
-                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
-                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                dialogHelper.hideDialog();
-                                getDockActivity().popBackStackTillEntry(0);
-                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
-                            }
-                        },response.body().getMessage());
-                        dialogHelper.showDialog();
-                    }
-
-                    //UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-
-                } else {
-
-                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
-
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<ResponseWrapper<PostsEnt>> call, Throwable t) {
-
-                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
-
-            }
-        });
-
-
-    }
-
-    @Override
-    public void setUpdatedData(int position, String data, int likes, int comments) {
-
-
-        HomeListDataEnt updatedItem = (HomeListDataEnt) adapter.getItem(position);
-        updatedItem.setIs_liked(data);
-        updatedItem.setTotoal_likes(likes);
-        updatedItem.setTotal_comments(comments);
-
-        dataCollection.remove(position);
-        dataCollection.add(position, updatedItem);
-        adapter.clearList();
-        adapter.addAll(dataCollection);
-        adapter.notifyDataSetChanged();
-
-
-    }
-
-
-    public void showNotification() {
-        getDockActivity().addDockableFragment(NotificationListingFragment.newInstance(), "NotificationListingFragment");
-    }
 
 
 }

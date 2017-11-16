@@ -37,28 +37,16 @@ import static com.app.ace.R.id.txt1;
 
 public class DialogHelper {
     Dialog dialog;
-
-    private ImageLoader imageLoader;
     int days = 1;
     CalendarPickerView calendarView;
     Date StartDate;
-
-    public Dialog initLogoutDialog(int layoutID, View.OnClickListener onclicklistenerYes,String message) {
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
-        this.dialog.setContentView(layoutID);
-        Button btnDeleteOk = (Button) dialog.findViewById(R.id.btnDeleteOk);
-        btnDeleteOk.setOnClickListener(onclicklistenerYes);
-        AnyTextView textView = (AnyTextView)dialog.findViewById(txt1);
-        textView.setText(message);
-        return this.dialog;
-    }
+    private ImageLoader imageLoader;
 
     public DialogHelper(Context context) {
-        this.dialog = new Dialog(context);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        if (context != null) {
+            this.dialog = new Dialog(context);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
        /* */
     }
 
@@ -73,6 +61,18 @@ public class DialogHelper {
        /* */
     }
 
+    public Dialog initLogoutDialog(int layoutID, View.OnClickListener onclicklistenerYes, String message) {
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        this.dialog.setContentView(layoutID);
+        Button btnDeleteOk = (Button) dialog.findViewById(R.id.btnDeleteOk);
+        btnDeleteOk.setOnClickListener(onclicklistenerYes);
+        AnyTextView textView = (AnyTextView) dialog.findViewById(txt1);
+        textView.setText(message);
+        return this.dialog;
+    }
 
     public Dialog initDialog(int layoutID, Date startDate) {
 
@@ -322,6 +322,7 @@ public class DialogHelper {
     public void showDialog() {
         this.dialog.show();
     }
+
     public void hideDialog() {
         this.dialog.dismiss();
     }

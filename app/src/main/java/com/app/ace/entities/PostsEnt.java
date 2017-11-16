@@ -13,7 +13,8 @@ public class PostsEnt {
     int total_comments;
     String post_image = "";
     String friend_name;
-    String friend_comment;;
+    String friend_comment;
+    ;
     CreaterEnt creator;
 
     //Adding Fileds for User Posts
@@ -28,9 +29,16 @@ public class PostsEnt {
     String comment_count;
     String is_liked;
     String post_thumb_image;
-
-
+    int follower_post;
     ArrayList<PostComment> comment;
+
+    public int getFollower_post() {
+        return follower_post;
+    }
+
+    public void setFollower_post(int follower_post) {
+        this.follower_post = follower_post;
+    }
 
     public int getId() {
         return id;
@@ -55,7 +63,6 @@ public class PostsEnt {
     public void setComment_count(String comment_count) {
         this.comment_count = comment_count;
     }
-
 
 
     public String getImage() {
@@ -97,8 +104,6 @@ public class PostsEnt {
     public void setUpdated_at(String updated_at) {
         this.updated_at = updated_at;
     }
-
-
 
 
     public String getFriend_name() {
@@ -169,16 +174,16 @@ public class PostsEnt {
         return is_liked;
     }
 
+    public void setIs_liked(String is_liked) {
+        this.is_liked = is_liked;
+    }
+
     public String getPost_thumb_image() {
         return post_thumb_image;
     }
 
     public void setPost_thumb_image(String post_thumb_image) {
         this.post_thumb_image = post_thumb_image;
-    }
-
-    public void setIs_liked(String is_liked) {
-        this.is_liked = is_liked;
     }
 
 
