@@ -42,7 +42,7 @@ public class OKHttpClientCreator {
                                 .body(new ProgressResponseBody(originalResponse.body(), progressListener))
                                 .build();
                     }
-                }).addInterceptor(loggingInterceptor)
+                })
                 .build();
 
 

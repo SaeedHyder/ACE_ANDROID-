@@ -331,10 +331,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             public void onResponse(Call<ResponseWrapper<ArrayList<ConversationEnt>>> call,
                                    Response<ResponseWrapper<ArrayList<ConversationEnt>>> response) {
                 loadingFinished();
+                collection = new ArrayList<>();
                 if (response.body().getUserDeleted() == 0) {
                     if (response.body().getResult().size() > 0) {
                         if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
                             loadingFinished();
+
                             newCollection = response.body().getResult().get(0).getMessages();
                             if (String.valueOf(response.body().getResult().get(0).getConversation().getSenderId()).equals(prefHelper.getUserId())) {
                                 isReceiver_mute = response.body().getResult().get(0).getConversation().getSenderMute();
