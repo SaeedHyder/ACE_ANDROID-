@@ -240,10 +240,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
 
-    private void deleteService(final int position) {
+    private void deleteService(final int position, final int id) {
         loadingStarted();
 
-        Call<ResponseWrapper> callBack = webService.deleteMessage(prefHelper.getUserId(), newCollection.get(position).getMessage().getId(), getMainActivity().selectedLanguage());
+        Call<ResponseWrapper> callBack = webService.deleteMessage(prefHelper.getUserId(), collection.get(position).getId(), getMainActivity().selectedLanguage());
 
         callBack.enqueue(new Callback<ResponseWrapper>() {
             @Override
@@ -259,13 +259,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         adapter.addAll(collection);
                         adapter.notifyDataSetChanged();
 
-                       /* if (collection.size() <= 0) {
-                            txt_noresult.setVisibility(View.VISIBLE);
-                            listView.setVisibility(View.GONE);
-                        } else {
-                            txt_noresult.setVisibility(View.GONE);
-                            listView.setVisibility(View.VISIBLE);
-                        }*/
+                        if (collection.size() <= 0) {
+                           if(getMainActivity().titleBar!=null){
+                               getMainActivity().titleBar.hideHelpButton();
+                           }
+                        }
                     }
 
                 } else {
@@ -332,7 +330,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             public void onResponse(Call<ResponseWrapper<ArrayList<ConversationEnt>>> call,
                                    Response<ResponseWrapper<ArrayList<ConversationEnt>>> response) {
-
+                loadingFinished();
                 if (response.body().getUserDeleted() == 0) {
                     if (response.body().getResult().size() > 0) {
                         if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
@@ -436,7 +434,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     collection.add(new ChatDataItem(msgEnt.getSender().getProfile_image(),
                             PostPath, getDockActivity().getDate(msgEnt.getMessage().getCreated_at()),
                             msgEnt.getReceiver().getProfile_image(), msgEnt.getMessage().getMessage_text(),
-                            getDockActivity().getDate(msgEnt.getMessage().getCreated_at()), isSender, msgEnt.getSender().getId(), msgEnt.getId()));
+                            getDockActivity().getDate(msgEnt.getMessage().getCreated_at()), isSender, msgEnt.getSender().getId(), msgEnt.getMessage().getId()));
                 }
 
             } else {
@@ -446,7 +444,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     collection.add(new ChatDataItem(msgEnt.getSender().getProfile_image(),
                             msgEnt.getMessage().getMessage_text(), getDockActivity().getDate(msgEnt.getMessage().getCreated_at()),
                             msgEnt.getReceiver().getProfile_image(), msgEnt.getMessage().getMessage_text(),
-                            getDockActivity().getDate(msgEnt.getMessage().getCreated_at()), isSender, msgEnt.getSender().getId(), msgEnt.getId()));
+                            getDockActivity().getDate(msgEnt.getMessage().getCreated_at()), isSender, msgEnt.getSender().getId(), msgEnt.getMessage().getId()));
                 }
             }
 
@@ -612,12 +610,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
 
     @Override
-    public void deleteMessage(final int Position) {
+    public void deleteMessage(final int position, final int id) {
         final DialogHelper dialog = new DialogHelper(getDockActivity());
         dialog.initDeleteChat(R.layout.delete_message_dialoge, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteService(Position);
+                deleteService(position,id);
                 dialog.hideDialog();
             }
         }, new View.OnClickListener() {

@@ -134,7 +134,9 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 dialog.initLanguage(R.layout.language_dialog, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        updateLanguageService("en");
                         prefHelper.putLang(getDockActivity(), "en");
+
                         dialog.hideDialog();
                     }
                 }, new View.OnClickListener() {
@@ -161,7 +163,9 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 dialog.initLanguage(R.layout.language_dialog, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        updateLanguageService("ar");
                         prefHelper.putLang(getDockActivity(), "ar");
+
                         dialog.hideDialog();
                     }
                 }, new View.OnClickListener() {
@@ -180,6 +184,26 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             }
         });
 
+    }
+
+    private void updateLanguageService(String language) {
+        loadingStarted();
+        Call<ResponseWrapper> callBack = webService.UpdateLanguage(prefHelper.getUserId(),language);
+        callBack.enqueue(new Callback<ResponseWrapper>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
+                loadingFinished();
+                if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+               //     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper> call, Throwable t) {
+                loadingFinished();
+                UIHelper.showLongToastInCenter(getDockActivity(), t.getMessage());
+            }
+        });
     }
 
 

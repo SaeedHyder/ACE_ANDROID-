@@ -21,5 +21,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="aspectjrt-1.7.3.aspectjrt-1.7.3" level="project" />
   </component>
 </module>

@@ -111,7 +111,6 @@
     <orderEntry type="library" exported="" name="com.google.android.gms:play-services-location-10.2.0" level="project" />
     <orderEntry type="library" exported="" name="com.google.firebase:firebase-analytics-impl-10.2.0" level="project" />
     <orderEntry type="library" exported="" name="com.google.android.gms:play-services-fitness-10.2.0" level="project" />
-    <orderEntry type="library" exported="" name="com.squareup.okhttp3:logging-interceptor:3.0.1@jar" level="project" />
     <orderEntry type="library" exported="" name="com.github.nicolasjafelle:paginglistview-1.2" level="project" />
     <orderEntry type="library" exported="" name="com.android.support:support-core-ui-25.3.1" level="project" />
     <orderEntry type="library" exported="" name="org.roboguice:roboguice:3.0-alpha-2@jar" level="project" />
@@ -122,6 +121,7 @@
     <orderEntry type="library" exported="" name="com.google.android.gms:play-services-tagmanager-10.2.0" level="project" />
     <orderEntry type="library" exported="" name="berlin.volders:badger-0.2.1" level="project" />
     <orderEntry type="library" exported="" name="com.rengwuxian.materialedittext:library-2.0.3" level="project" />
+    <orderEntry type="library" exported="" name="com.squareup.okhttp3:logging-interceptor:3.3.1@jar" level="project" />
     <orderEntry type="library" exported="" name="com.google.android.gms:play-services-wearable-10.2.0" level="project" />
     <orderEntry type="library" exported="" name="com.google.android.gms:play-services-ads-10.2.0" level="project" />
     <orderEntry type="library" exported="" name="com.google.android.gms:play-services-vision-10.2.0" level="project" />
@@ -187,6 +187,7 @@
     <orderEntry type="library" exported="" name="com.android.support:support-v4-25.3.1" level="project" />
     <orderEntry type="library" exported="" name="com.google.android.gms:play-services-instantapps-10.2.0" level="project" />
     <orderEntry type="library" exported="" name="com.android.support:support-media-compat-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="com.squareup.okhttp3:okhttp:3.3.1@jar" level="project" />
     <orderEntry type="library" exported="" name="com.google.android.gms:play-services-panorama-10.2.0" level="project" />
     <orderEntry type="library" exported="" name="com.google.android.gms:play-services-tasks-10.2.0" level="project" />
     <orderEntry type="library" exported="" name="com.github.bumptech.glide:annotations:4.0.0-RC0@jar" level="project" />
@@ -211,7 +212,6 @@
     <orderEntry type="library" exported="" name="com.google.firebase:firebase-config-10.2.0" level="project" />
     <orderEntry type="library" exported="" name="com.google.android.gms:play-services-iid-10.2.0" level="project" />
     <orderEntry type="library" exported="" name="com.google.android.gms:play-services-tagmanager-api-10.2.0" level="project" />
-    <orderEntry type="library" exported="" name="com.squareup.okhttp3:okhttp:3.3.0@jar" level="project" />
     <orderEntry type="library" exported="" name="com.nostra13.universalimageloader:universal-image-loader:1.9.4@jar" level="project" />
     <orderEntry type="library" exported="" name="com.google.android.gms:play-services-nearby-10.2.0" level="project" />
     <orderEntry type="library" exported="" name="com.google.android.gms:play-services-safetynet-10.2.0" level="project" />
@@ -224,5 +224,6 @@
     <orderEntry type="module" module-name="commons-lang3-3.1" exported="" />
     <orderEntry type="module" module-name="library" exported="" />
     <orderEntry type="module" module-name="aspectjrt-1.7.3" exported="" />
+    <orderEntry type="library" exported="" name="android-android-25" level="project" />
   </component>
 </module>

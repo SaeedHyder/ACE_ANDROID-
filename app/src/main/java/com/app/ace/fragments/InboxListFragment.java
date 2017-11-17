@@ -305,7 +305,7 @@ public class InboxListFragment extends BaseFragment implements DeleteChatInterfa
     }
 
     @Override
-    public void deleteMessage(int Position) {
+    public void deleteMessage(int position, int Position) {
 
     }
 

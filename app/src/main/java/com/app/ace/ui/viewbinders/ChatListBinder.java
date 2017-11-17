@@ -58,7 +58,7 @@ public class ChatListBinder extends ViewBinder<ChatDataItem> {
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                deleteChatInterface.deleteMessage(position);
+                deleteChatInterface.deleteMessage(position,entity.getId());
                 return true;
             }
         });

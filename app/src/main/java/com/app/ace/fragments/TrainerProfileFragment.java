@@ -398,7 +398,7 @@ public class TrainerProfileFragment extends BaseFragment implements View.OnClick
                                         specialtyArray.add(item.getSpeciality().getTitle());
                                     }
                                     Specialities = TextUtils.join( ",",specialtyArray);
-                                    txt_education_cirtification_dis.setText(Specialities + " " + response.body().getResult().getUniversity());
+                                    txt_education_cirtification_dis.setText(Specialities);
 
                                     RegistrationResult registrationResult=prefHelper.getUser();
                                     registrationResult.setSpecialities(response.body().getResult().getSpecialities());

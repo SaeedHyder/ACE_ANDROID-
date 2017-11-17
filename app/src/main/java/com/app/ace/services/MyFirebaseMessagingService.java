@@ -103,7 +103,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         Intent pushNotification = new Intent(AppConstants.PUSH_NOTIFICATION);
                         pushNotification.putExtra("message", message);
                         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(pushNotification);
-                        showNotificationMessage(getApplicationContext(), title, message, "", resultIntent);
+                        Long tsLong = System.currentTimeMillis()/1000;
+                        String ts = tsLong.toString();
+                        showNotificationMessage(getApplicationContext(), title, message, ts, resultIntent);
 
                     } catch (Exception e) {
                         Log.e(TAG, "Exception: " + e.getMessage());

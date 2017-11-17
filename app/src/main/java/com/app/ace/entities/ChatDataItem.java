@@ -17,7 +17,8 @@ public class ChatDataItem {
     private int UserId;
     private boolean isSender;
 
-    public ChatDataItem(String senderImage, String senderMessage, String senderMessageTime,String receiverImage, String receiverMessage, String receiverMessageTime, boolean isSender,int UserId ,int id){
+    public ChatDataItem(String senderImage, String senderMessage, String senderMessageTime,String receiverImage, String receiverMessage,
+                        String receiverMessageTime, boolean isSender,int UserId ,int id){
         setSenderImage(senderImage);
         setSenderMessage(senderMessage);
         setSenderMessageTime(senderMessageTime);

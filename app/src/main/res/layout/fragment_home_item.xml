@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginBottom="@dimen/x3"
-                android:gravity="start"
+                android:gravity="left"
                 android:maxLength="40"
                 android:layout_weight="0.8"
                 android:maxLines="1"

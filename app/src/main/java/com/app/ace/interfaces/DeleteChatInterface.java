@@ -6,6 +6,6 @@ package com.app.ace.interfaces;
 
 public interface DeleteChatInterface {
 
-    void deleteMessage(int Position);
+    void deleteMessage(int position, int id);
     void deleteChat(int Position);
 }
