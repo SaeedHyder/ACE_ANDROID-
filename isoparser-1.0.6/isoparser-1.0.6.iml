@@ -21,5 +21,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="isoparser-1.0.6.isoparser-1.0.6" level="project" />
   </component>
 </module>

@@ -527,6 +527,10 @@
     <string name="how_do_you_want__to_selectphoto">كيف تريد تعيين صورتك؟</string>
     <string name="set_file">كيف تريد تعيين الملف الخاص بك؟</string>
     <string name="twitter_password_error">يتعذر تغيير كلمة المرور أثناء تسجيل الدخول باستخدام تويتر</string>
+    <string name="delete_chat"> حذف الدردشة</string>
+    <string name="are_you_sure_you_want_to_delete_chat">هل تريد بالتأكيد حذف الدردشة؟</string>
+    <string name="delete_message">حذف رسالة</string>
+    <string name="are_you_sure_you_want_to_delete_message">هل تريد بالتأكيد حذف رسالة؟</string>
 
 
 

@@ -122,6 +122,7 @@ public class VarificationCodeFragment extends BaseFragment implements View.OnCli
 
     }
 
+
     private boolean validateField() {
         return edtCode.testValidity();
     }

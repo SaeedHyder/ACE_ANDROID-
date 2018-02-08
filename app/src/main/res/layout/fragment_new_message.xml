@@ -71,6 +71,8 @@
             android:id="@+id/lv_newMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:scrollbars="none"
             android:layout_weight="1">
 
         </ListView>

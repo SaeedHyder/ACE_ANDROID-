@@ -126,6 +126,10 @@ public class TitleBar extends RelativeLayout {
         btnRight.setOnClickListener(helpBtnListener);
         hideBadge();
     }
+    public void hideHelpButton() {
+        btnRight.setVisibility(View.GONE);
+        hideBadge();
+    }
 
     public void showSearchButton(View.OnClickListener searchBtnListener) {
         btnLeft.setVisibility(View.VISIBLE);

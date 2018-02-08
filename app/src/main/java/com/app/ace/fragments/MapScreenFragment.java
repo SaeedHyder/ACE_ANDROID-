@@ -140,6 +140,7 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
 
     private void getSearchUserData() {
 
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), AppConstants.zoomIn));
 
         Call<ResponseWrapper<ArrayList<UserProfile>>> callBack = webService.getSearchUser(edtsearch.getText().toString(), AppConstants.trainer, getMainActivity().selectedLanguage());
 
@@ -148,7 +149,7 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
             public void onResponse(Call<ResponseWrapper<ArrayList<UserProfile>>> call, Response<ResponseWrapper<ArrayList<UserProfile>>> response) {
 
                 loadingFinished();
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), AppConstants.zoomIn));
+              //  mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), AppConstants.zoomIn));
                 if (response.body() != null)
                     if (response.body().getResult().size() <= 0) {
                         if (response.body().getUserDeleted() == 0) {
@@ -211,7 +212,7 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
             }
         });
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(userCollection.get(userCollection.size() - 1).getLat()), Double.valueOf(userCollection.get(userCollection.size() - 1).getLng())), AppConstants.zoomInToTrainer));
+      //  mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(userCollection.get(userCollection.size() - 1).getLat()), Double.valueOf(userCollection.get(userCollection.size() - 1).getLng())), AppConstants.zoomInToTrainer));
 
 
     }
@@ -346,6 +347,10 @@ public class MapScreenFragment extends BaseFragment implements OnMapReadyCallbac
                     } else {
                         txt_noresult.setVisibility(View.GONE);
                         bindview(response.body().getResult());
+                       Double lat=Double.valueOf(response.body().getResult().get(response.body().getResult().size()-1).getGym_latitude());
+                       Double lng=Double.valueOf(response.body().getResult().get(response.body().getResult().size()-1).getGym_longitude());
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat,lng), AppConstants.zoomInToTrainer));
+
                         // addMarker();
                     }
             }

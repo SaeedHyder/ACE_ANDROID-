@@ -17,6 +17,7 @@ import com.app.ace.global.AppConstants;
 import com.app.ace.helpers.DialogHelper;
 import com.app.ace.helpers.InternetHelper;
 import com.app.ace.helpers.UIHelper;
+import com.app.ace.interfaces.DeleteChatInterface;
 import com.app.ace.ui.adapters.ArrayListAdapter;
 import com.app.ace.ui.viewbinders.InboxListItemBinder;
 import com.app.ace.ui.views.TitleBar;
@@ -32,7 +33,7 @@ import roboguice.inject.InjectView;
  * Created by khan_muhammad on 3/20/2017.
  */
 
-public class InboxListFragment extends BaseFragment {
+public class InboxListFragment extends BaseFragment implements DeleteChatInterface{
 
     @InjectView(R.id.listView)
     private ListView listView;
@@ -52,7 +53,7 @@ public class InboxListFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new ArrayListAdapter<MsgEnt>(getDockActivity(), new InboxListItemBinder(getDockActivity(), prefHelper));
+        adapter = new ArrayListAdapter<MsgEnt>(getDockActivity(), new InboxListItemBinder(getDockActivity(), prefHelper,this));
     }
 
     @Nullable
@@ -69,7 +70,92 @@ public class InboxListFragment extends BaseFragment {
             setInboxData();
         }
         ListViewItemListner();
+        DeleteChat();
         // getUserData();
+    }
+
+    private void DeleteChat() {
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+
+                final DialogHelper dialog = new DialogHelper(getDockActivity());
+                dialog.initDeleteChat(R.layout.delete_chat_dialoge, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        deleteService(position);
+                        dialog.hideDialog();
+                    }
+                }, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        dialog.hideDialog();
+                    }
+                });
+                dialog.showDialog();
+
+                return true;
+            }
+        });
+    }
+
+    private void deleteService(final int position) {
+        loadingStarted();
+        Call<ResponseWrapper> callBack = webService.deleteConversation(prefHelper.getUserId(),userCollection.get(position).getMessage().getConversation_id(),getMainActivity().selectedLanguage());
+
+        callBack.enqueue(new Callback<ResponseWrapper>() {
+            @Override
+            public void onResponse(Call<ResponseWrapper> call, Response<ResponseWrapper> response) {
+                loadingFinished();
+             //   if (response.body().getResponse().equals(AppConstants.CODE_SUCCESS)) {
+
+                    if (response.body().getUserDeleted() == 0) {
+                        if(response.body().getMessage().equals("Success")) {
+                            UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                            userCollection.remove(position);
+                            adapter.clearList();
+                            adapter.addAll(userCollection);
+                            adapter.notifyDataSetChanged();
+
+                            if (userCollection.size() <= 0) {
+                                txt_noresult.setVisibility(View.VISIBLE);
+                                listView.setVisibility(View.GONE);
+                            } else {
+                                txt_noresult.setVisibility(View.GONE);
+                                listView.setVisibility(View.VISIBLE);
+                            }
+                        }
+
+                    } else {
+                        final DialogHelper dialogHelper = new DialogHelper(getMainActivity());
+                        dialogHelper.initLogoutDialog(R.layout.dialogue_deleted, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                dialogHelper.hideDialog();
+                                getDockActivity().popBackStackTillEntry(0);
+                                getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
+                            }
+                        },response.body().getMessage());
+                        dialogHelper.showDialog();
+                    }
+
+               /* } else {
+                    UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
+                }*/
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseWrapper> call, Throwable t) {
+                loadingFinished();
+                System.out.println(t.getMessage());
+                System.out.println(t.getCause());
+            }
+        });
+
     }
 
     private void setInboxData() {
@@ -216,5 +302,17 @@ public class InboxListFragment extends BaseFragment {
                 getDockActivity().addDockableFragment(NewMessageFragment.newInstance(), "NewMessageFragment");
             }
         });
+    }
+
+    @Override
+    public void deleteMessage(int position, int Position) {
+
+    }
+
+    @Override
+    public void deleteChat(final int Position) {
+
+
+
     }
 }

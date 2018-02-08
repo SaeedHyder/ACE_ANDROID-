@@ -79,7 +79,7 @@ public interface WebService {
             @Part MultipartBody.Part profile_picture,
             @Part("user_type") RequestBody user_type,
             @Part("device_type") RequestBody device_type,
-            @Query("language") RequestBody language);
+            @Part("language") RequestBody language);
 
     @Multipart
     @POST("user/register")
@@ -108,7 +108,7 @@ public interface WebService {
             @Part("gym_timing_from") RequestBody gym_timing_from,
             @Part("gym_timing_to") RequestBody gym_timing_to,
             @Part("device_type") RequestBody device_type,
-            @Query("language") RequestBody language);
+            @Part("language") RequestBody language);
 
 
    /* @FormUrlEncoded
@@ -143,7 +143,7 @@ public interface WebService {
             @Field("password") String password,
             @Field("device_token") String device_token,
             @Field("device_type") String device_type,
-            @Query("language") String language);
+            @Field("language") String language);
 
 
     @FormUrlEncoded
@@ -151,7 +151,7 @@ public interface WebService {
     Call<ResponseWrapper<RegistrationResult>> verifyUser(
             @Field("verification_code") String verification_code,
             @Field("user_id") String user_id,
-            @Query("language") String language);
+            @Field("language") String language);
 
     @FormUrlEncoded
     @POST("post")
@@ -159,7 +159,7 @@ public interface WebService {
             @Field("user_id") String user_id,
             @Field("offset")int offset,
             @Field("limit")int limit,
-            @Query("language") String language);
+            @Field("language") String language);
 
     @FormUrlEncoded
     @POST("user/search")
@@ -168,7 +168,7 @@ public interface WebService {
             @Field("user_type") String user_type,
             @Field("latitude") Double latitude,
             @Field("longitude") Double longitude,
-            @Query("language") String language);
+            @Field("language") String language);
 
 
 
@@ -177,20 +177,20 @@ public interface WebService {
     Call<ResponseWrapper<ArrayList<UserProfile>>> getSearchUser(
             @Field("keyword") String keyword,
             @Field("user_type") String user_type,
-            @Query("language") String language);
+            @Field("language") String language);
 
     @FormUrlEncoded
     @POST("user/search")
     Call<ResponseWrapper<ArrayList<UserProfile>>> getSearchAllUsers(
             @Field("keyword") String username,
-            @Query("language") String language);
+            @Field("language") String language);
 
     @FormUrlEncoded
     @POST("user/search")
     Call<ResponseWrapper<ArrayList<UserProfile>>> getTrainingSearch(
             @Field("keyword") String username,
             @Field("body_building_type") String body_building_type,
-            @Query("language") String language);
+            @Field("language") String language);
 
     @GET("notification/app/{user_id}")
 
@@ -228,14 +228,14 @@ public interface WebService {
             @Field("profile_picture") String profile_picture,
             @Field("device_token") String device_token,
             @Field("device_type") String device_type,
-            @Query("language") String language);
+            @Field("language") String language);
 
 
     @FormUrlEncoded
     @POST("user/resendcode")
     Call<ResponseWrapper<RegistrationResult>> resencCode(
             @Field("email") String email,
-            @Query("language") String language);
+            @Field("language") String language);
 
     @Multipart
     @POST("post/create")
@@ -244,7 +244,7 @@ public interface WebService {
             @Part MultipartBody.Part image,
             @Part("user_id") RequestBody user_id,
             @Part MultipartBody.Part thumb_image,
-            @Query("language") RequestBody language);
+            @Part("language") RequestBody language);
 
 
     @GET("user/{user_id}")
@@ -334,7 +334,7 @@ public interface WebService {
             @Field("post_id") String post_id,
             @Field("comment_text") String comment_text,
             @Field("tag_ids") String tag_ids,
-            @Query("language") String language
+            @Field("language") String language
             //@Field("parent_comment_id") String parent_comment_id
     );
 
@@ -356,7 +356,7 @@ public interface WebService {
             @Part("user_status") RequestBody user_status,
             @Part("phone_number") RequestBody phone_number,
             @Part MultipartBody.Part profile_picture,
-            @Query("language") RequestBody language);
+            @Part("language") RequestBody language);
 
     @Multipart
     @POST("user/update")
@@ -373,7 +373,13 @@ public interface WebService {
             @Part("gym_address") RequestBody gym_address,
             @Part("gym_latitude") RequestBody gym_latitude,
             @Part("gym_longitude") RequestBody gym_longitude,
-            @Query("language") RequestBody language);
+            @Part("language") RequestBody language);
+
+    @FormUrlEncoded
+    @POST("user/update")
+    Call<ResponseWrapper> UpdateLanguage(
+            @Field("user_id") String user_id,
+            @Field("language") String language);
 
     @Multipart
     @POST("user/update")
@@ -381,14 +387,14 @@ public interface WebService {
             @Part("user_id") RequestBody user_id,
             @Part("notification_status") RequestBody notification_status,
             @Part("private_account") RequestBody private_account,
-            @Query("language") RequestBody language);
+            @Part("language") RequestBody language);
 
     @Multipart
     @POST("user/update")
     Call<ResponseWrapper<RegistrationResult>> MuteConversation(
             @Part("user_id") RequestBody user_id,
             @Part("mute_conversation") RequestBody mute_conversation,
-            @Query("language") RequestBody language);
+            @Part("language") RequestBody language);
 
     @FormUrlEncoded
     @POST("mute/conversation")
@@ -403,7 +409,7 @@ public interface WebService {
     @POST("user/forgotpassword")
     Call<ResponseWrapper> forgetPassword(
             @Field("email") String email,
-            @Query("language") String language);
+            @Field("language") String language);
 
     @FormUrlEncoded
     @POST("user/rating/add")
@@ -521,7 +527,7 @@ public interface WebService {
     Call<ResponseWrapper> ContactUs(
             @Field("user_id") String user_id,
             @Field("message") String message,
-            @Query("language") String language);
+            @Field("language") String language);
 
     @FormUrlEncoded
     @POST("booking/remove/range")
@@ -558,7 +564,7 @@ public interface WebService {
             @Field("user_id") String user_id,
             @Field("review") String review,
             @Field("review_type") String review_type,
-            @Query("language") String language);
+            @Field("language") String language);
 
 
     @FormUrlEncoded
@@ -569,7 +575,7 @@ public interface WebService {
             @Field("no_of_hours") String no_of_hours,
             @Field("no_of_days") String no_of_days,
             @Field("total_hours_requested") String total_hours_requested,
-            @Query("language") String language);
+            @Field("language") String language);
 
 
     @GET("service-request-detail")
@@ -585,18 +591,19 @@ public interface WebService {
     );
 
 
+    @FormUrlEncoded
+    @POST("remove/conversation")
+    Call<ResponseWrapper> deleteConversation(
+            @Field("user_id") String user_id,
+            @Field("conversation_id") int conversation_id,
+            @Field("language") String language);
 
-
-
-
-
-
-
-
-
-
-
-
+    @FormUrlEncoded
+    @POST("remove/message")
+    Call<ResponseWrapper> deleteMessage(
+            @Field("user_id") String user_id,
+            @Field("message_id") int message_id,
+            @Field("language") String language);
 
 
    /* @Multipart

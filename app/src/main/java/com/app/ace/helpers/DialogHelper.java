@@ -111,6 +111,17 @@ public class DialogHelper {
         return this.dialog;
     }
 
+    public Dialog initDeleteChat(int layoutID, View.OnClickListener onokclicklistener, View.OnClickListener oncancelclicklistener) {
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        this.dialog.setContentView(layoutID);
+        Button okbutton = (Button) dialog.findViewById(R.id.btn_yes);
+        okbutton.setOnClickListener(onokclicklistener);
+        Button cancelbutton = (Button) dialog.findViewById(R.id.btn_No);
+        cancelbutton.setOnClickListener(oncancelclicklistener);
+        return this.dialog;
+    }
+
 
     public Dialog postImage(int layoutID, Context context, String picpath) {
         this.dialog.setContentView(layoutID);

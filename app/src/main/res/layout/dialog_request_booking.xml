@@ -64,7 +64,7 @@
             android:background="@color/transparent"
             android:gravity="start"
             android:hint="0"
-            android:imeOptions="actionDone"
+            android:imeOptions="actionNext"
             android:inputType="number"
             android:maxLength="2"
             android:textColor="@color/dark_grey"

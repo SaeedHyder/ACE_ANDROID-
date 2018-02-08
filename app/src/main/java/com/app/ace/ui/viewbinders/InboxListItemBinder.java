@@ -11,6 +11,7 @@ import com.app.ace.fragments.ChatFragment;
 import com.app.ace.fragments.TrainerProfileFragment;
 import com.app.ace.helpers.BasePreferenceHelper;
 import com.app.ace.helpers.PreferenceHelper;
+import com.app.ace.interfaces.DeleteChatInterface;
 import com.app.ace.ui.viewbinders.abstracts.ViewBinder;
 import com.app.ace.ui.views.AnyTextView;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -27,14 +28,16 @@ public class InboxListItemBinder extends ViewBinder<MsgEnt> {
     private ImageLoader imageLoader;
     DockActivity context;
     public BasePreferenceHelper preferenceHelper;
+    private DeleteChatInterface deleteChatInterface;
     public String UserName;
 
-    public InboxListItemBinder(DockActivity context,BasePreferenceHelper preferenceHelper) {
+    public InboxListItemBinder(DockActivity context,BasePreferenceHelper preferenceHelper,DeleteChatInterface deleteChatInterface) {
         super(R.layout.inbox_list_item);
 
         imageLoader = ImageLoader.getInstance();
         this.preferenceHelper=preferenceHelper;
         this.context=context;
+        this.deleteChatInterface=deleteChatInterface;
 
     }
 
@@ -48,8 +51,16 @@ public class InboxListItemBinder extends ViewBinder<MsgEnt> {
     }
 
     @Override
-    public void bindView(final MsgEnt entity, int position, int grpPosition,
+    public void bindView(final MsgEnt entity, final int position, int grpPosition,
                          View view, Activity activity) {
+
+   /*     view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                deleteChatInterface.deleteChat(position);
+                return true;
+            }
+        });*/
 
 
         InboxListItemBinder.ViewHolder viewHolder = (InboxListItemBinder.ViewHolder) view.getTag();

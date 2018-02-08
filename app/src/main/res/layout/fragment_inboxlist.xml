@@ -14,7 +14,7 @@
         android:paddingLeft="@dimen/x8"
         android:layout_gravity="center"
         android:paddingTop="@dimen/x2"
-        android:text="@string/no_result_found"
+        android:text="@string/no_data"
         android:textColor="@color/black"
         android:textSize="@dimen/x20"
         android:textStyle="normal"
