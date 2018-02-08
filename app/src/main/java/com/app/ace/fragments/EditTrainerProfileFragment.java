@@ -34,7 +34,6 @@ import com.app.ace.ui.views.TitleBar;
 import com.google.android.gms.maps.model.LatLng;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +46,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import roboguice.inject.InjectView;
-import roboguice.util.Strings;
 
 
 /**
@@ -82,6 +80,9 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
 
     @InjectView(R.id.edtMobileNumber)
     AnyEditTextView edtMobileNumber;
+
+    @InjectView(R.id.txt_specialities)
+    AnyTextView txt_specialities;
 
     File profilePic;
     String profilePath;
@@ -156,9 +157,14 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
         }
 
         for (Specialities item : prefHelper.getUser().getSpecialities()) {
-            specialtyArray.add(item.getSpeciality().getTitle());
+            if (!prefHelper.isLanguageArabic()) {
+                specialtyArray.add(item.getSpeciality().getTitle());
+            } else {
+                specialtyArray.add(item.getSpeciality().getTitleAr());
+            }
         }
-        Specialities = TextUtils.join(",",specialtyArray);
+        Specialities = TextUtils.join(",", specialtyArray);
+        txt_specialities.setText(TextUtils.join(",", specialtyArray));
 
 
         ShowProfile();
@@ -207,10 +213,10 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
 
         if (Education.isEmpty()) {
             //Education = prefHelper.getUser().getEducation();
-           // Education = Specialities;
+            // Education = Specialities;
         }
         if (Speciality.isEmpty()) {
-        //    Speciality = prefHelper.getUser().getSpeciality();
+            //    Speciality = prefHelper.getUser().getSpeciality();
         }
         if (edtMobileNumber.getText().toString().length() < 11) {
             UIHelper.showShortToastInCenter(getDockActivity(), getString(R.string.phone_should_be_11));
@@ -267,7 +273,7 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
                                     getDockActivity().popBackStackTillEntry(0);
                                     getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                                 }
-                            },response.body().getMessage());
+                            }, response.body().getMessage());
                             dialogHelper.showDialog();
                         }
                     } else {
@@ -310,10 +316,10 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
                 // setSpCertification();
                 //setSpSpeciality();
 
-                Education =TextUtils.join(",",EducationArray);
-                Speciality = TextUtils.join(",",SpecialityArray);
+                Education = TextUtils.join(",", EducationArray);
+                Speciality = TextUtils.join(",", SpecialityArray);
 
-               // Speciality = StringUtils.join(SpecialityArray, ",");
+                // Speciality = StringUtils.join(SpecialityArray, ",");
                 //UIHelper.showShortToastInCenter(getDockActivity(),getString(R.string.will_be_implemented));
                 EditProfile();
             }
@@ -433,11 +439,10 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
                                 getDockActivity().popBackStackTillEntry(0);
                                 getDockActivity().addDockableFragment(LoginFragment.newInstance(), "LoginFragment");
                             }
-                        },response.body().getMessage());
+                        }, response.body().getMessage());
                         dialogHelper.showDialog();
-                    }}
-                else
-                {
+                    }
+                } else {
                     loadingFinished();
                     UIHelper.showLongToastInCenter(getDockActivity(), response.body().getMessage());
                 }
@@ -459,9 +464,9 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
 
         Certification.add(getString(R.string.Select_Speciality));
         CertificationID.add("-1");
-        for(SpecialityEnt item : specialities){
+        for (SpecialityEnt item : specialities) {
             Certification.add(item.getTitle());
-            CertificationID.add(item.getId()+"");
+            CertificationID.add(item.getId() + "");
         }
 
         ArrayList<SpinnerDataItem> listVOs = new ArrayList<>();
@@ -534,13 +539,15 @@ public class EditTrainerProfileFragment extends BaseFragment implements View.OnC
 
         }
 
+        txt_specialities.setText(TextUtils.join(",", EducationArray));
+
 
     }
 
     @Override
     public void updateSpecialtyData(ArrayList<SpinnerDataItem> listState) {
 
-      //  SpecialityArray.clear();
+        //  SpecialityArray.clear();
 
 
       /*  for (SpinnerDataItem item : listState)

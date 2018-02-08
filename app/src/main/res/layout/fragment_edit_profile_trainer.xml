@@ -213,6 +213,25 @@
 
         </RelativeLayout>
 
+        <com.app.ace.ui.views.AnyTextView
+            android:id="@+id/txt_specialities"
+            style="@style/form_edttext_fields_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/specialities"
+            android:layout_marginStart="@dimen/x15"
+            android:layout_marginEnd="@dimen/x15"
+            android:layout_marginBottom="@dimen/x15"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:maxLength="50"
+            app:emptyAllowed="false"
+            android:textColorHint="@color/edittext_hint_color"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/x14"
+            app:typeface="Roboto-Regular.ttf" />
+
 
 
         <View

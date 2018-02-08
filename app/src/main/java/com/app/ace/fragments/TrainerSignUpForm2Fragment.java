@@ -129,6 +129,9 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
     @InjectView(R.id.sp_Certification)
     private Spinner sp_Certification;
 
+    @InjectView(R.id.txt_specialities)
+    AnyTextView txt_specialities;
+
     ArrayList<String> EducationArray = new ArrayList<>();
 
     public File resume;
@@ -1164,6 +1167,8 @@ public class TrainerSignUpForm2Fragment extends BaseFragment implements View.OnC
             }
 
         }
+
+        txt_specialities.setText(TextUtils.join(",", EducationArray));
     }
 
     @Override
