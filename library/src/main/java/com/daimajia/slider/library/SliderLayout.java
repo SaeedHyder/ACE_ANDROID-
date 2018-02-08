@@ -377,7 +377,7 @@ public class SliderLayout extends RelativeLayout{
      * @param period
      * @param interpolator
      */
-    public void setSliderTransformDuration(int period,Interpolator interpolator){
+       public void setSliderTransformDuration(int period,Interpolator interpolator){
         try{
             Field mScroller = ViewPagerEx.class.getDeclaredField("mScroller");
             mScroller.setAccessible(true);
